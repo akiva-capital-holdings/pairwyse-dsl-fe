@@ -1,13 +1,24 @@
 {
-    "extends": "solhint:recommended",
-    "plugins": ["prettier"],
-    "rules": {
-      "compiler-version": ["error", "^0.8.0"],
-      "func-visibility": ["warn", { "ignoreConstructors": true }],
-      "max-line-length": ["error", 120],
-      "avoid-low-level-calls": ["off"],
-      "not-rely-on-time": ["off"],
-      "no-inline-assembly": ["off"],
-      "quotes": ["error", "single"]
-    }
+  "extends": "solhint:recommended",
+  "plugins": ["prettier"],
+  "rules": {
+    "compiler-version": ["error", "^0.8.0"],
+    "func-visibility": ["warn", { "ignoreConstructors": true }],
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
+    ],
+    "arrow-body-style": ["error", "as-needed"],
+    "max-line-length": ["error", 120],
+    "avoid-low-level-calls": ["off"],
+    "not-rely-on-time": ["off"],
+    "no-inline-assembly": ["off"],
+    "quotes": ["error", "single"]
   }
+}
