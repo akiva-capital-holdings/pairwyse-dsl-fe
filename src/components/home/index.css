@@ -1,0 +1,23 @@
+.homePage {
+  padding-top: 200px;
+  width: 500px;
+  margin: 0 auto;
+}
+.homePage .connectForm {
+  padding: 20px 30px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid grey;
+  border-radius: 5px;
+}
+.homePage .connectForm .title {
+  margin-bottom: 15px;
+}
+.homePage .connectForm .btn {
+  display: block;
+  width: 250px;
+  height: 30px;
+  border-radius: 5px;
+  margin: 0 auto 20px;
+}
