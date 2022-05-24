@@ -1,23 +1,89 @@
 .homePage {
-  padding-top: 200px;
-  width: 500px;
-  margin: 0 auto;
-}
-.homePage .connectForm {
-  padding: 20px 30px;
-  text-align: center;
+  padding: 92px 120px 160px;
+  text-align: left;
   display: flex;
-  flex-direction: column;
-  border: 1px solid grey;
-  border-radius: 5px;
+  justify-content: space-between;
 }
-.homePage .connectForm .title {
-  margin-bottom: 15px;
+.homePage .title{
+  display: inline-block;
+  font-family: var(--font_family_bold);
+  font-style: normal;
+  font-weight: var(--font_weight_bolder);
+  font-size: 60px;
+  line-height: 76px;
+  color: var(--dark_col);
+  margin-bottom: 72px;
 }
-.homePage .connectForm .btn {
-  display: block;
+.stepsContentContainer{
+  min-width: 680px;
+}
+.homePage .menu{
+  display: flex;
+}
+.homePage .menu > button {
+  width: calc(100% / 3 );
+  text-align: center;
+  cursor: pointer;
+}
+.homePage .menu > button:first-child{
+  text-align: left;
+}
+.homePage .menu > button:last-child{
+  text-align: right;
+}
+.homePage .menu .navButton.active{
+  font-family: var(--font_family_bold);
+  font-style: normal;
+  font-weight: var(--font_weight_bolder);
+  font-size: 20px;
+  line-height: 25px;
+  color: var(--dark_col);
+  border-bottom: 4px solid var(--dark_col);
+}
+.homePage .menu .navButton{
+  font-family: var(--font_family_bold);
+  font-style: normal;
+  font-weight: var(--font_weight_bolder);
+  font-size: 20px;
+  line-height: 25px;
+  color: var(--grey_color);
+  background-color: inherit;
+  border: none;
+  padding-bottom: 8px;
+  border-bottom: 4px solid var(--grey_color);
+  cursor: pointer;
+} 
+.homePage .statusContainer {
+  width: 350px;
+  height: 372px;
+  background: var(--background_color);
+  border-radius: 20px;
+  padding: 30px 40px 40px 40px;
+}
+.homePage .statusContainer .img{
+  background-image: url(../../images/readyToDeploy.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  margin-left: auto;
   width: 250px;
-  height: 30px;
-  border-radius: 5px;
-  margin: 0 auto 20px;
+  height: 250px;
+}
+.homePage .statusContainer .title {
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 800;
+  font-size: 24px;
+  line-height: 30px;
+  color: #120023;
+  margin-bottom: 0;
+}
+.homePage .statusContainer .secondaryTitle {
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 20px;
+  color: #120023;
+  text-align: center;
 }

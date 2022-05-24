@@ -4,9 +4,13 @@ import HomePage from 'components/home';
 import MetaMaskOnboarding from '@metamask/onboarding';
 import Web3 from 'web3';
 import detectEthereumProvider from '@metamask/detect-provider';
+import Header from 'components/header';
+import Footer from 'components/footer';
 import { selectSession, connect, provider, onboarding } from './redux/sessionReducer';
 import { fnc, ethereumOff } from './utils/helpers';
+import './styles/antd.css'
 import './App.css';
+import 'antd/dist/antd.css';
 
 function App() {
   const { onboarding: onboardingStore, provider: providerStore } = useSelector(selectSession);
@@ -34,7 +38,9 @@ function App() {
 
   return (
     <div className="App">
+      <Header/>
       <HomePage />
+      <Footer/>
     </div>
   );
 }

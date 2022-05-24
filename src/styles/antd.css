@@ -1,0 +1,41 @@
+.ant-btn.ant-btn-default.ant-dropdown-trigger {
+  width: 680px;
+  height: 48px;
+  background-color: var(--background_color);
+  border-radius: 8px;
+  border: unset;
+  text-align: left;
+  font-family: var(--font_family);
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  color: var(--dark_col);
+}
+.ant-dropdown-menu.ant-dropdown-menu-root.ant-dropdown-menu-vertical.ant-dropdown-menu-light.menu{
+  background-color: var(--background_color);
+  box-shadow: unset;
+}
+.ant-dropdown-menu.ant-dropdown-menu-root.ant-dropdown-menu-vertical.ant-dropdown-menu-light.menu > li > span > button{
+  background-color: var(--background_color);
+  border-radius: 8px;
+  border: unset;
+  text-align: left;
+  font-family: var(--font_family);
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  color: var(--dark_col);
+  height: 40px;
+}
+.ant-btn.ant-btn-default.ant-dropdown-trigger:hover,
+.ant-btn.ant-btn-default.ant-dropdown-trigger:focus{
+  border: none;
+  color: var(--dark_col);
+  box-shadow: none;
+}
+.ant-space.ant-space-horizontal.ant-space-align-center{
+  justify-content: space-between;
+  width: 100%;
+}

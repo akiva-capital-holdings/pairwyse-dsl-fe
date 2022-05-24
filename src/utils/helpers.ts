@@ -1,4 +1,5 @@
 import MetaMaskOnboarding from '@metamask/onboarding';
+import contract from '../contract/abi.json'
 
 const { ethereum }: any = window;
 
@@ -7,13 +8,13 @@ interface Error {
   message: string;
 }
 
-// export const createInstanceSizzleIto = async (
-//   address: string,
-//   provider: any,
-// ) => {
-//   const abi: any = contract;
-//   return new provider.eth.Contract(abi, address);
-// };
+export const createInstance = async (
+  address: string,
+  provider: any,
+) => {
+  const abi: any = contract;
+  return new provider.eth.Contract(abi, address);
+};
 
 export const handleError = ({ code, message }: Error) => {
   if (code === 4001) {
@@ -30,13 +31,6 @@ export const setToken = (data: any, dispatch: any, connect: any) => {
   if (data[0]) {
     dispatch(connect(data[0]));
   }
-  //   if (address && data[0] && address !== data[0]) {
-  //     // info(data[0]);
-  //     dispatch(connect({ addressToken: data[0] }));
-  //   }
-  //   if (address && data[0] && address === data[0]) {
-  //     dispatch(connect({ addressToken: data[0] }));
-  //   }
 };
 
 export const connectWallet = (onboarding: any, dispatch: any, connect: any) => {

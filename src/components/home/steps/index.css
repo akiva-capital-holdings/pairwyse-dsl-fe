@@ -1,0 +1,35 @@
+.agreementRequest{
+  margin-top: 60px;
+}
+.agreementRequest .title {
+  font-family: var(--font_family_bold);
+  font-style: normal;
+  font-weight: var(--font_weight_bolder);
+  font-size: var(--font_size_h2);
+  line-height: 45px;
+  color: var(--dark_col);
+}
+.agreementRequest .text {
+  font-family: var(--font_family);
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 15px;
+  color: var(--grey_color);
+  margin-bottom: 8px;
+}
+.agreementRequest .lander{
+  background: var(--background_color);
+  border-radius: 8px;
+  padding: 12px 16px;
+  height: 48px;
+  font-family: var(--font_family);
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  color: var(--dark_col);
+}
+.agreementRequest .btns{
+    margin-top: 80px;
+}
