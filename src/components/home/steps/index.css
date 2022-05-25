@@ -1,7 +1,11 @@
-.agreementRequest{
+.agreementRequest,
+.definitionRequest,
+.updateRequest{
   margin-top: 60px;
 }
-.agreementRequest .title {
+.agreementRequest .title,
+.definitionRequest .title,
+.updateRequest .title {
   font-family: var(--font_family_bold);
   font-style: normal;
   font-weight: var(--font_weight_bolder);
@@ -9,7 +13,9 @@
   line-height: 45px;
   color: var(--dark_col);
 }
-.agreementRequest .text {
+.agreementRequest .text,
+.definitionRequest .text,
+.updateRequest .text {
   font-family: var(--font_family);
   font-style: normal;
   font-weight: 500;
@@ -18,11 +24,14 @@
   color: var(--grey_color);
   margin-bottom: 8px;
 }
-.agreementRequest .lander{
+.agreementRequest .lander ,
+.definitionRequest .lander,
+.updateRequest .lander{
   background: var(--background_color);
   border-radius: 8px;
-  padding: 12px 16px;
-  height: 48px;
+  max-width: 680px;
+  padding: 12px 40px 12px 15px;
+  min-height: 48px;
   font-family: var(--font_family);
   font-style: normal;
   font-weight: 500;
@@ -30,6 +39,49 @@
   line-height: 20px;
   color: var(--dark_col);
 }
-.agreementRequest .btns{
+.agreementRequest .btns,
+.updateRequest .btns{
     margin-top: 80px;
+}
+.definitionRequest .spetificationImput,
+.updateRequest .spetificationImput {
+  position: relative;
+}
+.definitionRequest .del,
+.updateRequest  .del{
+  position: absolute;
+  right: 16px;
+  background-color: inherit;
+  top: 50%;
+  border: none;
+}
+.definitionRequest .add,
+.updateRequest .add {
+  font-family: var(--font_family_bold);
+  font-style: normal;
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 20px;
+  color: var(--dark_col);
+  border: none;
+  background-color: inherit;
+  margin-left: auto;
+  margin-top: 12px;
+}
+.definitionRequest .cancel,
+.updateRequest  .cancel {
+  font-family: var(--font_family_bold);
+  font-style: normal;
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 20px;
+  color: var(--grey_color);
+  border: none
+}
+.definitionRequest .btnsContainer,
+.updateRequest  .btnsContainer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 95px;
 }

@@ -53,6 +53,12 @@ button {
  line-height: 18px;
  color: var(--white_color);
 }
+.connectMetamask:hover,
+.connectMetamask:focus {
+ border: 1px solid grey;
+ box-shadow: none;
+ color: grey;
+}
 .btnSecondary{
  width: 187px;
  height: 48px;
@@ -63,11 +69,9 @@ button {
  font-weight: var(--font_weight_bolder);
  font-size: 16px;
  line-height: 20px;
-
-/* Dark */
-
-color: #120023;
+ color: #120023;
 }
+
 @font-face {
   font-family: 'PlusJakartaSans';
   src: url('./fonts/PlusJakartaSans-VariableFont_wght.ttf');

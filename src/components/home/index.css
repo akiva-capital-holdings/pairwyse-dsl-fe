@@ -87,3 +87,13 @@
   color: #120023;
   text-align: center;
 }
+.secondary {
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 20px;
+  color: #120023;
+  text-align: left;
+  margin-bottom: 20px;
+}
