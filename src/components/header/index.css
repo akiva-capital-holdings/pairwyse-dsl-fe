@@ -1,0 +1,16 @@
+.headerContainer {
+  display: flex;
+  align-items: center;
+  height: 80px;
+  padding: 14px 60px;
+  background-color: var(--background_color);
+  justify-content: space-between;
+}
+.headerContainer .logo {
+  font-family: var(--font_family_bold);
+  font-style: normal;
+  font-weight: var(--font_weight_bolder);
+  font-size: var(--font_size_h1);
+  line-height: 50px;
+  color: var(--dark_col);
+}
