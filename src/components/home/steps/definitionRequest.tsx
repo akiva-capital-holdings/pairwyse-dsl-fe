@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {Button} from 'antd'
+import { useNavigate } from 'react-router-dom';
 import {ReactComponent as Delete} from '../../../images/delete.svg'
 
 const mock = [
@@ -7,14 +8,15 @@ const mock = [
     {title: 'Agreement', value: '0x25eca5c18cf82a5ef7ac91bc168de7', id: 2}
 ]
 const DefinitionRequest = () => {
-    const [spetification, setSpetification] = useState(mock)
+    const [spetification, setSpetification] = useState(mock);
+    const navigate = useNavigate();
+
     return <div className='definitionRequest'>
     <div className='title'>DefinitionRequest</div>
     <div style={{marginTop: '24px'}} className='text'>Requestor</div>
     <div
       style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}} 
-      className='value'>Lender account
-        <div className='text'>0x7ac91528cf82aeca5c15efbc168de7</div>
+      className='value'>0x7ac91528cf82aeca5c15efbc168de7
     </div>
     <div style={{marginTop: '24px'}} className='text'>Agreement </div>
     <div className='lander'>0x25eca5c18cf82a5ef7ac91bc168de7</div>
@@ -34,12 +36,13 @@ const DefinitionRequest = () => {
     </div>
      <div className='btnsContainer'>
        <Button style={{height: '48px'}} htmlType="button" className="btn">
-        Request Approval
+         Request Approval
         </Button>
         <Button
+         onClick={() => navigate('/')}
          htmlType="button" className="cancel">
         Cancel
-        </Button>
+         </Button>
     </div>
 </div>
 }

@@ -1,0 +1,44 @@
+.status {
+  display: flex;
+}
+.address {
+  max-width: 135px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  margin: 0 auto;
+}
+.addressContainer {
+  text-align: center;
+  margin-bottom: 100px;
+}
+.addressContainer .img{
+   width: 100px;
+   height: 100px;
+   background-image: url(../../images/transaction.png);
+   background-color: #2B0255;
+   border-radius: 50%;
+   margin: 50px auto 24px;
+}
+.addressContainer .address{
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  color: #ACA2B5;
+  opacity: 0.5;
+}
+.title {
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 800;
+  font-size: 44px;
+  line-height: 55px;
+  color: #120023;
+}
+.header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 50px 60px;
+}
