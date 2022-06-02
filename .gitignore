@@ -18,14 +18,11 @@
 .env.test.local
 .env.production.local
 
-package-lock.json
-
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
 *.code-workspace
-!Linters.code-workspace
 
 #Hardhat files
 cache
