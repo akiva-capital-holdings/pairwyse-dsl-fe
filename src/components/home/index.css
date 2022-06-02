@@ -70,30 +70,58 @@
   height: 250px;
 }
 .homePage .statusContainer .title {
-  font-family: 'Plus Jakarta Sans';
+  font-family: var(--font_family_bold);
   font-style: normal;
-  font-weight: 800;
+  font-weight: var(--font_weight_bolder);
   font-size: 24px;
   line-height: 30px;
-  color: #120023;
+  color: var(--dark_col);
   margin-bottom: 0;
 }
 .homePage .statusContainer .secondaryTitle {
-  font-family: 'Plus Jakarta Sans';
+  font-family: var(--font_family_bold);
   font-style: normal;
-  font-weight: 800;
+  font-weight: var(--font_weight_bolder);
   font-size: 16px;
   line-height: 20px;
-  color: #120023;
+  color: var(--dark_col);
   text-align: center;
 }
 .secondary {
-  font-family: 'Plus Jakarta Sans';
+  font-family: var(--font_family_bold);
   font-style: normal;
-  font-weight: 800;
+  font-weight: var(--font_weight_bolder);
   font-size: 16px;
   line-height: 20px;
-  color: #120023;
+  color: var(--dark_col);
   text-align: left;
   margin-bottom: 20px;
+}
+.connectForm {
+  padding: 80px 113px;
+  width: 700px;
+  height: 377px;
+  text-align: center;
+  margin: 0 auto;
+  background: var(--background_color);
+  border-radius: 20px;
+}
+.connectForm .title {
+  font-family: var(--font_family_bold);
+  font-style: normal;
+  font-weight: var(--font_weight_bolder);
+  font-size: 36px;
+  line-height: 45px;
+  color: var(--dark_col);
+  margin-bottom: 60px;
+}
+.connectForm .btn {
+  width: 169px;
+  height: 48px;
+  margin: 0 auto;
+}
+.connectForm .btnSecondary {
+  border: none;
+  color: #ACA2B5;
+  margin: 29px auto 0;
 }

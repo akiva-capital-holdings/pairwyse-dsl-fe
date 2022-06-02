@@ -37,6 +37,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+input{
+  border: none;
+  width: 100%;
+}
 button {
   cursor: pointer;
   display: block;
@@ -59,6 +63,13 @@ button {
  box-shadow: none;
  color: grey;
 }
+.btn:hover,
+.btn:focus {
+  background: #120023;
+  color: var(--white_color);
+  border: none;
+  opacity: 0.9;
+}
 .btnSecondary{
  width: 187px;
  height: 48px;
@@ -71,7 +82,31 @@ button {
  line-height: 20px;
  color: #120023;
 }
-
+.btnSecondary:hover,
+.btnSecondary:focus {
+  color: #120023;
+  background: var(--background_color);
+  border: none;
+  opacity: 0.9;
+}
+.cancel {
+ border: none;
+ background-color: inherit;
+ color: #ACA2B5;
+ display: block;
+ font-family: var(--font_family);
+ font-style: normal;
+ font-weight: var(--font_weight_bolder);
+ font-size: 16px;
+ line-height: 20px;
+ color: #ACA2B5;
+}
+.cancel:hover,
+.cancel:focus {
+ border: none;
+ color: #ACA2B5;
+ opacity: 0.9;
+}
 @font-face {
   font-family: 'PlusJakartaSans';
   src: url('./fonts/PlusJakartaSans-VariableFont_wght.ttf');

@@ -1,10 +1,22 @@
 import React from 'react'
+import {useSelector } from 'react-redux'
+import {useNavigate} from 'react-router-dom'
+import { selectSession } from '../../redux/sessionReducer';
 import './index.css'
 
 const Header = () => {
-    return <div className='headerContainer'>
-        <div className='logo'>Logo</div>
-        <button className='btn' type='button'>Create Agreement</button>
+ const {address } = useSelector(selectSession);
+ const navigate = useNavigate();
+
+ return <div className='headerContainer'>
+    <div onClick={() => navigate('/')} className='logo'>Logo</div>
+    {address &&  
+    <button 
+        onClick={() => navigate('/create-agreement')} 
+        className='btn' 
+        type='button'>
+         Create Agreement
+    </button>}
     </div>
 }
 
