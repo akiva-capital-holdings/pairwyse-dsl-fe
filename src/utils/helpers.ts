@@ -1,6 +1,8 @@
 /* eslint-disable no-console */
 /* eslint-disable arrow-body-style */
 import MetaMaskOnboarding from '@metamask/onboarding'
+// import {  ethers } from 'ethers';
+// import contractDefinition from ''; @Misha path to contract 
 import contract from '../contract/agreementFactory.json'
 import allNetworks from './networks.json'
 
@@ -11,10 +13,24 @@ interface Error {
     message: string
 }
 
+// export const hex4Bytes = (str: string) =>
+//   ethers.utils
+//     .keccak256(ethers.utils.toUtf8Bytes(str))
+//     .split('')
+//     .map((x, i) => (i < 10 ? x : '0'))
+//     .join('');
+
 export const createInstance = async (address: string, provider: any) => {
     const abi: any = contract
     return new provider.eth.Contract(abi, address)
 }
+
+// @Misha instance  for DefinitionRequest
+// export const definitionInstance = async (address: string, provider: any) => {
+//   const abi: any = contractDefinition
+//   return new provider.eth.Contract(abi, address)
+// }
+
 
 export const handleError = ({ code, message }: Error) => {
     if (code === 4001) {

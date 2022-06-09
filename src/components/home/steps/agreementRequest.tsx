@@ -22,11 +22,12 @@ const AgreementRequest = () => {
    `${process.env.REACT_APP_AGREEMENT_FACTORY}`,
     provider,
    );
+
    const get = await membershipInstanceIto.methods
      .deployAgreement(process.env.REACT_APP_PARSER).send({from: address});
-  //  const getId = await membershipInstanceIto.methods.getDeployedLen().call();
+   const getId = await membershipInstanceIto.methods
    console.log(get);
-  //  console.log(getId);
+   console.log(getId);
   }
   
   const menu = (
