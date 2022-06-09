@@ -5,69 +5,64 @@ import React, { useEffect, Suspense } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 // import HomePage from 'components/home';
 import MetaMaskOnboarding from '@metamask/onboarding';
-import {
-  BrowserRouter as Router,
-  Navigate,
-  Route,
-  Routes,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
 import Web3 from 'web3';
-import {Modal} from 'antd'
+import { Modal } from 'antd';
 import detectEthereumProvider from '@metamask/detect-provider';
 import Header from './components/header';
 import Footer from './components/footer';
 import { initRoutes } from './router';
-import {NETWORK_OPTIONS} from './utils/constants'
-import { selectSession, connect,  } from './redux/sessionReducer';
-import {provider, onboarding, selectUtils} from './redux/utilsReducer';
-import { fnc, ethereumOff, 
-  getNetworksList
- } from './utils/helpers';
-import './styles/antd.css'
+import { NETWORK_OPTIONS } from './utils/constants';
+import { selectSession, connect } from './redux/sessionReducer';
+import { provider, onboarding, selectUtils } from './redux/utilsReducer';
+import { fnc, ethereumOff, getNetworksList } from './utils/helpers';
+import './styles/antd.css';
 import 'antd/dist/antd.css';
 
 function App() {
   const { address } = useSelector(selectSession);
-  const { onboarding: onboardingStore,  provider: providerStore } = useSelector(selectUtils);
+  const { onboarding: onboardingStore, provider: providerStore } = useSelector(selectUtils);
   console.log(onboardingStore);
-  
+
   const dispatch = useDispatch();
 
-  const {ethereum} : any = window;
+  const { ethereum }: any = window;
   const networksList: any = getNetworksList();
 
   const setOnboardingRef = async () => {
-    if (!onboardingStore || Object.keys(onboardingStore).length === 0) {      
+    if (!onboardingStore || Object.keys(onboardingStore).length === 0) {
       const meta: any = new MetaMaskOnboarding();
       await dispatch(onboarding({ meta }));
     }
     if (!providerStore || Object.keys(providerStore).length === 0) {
       const p: any = await detectEthereumProvider().catch();
       const web3 = new Web3(p);
-     await dispatch(provider(web3));
+      await dispatch(provider(web3));
     }
   };
   console.log(providerStore);
-  
+
   const modalNetwork = () => {
     Modal.info({
       closable: true,
       // @ts-ignore
-      onOk: () => { return handleClick(process.env.REACT_APP_NETWORK); },
+      onOk: () => {
+        return handleClick(process.env.REACT_APP_NETWORK);
+      },
       okText: 'Change Network',
       content: (
         <div className="modalInfoCountry">
           <div className="title">You Must Change Network</div>
           <p className="text">
             We’ve detected that you need to switch your wallet’s network from
-            <span style={{ color: 'black', fontWeight: '900' }}> 
-             {networksList[ethereum?.networkVersion]} </span>
+            <span style={{ color: 'black', fontWeight: '900' }}>
+              {networksList[ethereum?.networkVersion]}{' '}
+            </span>
             to <span style={{ color: 'black', fontWeight: '900' }}>Rinkeby</span> for this App
             <br />
             <br />
-            *Some wallets may not support changing networks.
-            If you can not change networks in your wallet you may
-            consider switching to a different wallet.
+            *Some wallets may not support changing networks. If you can not change networks in your
+            wallet you may consider switching to a different wallet.
           </p>
         </div>
       ),
@@ -93,11 +88,13 @@ function App() {
     checkNetwork();
     if (MetaMaskOnboarding.isMetaMaskInstalled()) {
       // @ts-ignore
-      ethereum?.on('chainChanged', () => { return checkNetwork(); });
+      ethereum?.on('chainChanged', () => {
+        return checkNetwork();
+      });
     }
   }, []);
 
-  const handleClick = async (name : any) => {
+  const handleClick = async (name: any) => {
     try {
       if (!ethereum) throw new Error('No crypto wallet found');
       // @ts-ignore
@@ -105,18 +102,18 @@ function App() {
         method: 'wallet_switchEthereumChain',
         params: [
           {
-          // @ts-ignore
+            // @ts-ignore
             chainId: NETWORK_OPTIONS[name].chainId,
           },
         ],
       });
-    } catch (err : any) {
+    } catch (err: any) {
       if (err?.code === 4001) {
         modalNetwork();
       }
       if (err?.code === 4902) {
         try {
-         // @ts-ignore
+          // @ts-ignore
           await ethereum.request({
             method: 'wallet_addEthereumChain',
             params: [
@@ -143,21 +140,20 @@ function App() {
     };
   }, []);
 
-  
   const redirect = <Route path="*" element={<Navigate to={'/'} />} />;
 
   return (
     <div className="App">
       <Router>
         <Suspense fallback={<div>Page is loading...</div>}>
-            <Header/>
-            <Routes>
-              {initRoutes(address)}
-              {redirect}
-            </Routes>
-            <Footer/>
+          <Header />
+          <Routes>
+            {initRoutes(address)}
+            {redirect}
+          </Routes>
+          <Footer />
         </Suspense>
-       </Router>
+      </Router>
     </div>
   );
 }
