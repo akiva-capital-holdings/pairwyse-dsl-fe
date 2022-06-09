@@ -1,29 +1,48 @@
+/* eslint-disable no-console */
+/* eslint-disable arrow-body-style */
 import React, {useState} from 'react';
 import { Form, Button, Menu, Dropdown, Space } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import {useSelector} from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import {createInstance} from '../../../utils/helpers'
+import {selectUtils} from '../../../redux/utilsReducer';
 import {selectSession} from '../../../redux/sessionReducer';
 import './index.css';
 
 const AgreementRequest = () => {
-    const {address} = useSelector(selectSession);
-    const [value, setValue] = useState(' ');
-    const [lender, setLender] = useState('');
-    const navigate = useNavigate();
+  const {address} = useSelector(selectSession);
+  const {provider} = useSelector(selectUtils);
+  const [value, setValue] = useState(' ');
+  const [lender, setLender] = useState('');
+  const navigate = useNavigate();
 
-    const menu = (
-        <Menu className='menu'>
-          <Menu.Item key="0">
-            <button onClick={() => setValue('Lending agreement with capital stack')} type="button">
-            Lending agreement with capital stack
-            </button>
-          </Menu.Item>
-          <Menu.Divider />
-        </Menu>
-      );
+  const createAgreement = async () => {
+    const membershipInstanceIto: any = await createInstance(
+   `${process.env.REACT_APP_AGREEMENT_FACTORY}`,
+    provider,
+   );
+   const get = await membershipInstanceIto.methods
+     .deployAgreement(process.env.REACT_APP_PARSER).send({from: address});
+  //  const getId = await membershipInstanceIto.methods.getDeployedLen().call();
+   console.log(get);
+  //  console.log(getId);
+  }
+  
+  const menu = (
+      <Menu className='menu'>
+        <Menu.Item key="0">
+          <button 
+            onClick={() => {return setValue('Lending agreement with capital stack')}} 
+            type="button">
+             Lending agreement with capital stack
+          </button>
+        </Menu.Item>
+        <Menu.Divider />
+      </Menu>
+    );
 
-  return <div className='agreementRequest'>
+ return <div className='agreementRequest'>
       <div className='title'>Agreement Request </div>
       <Form
       name="agreementRequestForm"
@@ -35,8 +54,9 @@ const AgreementRequest = () => {
      <div style={{marginTop: '24px'}} className='text'>Requestor label</div>
      <input 
       className='lander' 
-      placeholder='Lender' value={lender}
-      onChange={(e) => setLender(e?.target?.value)}
+      placeholder='Lender' 
+      value={lender}
+      onChange={(e) => {return setLender(e?.target?.value)}}
      />
      <div style={{marginTop: '24px'}}  className='text'>Agreement model </div>
      <Dropdown overlay={menu}>
@@ -53,14 +73,19 @@ const AgreementRequest = () => {
       </div>
      <div className='btns'>
      <div>
-     <Button style={{height: '48px', marginRight: '16px'}} htmlType="button" className="btn">
+     <Button 
+      onClick={createAgreement} 
+      style={{height: '48px', marginRight: '16px'}} 
+      htmlType="button" 
+      className="btn"
+     >
        Create Agreement
      </Button>
      <Button htmlType="button" className="btnSecondary">
       Validate Contract
      </Button>
      </div>
-     <Button onClick={() => navigate('/')} htmlType="button" className="cancel">
+     <Button onClick={() => {return navigate('/')}} htmlType="button" className="cancel">
       Cancel
      </Button>
      </div>

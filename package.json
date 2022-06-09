@@ -12,11 +12,12 @@
     "@testing-library/user-event": "^13.2.1",
     "@types/jest": "^27.0.1",
     "@types/node": "^16.7.13",
-    "@types/react": "^17.0.20",
+    "@types/react": "^18.0.0",
     "@types/react-dom": "^17.0.9",
     "@typescript-eslint/eslint-plugin": "^5.25.0",
     "@typescript-eslint/parser": "^5.25.0",
     "antd": "^4.20.6",
+    "craco-alias": "^3.0.1",
     "env-cmd": "^10.1.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -31,10 +32,12 @@
     "web3": "^1.7.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "craco  start",
+    "build": "craco  build",
+    "build:dev": "env-cmd -f .env.development craco  build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "husky-install": "husky install",
     "lint": "yarn lint:ts && yarn lint:sol",
     "lint:ts": "npx eslint --fix",
     "lint:sol": "npx solhint contracts/**/*.sol",
@@ -61,6 +64,7 @@
     ]
   },
   "devDependencies": {
+    "@craco/craco": "^6.4.3",
     "eslint": "^7.11.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-airbnb-typescript": "^17.0.0",
@@ -70,6 +74,7 @@
     "prettier": "^2.6.2",
     "prettier-plugin-solidity": "^1.0.0-beta.19",
     "solhint": "^3.3.7",
-    "solhint-plugin-prettier": "0.0.5"
+    "solhint-plugin-prettier": "0.0.5",
+    "ts-loader": "^9.3.0"
   }
 }

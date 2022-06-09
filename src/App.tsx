@@ -14,11 +14,12 @@ import {
 import Web3 from 'web3';
 import {Modal} from 'antd'
 import detectEthereumProvider from '@metamask/detect-provider';
-import { initRoutes } from 'router';
-import Header from 'components/header';
-import Footer from 'components/footer';
+import Header from './components/header';
+import Footer from './components/footer';
+import { initRoutes } from './router';
 import {NETWORK_OPTIONS} from './utils/constants'
-import { selectSession, connect, provider, onboarding } from './redux/sessionReducer';
+import { selectSession, connect,  } from './redux/sessionReducer';
+import {provider, onboarding, selectUtils} from './redux/utilsReducer';
 import { fnc, ethereumOff, 
   getNetworksList
  } from './utils/helpers';
@@ -26,26 +27,28 @@ import './styles/antd.css'
 import 'antd/dist/antd.css';
 
 function App() {
-  const { 
-    onboarding: onboardingStore, 
-    provider: providerStore, 
-    address
-   } = useSelector(selectSession);
+  const { address } = useSelector(selectSession);
+  const { onboarding: onboardingStore,  provider: providerStore } = useSelector(selectUtils);
+  console.log(onboardingStore);
+  
   const dispatch = useDispatch();
+
   const {ethereum} : any = window;
   const networksList: any = getNetworksList();
 
   const setOnboardingRef = async () => {
-    if (!onboardingStore) {
+    if (!onboardingStore || Object.keys(onboardingStore).length === 0) {      
       const meta: any = new MetaMaskOnboarding();
-      dispatch(onboarding({ meta }));
+      await dispatch(onboarding({ meta }));
     }
-    if (!providerStore) {
+    if (!providerStore || Object.keys(providerStore).length === 0) {
       const p: any = await detectEthereumProvider().catch();
       const web3 = new Web3(p);
-      dispatch(provider(web3));
+     await dispatch(provider(web3));
     }
   };
+  console.log(providerStore);
+  
   const modalNetwork = () => {
     Modal.info({
       closable: true,
@@ -72,18 +75,18 @@ function App() {
   };
 
   const checkNetwork = async () => {
-    const networks: any = {
-      mainnet: 1,
-      rinkeby: 4,
-    };
-    // @ts-ignore
-    const currentChainId: any = Number((await ethereum?.request({
-      method: 'eth_chainId',
-    })).split('x')[1]);
-    // @ts-ignore
-    if (networks[process.env.REACT_APP_NETWORK] !== currentChainId) {
-      modalNetwork();
-    }
+    // const networks: any = {
+    //   mainnet: 1,
+    //   rinkeby: 4,
+    // };
+    // // @ts-ignore
+    // const currentChainId: any = Number((await ethereum?.request({
+    //   method: 'eth_chainId',
+    // })).split('x')[1]);
+    // // @ts-ignore
+    // if (networks[process.env.REACT_APP_NETWORK] !== currentChainId) {
+    //   modalNetwork();
+    // }
   };
 
   useEffect(() => {
@@ -139,7 +142,7 @@ function App() {
       ethereumOff(dispatch, connect);
     };
   }, []);
-  console.log(initRoutes(address));
+
   
   const redirect = <Route path="*" element={<Navigate to={'/'} />} />;
 

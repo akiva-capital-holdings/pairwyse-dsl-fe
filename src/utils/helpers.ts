@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
+/* eslint-disable arrow-body-style */
 import MetaMaskOnboarding from '@metamask/onboarding'
-import contract from '../contract/abi.json'
+import contract from '../contract/agreementFactory.json'
 import allNetworks from './networks.json'
 
 const { ethereum }: any = window

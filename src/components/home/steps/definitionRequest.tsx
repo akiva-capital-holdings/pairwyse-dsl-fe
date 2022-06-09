@@ -8,10 +8,10 @@ const mock = [
     {title: 'Agreement', value: '0x25eca5c18cf82a5ef7ac91bc168de7', id: 2}
 ]
 const DefinitionRequest = () => {
-    const [spetification, setSpetification] = useState(mock);
-    const navigate = useNavigate();
+ const [spetification, setSpetification] = useState(mock);
+ const navigate = useNavigate();
 
-    return <div className='definitionRequest'>
+ return <div className='definitionRequest'>
     <div className='title'>DefinitionRequest</div>
     <div style={{marginTop: '24px'}} className='text'>Requestor</div>
     <div
@@ -26,12 +26,12 @@ const DefinitionRequest = () => {
           <div style={{marginTop: '24px'}} className='text'>{el.title} </div>
           <div className='lander'>{el.value}</div>
           <button 
-          onClick={() => setSpetification(spetification.filter((s) => s.id !== el.id))}
+          onClick={() => {return setSpetification(spetification.filter((s) => {return s.id !== el.id}))}}
           className='del'><Delete/></button>
           </div>
       })}
-       <button className='add' onClick={() => setSpetification([...spetification, 
-          {title: 'Agreement', value: '0x25eca5c18cf82a5ef7ac91bc168de7', id: 2 }])}
+       <button className='add' onClick={() => {return setSpetification([...spetification, 
+          {title: 'Agreement', value: '0x25eca5c18cf82a5ef7ac91bc168de7', id: 2 }])}}
           >Add Specification </button>
     </div>
      <div className='btnsContainer'>
@@ -39,7 +39,7 @@ const DefinitionRequest = () => {
          Request Approval
         </Button>
         <Button
-         onClick={() => navigate('/')}
+         onClick={() => {return navigate('/')}}
          htmlType="button" className="cancel">
         Cancel
          </Button>

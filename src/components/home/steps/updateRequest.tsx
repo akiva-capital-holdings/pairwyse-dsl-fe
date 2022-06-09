@@ -1,4 +1,5 @@
 /* eslint-disable max-len */
+/* eslint-disable arrow-body-style */
 import React, {useState} from 'react';
 import { Button,
    } from 'antd';

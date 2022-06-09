@@ -1,3 +1,4 @@
+/* eslint-disable arrow-body-style */
 import { useState } from 'react';
 
 import {UpdateRequest, DefinitionRequest, AgreementRequest} from './steps';

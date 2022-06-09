@@ -1,3 +1,4 @@
+/* eslint-disable arrow-body-style */
 import React, {useState} from 'react';
 import {Table, Empty, notification, Layout, Menu, Input} from 'antd'
 import type { ColumnsType } from 'antd/lib/table';
