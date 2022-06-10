@@ -1,12 +1,7 @@
 import React, { useEffect, Suspense } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import MetaMaskOnboarding from '@metamask/onboarding';
-import {
-  BrowserRouter as Router,
-  Navigate,
-  Route,
-  Routes,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
 import Web3 from 'web3';
 import detectEthereumProvider from '@metamask/detect-provider';
 import Header from './components/header';
@@ -26,14 +21,14 @@ function App() {
 
 
   const setOnboardingRef = async () => {
-    if (!onboardingStore || Object.keys(onboardingStore).length === 0) {      
+    if (!onboardingStore || Object.keys(onboardingStore).length === 0) {
       const meta: any = new MetaMaskOnboarding();
       await dispatch(onboarding({ meta }));
     }
     if (!providerStore || Object.keys(providerStore).length === 0) {
       const p: any = await detectEthereumProvider().catch();
       const web3 = new Web3(p);
-     await dispatch(provider(web3));
+      await dispatch(provider(web3));
     }
   };
 
@@ -70,14 +65,14 @@ const redirect = <Route path="*" element={<Navigate to={redirectF()} />} />;
     <div className="App">
       <Router>
         <Suspense fallback={<div>Page is loading...</div>}>
-            <Header/>
-            <Routes>
-              {initRoutes(address)}
-              {redirect}
-            </Routes>
-            <Footer/>
+          <Header />
+          <Routes>
+            {initRoutes(address)}
+            {redirect}
+          </Routes>
+          <Footer />
         </Suspense>
-       </Router>
+      </Router>
     </div>
   );
 }

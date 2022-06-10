@@ -12,18 +12,28 @@ import {ReactComponent as Delete} from '../../../images/delete.svg'
 // import {selectUtils} from '../../../redux/utilsReducer'
 
 const mock = [
-    {title: 'Condition 1', value: '((RISK IS TRUE) AND (TIME < EXPIRY))OR((TIME >= EXPIRY) AND (PRINCIPAL + INTEREST  > PAYMENTS))((RISK IS TRUE) AND (TIME < EXPIRY))OR((TIME >= EXPIRY) AND (PRINCIPAL + INTEREST  > PAYMENTS))', id: 1},
-    {title: 'Condition 2', value: '((RISK IS TRUE) AND (TIME < EXPIRY))OR((TIME >= EXPIRY) AND (PRINCIPAL + INTEREST  > PAYMENTS))((RISK IS TRUE) AND (TIME < EXPIRY))OR((TIME >= EXPIRY) AND (PRINCIPAL + INTEREST  > PAYMENTS))', id: 2},
-]
+  {
+    title: 'Condition 1',
+    value:
+      '((RISK IS TRUE) AND (TIME < EXPIRY))OR((TIME >= EXPIRY) AND (PRINCIPAL + INTEREST  > PAYMENTS))((RISK IS TRUE) AND (TIME < EXPIRY))OR((TIME >= EXPIRY) AND (PRINCIPAL + INTEREST  > PAYMENTS))',
+    id: 1,
+  },
+  {
+    title: 'Condition 2',
+    value:
+      '((RISK IS TRUE) AND (TIME < EXPIRY))OR((TIME >= EXPIRY) AND (PRINCIPAL + INTEREST  > PAYMENTS))((RISK IS TRUE) AND (TIME < EXPIRY))OR((TIME >= EXPIRY) AND (PRINCIPAL + INTEREST  > PAYMENTS))',
+    id: 2,
+  },
+];
 
 const mockSignatories = [
-  {title: 'signatories', value: '0x5ef78de7ac91bc1625eca5c18cf82a', id: 1},
-]
+  { title: 'signatories', value: '0x5ef78de7ac91bc1625eca5c18cf82a', id: 1 },
+];
 const UpdateRequest = () => {
- const {address} = useSelector(selectSession)
- const [condition, setCondition] = useState(mock);
- const [signatories, setSignatories] = useState(mockSignatories);
- const navigate = useNavigate();
+  const { address } = useSelector(selectSession);
+  const [condition, setCondition] = useState(mock);
+  const [signatories, setSignatories] = useState(mockSignatories);
+  const navigate = useNavigate();
 
   // const onSubmit = async () => {
   //   const membershipInstance: any = await updateInstance(
@@ -81,13 +91,11 @@ const UpdateRequest = () => {
        <Button style={{height: '48px'}} htmlType="button" className="btn">
          Request Approval
         </Button>
-        <Button
-         onClick={() => navigate('/')}
-         htmlType="button" className="cancel">
-         Cancel
+        <Button onClick={() => navigate('/')} htmlType="button" className="cancel">
+          Cancel
         </Button>
+      </div>
     </div>
-    </div>
-}
+};
 
-export default UpdateRequest
+export default UpdateRequest;

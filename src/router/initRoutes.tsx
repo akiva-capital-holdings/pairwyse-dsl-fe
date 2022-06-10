@@ -13,14 +13,11 @@ export default function initRoutes(addess) {
   //   );
   // }
   if (addess) {
-    return [...privateRoutes].map(
-      ({ path, component: Component }) => (
-        <Route key={path} path={path} element={<Component />} />
-      ),
-    );
+    return [...privateRoutes].map(({ path, component: Component }) => (
+      <Route key={path} path={path} element={<Component />} />
+    ));
   }
   return [...routes].map(({ path, component: Component }) => (
     <Route key={path} path={path} element={<Component />} />
   ))
-  
 }

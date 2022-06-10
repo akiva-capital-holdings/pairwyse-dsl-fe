@@ -1,13 +1,5 @@
 {
-  "printWidth": 100,
-  "bracketSpacing": true,
-  "singleQuote": true,
-  "trailingComma": "es5",
-  "tabWidth": 4,
-  "semi": false,
-  "useTabs": false,
-  "jsxBracketSameLine": false,
-  "arrowParens": "avoid",
-  "proseWrap": "always",
-  "global-require": true
+    "printWidth": 100,
+    "bracketSpacing": true,
+    "singleQuote": true
 }
