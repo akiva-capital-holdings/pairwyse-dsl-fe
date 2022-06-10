@@ -64,8 +64,7 @@ const redirectF = () => {
 }
 
 const redirect = <Route path="*" element={<Navigate to={redirectF()} />} />;
-console.log(redirect);
-console.log(initRoutes(address));
+
 
   return (
     <div className="App">

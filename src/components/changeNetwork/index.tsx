@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React from 'react';
 import {NETWORK_OPTIONS} from '../../utils/constants'
 import {getNetworksList} from '../../utils/helpers';
