@@ -16,7 +16,7 @@ const Header = () => {
         onClick={() => navigate('/create-agreement')} 
         className='btn' 
         type='button'>
-         Create Agreement
+         Agreement Interaction
     </button>}
     </div>
 }

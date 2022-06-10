@@ -1,12 +1,15 @@
 /* eslint-disable max-len */
 /* eslint-disable arrow-body-style */
 import React, {useState} from 'react';
+// import { useSelector } from 'react-redux';
+// import {updateInstance} from '../../../utils/helpers';
 import { Button,
    } from 'antd';
 import {useSelector} from 'react-redux'
 import { useNavigate } from 'react-router-dom';
 import {selectSession} from '../../../redux/sessionReducer'
 import {ReactComponent as Delete} from '../../../images/delete.svg'
+// import {selectUtils} from '../../../redux/utilsReducer'
 
 const mock = [
     {title: 'Condition 1', value: '((RISK IS TRUE) AND (TIME < EXPIRY))OR((TIME >= EXPIRY) AND (PRINCIPAL + INTEREST  > PAYMENTS))((RISK IS TRUE) AND (TIME < EXPIRY))OR((TIME >= EXPIRY) AND (PRINCIPAL + INTEREST  > PAYMENTS))', id: 1},
@@ -21,6 +24,14 @@ const UpdateRequest = () => {
  const [condition, setCondition] = useState(mock);
  const [signatories, setSignatories] = useState(mockSignatories);
  const navigate = useNavigate();
+
+  // const onSubmit = async () => {
+  //   const membershipInstance: any = await updateInstance(
+  //  `${process.env.REACT_APP_AGREEMENT_FACTORY}`, 
+  //   provider,
+  //  );
+  //  const get = await membershipInstance.methods  // @Misha call method 
+  // }
 
     return <div className='updateRequest'>
     <div className='title'>Update Request </div>

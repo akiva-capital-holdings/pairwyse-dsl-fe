@@ -46,7 +46,7 @@ button {
   display: block;
 }
 .btn{
- width: 160px;
+ min-width: 160px;
  height: 40px;
  background: #120023;
  border-radius: 4px;
