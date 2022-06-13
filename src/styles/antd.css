@@ -67,9 +67,20 @@
   font-size: 16px !important;
   line-height: 20px !important;
 }
-/* .ant-input-search > .ant-input-group > .ant-input-group-addon:last-child .ant-input-search-button:not(.ant-btn-primary){
- display: none;
-} */
+.ant-input-status-error{
+  background: #EAE6EE !important;
+  border: 1px solid #FF6969 !important;
+  border-radius: 8px !important;
+}
+.ant-form-item-explain-error{
+  margin-top: 4px !important;
+  font-family: var(--font_family) !important;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  font-size: 12px !important;
+  line-height: 15px !important;
+  color: #FF6969 !important;
+}
 .ant-pagination-item-link{
   border: none !important;
   background-color: inherit !important;
