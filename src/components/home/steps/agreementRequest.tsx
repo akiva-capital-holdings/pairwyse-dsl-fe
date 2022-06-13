@@ -18,17 +18,21 @@ const AgreementRequest = () => {
   const navigate = useNavigate();
 
   const createAgreement = async () => {
-    const membershipInstanceIto: any = await createInstance(
+    const agrFactory: any = await createInstance(
       `${process.env.REACT_APP_AGREEMENT_FACTORY}`,
       provider
     );
 
-    const get = await membershipInstanceIto.methods
+    const tx = await agrFactory.methods
       .deployAgreement(process.env.REACT_APP_PARSER)
       .send({ from: address });
-    const getId = await membershipInstanceIto.methods;
-    console.log(get);
-    console.log(getId);
+    console.log({ tx });
+
+    const agrLen = parseInt(await agrFactory.methods.getDeployedLen().call(), 10);
+    console.log({ agrLen });
+
+    const lastAgrAddr = await agrFactory.methods.deployed(agrLen - 1).call();
+    console.log({ lastAgrAddr });
   };
 
   const menu = (
