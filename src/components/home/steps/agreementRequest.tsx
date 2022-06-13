@@ -5,6 +5,7 @@ import { Form, Button, Menu, Dropdown, Space } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { Contract } from 'ethers';
 import { createInstance } from '../../../utils/helpers';
 import { selectUtils } from '../../../redux/utilsReducer';
 import { selectSession } from '../../../redux/sessionReducer';
@@ -18,7 +19,8 @@ const AgreementRequest = () => {
   const navigate = useNavigate();
 
   const createAgreement = async () => {
-    const agrFactory: any = await createInstance(
+    const agrFactory: Contract = await createInstance(
+      'AgreementFactory',
       `${process.env.REACT_APP_AGREEMENT_FACTORY}`,
       provider
     );

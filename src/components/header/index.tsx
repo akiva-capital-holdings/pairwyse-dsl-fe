@@ -9,16 +9,18 @@ const Header = () => {
   const { address } = useSelector(selectSession);
   const navigate = useNavigate();
 
- return <div className='headerContainer'>
-    <div onClick={() => navigate('/')} className='logo'>Logo</div>
-    {address &&  
-    <button 
-        onClick={() => navigate('/create-agreement')} 
-        className='btn' 
-        type='button'>
-         Agreement Interaction
-    </button>}
+  return (
+    <div className="headerContainer">
+      <div onClick={() => navigate('/')} className="logo">
+        Logo
+      </div>
+      {address && (
+        <button onClick={() => navigate('/create-agreement')} className="btn" type="button">
+          Agreement Interaction
+        </button>
+      )}
     </div>
+  );
 };
 
 export default Header;

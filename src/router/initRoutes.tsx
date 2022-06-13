@@ -19,5 +19,5 @@ export default function initRoutes(addess) {
   }
   return [...routes].map(({ path, component: Component }) => (
     <Route key={path} path={path} element={<Component />} />
-  ))
+  ));
 }

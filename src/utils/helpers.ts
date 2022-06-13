@@ -1,12 +1,13 @@
 /* eslint-disable no-unsafe-optional-chaining */
 /* eslint-disable no-console */
 /* eslint-disable arrow-body-style */
-import MetaMaskOnboarding from '@metamask/onboarding'
-import {  ethers } from 'ethers';
-// import contractDefinition from ''; @Misha path to contract 
-// import contractUpdateRequest from ''; @Misha path to contract 
-import contract from '../contract/agreementFactory.json'
-import allNetworks from './networks.json'
+import MetaMaskOnboarding from '@metamask/onboarding';
+import { ethers } from 'ethers';
+// import contractDefinition from ''; @Misha path to contract
+// import contractUpdateRequest from ''; @Misha path to contract
+import agreementFactoryABI from '../data/contract-abi/agreementFactory.json';
+import conditionalTxsABI from '../data/contract-abi/conditionalTxs.json';
+import allNetworks from './networks.json';
 
 const { ethereum }: any = window;
 
@@ -15,6 +16,12 @@ interface Error {
   message: string;
 }
 
+const contractNames = {
+  AgreementFactory: 'AgreementFactory',
+  ConditionalTxs: 'ConditionalTxs',
+};
+type ContractName = keyof typeof contractNames;
+
 export const hex4Bytes = (str: string) =>
   ethers.utils
     .keccak256(ethers.utils.toUtf8Bytes(str))
@@ -22,26 +29,37 @@ export const hex4Bytes = (str: string) =>
     .map((x, i) => (i < 10 ? x : '0'))
     .join('');
 
-export const createInstance = async (address: string, provider: any) => {
-    const abi: any = contract
-    return new provider.eth.Contract(abi, address)
-}
+export const createInstance = async (name: ContractName, address: string, provider: any) => {
+  let abi: string;
+
+  if (name === contractNames.AgreementFactory) {
+    abi = agreementFactoryABI as unknown as string;
+  } else if (name === contractNames.ConditionalTxs) {
+    abi = conditionalTxsABI as unknown as string;
+  }
+
+  return new provider.eth.Contract(abi, address);
+};
 export const checkNetwork = async (dispatch, checkNetworkAction) => {
   const networks: any = {
     mainnet: 1,
     rinkeby: 4,
   };
   // @ts-ignore
-  const currentChainId: any = Number((await ethereum?.request({
-    method: 'eth_chainId',
-  })).split('x')[1]);
+  const currentChainId: any = Number(
+    (
+      await ethereum?.request({
+        method: 'eth_chainId',
+      })
+    ).split('x')[1]
+  );
   // @ts-ignore
   if (networks[process.env.REACT_APP_NETWORK] !== currentChainId) {
     // modalNetwork();
-    dispatch(checkNetworkAction(false))
-    return 
+    dispatch(checkNetworkAction(false));
+    return;
   }
-  dispatch(checkNetworkAction(true))
+  dispatch(checkNetworkAction(true));
 };
 // @Misha instance  for DefinitionRequest
 // export const definitionInstance = async (address: string, provider: any) => {
@@ -54,7 +72,6 @@ export const checkNetwork = async (dispatch, checkNetworkAction) => {
 //   const abi: any = contractUpdateRequest
 //   return new provider.eth.Contract(abi, address)
 // }
-
 
 export const handleError = ({ code, message }: Error) => {
   if (code === 4001) {

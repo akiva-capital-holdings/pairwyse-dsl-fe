@@ -9,16 +9,15 @@ import Footer from './components/footer';
 import { initRoutes } from './router';
 
 import { selectSession, connect, changeNetworkAction } from './redux/sessionReducer';
-import {provider, onboarding, selectUtils} from './redux/utilsReducer';
+import { provider, onboarding, selectUtils } from './redux/utilsReducer';
 import { fnc, ethereumOff, checkNetwork } from './utils/helpers';
-import './styles/antd.css'
+import './styles/antd.css';
 import 'antd/dist/antd.css';
 
 function App() {
   const { address, network } = useSelector(selectSession);
-  const { onboarding: onboardingStore,  provider: providerStore } = useSelector(selectUtils);
+  const { onboarding: onboardingStore, provider: providerStore } = useSelector(selectUtils);
   const dispatch = useDispatch();
-
 
   const setOnboardingRef = async () => {
     if (!onboardingStore || Object.keys(onboardingStore).length === 0) {
@@ -37,7 +36,9 @@ function App() {
     setOnboardingRef();
     if (MetaMaskOnboarding.isMetaMaskInstalled()) {
       // @ts-ignore
-      ethereum?.on('chainChanged', () => { return checkNetwork(dispatch, changeNetworkAction); });
+      ethereum?.on('chainChanged', () => {
+        return checkNetwork(dispatch, changeNetworkAction);
+      });
     }
     return () => {
       ethereumOff(dispatch, connect);
@@ -45,21 +46,20 @@ function App() {
   }, []);
 
   useEffect(() => {
-    checkNetwork(dispatch, changeNetworkAction)
+    checkNetwork(dispatch, changeNetworkAction);
   }, [network]);
 
-const redirectF = () => {
-  // if(!network && !address) {
-  //   return '/'
-  // }
-  // if(!network && address) {
-  //   return '/change-network'
-  // }
-  return '/'
-}
+  const redirectF = () => {
+    // if(!network && !address) {
+    //   return '/'
+    // }
+    // if(!network && address) {
+    //   return '/change-network'
+    // }
+    return '/';
+  };
 
-const redirect = <Route path="*" element={<Navigate to={redirectF()} />} />;
-
+  const redirect = <Route path="*" element={<Navigate to={redirectF()} />} />;
 
   return (
     <div className="App">
