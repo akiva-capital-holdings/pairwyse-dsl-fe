@@ -1,0 +1,157 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_parser",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "txId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256[]",
+        "name": "requiredTxs",
+        "type": "uint256[]"
+      },
+      {
+        "indexed": false,
+        "internalType": "address[]",
+        "name": "signatories",
+        "type": "address[]"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "transaction",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string[]",
+        "name": "conditionStrs",
+        "type": "string[]"
+      }
+    ],
+    "name": "NewTransaction",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_txId",
+        "type": "uint256"
+      }
+    ],
+    "name": "execute",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "_code",
+        "type": "string"
+      },
+      {
+        "internalType": "contract Context",
+        "name": "_ctx",
+        "type": "address"
+      }
+    ],
+    "name": "parse",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "parser",
+    "outputs": [
+      {
+        "internalType": "contract IParser",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "returnFunds",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "txs",
+    "outputs": [
+      {
+        "internalType": "contract ConditionalTxs",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_txId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "_requiredTxs",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "address[]",
+        "name": "_signatories",
+        "type": "address[]"
+      },
+      {
+        "internalType": "string",
+        "name": "_transactionStr",
+        "type": "string"
+      },
+      {
+        "internalType": "string[]",
+        "name": "_conditionStrs",
+        "type": "string[]"
+      },
+      {
+        "internalType": "contract Context",
+        "name": "_transactionCtx",
+        "type": "address"
+      },
+      {
+        "internalType": "contract Context[]",
+        "name": "_conditionCtxs",
+        "type": "address[]"
+      }
+    ],
+    "name": "update",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]

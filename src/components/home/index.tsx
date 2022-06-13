@@ -1,15 +1,15 @@
+/* eslint-disable arrow-body-style */
 import { useState } from 'react';
 
-import {UpdateRequest, DefinitionRequest, AgreementRequest} from './steps';
-
+import { UpdateRequest, DefinitionRequest, AgreementRequest } from './steps';
 
 import './index.css';
 
 const steps = {
-  stepOne: <AgreementRequest/>,
-  stepTwo: <DefinitionRequest/>,
-  stepThree: <UpdateRequest/>
-}
+  stepOne: <AgreementRequest />,
+  stepTwo: <DefinitionRequest />,
+  stepThree: <UpdateRequest />,
+};
 
 const navSteps = {
   stepOne: 'stepOne',
@@ -17,11 +17,8 @@ const navSteps = {
   stepThree: 'stepThree',
 };
 
-
 const HomePage = () => {
   const [step, setStep] = useState(navSteps.stepOne);
-
-
 
   const onChangeStep = (value: number) => {
     switch (value) {
@@ -65,30 +62,37 @@ const HomePage = () => {
 
   return (
     <>
-    <div className="homePage">
-     <div className='stepsContentContainer'>
-      <span className='title'>Create Agreement</span>
-        <div className='menu'>
-          <button 
-            onClick={() => onChangeStep(1)} 
-            className={`navButton ${step === navSteps.stepOne && 'active'}`}
-          >Agreement Request</button>
-          <button onClick={() => onChangeStep(2)} 
-            className={`navButton ${step === navSteps.stepTwo && 'active'}`}
-          >Definition Request</button>
-          <button 
-            onClick={() => onChangeStep(3)} 
-            className={`navButton ${step === navSteps.stepThree && 'active'}`}
-          >Update Request</button>
+      <div className="homePage">
+        <div className="stepsContentContainer">
+          <span className="title">Create Agreement</span>
+          <div className="menu">
+            <button
+              onClick={() => onChangeStep(1)}
+              className={`navButton ${step === navSteps.stepOne && 'active'}`}
+            >
+              Agreement Request
+            </button>
+            <button
+              onClick={() => onChangeStep(2)}
+              className={`navButton ${step === navSteps.stepTwo && 'active'}`}
+            >
+              Definition Request
+            </button>
+            <button
+              onClick={() => onChangeStep(3)}
+              className={`navButton ${step === navSteps.stepThree && 'active'}`}
+            >
+              Update Request
+            </button>
+          </div>
+          <div>{steps[step]}</div>
         </div>
-        <div>{steps[step]}</div>
-     </div>
-     <div className='statusContainer'>
-       <div className='title'>Status</div>
-       <div className='img'/>
-       <div className='secondaryTitle'>Ready to deploy</div>
-     </div>
-    </div>
+        <div className="statusContainer">
+          <div className="title">Status</div>
+          <div className="img" />
+          <div className="secondaryTitle">Ready to deploy</div>
+        </div>
+      </div>
     </>
   );
 };

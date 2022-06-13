@@ -1,40 +1,32 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import type { RootState } from './store'
+/* eslint-disable arrow-body-style */
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import type { RootState } from './store';
 
 interface ISession {
-    onboarding?: any
-    provider: any
-    address: string
+  address: string;
+  network: boolean;
 }
 
 const initialState: ISession = {
-    onboarding: undefined,
-    provider: undefined,
-    address: '',
-}
+  address: '',
+  network: false,
+};
 
 export const sessionReducer = createSlice({
-    name: 'session',
-    initialState,
-    reducers: {
-        onboarding: (state: any, action: PayloadAction<any>) => {
-            state.onboarding = action.payload.meta
-        },
-        provider: (state: any, action: PayloadAction<any>) => {
-            state.provider = action.payload
-        },
-        connect: (state: any, action: PayloadAction<any>) => {
-            state.address = action.payload
-        },
-        logoutWallet: (state: any) => {
-            state.onboarding = initialState.onboarding
-            state.provider = initialState.provider
-        },
+  name: 'session',
+  initialState,
+  reducers: {
+    connect: (state: any, action: PayloadAction<any>) => {
+      state.address = action.payload;
     },
-})
+    changeNetworkAction: (state: any, action: PayloadAction<any>) => {
+      state.network = action.payload;
+    },
+  },
+});
 
-export const { onboarding, provider, logoutWallet, connect } = sessionReducer.actions
+export const { connect, changeNetworkAction } = sessionReducer.actions;
 
-export const selectSession = (state: RootState) => state.session
+export const selectSession = (state: RootState) => state.session;
 
-export default sessionReducer.reducer
+export default sessionReducer.reducer;
