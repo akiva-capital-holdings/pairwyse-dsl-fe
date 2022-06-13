@@ -3,6 +3,10 @@ import { Button } from 'antd';
 import { useNavigate } from 'react-router-dom';
 // import { useSelector } from 'react-redux';
 // import {definitionInstance} from '../../../utils/helpers';
+import { useSelector } from 'react-redux';
+import { selectUtils } from 'redux/utilsReducer';
+import { createInstance, hex4Bytes } from 'utils/helpers';
+import { selectSession } from 'redux/sessionReducer';
 import { ReactComponent as Delete } from '../../../images/delete.svg';
 // import {selectUtils} from '../../../redux/utilsReducer'
 
@@ -11,7 +15,8 @@ const mock = [
   { title: 'Spetification', value: '0x25eca5c18cf82a5ef7ac91bc168de7', id: 2 },
 ];
 const DefinitionRequest = () => {
-  //  const {provider} = useSelector(selectUtils)
+  const { address: userWallet } = useSelector(selectSession);
+  const { provider } = useSelector(selectUtils);
   const [spetification, setSpetification] = useState(mock);
   const navigate = useNavigate();
 
@@ -22,6 +27,25 @@ const DefinitionRequest = () => {
   //    );
   //    const get = await membershipInstance.methods  // @Misha call method
   //   }
+
+  const defineVariable = async () => {
+    // TODO: get `Agreement` (agreementAddr), `Definition` (varName), and `Specification` (varValue) from the
+    //       corresponding input fields
+    const agreementAddr = '0x3568ba92712ca84344b4ca732380f22a010d5f47';
+    const varName = hex4Bytes('ALICE');
+    const varValue = '0x6d82eB95C3c3468E1815242AB375327903E5261e';
+
+    const agreement = await createInstance('Agreement', agreementAddr, provider);
+    const txsAddr = await agreement.methods.txs().call();
+    console.log({ txsAddr });
+    const txs = await createInstance('ConditionalTxs', txsAddr, provider);
+    const tx = await txs.methods.setStorageAddress(varName, varValue).send({ from: userWallet });
+    console.log({ tx });
+
+    // Check that the variable was set
+    const value = await txs.methods.getStorageAddress(varName).call();
+    console.log({ value });
+  };
 
   return (
     <div className="definitionRequest">
@@ -75,7 +99,12 @@ const DefinitionRequest = () => {
         </button>
       </div>
       <div className="btnsContainer">
-        <Button style={{ height: '48px' }} htmlType="button" className="btn">
+        <Button
+          onClick={defineVariable}
+          style={{ height: '48px' }}
+          htmlType="button"
+          className="btn"
+        >
           Request Approval
         </Button>
         <Button

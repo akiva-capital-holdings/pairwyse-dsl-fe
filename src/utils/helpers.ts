@@ -2,9 +2,10 @@
 /* eslint-disable no-console */
 /* eslint-disable arrow-body-style */
 import MetaMaskOnboarding from '@metamask/onboarding';
-import { ethers } from 'ethers';
+import { Contract, ethers } from 'ethers';
 // import contractDefinition from ''; @Misha path to contract
 // import contractUpdateRequest from ''; @Misha path to contract
+import agreementABI from '../data/contract-abi/agreement.json';
 import agreementFactoryABI from '../data/contract-abi/agreementFactory.json';
 import conditionalTxsABI from '../data/contract-abi/conditionalTxs.json';
 import allNetworks from './networks.json';
@@ -17,6 +18,7 @@ interface Error {
 }
 
 const contractNames = {
+  Agreement: 'Agreement',
   AgreementFactory: 'AgreementFactory',
   ConditionalTxs: 'ConditionalTxs',
 };
@@ -29,17 +31,28 @@ export const hex4Bytes = (str: string) =>
     .map((x, i) => (i < 10 ? x : '0'))
     .join('');
 
-export const createInstance = async (name: ContractName, address: string, provider: any) => {
-  let abi: string;
-
-  if (name === contractNames.AgreementFactory) {
-    abi = agreementFactoryABI as unknown as string;
-  } else if (name === contractNames.ConditionalTxs) {
-    abi = conditionalTxsABI as unknown as string;
+const getContractABI = (name: ContractName): string => {
+  switch (name) {
+    case contractNames.Agreement:
+      return agreementABI as unknown as string;
+    case contractNames.AgreementFactory:
+      return agreementFactoryABI as unknown as string;
+    case contractNames.ConditionalTxs:
+      return conditionalTxsABI as unknown as string;
+    default:
+      return '';
   }
+};
 
+export const createInstance = async (
+  name: ContractName,
+  address: string,
+  provider: any
+): Promise<Contract> => {
+  const abi = getContractABI(name);
   return new provider.eth.Contract(abi, address);
 };
+
 export const checkNetwork = async (dispatch, checkNetworkAction) => {
   const networks: any = {
     mainnet: 1,

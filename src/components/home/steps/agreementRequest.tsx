@@ -12,7 +12,7 @@ import { selectSession } from '../../../redux/sessionReducer';
 import './index.css';
 
 const AgreementRequest = () => {
-  const { address } = useSelector(selectSession);
+  const { address: userWallet } = useSelector(selectSession);
   const { provider } = useSelector(selectUtils);
   const [value, setValue] = useState(' ');
   const [lender, setLender] = useState('');
@@ -27,7 +27,7 @@ const AgreementRequest = () => {
 
     const tx = await agrFactory.methods
       .deployAgreement(process.env.REACT_APP_PARSER)
-      .send({ from: address });
+      .send({ from: userWallet });
     console.log({ tx });
 
     const agrLen = parseInt(await agrFactory.methods.getDeployedLen().call(), 10);
@@ -60,7 +60,7 @@ const AgreementRequest = () => {
         <div style={{ marginTop: '24px' }} className="text">
           Requestor
         </div>
-        <div className="value">{address}</div>
+        <div className="value">{userWallet}</div>
         <div style={{ marginTop: '24px' }} className="text">
           Requestor label
         </div>
