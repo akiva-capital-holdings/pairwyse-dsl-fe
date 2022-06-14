@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { useState } from 'react';
 import { Button } from 'antd';
 import { useNavigate } from 'react-router-dom';
