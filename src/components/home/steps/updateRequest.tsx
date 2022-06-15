@@ -38,18 +38,18 @@ const UpdateRequest = () => {
   const [agreement, setAgreement] = useState('')
   const navigate = useNavigate();
 
-  // const onSubmit = async () => {
+  const onSubmit = async () => {
   //   const membershipInstance: any = await updateInstance(
   //  `${process.env.REACT_APP_AGREEMENT_FACTORY}`,
   //   provider,
   //  );
   //  const get = await membershipInstance.methods  // @Misha call method
-  // }
+  }
 
   return (
     <div className="updateRequest">
       <div className="title">Update Request </div>
-      <Form name="agreementRequestForm" autoComplete="off" onFinish={() => console.log('finish')}>
+      <Form name="agreementRequestForm" autoComplete="off" onFinish={() => onSubmit()}>
         <div style={{ marginTop: '24px' }} className="text">
           Requestor
         </div>
@@ -67,7 +67,7 @@ const UpdateRequest = () => {
         <div style={{ marginTop: '24px' }} className="text">
             Agreement
         </div>
-        <Item name='agreement' validateTrigger="onBlur" rules={getRule('agreement')}>
+        <Item name='agreement' validateTrigger="onBlur" rules={getRule('agreement', 'agreement')}>
             <Input
               placeholder='0x5ef78de7ac91bc1625eca5c18cf82a'
               className="lander"
@@ -113,7 +113,13 @@ const UpdateRequest = () => {
                 <div style={{ marginTop: '24px' }} className="text">
                   {el.title}{' '}
                 </div>
-                <div className="lander">{el.value}</div>
+                <Item name={`condition${el.id}`} validateTrigger="onChange" rules={getRule('condition', 'condition', el.value)}>
+                  <Input.TextArea
+                    style={{minHeight: '100px'}}
+                    className="lander"
+                    defaultValue={el.value}
+                  />
+               </Item>
                 <button
                   onClick={() => setCondition(condition.filter((s) => s.id !== el.id))}
                   className="del"

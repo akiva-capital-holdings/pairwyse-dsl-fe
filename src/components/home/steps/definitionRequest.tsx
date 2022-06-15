@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { useState } from 'react';
 import { Button, Input, Form } from 'antd';
 import { useNavigate } from 'react-router-dom';
@@ -71,7 +72,7 @@ const DefinitionRequest = () => {
         <div style={{ marginTop: '24px' }} className="text">
           Definition
         </div>
-        <Item name='borrower' validateTrigger="onBlur" rules={getRule('definition')}>
+        <Item name='borrower' validateTrigger="onBlur" rules={getRule('definition', 'efinition')}>
             <Input
               placeholder='Borrower'
               className="lander"
@@ -88,7 +89,9 @@ const DefinitionRequest = () => {
                 <div style={{ marginTop: '24px' }} className="text">
                   {el.title}{' '}
                 </div>
-                <div className="lander">{el.value}</div>
+                <Item name='spetification' validateTrigger="onBlur" rules={getRule('spetification', 'spetification')}>
+                 <Input defaultValue={el.value}style={{  width: '100%' }} className="lander"/>
+               </Item>
                 <button
                   onClick={() => {
                     return setSpetification(

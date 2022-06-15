@@ -38,7 +38,7 @@
   font-weight: 500;
   font-size: 16px;
   line-height: 20px;
-  color: var(--dark_col);
+  color: var(--dark_col) !important;
 }
 .agreementRequest .btns,
 .updateRequest .btns{

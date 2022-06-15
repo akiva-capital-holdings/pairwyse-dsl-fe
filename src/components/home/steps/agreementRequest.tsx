@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 /* eslint-disable arrow-body-style */
-import React, { useState } from 'react';
-import { Form, Button, Menu, Dropdown, Space, Input } from 'antd';
+import React, { useMemo, useState } from 'react';
+import { Form, Button, Menu, Dropdown, Space, Input, notification } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -15,7 +15,7 @@ import './index.css';
 
 const {Item} = Form; 
 
-const AgreementRequest = () => {
+const AgreementRequest = ({onChangeStep}) => {
   const { address: userWallet } = useSelector(selectSession);
   const { provider } = useSelector(selectUtils);
   const [value, setValue] = useState(' ');
@@ -23,12 +23,15 @@ const AgreementRequest = () => {
   const navigate = useNavigate();
 
   const createAgreement = async () => {
+   // eslint-disable-next-line no-async-promise-executor
+   return new Promise(async (resolve: any, reject: any) => {
     const agrFactory: Contract = await createInstance(
       'AgreementFactory',
       `${process.env.REACT_APP_AGREEMENT_FACTORY}`,
       provider
     );
-
+    console.log(agrFactory);
+    
     const tx = await agrFactory.methods
       .deployAgreement(process.env.REACT_APP_PARSER)
       .send({ from: userWallet });
@@ -39,7 +42,17 @@ const AgreementRequest = () => {
 
     const lastAgrAddr = await agrFactory.methods.deployed(agrLen - 1).call();
     console.log({ lastAgrAddr });
-  };
+    try {
+      resolve(tx?.transactionHash);
+      onChangeStep(2);
+    } catch (error: any) {
+      if (error?.code === 4001) {
+        notification.error({message: 'Error'});
+      }
+      reject(error.message || JSON.stringify(error));
+    }
+  });
+}
 
   const menu = (
     <Menu className="menu">
@@ -57,6 +70,20 @@ const AgreementRequest = () => {
     </Menu>
   );
 
+  const DropdownCotent = () => useMemo(() => {
+      return  <Item 
+       name='agreementModel' validateTrigger="onFieldsChange" rules={getRule('agreement model', 'agreementModel', value)}>
+      <Dropdown overlay={menu} >
+        <Button>
+          <Space>
+            {value}
+            <DownOutlined />
+          </Space>
+        </Button>
+      </Dropdown>
+      </Item>
+  },[value])
+
   return (
     <div className="agreementRequest">
       <div className="title">Agreement Request </div>
@@ -68,7 +95,7 @@ const AgreementRequest = () => {
         <div style={{ marginTop: '24px' }} className="text">
           Requestor label
         </div>
-        <Item name='lander' validateTrigger="onBlur" rules={getRule('lander')}>
+        <Item name='lander' validateTrigger="onBlur" rules={getRule('requestor label', 'requestorLabel')}>
           <Input
             className="lander"
             placeholder="Lender"
@@ -81,16 +108,7 @@ const AgreementRequest = () => {
         <div style={{ marginTop: '24px' }} className="text">
           Agreement model{' '}
         </div>
-        <Item name='agreementModel' validateTrigger="onBlur" rules={getRule('agreement model')}>
-        <Dropdown overlay={menu}>
-          <Button>
-            <Space>
-              {value}
-              <DownOutlined />
-            </Space>
-          </Button>
-        </Dropdown>
-        </Item>
+       {DropdownCotent()}
         <div style={{ marginTop: '24px' }} className="text">
           Agreement template
         </div>
