@@ -8,6 +8,7 @@ import { Contract, ethers } from 'ethers';
 import agreementABI from '../data/contract-abi/agreement.json';
 import agreementFactoryABI from '../data/contract-abi/agreementFactory.json';
 import conditionalTxsABI from '../data/contract-abi/conditionalTxs.json';
+import contextFactoryABI from '../data/contract-abi/contextFactory.json';
 import allNetworks from './networks.json';
 
 const { ethereum }: any = window;
@@ -21,6 +22,7 @@ const contractNames = {
   Agreement: 'Agreement',
   AgreementFactory: 'AgreementFactory',
   ConditionalTxs: 'ConditionalTxs',
+  ContextFactory: 'ContextFactory',
 };
 type ContractName = keyof typeof contractNames;
 
@@ -39,6 +41,8 @@ const getContractABI = (name: ContractName): string => {
       return agreementFactoryABI as unknown as string;
     case contractNames.ConditionalTxs:
       return conditionalTxsABI as unknown as string;
+    case contractNames.ContextFactory:
+      return contextFactoryABI as unknown as string;
     default:
       return '';
   }
