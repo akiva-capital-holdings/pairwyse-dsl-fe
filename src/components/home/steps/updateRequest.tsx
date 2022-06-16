@@ -77,6 +77,8 @@ const UpdateRequest = () => {
           .call();
         console.log({ conditionContextAddr });
         conditionsContextAddrs.push(conditionContextAddr);
+
+        console.log(`Parsing a condition #${j}`);
         const agrParseTx = await agreement.methods
           .parse(step.conditions[j], conditionContextAddr)
           .send({ from: userWallet });
@@ -119,7 +121,7 @@ const UpdateRequest = () => {
     const tenTokens = parseEther('10');
 
     // TODO: get agreementAddr from the input field
-    const agreementAddr = '0x3568ba92712ca84344b4ca732380f22a010d5f47';
+    const agreementAddr = '0xfB990B0cBa54a19C109D1Eb0C890C20a7F856AF7';
     const agreement = await createInstance('Agreement', agreementAddr, provider);
 
     const conditionalTxs = [
@@ -145,7 +147,7 @@ const UpdateRequest = () => {
         requiredTxs: [22],
         signatories: [alice],
         transaction: `
-              (transferFrom TOKEN_ADDR ALICE BOB ${tenTokens})
+              (transferFrom TOKEN_ADDR ALICE BOB ${tenTokens.toString()})
           and (sendEth ALICE ${oneEth})
         `,
         conditions: ['bool true'],

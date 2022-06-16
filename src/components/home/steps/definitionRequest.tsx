@@ -31,7 +31,7 @@ const DefinitionRequest = () => {
   const defineVariable = async () => {
     // TODO: get `Agreement` (agreementAddr), `Definition` (varName), and `Specification` (varValue) from the
     //       corresponding input fields
-    const agreementAddr = '0x3568ba92712ca84344b4ca732380f22a010d5f47';
+    const agreementAddr = '0xfB990B0cBa54a19C109D1Eb0C890C20a7F856AF7';
     const varName = hex4Bytes('ALICE');
     const varValue = '0x6d82eB95C3c3468E1815242AB375327903E5261e';
 
