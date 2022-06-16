@@ -30,18 +30,18 @@ const AgreementRequest = ({onChangeStep}) => {
       `${process.env.REACT_APP_AGREEMENT_FACTORY}`,
       provider
     );
-    console.log(agrFactory);
+    // console.log(agrFactory);
     
     const tx = await agrFactory.methods
       .deployAgreement(process.env.REACT_APP_PARSER)
       .send({ from: userWallet });
-    console.log({ tx });
+    // console.log({ tx });
 
     const agrLen = parseInt(await agrFactory.methods.getDeployedLen().call(), 10);
-    console.log({ agrLen });
+    // console.log({ agrLen });
 
     const lastAgrAddr = await agrFactory.methods.deployed(agrLen - 1).call();
-    console.log({ lastAgrAddr });
+    // console.log({ lastAgrAddr });
     try {
       resolve(tx?.transactionHash);
       onChangeStep(2);

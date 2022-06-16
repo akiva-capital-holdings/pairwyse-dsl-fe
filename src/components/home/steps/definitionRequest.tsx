@@ -8,21 +8,21 @@ import { useSelector } from 'react-redux';
 import { selectUtils } from 'redux/utilsReducer';
 import { createInstance, hex4Bytes } from 'utils/helpers';
 import { selectSession } from 'redux/sessionReducer';
-import getRule from '../../../utils/validate'
+import getRule from '../../../utils/validate';
 import { ReactComponent as Delete } from '../../../images/delete.svg';
 
-const {Item} = Form;
+const { Item } = Form;
 // import {selectUtils} from '../../../redux/utilsReducer'
 
 const mock = [
-  { title: 'Spetification', value: '0x25eca5c18cf82asdfs91bc168de7', id: 1 },
-  { title: 'Spetification 1', value: '0x25eca5c18cf82a5ef7ac91bc168de7', id: 2 },
+  { title: 'Specification', value: '0x25eca5c18cf82asdfs91bc168de7', id: 1 },
+  { title: 'Specification 1', value: '0x25eca5c18cf82a5ef7ac91bc168de7', id: 2 },
 ];
 const DefinitionRequest = () => {
   const { address: userWallet } = useSelector(selectSession);
   const [definition, setDefinition] = useState('');
   const { provider } = useSelector(selectUtils);
-  const [spetification, setSpetification] = useState(mock);
+  const [specification, setSpecification] = useState(mock);
   const navigate = useNavigate();
 
   //  const onSubmit = async () => {
@@ -42,14 +42,14 @@ const DefinitionRequest = () => {
 
     const agreement = await createInstance('Agreement', agreementAddr, provider);
     const txsAddr = await agreement.methods.txs().call();
-    console.log({ txsAddr });
+    // console.log({ txsAddr });
     const txs = await createInstance('ConditionalTxs', txsAddr, provider);
     const tx = await txs.methods.setStorageAddress(varName, varValue).send({ from: userWallet });
-    console.log({ tx });
+    // console.log({ tx });
 
     // Check that the variable was set
     const value = await txs.methods.getStorageAddress(varName).call();
-    console.log({ value });
+    // console.log({ value });
   };
 
   return (
@@ -72,37 +72,41 @@ const DefinitionRequest = () => {
         <div style={{ marginTop: '24px' }} className="text">
           Definition
         </div>
-        <Item name='borrower' validateTrigger="onBlur" rules={getRule('definition', 'efinition')}>
-            <Input
-              placeholder='Borrower'
-              className="lander"
-              value={definition}
-              onChange={(e) => {
-                return setDefinition(e?.target?.value);
-              }}
-            />
+        <Item name="borrower" validateTrigger="onBlur" rules={getRule('definition', 'efinition')}>
+          <Input
+            placeholder="Borrower"
+            className="lander"
+            value={definition}
+            onChange={(e) => {
+              return setDefinition(e?.target?.value);
+            }}
+          />
         </Item>
-        <div className="spetification">
-          {spetification.map((el) => {
+        <div className="specification">
+          {specification.map((el) => {
             return (
-              <div className="spetificationImput" key={el.id}>
+              <div className="specificationImput" key={el.id}>
                 <div style={{ marginTop: '24px' }} className="text">
                   {el.title}{' '}
                 </div>
-                <Item name='spetification' validateTrigger="onBlur" rules={getRule('spetification', 'spetification')}>
-                 <Input defaultValue={el.value}style={{  width: '100%' }} className="lander"/>
-               </Item>
+                <Item
+                  name="specification"
+                  validateTrigger="onBlur"
+                  rules={getRule('specification', 'specification')}
+                >
+                  <Input defaultValue={el.value} style={{ width: '100%' }} className="lander" />
+                </Item>
                 <button
                   onClick={() => {
-                    return setSpetification(
-                      spetification.filter((s) => {
+                    return setSpecification(
+                      specification.filter((s) => {
                         return s.id !== el.id;
                       })
                     );
                   }}
                   className="del"
                 >
-                {spetification?.length > 1 && <Delete />}
+                  {specification?.length > 1 && <Delete />}
                 </button>
               </div>
             );
@@ -110,8 +114,8 @@ const DefinitionRequest = () => {
           <button
             className="add"
             onClick={() => {
-              return setSpetification([
-                ...spetification,
+              return setSpecification([
+                ...specification,
                 { title: 'Agreement', value: '0x25eca5c18cf82a5ef7ac91bc168de7', id: 2 },
               ]);
             }}
@@ -120,11 +124,7 @@ const DefinitionRequest = () => {
           </button>
         </div>
         <div className="btnsContainer">
-          <Button
-            style={{ height: '48px' }}
-            htmlType="submit"
-            className="btn"
-          >
+          <Button style={{ height: '48px' }} htmlType="submit" className="btn">
             Request Approval
           </Button>
           <Button
@@ -137,7 +137,7 @@ const DefinitionRequest = () => {
             Cancel
           </Button>
         </div>
-      </Form>   
+      </Form>
     </div>
   );
 };

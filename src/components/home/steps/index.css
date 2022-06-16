@@ -1,6 +1,6 @@
 .agreementRequest,
 .definitionRequest,
-.updateRequest{
+.updateRequest {
   margin-top: 60px;
 }
 .agreementRequest .title,
@@ -24,9 +24,9 @@
   color: var(--grey_color);
   margin-bottom: 8px;
 }
-.agreementRequest .lander ,
+.agreementRequest .lander,
 .definitionRequest .lander,
-.updateRequest .lander{
+.updateRequest .lander {
   background: var(--background_color);
   border-radius: 8px;
   max-width: 680px;
@@ -41,18 +41,18 @@
   color: var(--dark_col) !important;
 }
 .agreementRequest .btns,
-.updateRequest .btns{
-    margin-top: 80px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+.updateRequest .btns {
+  margin-top: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
-.definitionRequest .spetificationImput,
-.updateRequest .spetificationImput {
+.definitionRequest .specificationImput,
+.updateRequest .specificationImput {
   position: relative;
 }
 .definitionRequest .del,
-.updateRequest  .del{
+.updateRequest .del {
   position: absolute;
   right: 16px;
   background-color: inherit;
@@ -73,17 +73,17 @@
   margin-top: 12px;
 }
 .definitionRequest .cancel,
-.updateRequest  .cancel {
+.updateRequest .cancel {
   font-family: var(--font_family_bold);
   font-style: normal;
   font-weight: 800;
   font-size: 16px;
   line-height: 20px;
   color: var(--grey_color);
-  border: none
+  border: none;
 }
 .definitionRequest .btnsContainer,
-.updateRequest  .btnsContainer {
+.updateRequest .btnsContainer {
   width: 100%;
   display: flex;
   justify-content: space-between;
