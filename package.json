@@ -41,7 +41,8 @@
     "eject": "react-scripts eject",
     "husky-install": "husky install",
     "lint": "npx eslint --fix",
-    "prettier": "npx prettier --write '**/*.ts' '**/*.tsx'"
+    "prettier": "npx prettier --write '**/*.ts' '**/*.tsx'",
+    "prepare": "husky install"
   },
   "eslintConfig": {
     "extends": [
@@ -69,6 +70,8 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-prettier": "^4.0.0",
+    "husky": "^8.0.1",
+    "lint-staged": "^13.0.1",
     "prettier": "^2.6.2",
     "ts-loader": "^9.3.0"
   }
