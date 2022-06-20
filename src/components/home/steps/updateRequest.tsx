@@ -84,7 +84,16 @@ const UpdateRequest = () => {
                 <div style={{ marginTop: '24px' }} className="text">
                   {el.title}{' '}
                 </div>
-                <div className="lander">{el.value}</div>
+                <Item name='signatories' validateTrigger="onBlur" rules={getRule('agreement', 'agreement')}>
+                  <Input
+                    placeholder='0x5ef78de7ac91bc1625eca5c18cf82a'
+                    className="lander"
+                    value={agreement}
+                    onChange={(e) => {
+                      return setAgreement(e?.target?.value);
+                    }}
+                  />
+                </Item>
                 <button
                   onClick={() => setCondition(signatories.filter((s) => s.id !== el.id))}
                   className="del"

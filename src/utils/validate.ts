@@ -1,4 +1,7 @@
+import {ethers} from 'ethers'
+
 export default function getRule(label: string, name: string, v?: any) {
+
     const defaultRule = {
       required: true,
       message: `This field ${label.toLowerCase()} is required`,
@@ -41,6 +44,24 @@ export default function getRule(label: string, name: string, v?: any) {
     },
   }};
 
+  const validateAddressEth = () => {return {
+    validator: (_: any, value: string) => {
+      if (!value) return Promise.resolve();
+      if (ethers.utils.isAddress(value)) return Promise.resolve();
+      return Promise.reject(new Error('Invalid format'),);
+    },
+   }
+  }
+
+  const validateAddress = () => {return {
+    validator: (_: any, value: string) => {
+      if (!value) return Promise.resolve();
+      if (value !== '0x0000000000000000000000000000000000000000') return Promise.resolve();
+      return Promise.reject(new Error('Invalid address'),);
+    },
+   }
+  }
+
     const validationAgreementModel = () => {return {
       validator: () => {
         if (v && v?.length === 0 || v?.length ===  1) {
@@ -61,9 +82,11 @@ export default function getRule(label: string, name: string, v?: any) {
       case 'definition':
         return [defaultRule, validateField(), validateMinMax(0, 20)];
       case 'spetification':
-        return [defaultRule, validateField(), validateMinMax(0, 20)];
+        return [defaultRule, validateField()];
       case 'condition':
         return [defaultRule, validateSimbols()];
+      case 'agreement': 
+        return [defaultRule, validateAddressEth(), validateAddress()]
       default:
         return [defaultRule];
     }

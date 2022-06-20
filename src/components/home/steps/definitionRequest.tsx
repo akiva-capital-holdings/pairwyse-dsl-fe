@@ -68,7 +68,9 @@ const DefinitionRequest = () => {
         <div style={{ marginTop: '24px' }} className="text">
           Agreement{' '}
         </div>
-        <div className="lander">0x25eca5c18cf82a5ef7ac91bc168de7</div>
+        <Item validateTrigger='onBlur' name='agreement' rules={getRule('agreement', 'agreement', '0x25eca5c18cf82a5ef7ac91bc168de7')}>
+           <Input  name='agreementValue' className="lander"/>
+        </Item>
         <div style={{ marginTop: '24px' }} className="text">
           Definition
         </div>
