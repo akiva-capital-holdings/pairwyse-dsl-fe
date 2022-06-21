@@ -16,10 +16,10 @@ export const utilsReducer = createSlice({
   name: 'utils',
   initialState,
   reducers: {
-    onboarding: (state: any, action: PayloadAction<any>) => {
+    onboarding: (state, action: PayloadAction<any>) => {
       state.onboarding = action.payload.meta;
     },
-    provider: (state: any, action: PayloadAction<any>) => {
+    provider: (state, action: PayloadAction<any>) => {
       state.provider = action.payload;
     },
   },

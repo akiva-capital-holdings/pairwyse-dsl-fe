@@ -51,19 +51,19 @@ const getContractABI = (name: ContractName): string => {
 export const createInstance = async (
   name: ContractName,
   address: string,
-  provider: any
+  provider
 ): Promise<Contract> => {
   const abi = getContractABI(name);
   return new provider.eth.Contract(abi, address);
 };
 
 export const checkNetwork = async (dispatch, checkNetworkAction) => {
-  const networks: any = {
+  const networks = {
     mainnet: 1,
     rinkeby: 4,
   };
   // @ts-ignore
-  const currentChainId: any = Number(
+  const currentChainId = Number(
     (
       await ethereum?.request({
         method: 'eth_chainId',
@@ -98,7 +98,7 @@ export const handleError = ({ code, message }: Error) => {
   }
 };
 
-export const setToken = (data: any, dispatch: any, connect: any) => {
+export const setToken = (data, dispatch, connect) => {
   if (data?.length === 0) {
     dispatch(connect(''));
   }
@@ -107,18 +107,18 @@ export const setToken = (data: any, dispatch: any, connect: any) => {
   }
 };
 
-export const connectWallet = (onboarding: any, dispatch: any, connect: any) => {
+export const connectWallet = (onboarding, dispatch, connect) => {
   if (MetaMaskOnboarding.isMetaMaskInstalled()) {
     ethereum
       .request({ method: 'eth_requestAccounts' })
-      .then((data: any) => setToken(data, dispatch, connect))
+      .then((data) => setToken(data, dispatch, connect))
       .catch(handleError);
   } else {
     onboarding.startOnboarding();
   }
 };
 
-export const sign = async (from: any, provider: any) => {
+export const sign = async (from: string, provider: any) => {
   const method = 'personal_sign';
   const currProvider: any = provider.currentProvider;
   const signature = await currProvider.send(
@@ -133,13 +133,13 @@ export const sign = async (from: any, provider: any) => {
   return signature;
 };
 
-export const fnc = (dispatch: any, connect: any) => {
-  ethereum?.on('accountsChanged', (data: any) => setToken(data, dispatch, connect));
+export const fnc = (dispatch, connect) => {
+  ethereum?.on('accountsChanged', (data) => setToken(data, dispatch, connect));
 };
 
-export const ethereumOff = (dispatch: any, connect: any) => {
+export const ethereumOff = (dispatch, connect) => {
   if (ethereum?.off) {
-    ethereum?.off('accountsChanged', (data: any) => setToken(data, dispatch, connect));
+    ethereum?.off('accountsChanged', (data) => setToken(data, dispatch, connect));
   }
 };
 export const getNetworksList = () => {
