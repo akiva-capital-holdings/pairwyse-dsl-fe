@@ -42,42 +42,7 @@ module.exports = {
     "no-plusplus": ["off"],
     "no-param-reassign": [2, { "props": false }],
     "arrow-body-style": ['error', 'always'],
-    "import/no-named-as-default": 0
+    "import/no-named-as-default": 0,
+    "no-console": "off"
   }
 }
-
-// module.exports = {
-//   env: {
-//     browser: true,
-//     es2021: true,
-//   },
-//   extends: ['plugin:react/recommended', 'airbnb'],
-//   parser: '@typescript-eslint/parser',
-//   parserOptions: {
-//     ecmaFeatures: {
-//       jsx: true,
-//     },
-//     ecmaVersion: 13,
-//     sourceType: 'module',
-//   },
-//   plugins: ['react', '@typescript-eslint'],
-//   rules: {
-//     'arrow-body-style': ['error', 'always'],
-//     // note you must disable the base rule as it can report incorrect errors
-//     'no-use-before-define': 0,
-//     // '@typescript-eslint/no-use-before-define': ['error'],
-//     'max-len': ['warn', { code: 180 }],
-//     'linebreak-style': [
-//       'error',
-//       process.platform === 'win32' ? 'windows' : 'unix',
-//     ],
-//     'react/jsx-filename-extension': 0,
-//     'react/react-in-jsx-scope': 0,
-//     'import/extensions': 0,
-//     'import/no-unresolved': 0,
-//     'import/prefer-default-export': 0,
-//     'no-empty-pattern': 1,
-//     'react/no-unescaped-entities': 0,
-//     'import/no-extraneous-dependencies': 0,
-//   },
-// };

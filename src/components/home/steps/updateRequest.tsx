@@ -1,3 +1,4 @@
+/* eslint-disable no-unsafe-optional-chaining */
 /* eslint-disable arrow-body-style */
 import React, { useState } from 'react';
 // import { useSelector } from 'react-redux';
@@ -18,24 +19,19 @@ const {Item} = Form;
 
 const mock = [
   {
-    title: 'Condition 1',
-    value: `((RISK IS TRUE) AND (TIME < EXPIRY)) OR ((TIME >= EXPIRY) AND
-        (PRINCIPAL + INTEREST  > PAYMENTS))((RISK IS TRUE) AND (TIME < EXPIRY))
-        OR ((TIME >= EXPIRY) AND (PRINCIPAL + INTEREST  > PAYMENTS))`,
+    title: 'Condition',
+    value: '',
     id: 1,
-  },
-  {
-    title: 'Condition 2',
-    value: `((RISK IS TRUE) AND (TIME < EXPIRY)) OR 
-      ((TIME >= EXPIRY) AND (PRINCIPAL + INTEREST  > PAYMENTS))
-      ((RISK IS TRUE) AND (TIME < EXPIRY))OR((TIME >= EXPIRY)
-      AND (PRINCIPAL + INTEREST  > PAYMENTS))`,
-    id: 2,
   },
 ];
 
+// ((RISK IS TRUE) AND (TIME < EXPIRY)) OR 
+//       ((TIME >= EXPIRY) AND (PRINCIPAL + INTEREST  > PAYMENTS))
+//       ((RISK IS TRUE) AND (TIME < EXPIRY))OR((TIME >= EXPIRY)
+//       AND (PRINCIPAL + INTEREST  > PAYMENTS))
+
 const mockSignatories = [
-  { title: 'signatories', value: '0x5ef78de7ac91bc1625eca5c18cf82a', id: 1 },
+  { title: 'Signatory', value: '0x5ef78de7ac91bc1625eca5c18cf82a', id: 1 },
 ];
 
 const UpdateRequest = () => {
@@ -46,15 +42,6 @@ const UpdateRequest = () => {
   const [agreement, setAgreement] = useState('')
   const navigate = useNavigate();
 
-
-  const onSubmit = async () => {
-  //   const membershipInstance: any = await updateInstance(
-  //  `${process.env.REACT_APP_AGREEMENT_FACTORY}`,
-  //   provider,
-  //  );
-  //  const get = await membershipInstance.methods  // @Misha call method
-  }
-
   type TxObject = {
     txId: number;
     requiredTxs: number[];
@@ -63,7 +50,7 @@ const UpdateRequest = () => {
     transaction: string;
   };
 
-  const addSteps = async (agreement: Contract, contextFactory: Contract, steps: TxObject[]) => {
+  const addSteps = async (a: Contract, contextFactory: Contract, steps: TxObject[]) => {
     console.log('`addSteps` function call');
 
     for await (const step of steps) {
@@ -92,7 +79,7 @@ const UpdateRequest = () => {
         conditionsContextAddrs.push(conditionContextAddr);
 
         console.log(`Parsing a condition #${j}`);
-        const agrParseTx = await agreement.methods
+        const agrParseTx = await a.methods
           .parse(step.conditions[j], conditionContextAddr)
           .send({ from: userWallet });
         console.log({ agrParseTx });
@@ -104,13 +91,13 @@ const UpdateRequest = () => {
       }
 
       console.log('Parsing transaction');
-      await agreement.methods
+      await a.methods
         .parse(step.transaction, transactionContextAddr)
         .send({ from: userWallet });
       console.log('\nTerm transaction');
       console.log(`\n\taddress: \x1b[35m${transactionContextAddr}\x1b[0m`);
       console.log(`\t\x1b[33m${step.transaction}\x1b[0m`);
-      const { hash } = await agreement.methods
+      const { hash } = await a.methods
         .update(
           step.txId,
           step.requiredTxs,
@@ -135,7 +122,7 @@ const UpdateRequest = () => {
 
     // TODO: get agreementAddr from the input field
     const agreementAddr = '0xfB990B0cBa54a19C109D1Eb0C890C20a7F856AF7';
-    const agreement = await createInstance('Agreement', agreementAddr, provider);
+    const a = await createInstance('Agreement', agreementAddr, provider);
 
     const conditionalTxs = [
       // Alice deposits 1 ETH to SC
@@ -178,103 +165,131 @@ const UpdateRequest = () => {
       provider
     );
 
-    console.log({ txsAddr: await agreement.methods.txs().call() });
+    console.log({ txsAddr: await a.methods.txs().call() });
     console.log({ agrdeployedLen: await agrFactory.methods.getDeployedLen().call() });
     console.log({ ctxdeployedLen: await contextFactory.methods.getDeployedLen().call() });
 
-    await addSteps(agreement, contextFactory, conditionalTxs);
+    await addSteps(a, contextFactory, conditionalTxs);
   };
 
-  return (
-                <div className="spetificationImput" key={el.id}>
-                <div style={{ marginTop: '24px' }} className="text">
-                  {el.title}{' '}
-                </div>
-                <Item name='signatories' validateTrigger="onBlur" rules={getRule('agreement', 'agreement')}>
-                  <Input
-                    placeholder='0x5ef78de7ac91bc1625eca5c18cf82a'
-                    className="lander"
-                    value={agreement}
-                    onChange={(e) => {
-                      return setAgreement(e?.target?.value);
-                    }}
-                  />
-                </Item>
-                <button
-                  onClick={() => setCondition(signatories.filter((s) => s.id !== el.id))}
-                  className="del"
-                >
-                 {signatories?.length > 1 &&  <Delete />}
-                </button>
-              </div>
-            );
-          })}
-          <button
-            className="add"
-            onClick={() =>
-              setSignatories([
-                ...signatories,
-                { title: 'Signatory 2', value: '0x25eca5c18cf82a5ef7ac91bc168de7', id: 2 },
-              ])
-            }
-          >
-            Add Signatory
-          </button>
-        </div>
-        <div className="spetification">
-          {condition.map((el) => {
-            return (
-              <div className="spetificationImput" key={el.id}>
-                <div style={{ marginTop: '24px' }} className="text">
-                  {el.title}{' '}
-                </div>
-                <Item name={`condition${el.id}`} validateTrigger="onChange" rules={getRule('condition', 'condition', el.value)}>
-                  <Input.TextArea
-                    style={{minHeight: '100px'}}
-                    className="lander"
-                    defaultValue={el.value}
-                  />
-               </Item>
-                <button
-                  onClick={() => setCondition(condition.filter((s) => s.id !== el.id))}
-                  className="del"
-                >
-                  {condition?.length > 1 &&  <Delete />}
-                </button>
-              </div>
-            );
-          })}
-          <button
-            className="add"
-            onClick={() =>
-              setCondition([
-                ...condition,
-                { title: 'Agreement', value: '0x25eca5c18cf82a5ef7ac91bc168de7', id: 2 },
-              ])
-            }
-          >
-            Add Condition
-          </button>
-        </div>
-        <div className="spetificationImput">
-          <div style={{ marginTop: '24px' }} className="text">
-            Transaction 
+  return   <div className="updateRequest">
+  <div className="title">Update Request </div>
+  <Form name="agreementRequestForm" autoComplete="off" onFinish={() => updateAgreement()}>
+     <div style={{ marginTop: '24px' }} className="text">
+        Requestor
+      </div>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginBottom: '24px',
+        }}
+        className="value"
+      >
+        {userWallet}
+      </div>         <div style={{ marginTop: '24px' }} className="text">
+          Agreement
+      </div>
+      <Item name='agreement' validateTrigger="onBlur" rules={getRule('agreement', 'agreement')}>
+          <Input
+            className="lander"
+            value={agreement}
+            onChange={(e) => {
+              return setAgreement(e?.target?.value);
+            }}
+          />
+      </Item>
+      {signatories.map((el) => {
+        return (
+          <div className="spetificationImput" key={el.id}>
+            <div style={{ marginTop: '24px' }} className="text">
+              {el.title}{' '}
+            </div>
+            <Item name={`signatories${el.id}`} validateTrigger="onBlur" rules={getRule('signatories', 'signatories', el.value)}>
+              <Input
+                onChange={e => setSignatories(signatories?.map(c => c?.id === el?.id ? {...c} : {...c, value: e?.target.value}))}
+                className="lander"
+              />
+            </Item>
+            <Button
+              htmlType='button'
+              onClick={() => setSignatories(signatories.filter((s) => s.id !== el.id))}
+              className="del"
+            >
+             {signatories?.length > 1 &&  <Delete />}
+            </Button>
           </div>
-          <div className="lander">
-            CLAIM BORROWER COLLATERALUPTO (PRINCIPAL + INTEREST - PAYMENTS)
+        );
+      })}
+          <Button
+           htmlType='button'
+           className="add"
+           onClick={() =>
+             setSignatories([
+               ...signatories,
+               { title: `Signatory ${signatories?.length}`, value: '0x25eca5c18cf82a5ef7ac91bc168de7', id: 2 },
+             ])
+           }
+         >
+           Add Signatory
+         </Button>
+      <div className="spetification">
+       {condition.map((el) => {
+        return (
+          <div className="spetificationImput" key={el.id}>
+            <div style={{ marginTop: '24px' }} className="text">
+              {el.title}{' '}
+            </div>
+            <Item name={`condition${el.id + 1}`} validateTrigger="onBlur" rules={getRule('condition', 'condition', el.value)}>
+              <Input.TextArea
+                onChange={e => setCondition(condition?.map(c => c?.id === el?.id ? {...c} : {...c, value: e?.target.value}))}
+                style={{minHeight: '100px'}}
+                className="lander"
+              />
+            </Item>
+            <button
+              onClick={() => setCondition(condition.filter((s) => s.id !== el.id))}
+              className="del"
+            >
+            {condition?.length > 1 &&  <Delete />}
+            </button>
           </div>
-        </div>
-        <div className="btnsContainer">
-          <Button style={{ height: '48px' }} htmlType="submit" className="btn">
-            Request Approval
-          </Button>
-          <Button onClick={() => navigate('/')} htmlType="button" className="cancel">
-            Cancel
-          </Button>
-        </div>
-      </Form>
+        );
+      })}
+      <Button
+        className="add"
+        htmlType='button'
+        onClick={() =>
+          setCondition([
+            ...condition,
+            { title: `Condition ${condition?.length}`, value: '0x25eca5c18cf82a5ef7ac91bc168de7', id: condition?.length + 1},
+          ])
+        }
+      >
+        Add Condition
+      </Button>
     </div>
-  );
+         <div className="spetificationImput">
+         <div style={{ marginTop: '24px' }} className="text">
+           Transaction 
+         </div>
+         <Item name='transaction' validateTrigger="onBlur" rules={getRule('transaction', 'transaction')}>
+          <Input
+              className="lander"
+          />
+          </Item>
+       </div>
+       <div className="btnsContainer">
+         <Button style={{ height: '48px' }} htmlType="submit" className="btn">
+           Request Approval
+         </Button>
+         <Button onClick={() => navigate('/')} htmlType="button" className="cancel">
+           Cancel
+         </Button>
+      </div>
+     </Form>
+    </div>
 };
 
 export default UpdateRequest;

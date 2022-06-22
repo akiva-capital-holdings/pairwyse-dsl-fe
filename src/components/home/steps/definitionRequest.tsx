@@ -68,13 +68,11 @@ const DefinitionRequest = () => {
         <div style={{ marginTop: '24px' }} className="text">
           Agreement{' '}
         </div>
-        <Item validateTrigger='onBlur' name='agreement' rules={getRule('agreement', 'agreement', '0x25eca5c18cf82a5ef7ac91bc168de7')}>
-           <Input  name='agreementValue' className="lander"/>
-        </Item>
+        <div className="lander">0x25eca5c18cf82a5ef7ac91bc168de7</div>
         <div style={{ marginTop: '24px' }} className="text">
           Definition
         </div>
-        <Item name='borrower' validateTrigger="onBlur" rules={getRule('definition', 'efinition')}>
+        <Item name='borrower' validateTrigger="onBlur" rules={getRule('definition', 'definition')}>
             <Input
               placeholder='Borrower'
               className="lander"
@@ -91,9 +89,7 @@ const DefinitionRequest = () => {
                 <div style={{ marginTop: '24px' }} className="text">
                   {el.title}{' '}
                 </div>
-                <Item name='spetification' validateTrigger="onBlur" rules={getRule('spetification', 'spetification')}>
-                 <Input defaultValue={el.value}style={{  width: '100%' }} className="lander"/>
-               </Item>
+                <div className="lander">{el.value}</div>
                 <button
                   onClick={() => {
                     return setSpetification(
