@@ -32,7 +32,7 @@ const HomePage = () => {
   };
 
   const steps = {
-    stepOne: <AgreementRequest  onChangeStep={onChangeStep}/>,
+    stepOne: <AgreementRequest />,
     stepTwo: <DefinitionRequest />,
     stepThree: <UpdateRequest />,
   };
