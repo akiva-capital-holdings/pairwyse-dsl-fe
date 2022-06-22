@@ -1,14 +1,18 @@
 /* eslint-disable arrow-body-style */
 import React, { useState } from 'react';
-import { Form, Button, Menu, Dropdown, Space } from 'antd';
+import { Form, Button, Menu, Dropdown, Space, Input } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Contract } from 'ethers';
+import getRule from '../../../utils/validate'
 import { createInstance } from '../../../utils/helpers';
 import { selectUtils } from '../../../redux/utilsReducer';
 import { selectSession } from '../../../redux/sessionReducer';
 import './index.css';
+
+
+const {Item} = Form; 
 
 const AgreementRequest = () => {
   const { address: userWallet } = useSelector(selectSession);
@@ -55,7 +59,7 @@ const AgreementRequest = () => {
   return (
     <div className="agreementRequest">
       <div className="title">Agreement Request </div>
-      <Form name="agreementRequestForm" autoComplete="off" className="auth-form">
+      <Form name="agreementRequestForm" autoComplete="off" onFinish={createAgreement}>
         <div style={{ marginTop: '24px' }} className="text">
           Requestor
         </div>
@@ -63,17 +67,20 @@ const AgreementRequest = () => {
         <div style={{ marginTop: '24px' }} className="text">
           Requestor label
         </div>
-        <input
-          className="lander"
-          placeholder="Lender"
-          value={lender}
-          onChange={(e) => {
-            return setLender(e?.target?.value);
-          }}
-        />
+        <Item name='lander' validateTrigger="onBlur" rules={getRule('lander', 'lander')}>
+          <Input
+            className="lander"
+            placeholder="Lender"
+            value={lender}
+            onChange={(e) => {
+              return setLender(e?.target?.value);
+            }}
+          />
+        </Item>
         <div style={{ marginTop: '24px' }} className="text">
           Agreement model{' '}
         </div>
+        <Item name='agreementModel' validateTrigger="onBlur" rules={getRule('agreement model', 'agreement model')}>
         <Dropdown overlay={menu}>
           <Button>
             <Space>
@@ -82,6 +89,7 @@ const AgreementRequest = () => {
             </Space>
           </Button>
         </Dropdown>
+        </Item>
         <div style={{ marginTop: '24px' }} className="text">
           Agreement template
         </div>
@@ -91,9 +99,8 @@ const AgreementRequest = () => {
         <div className="btns">
           <div>
             <Button
-              onClick={createAgreement}
               style={{ height: '48px', marginRight: '16px' }}
-              htmlType="button"
+              htmlType="submit"
               className="btn"
             >
               Create Agreement
@@ -118,3 +125,4 @@ const AgreementRequest = () => {
 };
 
 export default AgreementRequest;
+

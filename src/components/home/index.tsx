@@ -5,11 +5,7 @@ import { UpdateRequest, DefinitionRequest, AgreementRequest } from './steps';
 
 import './index.css';
 
-const steps = {
-  stepOne: <AgreementRequest />,
-  stepTwo: <DefinitionRequest />,
-  stepThree: <UpdateRequest />,
-};
+
 
 const navSteps = {
   stepOne: 'stepOne',
@@ -35,6 +31,11 @@ const HomePage = () => {
     }
   };
 
+  const steps = {
+    stepOne: <AgreementRequest />,
+    stepTwo: <DefinitionRequest />,
+    stepThree: <UpdateRequest />,
+  };
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   // const [increment, setIncrement] = useState();
   // const [xValue, setXValue] = useState();
