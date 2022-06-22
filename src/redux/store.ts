@@ -1,5 +1,5 @@
 /* eslint-disable arrow-body-style */
-import { AnyAction, configureStore } from '@reduxjs/toolkit';
+import { AnyAction, configureStore, Reducer } from '@reduxjs/toolkit';
 import { persistStore, persistCombineReducers } from 'reduxjs-toolkit-persist';
 import autoMergeLevel1 from 'reduxjs-toolkit-persist/lib/stateReconciler/autoMergeLevel1';
 import storage from 'reduxjs-toolkit-persist/lib/storage';
@@ -16,14 +16,14 @@ const persistConfig = {
   stateReconciler: autoMergeLevel1,
 };
 
-const persistedReducer: any = persistCombineReducers<RootState, AnyAction>(persistConfig, {
+const persistedReducer : Reducer<any, AnyAction> = persistCombineReducers<RootState, AnyAction>(persistConfig, {
   session: sessionReducer,
   utils: utilsReducer,
 });
 
 export const store = configureStore({
   reducer: persistedReducer,
-  middleware: (getDefaultMiddleware): any => getDefaultMiddleware({ serializableCheck: false }),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }),
 });
 
 export const persistor = persistStore(store);

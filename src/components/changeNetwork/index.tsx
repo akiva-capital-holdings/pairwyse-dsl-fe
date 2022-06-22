@@ -5,7 +5,7 @@ import { getNetworksList } from '../../utils/helpers';
 import '../home/index.css';
 import './index.css';
 
-const networksList: any = getNetworksList();
+const networksList: {} = getNetworksList();
 const { ethereum }: any = window;
 
 const handleClick = async () => {
