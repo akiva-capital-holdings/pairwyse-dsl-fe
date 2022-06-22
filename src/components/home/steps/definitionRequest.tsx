@@ -1,3 +1,4 @@
+/* eslint-disable no-unsafe-optional-chaining */
 /* eslint-disable arrow-body-style */
 import React, { useState } from 'react';
 import { Button, Input, Form } from 'antd';
@@ -15,13 +16,13 @@ const {Item} = Form;
 // import {selectUtils} from '../../../redux/utilsReducer'
 
 const mock = [
-  { title: 'Spetification', value: '0x25eca5c18cf82asdfs91bc168de7', id: 1 },
+  { title: 'specification', value: '0x25eca5c18cf82asdfs91bc168de7', id: 1 },
 ];
 const DefinitionRequest = () => {
   const { address: userWallet } = useSelector(selectSession);
   const [definition, setDefinition] = useState('');
   const { provider } = useSelector(selectUtils);
-  const [spetification, setSpetification] = useState(mock);
+  const [specification, setspecification] = useState(mock);
   const [agreement, setAgreement] = useState('')
   const navigate = useNavigate();
 
@@ -38,13 +39,13 @@ const DefinitionRequest = () => {
     const txsAddr = await a.methods.txs().call();
     console.log({ txsAddr });
     const txs = await createInstance('ConditionalTxs', txsAddr, provider);
-    const tx = await txs.methods.setStorageAddress(hex4Bytes(definition), spetification).send({ from: userWallet });
+    const tx = await txs.methods.setStorageAddress(hex4Bytes(definition), specification).send({ from: userWallet });
     console.log({ tx });
     // Check that the variable was set
     const value = await txs.methods.getStorageAddress(hex4Bytes(definition)).call();
     console.log({ value });
   };
-
+ 
   return (
     <div className="definitionRequest">
       <div className="title">DefinitionRequest</div>
@@ -78,25 +79,25 @@ const DefinitionRequest = () => {
               }}
             />
         </Item>
-        <div className="spetification">
-        {spetification.map((el) => {
+        <div className="specification">
+        {specification.map((el) => {
         return (
-          <div className="spetificationImput" key={el.id}>
+          <div className="specificationInput" key={el.id}>
             <div style={{ marginTop: '24px' }} className="text">
               {el.title}{' '}
             </div>
             <Item name={`specification${el.id}`} validateTrigger="onBlur" rules={getRule('specification', 'specification', el.value)}>
               <Input
-                onChange={e => setSpetification(spetification?.map(c => c?.id === el?.id ? {...c} : {...c, value: e?.target.value}))}
+                onChange={e => setspecification(specification?.map(c => c?.id === el?.id ?  {...c, value: e?.target.value} : {...c}))}
                 className="lander"
               />
             </Item>
             <Button
               htmlType='button'
-              onClick={() => setSpetification(spetification.filter((s) => s.id !== el.id))}
+              onClick={() => setspecification(specification.filter((s) => s.id !== el.id))}
               className="del"
             >
-             {spetification?.length > 1 &&  <Delete />}
+             {specification?.length > 1 &&  <Delete />}
             </Button>
           </div>
         );
@@ -105,9 +106,9 @@ const DefinitionRequest = () => {
            htmlType='button'
            className="add"
            onClick={() =>
-            setSpetification([
-               ...spetification,
-               { title: `Spetification ${spetification?.length}`, value: '0x25eca5c18cf82a5ef7ac91bc168de7', id: 2 },
+            setspecification([
+               ...specification,
+               { title: `specification ${specification?.length}`, value: '', id: specification?.length + 1 },
              ])
            }
          >

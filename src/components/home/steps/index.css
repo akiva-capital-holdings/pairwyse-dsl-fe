@@ -47,8 +47,8 @@
     align-items: center;
     justify-content: space-between;
 }
-.definitionRequest .spetificationImput,
-.updateRequest .spetificationImput {
+.definitionRequest .specificationInput,
+.updateRequest .specificationInput {
   position: relative;
 }
 .definitionRequest .del,

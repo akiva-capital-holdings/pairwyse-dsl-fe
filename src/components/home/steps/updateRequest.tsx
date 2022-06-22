@@ -31,16 +31,16 @@ const mock = [
 //       AND (PRINCIPAL + INTEREST  > PAYMENTS))
 
 const mockSignatories = [
-  { title: 'Signatory', value: '0x5ef78de7ac91bc1625eca5c18cf82a', id: 1 },
+  { title: 'Signatory', value: '', id: 1 },
 ];
 
 const UpdateRequest = () => {
   const { address: userWallet } = useSelector(selectSession);
   const { provider } = useSelector(selectUtils);
-  const [condition, setCondition] = useState(mock);
+  const [conditions, setConditions] = useState(mock);
   const [signatories, setSignatories] = useState(mockSignatories);
   const [agreement, setAgreement] = useState('')
-  const [transactions, setTransactions] = useState('');
+  const [transaction, setTransaction] = useState('');
   const navigate = useNavigate();
 
   type TxObject = {
@@ -171,7 +171,7 @@ const UpdateRequest = () => {
 
     await addSteps(a, contextFactory, conditionalTxs);
   };
-
+  
   return   <div className="updateRequest">
   <div className="title">Update Request </div>
   <Form name="agreementRequestForm" autoComplete="off" onFinish={() => updateAgreement()}>
@@ -203,14 +203,15 @@ const UpdateRequest = () => {
       </Item>
       {signatories.map((el) => {
         return (
-          <div className="spetificationImput" key={el.id}>
+          <div className="specificationInput" key={el.id}>
             <div style={{ marginTop: '24px' }} className="text">
               {el.title}{' '}
             </div>
             <Item name={`signatories${el.id}`} validateTrigger="onBlur" rules={getRule('signatories', 'signatories', el.value)}>
               <Input
-                onChange={e => setSignatories(signatories?.map(c => c?.id === el?.id ? {...c} : {...c, value: e?.target.value}))}
+                onChange={e => setSignatories(signatories?.map(c => c?.id === el?.id ?  {...c, value: e?.target.value}: {...c}))}
                 className="lander"
+                value={el?.value}
               />
             </Item>
             <Button
@@ -229,31 +230,31 @@ const UpdateRequest = () => {
            onClick={() =>
              setSignatories([
                ...signatories,
-               { title: `Signatory ${signatories?.length}`, value: '0x25eca5c18cf82a5ef7ac91bc168de7', id: 2 },
+               { title: `Signatory ${signatories?.length}`, value: '', id: signatories?.length + 1},
              ])
            }
          >
            Add Signatory
          </Button>
-      <div className="spetification">
-       {condition.map((el) => {
+      <div className="specification">
+       {conditions.map((el) => {
         return (
-          <div className="spetificationImput" key={el.id}>
+          <div className="specificationInput" key={el.id}>
             <div style={{ marginTop: '24px' }} className="text">
               {el.title}{' '}
             </div>
             <Item name={`condition${el.id + 1}`} validateTrigger="onBlur" rules={getRule('condition', 'condition', el.value)}>
               <Input.TextArea
-                onChange={e => setCondition(condition?.map(c => c?.id === el?.id ? {...c} : {...c, value: e?.target.value}))}
+                onChange={e => setConditions(conditions?.map(c => c?.id === el?.id ?   {...c, value: e?.target.value} : {...c}))}
                 style={{minHeight: '100px'}}
                 className="lander"
               />
             </Item>
             <button
-              onClick={() => setCondition(condition.filter((s) => s.id !== el.id))}
+              onClick={() => setConditions(conditions.filter((s) => s.id !== el.id))}
               className="del"
             >
-            {condition?.length > 1 &&  <Delete />}
+            {conditions?.length > 1 &&  <Delete />}
             </button>
           </div>
         );
@@ -262,23 +263,23 @@ const UpdateRequest = () => {
         className="add"
         htmlType='button'
         onClick={() =>
-          setCondition([
-            ...condition,
-            { title: `Condition ${condition?.length}`, value: '0x25eca5c18cf82a5ef7ac91bc168de7', id: condition?.length + 1},
+          setConditions([
+            ...conditions,
+            { title: `Condition ${conditions?.length}`, value: '', id: conditions?.length + 1},
           ])
         }
       >
         Add Condition
       </Button>
     </div>
-         <div className="spetificationImput">
+         <div className="specificationInput">
          <div style={{ marginTop: '24px' }} className="text">
            Transaction 
          </div>
          <Item name='transaction' validateTrigger="onBlur" rules={getRule('transaction', 'transaction')}>
           <Input
-            value={transactions}
-            onChange={(e) => setTransactions(e.target.value)}
+            value={transaction}
+            onChange={(e) => setTransaction(e.target.value)}
             className="lander"
           />
           </Item>
