@@ -40,6 +40,7 @@ const UpdateRequest = () => {
   const [condition, setCondition] = useState(mock);
   const [signatories, setSignatories] = useState(mockSignatories);
   const [agreement, setAgreement] = useState('')
+  const [transactions, setTransactions] = useState('');
   const navigate = useNavigate();
 
   type TxObject = {
@@ -121,8 +122,7 @@ const UpdateRequest = () => {
     const tenTokens = parseEther('10');
 
     // TODO: get agreementAddr from the input field
-    const agreementAddr = '0xfB990B0cBa54a19C109D1Eb0C890C20a7F856AF7';
-    const a = await createInstance('Agreement', agreementAddr, provider);
+    const a = await createInstance('Agreement', agreement, provider);
 
     const conditionalTxs = [
       // Alice deposits 1 ETH to SC
@@ -277,7 +277,9 @@ const UpdateRequest = () => {
          </div>
          <Item name='transaction' validateTrigger="onBlur" rules={getRule('transaction', 'transaction')}>
           <Input
-              className="lander"
+            value={transactions}
+            onChange={(e) => setTransactions(e.target.value)}
+            className="lander"
           />
           </Item>
        </div>

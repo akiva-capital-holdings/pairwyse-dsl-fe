@@ -34,21 +34,14 @@ const DefinitionRequest = () => {
   //   }
 
   const defineVariable = async () => {
-    // TODO: get `Agreement` (agreementAddr), `Definition` (varName), and `Specification` (varValue) from the
-    //       corresponding input fields
-    const agreementAddr = '0xfB990B0cBa54a19C109D1Eb0C890C20a7F856AF7';
-    const varName = hex4Bytes('ALICE');
-    const varValue = '0x6d82eB95C3c3468E1815242AB375327903E5261e';
-
-    const a = await createInstance('Agreement', agreementAddr, provider);
+    const a = await createInstance('Agreement', agreement, provider);
     const txsAddr = await a.methods.txs().call();
     console.log({ txsAddr });
     const txs = await createInstance('ConditionalTxs', txsAddr, provider);
-    const tx = await txs.methods.setStorageAddress(varName, varValue).send({ from: userWallet });
+    const tx = await txs.methods.setStorageAddress(hex4Bytes(definition), spetification).send({ from: userWallet });
     console.log({ tx });
-
     // Check that the variable was set
-    const value = await txs.methods.getStorageAddress(varName).call();
+    const value = await txs.methods.getStorageAddress(hex4Bytes(definition)).call();
     console.log({ value });
   };
 
