@@ -188,3 +188,6 @@
 .site-layout-background {
   padding: 0 60px;
 }
+.ant-btn {
+  display: block !important;
+}

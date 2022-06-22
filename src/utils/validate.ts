@@ -1,3 +1,5 @@
+import {ethers} from 'ethers'
+
 export default function getRule(label: string, name: string, v?) {
   const defaultRule = {
     required: true,
@@ -21,12 +23,21 @@ export default function getRule(label: string, name: string, v?) {
 
 
 const simbols = /^[A-Za-z0-9_.]+$/
+const ruAlfabet = /^[а-яА-ЯёЁ]+$/
 
 const validateField = () => {return {
   validator: (_: any, value: string) => {
     if (!value) return Promise.resolve();
     if (simbols.test(value)) return Promise.resolve();
     return Promise.reject(new Error(`This field ${label.toLowerCase()} is required`),);
+  },
+}};
+
+const validateFieldCondition = () => {return {
+  validator: (_: any, value: string) => {
+    if (!value) return Promise.resolve();
+    if (!ruAlfabet.test(value)) return Promise.resolve();
+      return Promise.reject(new Error('Invalid format'),)
   },
 }};
 
@@ -42,17 +53,38 @@ const validateField = () => {return {
     },
   }}
 
+  const validateAddressEth = () => {return {
+    validator: (_: any, value: string) => {
+      if (!value) return Promise.resolve();
+      if (ethers.utils.isAddress(value)) return Promise.resolve();
+      return Promise.reject(new Error('Invalid format'),);
+    },
+   }
+  }
+
+  const validateAddress = () => {return {
+    validator: (_: any, value: string) => {
+      if (!value) return Promise.resolve();
+      if (value !== '0x0000000000000000000000000000000000000000') return Promise.resolve();
+      return Promise.reject(new Error('Invalid address'),);
+    },
+   }
+  }
   switch (name) {
     case 'requestorLabel':
       return [defaultRule, validateMinMax(0, 20)];
+    case 'agreement': 
+      return [defaultRule, validateAddressEth(), validateAddress()]
     case 'agreement model':
       return [validationAgreementModel()];
     case 'definition':
       return [defaultRule, validateField(), validateMinMax(0, 20)];
-    case 'spetification':
+    case 'specification':
       return [defaultRule, validateField(), validateMinMax(0, 20)];
     case 'condition':
-      return [defaultRule, validationAgreementModel()];
+      return [defaultRule, validateFieldCondition()];
+    case 'signatories':
+      return [defaultRule, validateAddressEth(), validateAddress()];
     default:
       return [defaultRule];
   }

@@ -47,8 +47,8 @@
     align-items: center;
     justify-content: space-between;
 }
-.definitionRequest .spetificationImput,
-.updateRequest .spetificationImput {
+.definitionRequest .specificationInput,
+.updateRequest .specificationInput {
   position: relative;
 }
 .definitionRequest .del,
@@ -56,7 +56,7 @@
   position: absolute;
   right: 16px;
   background-color: inherit;
-  top: 50%;
+  top: 35px;
   border: none;
 }
 .definitionRequest .add,
