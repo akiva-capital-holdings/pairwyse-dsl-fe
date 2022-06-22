@@ -97,7 +97,7 @@ const AgreementRequest = () => {
           {value === ' ' ? '' : '0x0000000000000000000000000000000000000000'}
         </div>
         <div className="btns">
-          <div>
+          <div style={{display: 'flex'}}>
             <Button
               style={{ height: '48px', marginRight: '16px' }}
               htmlType="submit"

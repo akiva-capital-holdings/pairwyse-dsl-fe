@@ -188,7 +188,8 @@ const UpdateRequest = () => {
         className="value"
       >
         {userWallet}
-      </div>         <div style={{ marginTop: '24px' }} className="text">
+      </div>        
+       <div style={{ marginTop: '24px' }} className="text">
           Agreement
       </div>
       <Item name='agreement' validateTrigger="onBlur" rules={getRule('agreement', 'agreement')}>
