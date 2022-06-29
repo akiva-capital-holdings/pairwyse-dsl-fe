@@ -34,8 +34,8 @@
     "web3": "^1.7.0"
   },
   "scripts": {
-    "start": "craco  start",
-    "build": "craco  build",
+    "start": "craco start",
+    "build": "craco build",
     "build:dev": "env-cmd -f .env.development craco  build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
