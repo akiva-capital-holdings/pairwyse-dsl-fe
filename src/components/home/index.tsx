@@ -5,8 +5,6 @@ import { UpdateRequest, DefinitionRequest, AgreementRequest } from './steps';
 
 import './index.css';
 
-
-
 const navSteps = {
   stepOne: 'stepOne',
   stepTwo: 'stepTwo',

@@ -18,7 +18,7 @@ function App() {
   const { address, network } = useSelector(selectSession);
   const { onboarding: onboardingStore, provider: providerStore } = useSelector(selectUtils);
   const dispatch = useDispatch();
-  const {ethereum}  : any = window
+  const { ethereum }: any = window;
 
   const setOnboardingRef = async () => {
     if (!onboardingStore || Object.keys(onboardingStore).length === 0) {
@@ -31,7 +31,7 @@ function App() {
       await dispatch(provider(web3));
     }
   };
-  
+
   useEffect(() => {
     fnc(dispatch, connect);
     setOnboardingRef();

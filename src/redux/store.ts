@@ -16,10 +16,13 @@ const persistConfig = {
   stateReconciler: autoMergeLevel1,
 };
 
-const persistedReducer : Reducer<any, AnyAction> = persistCombineReducers<RootState, AnyAction>(persistConfig, {
-  session: sessionReducer,
-  utils: utilsReducer,
-});
+const persistedReducer: Reducer<any, AnyAction> = persistCombineReducers<RootState, AnyAction>(
+  persistConfig,
+  {
+    session: sessionReducer,
+    utils: utilsReducer,
+  }
+);
 
 export const store = configureStore({
   reducer: persistedReducer,

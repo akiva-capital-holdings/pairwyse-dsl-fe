@@ -5,14 +5,13 @@ import { DownOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Contract } from 'ethers';
-import getRule from '../../../utils/validate'
+import getRule from '../../../utils/validate';
 import { createInstance } from '../../../utils/helpers';
 import { selectUtils } from '../../../redux/utilsReducer';
 import { selectSession } from '../../../redux/sessionReducer';
 import './index.css';
 
-
-const {Item} = Form; 
+const { Item } = Form;
 
 const AgreementRequest = () => {
   const { address: userWallet } = useSelector(selectSession);
@@ -67,7 +66,7 @@ const AgreementRequest = () => {
         <div style={{ marginTop: '24px' }} className="text">
           Requestor label
         </div>
-        <Item name='lander' validateTrigger="onBlur" rules={getRule('lander', 'lander')}>
+        <Item name="lander" validateTrigger="onBlur" rules={getRule('lander', 'lander')}>
           <Input
             className="lander"
             placeholder="Lender"
@@ -80,15 +79,19 @@ const AgreementRequest = () => {
         <div style={{ marginTop: '24px' }} className="text">
           Agreement model{' '}
         </div>
-        <Item name='agreementModel' validateTrigger="onBlur" rules={getRule('agreement model', 'agreement model')}>
-        <Dropdown overlay={menu}>
-          <Button>
-            <Space>
-              {value}
-              <DownOutlined />
-            </Space>
-          </Button>
-        </Dropdown>
+        <Item
+          name="agreementModel"
+          validateTrigger="onBlur"
+          rules={getRule('agreement model', 'agreement model')}
+        >
+          <Dropdown overlay={menu}>
+            <Button>
+              <Space>
+                {value}
+                <DownOutlined />
+              </Space>
+            </Button>
+          </Dropdown>
         </Item>
         <div style={{ marginTop: '24px' }} className="text">
           Agreement template
@@ -97,7 +100,7 @@ const AgreementRequest = () => {
           {value === ' ' ? '' : '0x0000000000000000000000000000000000000000'}
         </div>
         <div className="btns">
-          <div style={{display: 'flex'}}>
+          <div style={{ display: 'flex' }}>
             <Button
               style={{ height: '48px', marginRight: '16px' }}
               htmlType="submit"
@@ -125,4 +128,3 @@ const AgreementRequest = () => {
 };
 
 export default AgreementRequest;
-
