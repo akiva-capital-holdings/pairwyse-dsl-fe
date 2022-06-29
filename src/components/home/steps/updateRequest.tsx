@@ -1,19 +1,15 @@
 /* eslint-disable no-unsafe-optional-chaining */
 /* eslint-disable arrow-body-style */
 import React, { useState } from 'react';
-// import { useSelector } from 'react-redux';
-// import {updateInstance} from '../../../utils/helpers';
 import { Button, Form, Input } from 'antd';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { parseEther } from 'ethers/lib/utils';
 import { createInstance } from 'utils/helpers';
 import { selectUtils } from 'redux/utilsReducer';
 import { Contract } from 'ethers';
 import { selectSession } from '../../../redux/sessionReducer';
 import { ReactComponent as Delete } from '../../../images/delete.svg';
 import getRule from '../../../utils/validate';
-// import {selectUtils} from '../../../redux/utilsReducer'
 
 const { Item } = Form;
 
@@ -25,11 +21,6 @@ const mock = [
   },
 ];
 
-// ((RISK IS TRUE) AND (TIME < EXPIRY)) OR
-//       ((TIME >= EXPIRY) AND (PRINCIPAL + INTEREST  > PAYMENTS))
-//       ((RISK IS TRUE) AND (TIME < EXPIRY))OR((TIME >= EXPIRY)
-//       AND (PRINCIPAL + INTEREST  > PAYMENTS))
-
 const mockSignatories = [{ title: 'Signatory', value: '', id: 1 }];
 
 const UpdateRequest = () => {
@@ -38,6 +29,7 @@ const UpdateRequest = () => {
   const [conditions, setConditions] = useState(mock);
   const [signatories, setSignatories] = useState(mockSignatories);
   const [agreement, setAgreement] = useState('');
+  const [dslId, setDslID] = useState('');
   const [transaction, setTransaction] = useState('');
   const navigate = useNavigate();
 
@@ -49,7 +41,11 @@ const UpdateRequest = () => {
     transaction: string;
   };
 
-  const addSteps = async (a: Contract, contextFactory: Contract, steps: TxObject[]) => {
+  const addSteps = async (
+    agreementContract: Contract,
+    contextFactory: Contract,
+    steps: TxObject[]
+  ) => {
     console.log('`addSteps` function call');
 
     for await (const step of steps) {
@@ -57,9 +53,7 @@ const UpdateRequest = () => {
       await contextFactory.methods.deployContext().send({ from: userWallet });
       let contextsLen = parseInt(await contextFactory.methods.getDeployedLen().call(), 10);
       console.log({ contextsLen });
-      const transactionContextAddr = await contextFactory.methods
-        .deployedContexts(contextsLen - 1)
-        .call();
+      const transactionContextAddr = await contextFactory.methods.deployed(contextsLen - 1).call();
       console.log({ transactionContextAddr });
       const conditionsContextAddrs = [];
 
@@ -71,14 +65,12 @@ const UpdateRequest = () => {
         console.log({ deployCtxTx });
         contextsLen = parseInt(await contextFactory.methods.getDeployedLen().call(), 10);
         console.log({ contextsLen });
-        const conditionContextAddr = await contextFactory.methods
-          .deployedContexts(contextsLen - 1)
-          .call();
+        const conditionContextAddr = await contextFactory.methods.deployed(contextsLen - 1).call();
         console.log({ conditionContextAddr });
         conditionsContextAddrs.push(conditionContextAddr);
 
         console.log(`Parsing a condition #${j}`);
-        const agrParseTx = await a.methods
+        const agrParseTx = await agreementContract.methods
           .parse(step.conditions[j], conditionContextAddr)
           .send({ from: userWallet });
         console.log({ agrParseTx });
@@ -90,11 +82,13 @@ const UpdateRequest = () => {
       }
 
       console.log('Parsing transaction');
-      await a.methods.parse(step.transaction, transactionContextAddr).send({ from: userWallet });
+      await agreementContract.methods
+        .parse(step.transaction, transactionContextAddr)
+        .send({ from: userWallet });
       console.log('\nTerm transaction');
       console.log(`\n\taddress: \x1b[35m${transactionContextAddr}\x1b[0m`);
       console.log(`\t\x1b[33m${step.transaction}\x1b[0m`);
-      const { hash } = await a.methods
+      const agrUpdate = await agreementContract.methods
         .update(
           step.txId,
           step.requiredTxs,
@@ -105,50 +99,33 @@ const UpdateRequest = () => {
           conditionsContextAddrs
         )
         .send({ from: userWallet });
-      console.log(`\nAgreement update transaction hash: \n\t\x1b[35m${hash}\x1b[0m`);
+      console.log(`\nAgreement update transaction hash: \n\t\x1b[35m${agrUpdate}\x1b[0m`);
     }
   };
 
   const updateAgreement = async () => {
     console.log('`updateAgreement` function call');
     // Input data
-    const alice = '0x764E1431Bc7f0D2351Daf2e771729F5D230493A0';
-    const bob = '0x7e57B32aCB1FE54Ae92F8aDe15Fa026512b80819';
-    const oneEth = parseEther('1');
-    const tenTokens = parseEther('10');
+    // eslint-disable-next-line
+    const _dslId = parseInt(dslId, 10);
+    // eslint-disable-next-line
+    const _agreementAddr = agreement;
+    // eslint-disable-next-line
+    const _signatory = signatories[0].value;
+    // eslint-disable-next-line
+    const _condition = conditions[0].value;
+    // eslint-disable-next-line
+    const _transaction = transaction;
 
-    // TODO: get agreementAddr from the input field
-    const a = await createInstance('Agreement', agreement, provider);
+    console.log({
+      _dslId,
+      _agreementAddr,
+      _signatory,
+      _condition,
+      _transaction,
+    });
 
-    const conditionalTxs = [
-      // Alice deposits 1 ETH to SC
-      {
-        txId: 21,
-        requiredTxs: [],
-        signatories: [alice],
-        transaction: `msgValue == uint256 ${oneEth}`,
-        conditions: ['bool true'],
-      },
-      // Bob lends 10 tokens to Alice
-      {
-        txId: 22,
-        requiredTxs: [21],
-        signatories: [bob],
-        transaction: `transferFrom TOKEN_ADDR BOB ALICE ${tenTokens.toString()}`,
-        conditions: ['bool true'],
-      },
-      // Alice returns 10 tokens to Bob and collects 1 ETH
-      {
-        txId: 23,
-        requiredTxs: [22],
-        signatories: [alice],
-        transaction: `
-              (transferFrom TOKEN_ADDR ALICE BOB ${tenTokens.toString()})
-          and (sendEth ALICE ${oneEth})
-        `,
-        conditions: ['bool true'],
-      },
-    ];
+    const agreementContract = await createInstance('Agreement', _agreementAddr, provider);
 
     const contextFactory = await createInstance(
       'ContextFactory',
@@ -161,11 +138,19 @@ const UpdateRequest = () => {
       provider
     );
 
-    console.log({ txsAddr: await a.methods.txs().call() });
+    console.log({ txsAddr: await agreementContract.methods.txs().call() });
     console.log({ agrdeployedLen: await agrFactory.methods.getDeployedLen().call() });
     console.log({ ctxdeployedLen: await contextFactory.methods.getDeployedLen().call() });
 
-    await addSteps(a, contextFactory, conditionalTxs);
+    await addSteps(agreementContract, contextFactory, [
+      {
+        txId: _dslId,
+        requiredTxs: [],
+        signatories: [_signatory],
+        conditions: [_condition],
+        transaction: _transaction,
+      },
+    ]);
   };
 
   return (
@@ -186,6 +171,20 @@ const UpdateRequest = () => {
         >
           {userWallet}
         </div>
+
+        <div style={{ marginTop: '24px' }} className="text">
+          ID
+        </div>
+        <Item name="dsl-id" validateTrigger="onBlur" rules={getRule('dsl-id', 'dsl-id')}>
+          <Input
+            className="lander"
+            value={dslId}
+            onChange={(e) => {
+              return setDslID(e?.target?.value);
+            }}
+          />
+        </Item>
+
         <div style={{ marginTop: '24px' }} className="text">
           Agreement
         </div>
@@ -198,6 +197,7 @@ const UpdateRequest = () => {
             }}
           />
         </Item>
+
         {signatories.map((el) => {
           return (
             <div className="specificationInput" key={el.id}>
