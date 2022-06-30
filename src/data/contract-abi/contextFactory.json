@@ -33,7 +33,7 @@
         "type": "uint256"
       }
     ],
-    "name": "deployed",
+    "name": "deployedContexts",
     "outputs": [
       {
         "internalType": "address",
@@ -46,7 +46,7 @@
   },
   {
     "inputs": [],
-    "name": "getDeployedLen",
+    "name": "getDeployedContextsLen",
     "outputs": [
       {
         "internalType": "uint256",

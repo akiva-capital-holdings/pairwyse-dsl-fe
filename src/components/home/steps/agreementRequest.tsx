@@ -32,10 +32,10 @@ const AgreementRequest = () => {
       .send({ from: userWallet });
     console.log({ tx });
 
-    const agrLen = parseInt(await agrFactory.methods.getDeployedLen().call(), 10);
+    const agrLen = parseInt(await agrFactory.methods.getDeployedAgreementsLen().call(), 10);
     console.log({ agrLen });
 
-    const lastAgrAddr = await agrFactory.methods.deployed(agrLen - 1).call();
+    const lastAgrAddr = await agrFactory.methods.deployedAgreements(agrLen - 1).call();
     console.log({ lastAgrAddr });
   };
 
