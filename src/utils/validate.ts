@@ -11,14 +11,16 @@ export const  validationAgreementModel = (value, setError) => {
 export default function getRule(label: string, name: string, v?) {
   const defaultRule = {
     required: true,
-    message: `This field ${label.toLowerCase()} is required`,
+    message: 'This field is required',
   };
 
   const validateMinMax = (min: number, max: number) => {
     return {
       validator: (_: any, value: string) => {
         console.log({ valLen: value?.length });
-        if (value?.length < min) {
+        console.log(value?.length );
+        
+        if (value?.length <  min) {
           return Promise.reject(new Error(`Field ${name} must be less than ${min} symbols`));
         }
         if (value?.length > max) {
@@ -37,7 +39,7 @@ export default function getRule(label: string, name: string, v?) {
       validator: (_: any, value: string) => {
         if (!value) return Promise.resolve();
         if (simbols.test(value)) return Promise.resolve();
-        return Promise.reject(new Error(`This field ${label.toLowerCase()} is required`));
+        return Promise.reject(new Error('This field is required'));
       },
     };
   };
@@ -76,7 +78,7 @@ export default function getRule(label: string, name: string, v?) {
     return {
       validator: () => {
         if ((v && v?.length === 0) || v?.length === 1) {
-          return Promise.reject(new Error(`This field ${label.toLowerCase()} is required`));
+          return Promise.reject(new Error('This field is required'));
         }
 
         return Promise.resolve();
@@ -89,8 +91,8 @@ export default function getRule(label: string, name: string, v?) {
       return [defaultRule, validateMinMax(0, 20)];
     case 'agreement':
       return [defaultRule, validateAddressEth(), validateAddress()];
-    case 'definition':
-      return [defaultRule, validateField(), validateMinMax(0, 20)];
+    // case 'definition':
+      // return [defaultRule, validateField(), validateMinMax(0, 20)];
     case 'specification':
       return [defaultRule, validateField(), validateMinMax(0, 42)];
     case 'condition':
