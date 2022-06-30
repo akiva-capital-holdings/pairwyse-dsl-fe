@@ -53,7 +53,7 @@ const DefinitionRequest = () => {
 
   return (
     <div className="definitionRequest">
-      <div className="title">DefinitionRequest</div>
+      <div className="title">Definition Request</div>
       <Form name="agreementRequestForm" autoComplete="off" onFinish={defineVariable}>
         <div style={{ marginTop: '24px' }} className="text">
           Requestor
