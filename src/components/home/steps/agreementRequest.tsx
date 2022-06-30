@@ -1,11 +1,11 @@
 /* eslint-disable arrow-body-style */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Button, Menu, Dropdown, Space, Input } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Contract } from 'ethers';
-import getRule from '../../../utils/validate';
+import getRule, {validationAgreementModel} from '../../../utils/validate';
 import { createInstance } from '../../../utils/helpers';
 import { selectUtils } from '../../../redux/utilsReducer';
 import { selectSession } from '../../../redux/sessionReducer';
@@ -16,27 +16,30 @@ const { Item } = Form;
 const AgreementRequest = () => {
   const { address: userWallet } = useSelector(selectSession);
   const { provider } = useSelector(selectUtils);
-  const [value, setValue] = useState(' ');
+  const [value, setValue] = useState(undefined);
   const [lender, setLender] = useState('');
+  const [error, setError] = useState(undefined)
   const navigate = useNavigate();
 
   const createAgreement = async () => {
-    const agrFactory: Contract = await createInstance(
-      'AgreementFactory',
-      `${process.env.REACT_APP_AGREEMENT_FACTORY}`,
-      provider
-    );
-
-    const tx = await agrFactory.methods
-      .deployAgreement(process.env.REACT_APP_PARSER)
-      .send({ from: userWallet });
-    console.log({ tx });
-
-    const agrLen = parseInt(await agrFactory.methods.getDeployedLen().call(), 10);
-    console.log({ agrLen });
-
-    const lastAgrAddr = await agrFactory.methods.deployed(agrLen - 1).call();
-    console.log({ lastAgrAddr });
+    if(!error) {
+      const agrFactory: Contract = await createInstance(
+        'AgreementFactory',
+        `${process.env.REACT_APP_AGREEMENT_FACTORY}`,
+        provider
+      );
+  
+      const tx = await agrFactory.methods
+        .deployAgreement(process.env.REACT_APP_PARSER)
+        .send({ from: userWallet });
+      console.log({ tx });
+  
+      const agrLen = parseInt(await agrFactory.methods.getDeployedLen().call(), 10);
+      console.log({ agrLen });
+  
+      const lastAgrAddr = await agrFactory.methods.deployed(agrLen - 1).call();
+      console.log({ lastAgrAddr });
+    } 
   };
 
   const menu = (
@@ -54,6 +57,29 @@ const AgreementRequest = () => {
       <Menu.Divider />
     </Menu>
   );
+
+  const dropDown = () => {
+  return  <Item
+    name="agreementModel"
+  >
+    <Dropdown className='dropdown' overlay={menu}>
+      <Button className={error && 'ant-input-status-error'}>
+        <Space>
+          {value}
+          <DownOutlined className='iconDropDown' />
+        </Space>
+      </Button>
+    </Dropdown>
+    <span className='ant-form-item-explain-error'>{error}</span>
+  </Item>
+  }
+  useEffect(() => {
+    if(error) {
+      validationAgreementModel(value, setError)
+    }
+    dropDown()
+  }, [value])
+
 
   return (
     <div className="agreementRequest">
@@ -79,20 +105,7 @@ const AgreementRequest = () => {
         <div style={{ marginTop: '24px' }} className="text">
           Agreement model{' '}
         </div>
-        <Item
-          name="agreementModel"
-          validateTrigger="onBlur"
-          rules={getRule('agreement model', 'agreement model')}
-        >
-          <Dropdown overlay={menu}>
-            <Button>
-              <Space>
-                {value}
-                <DownOutlined />
-              </Space>
-            </Button>
-          </Dropdown>
-        </Item>
+       {dropDown()}
         <div style={{ marginTop: '24px' }} className="text">
           Agreement template
         </div>
@@ -105,6 +118,7 @@ const AgreementRequest = () => {
               style={{ height: '48px', marginRight: '16px' }}
               htmlType="submit"
               className="btn"
+              onClick={() => validationAgreementModel(value, setError) }
             >
               Create Agreement
             </Button>

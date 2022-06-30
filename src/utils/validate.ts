@@ -1,10 +1,19 @@
 import { ethers } from 'ethers';
 
+export const  validationAgreementModel = (value, setError) => {
+  if(value?.length > 0) {
+   setError(null)
+  } else {
+   setError('This field lander is required')
+  }
+};
+
 export default function getRule(label: string, name: string, v?) {
   const defaultRule = {
     required: true,
     message: `This field ${label.toLowerCase()} is required`,
   };
+
   const validateMinMax = (min: number, max: number) => {
     return {
       validator: (_: any, value: string) => {
@@ -43,18 +52,6 @@ export default function getRule(label: string, name: string, v?) {
     };
   };
 
-  const validationAgreementModel = () => {
-    return {
-      validator: () => {
-        if ((v && v?.length === 0) || v?.length === 1) {
-          return Promise.reject(new Error(`This field ${label.toLowerCase()} is required`));
-        }
-
-        return Promise.resolve();
-      },
-    };
-  };
-
   const validateAddressEth = () => {
     return {
       validator: (_: any, value: string) => {
@@ -74,19 +71,30 @@ export default function getRule(label: string, name: string, v?) {
       },
     };
   };
+
+  const validation = () => {
+    return {
+      validator: () => {
+        if ((v && v?.length === 0) || v?.length === 1) {
+          return Promise.reject(new Error(`This field ${label.toLowerCase()} is required`));
+        }
+
+        return Promise.resolve();
+      },
+    };
+  };
+
   switch (name) {
     case 'requestorLabel':
       return [defaultRule, validateMinMax(0, 20)];
     case 'agreement':
       return [defaultRule, validateAddressEth(), validateAddress()];
-    case 'agreement model':
-      return [validationAgreementModel()];
     case 'definition':
       return [defaultRule, validateField(), validateMinMax(0, 20)];
     case 'specification':
       return [defaultRule, validateField(), validateMinMax(0, 42)];
     case 'condition':
-      return [defaultRule, validateFieldCondition()];
+      return [defaultRule, validateFieldCondition(), validation()];
     case 'signatories':
       return [defaultRule, validateAddressEth(), validateAddress()];
     default:
