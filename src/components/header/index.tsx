@@ -11,7 +11,7 @@ const Header = () => {
 
   return (
     <div className="headerContainer">
-      <div onClick={() => navigate('/')} className="logo">
+      <div style={{cursor: 'pointer'}} onClick={() => navigate('/')} className="logo">
         Logo
       </div>
       {address && (

@@ -7,11 +7,15 @@ import './index.css';
 
 const networksList: {} = getNetworksList();
 const { ethereum }: any = window;
+console.log(process.env.REACT_APP_NETWORK, NETWORK_OPTIONS[process.env.REACT_APP_NETWORK].rpcUrls);
+
+console.log(NETWORK_OPTIONS[process.env.REACT_APP_NETWORK].chainId);
+
 
 const handleClick = async () => {
   try {
     if (!ethereum) throw new Error('No crypto wallet found');
-    await ethereum.request({
+   await ethereum.request({
       method: 'wallet_switchEthereumChain',
       params: [
         {
@@ -19,6 +23,7 @@ const handleClick = async () => {
         },
       ],
     });
+    
   } catch (err: any) {
     if (err?.code === 4902) {
       try {
@@ -37,6 +42,7 @@ const handleClick = async () => {
     console.error(err?.message);
   }
 };
+console.log(ethereum?.networkVersion, process.env.REACT_APP_NETWORK);
 
 const ChangeNetwork = () => {
   return (
@@ -45,7 +51,7 @@ const ChangeNetwork = () => {
       <div className="secondaryTitle">
         We've detected that you need to switch your wallet's network from <br />{' '}
         <span className="network">{networksList[ethereum?.networkVersion]}</span> to{' '}
-        <span className="network">Rinkeby</span> for this app.
+        <span className="network">{process.env.REACT_APP_NETWORK}</span> for this app.
       </div>
       <div className="textInfo">
         Some wallets may not support changing networks. If you cannot change networks in your

@@ -5,6 +5,7 @@ import type { ColumnsType } from 'antd/lib/table';
 import { useSelector } from 'react-redux';
 import { selectSession } from '../../redux/sessionReducer';
 import { ReactComponent as Copy } from '../../images/copy.svg';
+import { ReactComponent as CopyWhite } from '../../images/coppyWhite.svg';
 import './index.css';
 
 const { Search } = Input;
@@ -41,7 +42,7 @@ const columns: ColumnsType<MockType> = [
     render: (txID) => (
       <div className="status">
         <div style={{ textOverflow: 'ellipsis', overflow: 'hiden' }}>{txID}</div>
-        <Copy onClick={() => onCopyClick(txID)} />
+        <Copy className='copy'  onClick={() => onCopyClick(txID)} />
       </div>
     ),
   },
@@ -52,7 +53,7 @@ const columns: ColumnsType<MockType> = [
     render: (agreementAddress) => (
       <div className="status">
         <div style={{ textOverflow: 'ellipsis', overflow: 'hiden' }}>{agreementAddress}</div>
-        <Copy onClick={() => onCopyClick(agreementAddress)} />
+        <Copy className='copy'  onClick={() => onCopyClick(agreementAddress)} />
       </div>
     ),
   },
@@ -63,7 +64,7 @@ const columns: ColumnsType<MockType> = [
     render: (txOriginator) => (
       <div className="status">
         <div style={{ textOverflow: 'ellipsis', overflow: 'hiden' }}>{txOriginator}</div>
-        <Copy onClick={() => onCopyClick(txOriginator)} />
+        <Copy  className='copy' onClick={() => onCopyClick(txOriginator)} />
       </div>
     ),
   },
@@ -108,7 +109,13 @@ const Transaction = () => {
       <Sider collapsible collapsed={collapsed} onCollapse={() => setCollapsed(!collapsed)}>
         <div className="addressContainer">
           <div className="img" />
-          <div className="address">{address}</div>
+          <div style={{display: 'flex', maxWidth: '150px', margin: '0 auto'}}>
+            <div className="address">
+             {address}
+            </div>
+            <CopyWhite className='copy' onClick={() => onCopyClick(address)} />
+          </div>
+         
         </div>
         <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']} accessKey={'1'}>
           <Menu.Item key="1">Transactions</Menu.Item>

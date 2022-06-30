@@ -63,7 +63,7 @@ const HomePage = () => {
     <>
       <div className="homePage">
         <div className="stepsContentContainer">
-          <span className="title">Create Agreement</span>
+          <span className="title">Agreement</span>
           <div className="menu">
             <button
               onClick={() => onChangeStep(1)}

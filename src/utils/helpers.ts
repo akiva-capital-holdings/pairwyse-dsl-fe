@@ -61,6 +61,7 @@ export const checkNetwork = async (dispatch, checkNetworkAction) => {
   const networks = {
     mainnet: 1,
     rinkeby: 4,
+    local: 539,
   };
   // @ts-ignore
   const currentChainId = Number(
@@ -70,9 +71,12 @@ export const checkNetwork = async (dispatch, checkNetworkAction) => {
       })
     ).split('x')[1]
   );
+  console.log(currentChainId);
+  console.log(networks[process.env.REACT_APP_NETWORK]);
   // @ts-ignore
   if (networks[process.env.REACT_APP_NETWORK] !== currentChainId) {
-    // modalNetwork();
+  
+    console.log(currentChainId);
     dispatch(checkNetworkAction(false));
     return;
   }
