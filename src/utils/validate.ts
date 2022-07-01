@@ -9,8 +9,6 @@ export const  validationAgreementModel = (value, setError) => {
 };
 
 export default function getRule(label: string, name: string, v?) {
-  console.log(v);
-  
   const defaultRule = {
     required: true,
     message: 'This field is required',

@@ -7,10 +7,6 @@ import './index.css';
 
 const networksList: {} = getNetworksList();
 const { ethereum }: any = window;
-console.log(process.env.REACT_APP_NETWORK, NETWORK_OPTIONS[process.env.REACT_APP_NETWORK].rpcUrls);
-
-console.log(NETWORK_OPTIONS[process.env.REACT_APP_NETWORK].chainId);
-
 
 const handleClick = async () => {
   try {
@@ -42,7 +38,6 @@ const handleClick = async () => {
     console.error(err?.message);
   }
 };
-console.log(ethereum?.networkVersion, process.env.REACT_APP_NETWORK);
 
 const ChangeNetwork = () => {
   return (
