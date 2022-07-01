@@ -226,7 +226,7 @@ const UpdateRequest = () => {
                 onClick={() => setSignatories(signatories.filter((s) => s.id !== el.id))}
                 className="del"
               >
-                {signatories?.length > 1 && <Delete />}
+                {el?.id !== 1 && <Delete />}
               </Button>
             </div>
           );
@@ -271,7 +271,7 @@ const UpdateRequest = () => {
                   onClick={() => setConditions(conditions.filter((s) => s.id !== el.id))}
                   className="del"
                 >
-                  {conditions?.length > 1 && <Delete />}
+                  {el?.id !== 1 && <Delete />}
                 </button>
               </div>
             );

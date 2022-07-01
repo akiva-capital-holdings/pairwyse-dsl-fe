@@ -50,7 +50,7 @@ const DefinitionRequest = () => {
     const value = await txs.methods.getStorageAddress(hex4Bytes(_definition)).call();
     console.log({ value });
   };
-
+  
   return (
     <div className="definitionRequest">
       <div className="title">Definition Request</div>
@@ -76,6 +76,7 @@ const DefinitionRequest = () => {
         </div>
         <Item name="borrower" validateTrigger="onBlur" rules={getRule('definition', 'definition')}>
           <Input
+            maxLength={20}
             placeholder="Borrower"
             className="lander"
             value={definition}
@@ -112,27 +113,29 @@ const DefinitionRequest = () => {
                   onClick={() => setspecification(specifications.filter((s) => s.id !== el.id))}
                   className="del"
                 >
-                  {specifications?.length > 1 && <Delete />}
+                  {el.id !== 1  && <Delete />}
                 </Button>
               </div>
             );
           })}
-          <Button
-            htmlType="button"
-            className="add"
-            onClick={() =>
-              setspecification([
-                ...specifications,
-                {
-                  title: `Specification ${specifications?.length}`,
-                  value: '',
-                  id: specifications?.length + 1,
-                },
-              ])
-            }
-          >
-            Add Specification
-          </Button>
+          {specifications?.length === 5 || specifications?.length < 5 &&
+           <Button
+           htmlType="button"
+           className="add"
+           onClick={() =>
+             setspecification([
+               ...specifications,
+               {
+                 title: `Specification ${specifications?.length}`,
+                 value: '',
+                 id: specifications?.length + 1,
+               },
+             ])
+           }
+         >
+           Add Specification
+         </Button>
+       }
         </div>
         <div className="btnsContainer">
           <Button style={{ height: '48px' }} htmlType="submit" className="btn">
