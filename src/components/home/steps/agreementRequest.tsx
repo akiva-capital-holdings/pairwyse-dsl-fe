@@ -1,5 +1,5 @@
 /* eslint-disable arrow-body-style */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Form, Button, Menu, Dropdown, Space, Input } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
@@ -13,12 +13,13 @@ import './index.css';
 
 const { Item } = Form;
 
-const AgreementRequest = () => {
+const AgreementRequest = ({setLender, setError, setValue, lender, error,  value}) => {
   const { address: userWallet } = useSelector(selectSession);
   const { provider } = useSelector(selectUtils);
-  const [value, setValue] = useState(undefined);
-  const [lender, setLender] = useState('');
-  const [error, setError] = useState(undefined)
+
+  console.log('lender', lender);
+  
+
   const navigate = useNavigate();
 
   const createAgreement = async () => {
@@ -92,11 +93,11 @@ const AgreementRequest = () => {
         <div style={{ marginTop: '24px' }} className="text">
           Requestor label
         </div>
-        <Item name="lander" validateTrigger="onBlur" rules={getRule('lander', 'lander')}>
+        <Item name="lander" validateTrigger="onBlur" rules={getRule('lander', 'lander', lender)}>
           <Input
             className="lander"
             placeholder="Lender"
-            value={lender}
+            defaultValue={lender}
             onChange={(e) => {
               return setLender(e?.target?.value);
             }}

@@ -9,6 +9,8 @@ export const  validationAgreementModel = (value, setError) => {
 };
 
 export default function getRule(label: string, name: string, v?) {
+  console.log(v);
+  
   const defaultRule = {
     required: true,
     message: 'This field is required',
@@ -16,14 +18,11 @@ export default function getRule(label: string, name: string, v?) {
 
   const validateMinMax = (min: number, max: number) => {
     return {
-      validator: (_: any, value: string) => {
-        console.log({ valLen: value?.length });
-        console.log(value?.length );
-        
-        if (value?.length <  min) {
+      validator: () => {
+        if (v?.length <  min) {
           return Promise.reject(new Error(`Field ${name} must be less than ${min} symbols`));
         }
-        if (value?.length > max) {
+        if (v?.length > max) {
           return Promise.reject(new Error(`Field ${name} must be more than  ${max} symbols`));
         }
         return Promise.resolve();
@@ -36,9 +35,9 @@ export default function getRule(label: string, name: string, v?) {
 
   const validateField = () => {
     return {
-      validator: (_: any, value: string) => {
-        if (!value) return Promise.resolve();
-        if (simbols.test(value)) return Promise.resolve();
+      validator: () => {
+        if (!v) return Promise.resolve();
+        if (simbols.test(v)) return Promise.resolve();
         return Promise.reject(new Error('This field is required'));
       },
     };
@@ -46,9 +45,9 @@ export default function getRule(label: string, name: string, v?) {
 
   const validateFieldCondition = () => {
     return {
-      validator: (_: any, value: string) => {
-        if (!value) return Promise.resolve();
-        if (!ruAlfabet.test(value)) return Promise.resolve();
+      validator: () => {
+        if (!v) return Promise.resolve();
+        if (!ruAlfabet.test(v)) return Promise.resolve();
         return Promise.reject(new Error('Invalid format'));
       },
     };
@@ -56,9 +55,9 @@ export default function getRule(label: string, name: string, v?) {
 
   const validateAddressEth = () => {
     return {
-      validator: (_: any, value: string) => {
-        if (!value) return Promise.resolve();
-        if (ethers.utils.isAddress(value)) return Promise.resolve();
+      validator: () => {
+        if (!v) return Promise.resolve();
+        if (ethers.utils.isAddress(v)) return Promise.resolve();
         return Promise.reject(new Error('Invalid format'));
       },
     };
@@ -66,9 +65,9 @@ export default function getRule(label: string, name: string, v?) {
 
   const validateAddress = () => {
     return {
-      validator: (_: any, value: string) => {
-        if (!value) return Promise.resolve();
-        if (value !== '0x0000000000000000000000000000000000000000') return Promise.resolve();
+      validator: () => {
+        if (!v) return Promise.resolve();
+        if (v !== '0x0000000000000000000000000000000000000000') return Promise.resolve();
         return Promise.reject(new Error('Invalid address'));
       },
     };
@@ -87,8 +86,8 @@ export default function getRule(label: string, name: string, v?) {
 
   const validateSpace = () => {
     return {
-      validator: (_: any, value: string) => {
-        if (value?.trim() === '' || value === undefined) {
+      validator: () => {
+        if (v?.trim() === '' || v === undefined) {
           return Promise.reject(new Error('This field is required'));
         }
         return Promise.resolve();
@@ -98,19 +97,19 @@ export default function getRule(label: string, name: string, v?) {
 
   switch (name) {
     case 'requestorLabel':
-      return [defaultRule, validateMinMax(0, 20)];
+      return [validateMinMax(0, 20), validateSpace];
     case 'lander':
       return [validateSpace]
     case 'agreement':
-      return [defaultRule, validateAddressEth, validateAddress];
+      return [validateAddressEth, validateAddress, validateSpace];
     case 'definition':
       return [validateSpace];
     case 'specification':
-      return [defaultRule, validateField, validateMinMax(0, 42)];
+      return [validateField, validateMinMax(0, 42), validateSpace];
     case 'condition':
-      return [defaultRule, validateFieldCondition, validation, validateSpace];
+      return [validateFieldCondition, validation, validateSpace];
     case 'signatories':
-      return [defaultRule, validateAddressEth, validateAddress];
+      return [validateAddressEth, validateAddress, validateSpace];
     case 'transaction':
       return [validateSpace];
     case 'dsl-id':

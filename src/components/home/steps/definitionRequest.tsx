@@ -1,6 +1,6 @@
 /* eslint-disable no-unsafe-optional-chaining */
 /* eslint-disable arrow-body-style */
-import React, { useState } from 'react';
+import React from 'react';
 import { Button, Input, Form } from 'antd';
 import { useNavigate } from 'react-router-dom';
 // import { useSelector } from 'react-redux';
@@ -13,15 +13,16 @@ import getRule from '../../../utils/validate';
 import { ReactComponent as Delete } from '../../../images/delete.svg';
 
 const { Item } = Form;
-// import {selectUtils} from '../../../redux/utilsReducer'
-
-const mock = [{ title: 'Specification (address)', value: '', id: 1 }];
-const DefinitionRequest = () => {
+const DefinitionRequest = ({
+  setAgreementDefinition: setAgreement,
+  agreementDefinition : agreement,
+  setspecification,
+  specifications,
+  setDefinition,
+  definition
+}) => {
   const { address: userWallet } = useSelector(selectSession);
-  const [definition, setDefinition] = useState('');
   const { provider } = useSelector(selectUtils);
-  const [specifications, setspecification] = useState(mock);
-  const [agreement, setAgreement] = useState('');
   const navigate = useNavigate();
 
   const defineVariable = async () => {
@@ -50,6 +51,8 @@ const DefinitionRequest = () => {
     const value = await txs.methods.getStorageAddress(hex4Bytes(_definition)).call();
     console.log({ value });
   };
+  console.log(specifications);
+  
   
   return (
     <div className="definitionRequest">
@@ -62,10 +65,10 @@ const DefinitionRequest = () => {
         <div style={{ marginTop: '24px' }} className="text">
           Agreement
         </div>
-        <Item name="agreement" validateTrigger="onBlur" rules={getRule('agreement', 'agreement')}>
+        <Item name="agreement" validateTrigger="onBlur" rules={getRule('agreement', 'agreement', agreement)}>
           <Input
             className="lander"
-            value={agreement}
+            defaultValue={agreement}
             onChange={(e) => {
               return setAgreement(e?.target?.value);
             }}
@@ -74,12 +77,12 @@ const DefinitionRequest = () => {
         <div style={{ marginTop: '24px' }} className="text">
           Definition
         </div>
-        <Item name="borrower" validateTrigger="onBlur" rules={getRule('definition', 'definition')}>
+        <Item name="borrower" validateTrigger="onBlur" rules={getRule('definition', 'definition', definition)}>
           <Input
             maxLength={20}
             placeholder="Borrower"
             className="lander"
-            value={definition}
+            defaultValue={definition}
             onChange={(e) => {
               return setDefinition(e?.target?.value);
             }}
@@ -100,6 +103,7 @@ const DefinitionRequest = () => {
                   rules={getRule('specification', 'specification', el.value)}
                 >
                   <Input
+                    defaultValue={el.value}
                     onChange={(e) =>
                       setspecification(
                         specifications?.map((c) =>
