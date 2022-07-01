@@ -89,9 +89,11 @@ const DefinitionRequest = () => {
           {specifications.map((el) => {
             return (
               <div className="specificationInput" key={el.id}>
+               { el?.id === 1 &&
                 <div style={{ marginTop: '24px' }} className="text">
-                  {el.title}{' '}
+                  Specifications
                 </div>
+                }
                 <Item
                   name={`specification${el.id}`}
                   validateTrigger="onBlur"

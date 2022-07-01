@@ -80,7 +80,17 @@ export default function getRule(label: string, name: string, v?) {
         if ((v && v?.length === 0) || v?.length === 1) {
           return Promise.reject(new Error('This field is required'));
         }
+        return Promise.resolve();
+      },
+    };
+  };
 
+  const validateSpace = () => {
+    return {
+      validator: (_: any, value: string) => {
+        if (value?.trim() === '' || value === undefined) {
+          return Promise.reject(new Error('This field is required'));
+        }
         return Promise.resolve();
       },
     };
@@ -89,16 +99,22 @@ export default function getRule(label: string, name: string, v?) {
   switch (name) {
     case 'requestorLabel':
       return [defaultRule, validateMinMax(0, 20)];
+    case 'lander':
+      return [validateSpace]
     case 'agreement':
-      return [defaultRule, validateAddressEth(), validateAddress()];
-    // case 'definition':
-      // return [defaultRule, validateField(), validateMinMax(0, 20)];
+      return [defaultRule, validateAddressEth, validateAddress];
+    case 'definition':
+      return [validateSpace];
     case 'specification':
-      return [defaultRule, validateField(), validateMinMax(0, 42)];
+      return [defaultRule, validateField, validateMinMax(0, 42)];
     case 'condition':
-      return [defaultRule, validateFieldCondition(), validation()];
+      return [defaultRule, validateFieldCondition, validation, validateSpace];
     case 'signatories':
-      return [defaultRule, validateAddressEth(), validateAddress()];
+      return [defaultRule, validateAddressEth, validateAddress];
+    case 'transaction':
+      return [validateSpace];
+    case 'dsl-id':
+      return [validateSpace];
     default:
       return [defaultRule];
   }

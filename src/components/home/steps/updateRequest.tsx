@@ -197,13 +197,14 @@ const UpdateRequest = () => {
             }}
           />
         </Item>
-
         {signatories.map((el) => {
           return (
             <div className="specificationInput" key={el.id}>
+             { el?.id === 1 && 
               <div style={{ marginTop: '24px' }} className="text">
-                {el.title}{' '}
+                 Signatories
               </div>
+             }
               <Item
                 name={`signatories${el.id}`}
                 validateTrigger="onBlur"
@@ -247,9 +248,10 @@ const UpdateRequest = () => {
           {conditions.map((el) => {
             return (
               <div className="specificationInput" key={el.id}>
+               { el?.id === 1 &&
                 <div style={{ marginTop: '24px' }} className="text">
-                  {el.title}{' '}
-                </div>
+                 Conditions
+                </div>}
                 <Item
                   name={`condition${el.id + 1}`}
                   validateTrigger="onBlur"
