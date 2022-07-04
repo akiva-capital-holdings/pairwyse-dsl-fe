@@ -292,7 +292,7 @@ const UpdateRequest = ({
             validateTrigger="onBlur"
             rules={getRule('transaction', 'transaction', transaction )}
           >
-            <Input
+            <Input.TextArea
               defaultValue={transaction}
               onChange={(e) => setTransaction(e.target.value)}
               className="lander"
