@@ -22,4 +22,14 @@ export const NETWORK_OPTIONS = {
     rpcUrls: ['https://blockexplorer.rinkeby.boba.network/api/eth-rpc'],
     blockExplorerUrls: ['https://rinkeby.etherscan.io'],
   },
+  local: {
+    chainId: `0x${Number()}`,
+    chainName: 'castom',
+    nativeCurrency: { 
+      name: 'castom',
+      symbol: 'ETH',
+      decimals: 18,
+    },
+    rpcUrls: ['http://127.0.0.1:7545'],
+  },
 };

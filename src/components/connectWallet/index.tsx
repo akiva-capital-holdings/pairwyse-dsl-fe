@@ -12,11 +12,10 @@ const ConnectWallet = () => {
 
   return (
     <div className="connectForm">
-      <div className="title">Please connect your wallet</div>
+      <div className="title">Please Connect your wallet</div>
       <button className="btn" onClick={() => connectWallet(onboarding, dispatch, connect)}>
-        connectWallet
+      Connect Wallet
       </button>
-      <button className="btnSecondary">cancel</button>
     </div>
   );
 };

@@ -2,6 +2,7 @@
 import { useState } from 'react';
 
 import { UpdateRequest, DefinitionRequest, AgreementRequest } from './steps';
+import {mock, mockSignatories, mockDefinitions} from './mock'
 
 import './index.css';
 
@@ -13,9 +14,24 @@ const navSteps = {
 
 const HomePage = () => {
   const [step, setStep] = useState(navSteps.stepOne);
+  // agrement request
+  const [value, setValue] = useState(undefined);
+  const [lender, setLender] = useState('');
+  const [error, setError] = useState(undefined)
+  // definition request
+  const [definition, setDefinition] = useState('');
+  const [specifications, setspecification] = useState(mockDefinitions);
+  const [agreementDefinition, setAgreementDefinition] = useState('');
+  // update request 
+  const [conditions, setConditions] = useState(mock);
+  const [signatories, setSignatories] = useState(mockSignatories);
+  const [agreement, setAgreement] = useState('');
+  const [dslId, setDslID] = useState('');
+  const [transaction, setTransaction] = useState('');
 
-  const onChangeStep = (value: number) => {
-    switch (value) {
+
+  const onChangeStep = (v: number) => {
+    switch (v) {
       case 1:
         setStep(navSteps.stepOne);
         break;
@@ -30,9 +46,34 @@ const HomePage = () => {
   };
 
   const steps = {
-    stepOne: <AgreementRequest />,
-    stepTwo: <DefinitionRequest />,
-    stepThree: <UpdateRequest />,
+    stepOne: <AgreementRequest 
+      setLender={setLender}
+      setError={setError}
+      setValue={setValue} 
+      lender={lender} 
+      error={error}
+      value={value} 
+     />,
+    stepTwo: <DefinitionRequest
+      setAgreementDefinition={setAgreementDefinition}
+      agreementDefinition={agreementDefinition}
+      setspecification={setspecification}
+      specifications={specifications}
+      setDefinition={setDefinition}
+      definition={definition}
+    />,
+    stepThree: <UpdateRequest
+    setSignatories={setSignatories}
+    setTransaction={setTransaction}
+    setConditions={setConditions}
+    setAgreement={setAgreement}
+    transaction={transaction}
+    signatories={signatories}
+    conditions={conditions}
+    agreement={agreement}
+    setDslID={setDslID}
+    dslId={dslId}
+     />,
   };
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   // const [increment, setIncrement] = useState();
@@ -63,7 +104,7 @@ const HomePage = () => {
     <>
       <div className="homePage">
         <div className="stepsContentContainer">
-          <span className="title">Create Agreement</span>
+          <span className="title">Agreement</span>
           <div className="menu">
             <button
               onClick={() => onChangeStep(1)}

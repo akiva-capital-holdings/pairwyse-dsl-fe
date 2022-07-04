@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/naming-convention */
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable no-unsafe-optional-chaining */
 /* eslint-disable arrow-body-style */
-import React, { useState } from 'react';
+import React from 'react';
 import { Button, Form, Input } from 'antd';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -13,24 +15,20 @@ import getRule from '../../../utils/validate';
 
 const { Item } = Form;
 
-const mock = [
-  {
-    title: 'Condition',
-    value: '',
-    id: 1,
-  },
-];
-
-const mockSignatories = [{ title: 'Signatory', value: '', id: 1 }];
-
-const UpdateRequest = () => {
+const UpdateRequest = ({
+    setSignatories,
+    setTransaction , 
+    setConditions, 
+    setAgreement, 
+    transaction, 
+    signatories, 
+    conditions, 
+    agreement, 
+    setDslID, 
+    dslId
+}) => {
   const { address: userWallet } = useSelector(selectSession);
   const { provider } = useSelector(selectUtils);
-  const [conditions, setConditions] = useState(mock);
-  const [signatories, setSignatories] = useState(mockSignatories);
-  const [agreement, setAgreement] = useState('');
-  const [dslId, setDslID] = useState('');
-  const [transaction, setTransaction] = useState('');
   const navigate = useNavigate();
 
   type TxObject = {
@@ -110,15 +108,10 @@ const UpdateRequest = () => {
   const updateAgreement = async () => {
     console.log('`updateAgreement` function call');
     // Input data
-    // eslint-disable-next-line
     const _dslId = parseInt(dslId, 10);
-    // eslint-disable-next-line
     const _agreementAddr = agreement;
-    // eslint-disable-next-line
     const _signatory = signatories[0].value;
-    // eslint-disable-next-line
     const _condition = conditions[0].value;
-    // eslint-disable-next-line
     const _transaction = transaction;
 
     console.log({
@@ -173,10 +166,10 @@ const UpdateRequest = () => {
         <div style={{ marginTop: '24px' }} className="text">
           ID
         </div>
-        <Item name="dsl-id" validateTrigger="onBlur" rules={getRule('dsl-id', 'dsl-id')}>
+        <Item name="dsl-id" validateTrigger="onBlur" rules={getRule('dsl-id', 'dsl-id', dslId)}>
           <Input
             className="lander"
-            value={dslId}
+            defaultValue={dslId}
             onChange={(e) => {
               return setDslID(e?.target?.value);
             }}
@@ -186,22 +179,23 @@ const UpdateRequest = () => {
         <div style={{ marginTop: '24px' }} className="text">
           Agreement
         </div>
-        <Item name="agreement" validateTrigger="onBlur" rules={getRule('agreement', 'agreement')}>
+        <Item name="agreement" validateTrigger="onBlur" rules={getRule('agreement', 'agreement', agreement)}>
           <Input
             className="lander"
-            value={agreement}
+            defaultValue={agreement}
             onChange={(e) => {
               return setAgreement(e?.target?.value);
             }}
           />
         </Item>
-
         {signatories.map((el) => {
           return (
             <div className="specificationInput" key={el.id}>
+             { el?.id === 1 && 
               <div style={{ marginTop: '24px' }} className="text">
-                {el.title}{' '}
+                 Signatories
               </div>
+             }
               <Item
                 name={`signatories${el.id}`}
                 validateTrigger="onBlur"
@@ -216,7 +210,7 @@ const UpdateRequest = () => {
                     )
                   }
                   className="lander"
-                  value={el?.value}
+                  defaultValue={el?.value}
                 />
               </Item>
               <Button
@@ -224,7 +218,7 @@ const UpdateRequest = () => {
                 onClick={() => setSignatories(signatories.filter((s) => s.id !== el.id))}
                 className="del"
               >
-                {signatories?.length > 1 && <Delete />}
+                {el?.id !== 1 && <Delete />}
               </Button>
             </div>
           );
@@ -245,15 +239,17 @@ const UpdateRequest = () => {
           {conditions.map((el) => {
             return (
               <div className="specificationInput" key={el.id}>
+               { el?.id === 1 &&
                 <div style={{ marginTop: '24px' }} className="text">
-                  {el.title}{' '}
-                </div>
+                 Conditions
+                </div>}
                 <Item
                   name={`condition${el.id + 1}`}
                   validateTrigger="onBlur"
                   rules={getRule('condition', 'condition', el.value)}
                 >
                   <Input.TextArea
+                    defaultValue={el.value}
                     onChange={(e) =>
                       setConditions(
                         conditions?.map((c) =>
@@ -269,7 +265,7 @@ const UpdateRequest = () => {
                   onClick={() => setConditions(conditions.filter((s) => s.id !== el.id))}
                   className="del"
                 >
-                  {conditions?.length > 1 && <Delete />}
+                  {el?.id !== 1 && <Delete />}
                 </button>
               </div>
             );
@@ -294,10 +290,10 @@ const UpdateRequest = () => {
           <Item
             name="transaction"
             validateTrigger="onBlur"
-            rules={getRule('transaction', 'transaction')}
+            rules={getRule('transaction', 'transaction', transaction )}
           >
             <Input
-              value={transaction}
+              defaultValue={transaction}
               onChange={(e) => setTransaction(e.target.value)}
               className="lander"
             />

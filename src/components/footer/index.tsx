@@ -5,7 +5,7 @@ const Footer = () => {
   return (
     <div className="footerContainer">
       <div className="logoContainer">
-        <div className="logo">Logo</div>
+        <div style={{cursor: 'pointer'}} className="logo">Logo</div>
         <div className="text">© 2022 Akiva | All Rights Reserved</div>
       </div>
       <div className="contactContainer">

@@ -191,3 +191,13 @@
 .ant-btn {
   display: block !important;
 }
+.ant-space.ant-space-horizontal.ant-space-align-center {
+  justify-content: flex-end;
+}
+
+.dropdown .ant-space-item:last-child{
+  margin-right: 0 !important;
+}
+.dropdown .ant-space-item{
+  margin-right: auto !important;
+}

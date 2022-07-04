@@ -45,6 +45,11 @@ button {
   cursor: pointer;
   display: block;
 }
+
+.copy{
+  cursor: pointer;
+}
+
 .btn{
  min-width: 160px;
  height: 40px;

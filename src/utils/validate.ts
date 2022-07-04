@@ -1,18 +1,26 @@
 import { ethers } from 'ethers';
 
+export const  validationAgreementModel = (value, setError) => {
+  if(value?.length > 0) {
+   setError(null)
+  } else {
+   setError('This field lander is required')
+  }
+};
+
 export default function getRule(label: string, name: string, v?) {
   const defaultRule = {
     required: true,
-    message: `This field ${label.toLowerCase()} is required`,
+    message: 'This field is required',
   };
+
   const validateMinMax = (min: number, max: number) => {
     return {
-      validator: (_: any, value: string) => {
-        console.log({ valLen: value?.length });
-        if (value?.length < min) {
+      validator: () => {
+        if (v?.length <  min) {
           return Promise.reject(new Error(`Field ${name} must be less than ${min} symbols`));
         }
-        if (value?.length > max) {
+        if (v?.length > max) {
           return Promise.reject(new Error(`Field ${name} must be more than  ${max} symbols`));
         }
         return Promise.resolve();
@@ -25,41 +33,29 @@ export default function getRule(label: string, name: string, v?) {
 
   const validateField = () => {
     return {
-      validator: (_: any, value: string) => {
-        if (!value) return Promise.resolve();
-        if (simbols.test(value)) return Promise.resolve();
-        return Promise.reject(new Error(`This field ${label.toLowerCase()} is required`));
+      validator: () => {
+        if (!v) return Promise.resolve();
+        if (simbols.test(v)) return Promise.resolve();
+        return Promise.reject(new Error('This field is required'));
       },
     };
   };
 
   const validateFieldCondition = () => {
     return {
-      validator: (_: any, value: string) => {
-        if (!value) return Promise.resolve();
-        if (!ruAlfabet.test(value)) return Promise.resolve();
-        return Promise.reject(new Error('Invalid format'));
-      },
-    };
-  };
-
-  const validationAgreementModel = () => {
-    return {
       validator: () => {
-        if ((v && v?.length === 0) || v?.length === 1) {
-          return Promise.reject(new Error(`This field ${label.toLowerCase()} is required`));
-        }
-
-        return Promise.resolve();
+        if (!v) return Promise.resolve();
+        if (!ruAlfabet.test(v)) return Promise.resolve();
+        return Promise.reject(new Error('Invalid format'));
       },
     };
   };
 
   const validateAddressEth = () => {
     return {
-      validator: (_: any, value: string) => {
-        if (!value) return Promise.resolve();
-        if (ethers.utils.isAddress(value)) return Promise.resolve();
+      validator: () => {
+        if (!v) return Promise.resolve();
+        if (ethers.utils.isAddress(v)) return Promise.resolve();
         return Promise.reject(new Error('Invalid format'));
       },
     };
@@ -67,28 +63,55 @@ export default function getRule(label: string, name: string, v?) {
 
   const validateAddress = () => {
     return {
-      validator: (_: any, value: string) => {
-        if (!value) return Promise.resolve();
-        if (value !== '0x0000000000000000000000000000000000000000') return Promise.resolve();
+      validator: () => {
+        if (!v) return Promise.resolve();
+        if (v !== '0x0000000000000000000000000000000000000000') return Promise.resolve();
         return Promise.reject(new Error('Invalid address'));
       },
     };
   };
+
+  const validation = () => {
+    return {
+      validator: () => {
+        if ((v && v?.length === 0) || v?.length === 1) {
+          return Promise.reject(new Error('This field is required'));
+        }
+        return Promise.resolve();
+      },
+    };
+  };
+
+  const validateSpace = () => {
+    return {
+      validator: () => {
+        if (v?.trim() === '' || v === undefined) {
+          return Promise.reject(new Error('This field is required'));
+        }
+        return Promise.resolve();
+      },
+    };
+  };
+
   switch (name) {
     case 'requestorLabel':
-      return [defaultRule, validateMinMax(0, 20)];
+      return [validateMinMax(0, 20), validateSpace];
+    case 'lander':
+      return [validateSpace]
     case 'agreement':
-      return [defaultRule, validateAddressEth(), validateAddress()];
-    case 'agreement model':
-      return [validationAgreementModel()];
+      return [validateAddressEth, validateAddress, validateSpace];
     case 'definition':
-      return [defaultRule, validateField(), validateMinMax(0, 20)];
+      return [validateSpace];
     case 'specification':
-      return [defaultRule, validateField(), validateMinMax(0, 42)];
+      return [validateField, validateMinMax(0, 42), validateSpace];
     case 'condition':
-      return [defaultRule, validateFieldCondition()];
+      return [validateFieldCondition, validation, validateSpace];
     case 'signatories':
-      return [defaultRule, validateAddressEth(), validateAddress()];
+      return [validateAddressEth, validateAddress, validateSpace];
+    case 'transaction':
+      return [validateSpace];
+    case 'dsl-id':
+      return [validateSpace];
     default:
       return [defaultRule];
   }
