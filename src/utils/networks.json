@@ -8162,13 +8162,23 @@
       ]
     },
     {
-      "name": "local",
-      "title": "Ethereum Testnet castom",
+      "name": "custom",
+      "title": "Ethereum Testnet custom",
       "chain": "ETH",
       "shortName": "loc",
       "chainId": 539,
       "networkId": 539,
       "rpc": ["http://127.0.0.1:7545"],
+      "faucets": []
+    },
+    {
+      "name": "dev",
+      "title": "Ethereum Dev custom",
+      "chain": "ETH",
+      "shortName": "dev",
+      "chainId": 1691,
+      "networkId": 1691,
+      "rpc": [" http://54.91.95.131:8545"],
       "faucets": []
     }
   ]

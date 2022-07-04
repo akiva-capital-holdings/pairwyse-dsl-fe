@@ -7,11 +7,20 @@
 .logoContainer{
   text-align: left;
 }
+.footerContainer .logoContainer .text {
+  font-family: var(--font_family_medium);
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
+  text-align: center;
+  color: #ACA2B5;
+}
 .logoContainer .logo {
   font-family: var(--font_family_bold);
   font-style: normal;
   font-weight: var(--font_weight_bolder);
-  font-size: var(--font_size_h1);
+  font-size: 40px;
   line-height: 50px;
   color: var(--dark_col);
   margin-bottom: 60px;
@@ -25,6 +34,7 @@
   margin-right: 100px;
 }
 .contactContainer .title {
+  color: var(--dark_col);
   font-family: var(--font_family_bold);
   font-style: normal;
   font-weight: var(--font_weight_bolder);
@@ -50,22 +60,28 @@
   justify-content: space-between;
 }
 .contactContainer .social .icon{
-  width: 15px;
-  height: 15px;
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
   cursor: pointer;
 }
 .contactContainer .social .instagram{
+ width: 18px;
+ height: 18px;
  background-image: url(../../images/instagram.svg);
 }
 .contactContainer .social .facebook{
+  width: 9px;
+  height: 18px;
   background-image: url(../../images/facebook.svg);
 }
 .contactContainer .social .twitter{
+  width: 20px;
+  height: 16px;
   background-image: url(../../images/twitter.svg);
 }
 .contactContainer .social .youtube{
+  width: 22px;
+  height: 15px;
   background-image: url(../../images/youtube.svg);
 }

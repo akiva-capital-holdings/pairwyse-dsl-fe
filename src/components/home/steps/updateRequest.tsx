@@ -16,16 +16,16 @@ import getRule from '../../../utils/validate';
 const { Item } = Form;
 
 const UpdateRequest = ({
-    setSignatories,
-    setTransaction , 
-    setConditions, 
-    setAgreement, 
-    transaction, 
-    signatories, 
-    conditions, 
-    agreement, 
-    setDslID, 
-    dslId
+  setSignatories,
+  setTransaction,
+  setConditions,
+  setAgreement,
+  transaction,
+  signatories,
+  conditions,
+  agreement,
+  setDslID,
+  dslId,
 }) => {
   const { address: userWallet } = useSelector(selectSession);
   const { provider } = useSelector(selectUtils);
@@ -179,7 +179,11 @@ const UpdateRequest = ({
         <div style={{ marginTop: '24px' }} className="text">
           Agreement
         </div>
-        <Item name="agreement" validateTrigger="onBlur" rules={getRule('agreement', 'agreement', agreement)}>
+        <Item
+          name="agreement"
+          validateTrigger="onBlur"
+          rules={getRule('agreement', 'agreement', agreement)}
+        >
           <Input
             className="lander"
             defaultValue={agreement}
@@ -191,11 +195,11 @@ const UpdateRequest = ({
         {signatories.map((el) => {
           return (
             <div className="specificationInput" key={el.id}>
-             { el?.id === 1 && 
-              <div style={{ marginTop: '24px' }} className="text">
-                 Signatories
-              </div>
-             }
+              {el?.id === 1 && (
+                <div style={{ marginTop: '24px' }} className="text">
+                  Signatories
+                </div>
+              )}
               <Item
                 name={`signatories${el.id}`}
                 validateTrigger="onBlur"
@@ -239,10 +243,11 @@ const UpdateRequest = ({
           {conditions.map((el) => {
             return (
               <div className="specificationInput" key={el.id}>
-               { el?.id === 1 &&
-                <div style={{ marginTop: '24px' }} className="text">
-                 Conditions
-                </div>}
+                {el?.id === 1 && (
+                  <div style={{ marginTop: '24px' }} className="text">
+                    Conditions
+                  </div>
+                )}
                 <Item
                   name={`condition${el.id + 1}`}
                   validateTrigger="onBlur"
@@ -290,9 +295,9 @@ const UpdateRequest = ({
           <Item
             name="transaction"
             validateTrigger="onBlur"
-            rules={getRule('transaction', 'transaction', transaction )}
+            rules={getRule('transaction', 'transaction', transaction)}
           >
-            <Input
+            <Input.TextArea
               defaultValue={transaction}
               onChange={(e) => setTransaction(e.target.value)}
               className="lander"

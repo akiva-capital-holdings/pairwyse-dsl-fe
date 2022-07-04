@@ -14,7 +14,7 @@ const ConnectWallet = () => {
     <div className="connectForm">
       <div className="title">Please Connect your wallet</div>
       <button className="btn" onClick={() => connectWallet(onboarding, dispatch, connect)}>
-      Connect Wallet
+        Connect Wallet
       </button>
     </div>
   );

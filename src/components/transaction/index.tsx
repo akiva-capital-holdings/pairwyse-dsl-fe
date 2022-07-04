@@ -42,7 +42,7 @@ const columns: ColumnsType<MockType> = [
     render: (txID) => (
       <div className="status">
         <div style={{ textOverflow: 'ellipsis', overflow: 'hiden' }}>{txID}</div>
-        <Copy className='copy'  onClick={() => onCopyClick(txID)} />
+        <Copy className="copy" onClick={() => onCopyClick(txID)} />
       </div>
     ),
   },
@@ -53,7 +53,7 @@ const columns: ColumnsType<MockType> = [
     render: (agreementAddress) => (
       <div className="status">
         <div style={{ textOverflow: 'ellipsis', overflow: 'hiden' }}>{agreementAddress}</div>
-        <Copy className='copy'  onClick={() => onCopyClick(agreementAddress)} />
+        <Copy className="copy" onClick={() => onCopyClick(agreementAddress)} />
       </div>
     ),
   },
@@ -64,7 +64,7 @@ const columns: ColumnsType<MockType> = [
     render: (txOriginator) => (
       <div className="status">
         <div style={{ textOverflow: 'ellipsis', overflow: 'hiden' }}>{txOriginator}</div>
-        <Copy  className='copy' onClick={() => onCopyClick(txOriginator)} />
+        <Copy className="copy" onClick={() => onCopyClick(txOriginator)} />
       </div>
     ),
   },
@@ -109,13 +109,10 @@ const Transaction = () => {
       <Sider collapsible collapsed={collapsed} onCollapse={() => setCollapsed(!collapsed)}>
         <div className="addressContainer">
           <div className="img" />
-          <div style={{display: 'flex', maxWidth: '150px', margin: '0 auto'}}>
-            <div className="address">
-             {address}
-            </div>
-            <CopyWhite className='copy' onClick={() => onCopyClick(address)} />
+          <div style={{ display: 'flex', maxWidth: '150px', margin: '0 auto' }}>
+            <div className="address">{address}</div>
+            <CopyWhite className="copy" onClick={() => onCopyClick(address)} />
           </div>
-         
         </div>
         <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']} accessKey={'1'}>
           <Menu.Item key="1">Transactions</Menu.Item>

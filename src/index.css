@@ -15,9 +15,9 @@
   --font_weight_normal: 500;
   --font_weight_bolder: 800;
   --font_weight_extra_bolder: 900;
-  --font_family: PlusJakartaSans;
+  --font_family: PlusJakarta;
   --font_family_bold: PlusJakartaSansBold;
-
+  --font_family_medium: PlusJakartaMedium;
 }
 html, body {
   max-width: 100%;
@@ -61,6 +61,8 @@ button {
  font-size: var(--font_size_h6);
  line-height: 18px;
  color: var(--white_color);
+ padding-left: 16px;
+ padding-right: 16px;
 }
 .connectMetamask:hover,
 .connectMetamask:focus {
@@ -118,5 +120,13 @@ button {
 }
 @font-face {
   font-family: 'PlusJakartaSansBold';
-  src: url('./fonts/PlusJakartaSans-Bold.ttf');
+  src: url('./fonts/PlusJakartaSans-ExtraBold.ttf');
+}
+@font-face {
+  font-family: 'PlusJakarta';
+  src: url('./fonts/PlusJakartaSans-Regular.ttf');
+}
+@font-face {
+  font-family: 'PlusJakartaMedium';
+  src: url('./fonts/PlusJakartaSans-Medium.ttf');
 }

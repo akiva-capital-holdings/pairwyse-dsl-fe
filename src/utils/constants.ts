@@ -23,10 +23,20 @@ export const NETWORK_OPTIONS = {
     blockExplorerUrls: ['https://rinkeby.etherscan.io'],
   },
   local: {
-    chainId: `0x${Number()}`,
-    chainName: 'castom',
-    nativeCurrency: { 
-      name: 'castom',
+    chainId: `0x${Number(539)}`,
+    chainName: 'http://127.0.0.1:7545',
+    nativeCurrency: {
+      name: 'custom',
+      symbol: 'ETH',
+      decimals: 18,
+    },
+    rpcUrls: ['http://127.0.0.1:7545'],
+  },
+  dev: {
+    chainId: `0x${Number(1691)}`,
+    chainName: 'dev',
+    nativeCurrency: {
+      name: 'dev',
       symbol: 'ETH',
       decimals: 18,
     },

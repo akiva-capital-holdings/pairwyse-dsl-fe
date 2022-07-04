@@ -20,7 +20,7 @@
    margin: 50px auto 24px;
 }
 .addressContainer .address{
-  font-family: 'Plus Jakarta Sans';
+  font-family: var(--font_family);
   font-style: normal;
   font-weight: 500;
   font-size: 16px;
@@ -29,7 +29,7 @@
   opacity: 0.5;
 }
 .title {
-  font-family: 'Plus Jakarta Sans';
+  font-family: var(--font_family);
   font-style: normal;
   font-weight: 800;
   font-size: 44px;
@@ -40,5 +40,5 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 50px 60px;
+  padding: 52px 60px 40px 60px;
 }
