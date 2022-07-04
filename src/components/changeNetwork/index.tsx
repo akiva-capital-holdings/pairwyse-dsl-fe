@@ -1,12 +1,15 @@
 /* eslint-disable no-console */
-import React from 'react';
+import React, { useMemo } from 'react';
+import {useSelector} from 'react-redux'
 import { NETWORK_OPTIONS } from '../../utils/constants';
 import { getNetworksList } from '../../utils/helpers';
+import {selectSession} from '../../redux/sessionReducer'
 import '../home/index.css';
 import './index.css';
 
 const networksList: {} = getNetworksList();
 const { ethereum }: any = window;
+console.log(NETWORK_OPTIONS[process.env.REACT_APP_NETWORK].chainId);
 
 const handleClick = async () => {
   try {
@@ -38,14 +41,24 @@ const handleClick = async () => {
     console.error(err?.message);
   }
 };
+console.log(ethereum?.networkVersion);
+
+const nameNetwork = () => {return useMemo(() => {
+  console.log(ethereum?.networkVersion, networksList[ethereum?.networkVersion]);
+  
+  return networksList[ethereum?.networkVersion]
+}, [ethereum?.networkVersion])}
 
 const ChangeNetwork = () => {
+  const {network } = useSelector(selectSession);
+  console.log('network', network);
+  
   return (
     <div className="changeNetwork">
       <div className="title">You Must Change Network</div>
       <div className="secondaryTitle">
         We've detected that you need to switch your wallet's network from <br />{' '}
-        <span className="network">{networksList[ethereum?.networkVersion]}</span> to{' '}
+        <span className="network">{nameNetwork()}</span> to{' '}
         <span className="network">{process.env.REACT_APP_NETWORK}</span> for this app.
       </div>
       <div className="textInfo">

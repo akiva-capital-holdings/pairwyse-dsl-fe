@@ -5,11 +5,13 @@ import type { RootState } from './store';
 interface ISession {
   address: string;
   network: boolean;
+  networkName: string;
 }
 
 const initialState: ISession = {
   address: '',
   network: false,
+  networkName: ''
 };
 
 export const sessionReducer = createSlice({
@@ -22,10 +24,13 @@ export const sessionReducer = createSlice({
     changeNetworkAction: (state: any, action: PayloadAction<any>) => {
       state.network = action.payload;
     },
+    changeNetworkName: (state: any, action: PayloadAction<any>) => {
+      state.networkName = action.payload;
+    },
   },
 });
 
-export const { connect, changeNetworkAction } = sessionReducer.actions;
+export const { connect, changeNetworkAction, changeNetworkName } = sessionReducer.actions;
 
 export const selectSession = (state: RootState) => state.session;
 

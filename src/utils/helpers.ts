@@ -57,11 +57,12 @@ export const createInstance = async (
   return new provider.eth.Contract(abi, address);
 };
 
-export const checkNetwork = async (dispatch, checkNetworkAction) => {
+export const checkNetwork = async (dispatch, checkNetworkAction, changeNetworkName) => {
   const networks = {
     mainnet: 1,
     rinkeby: 4,
     local: 539,
+    dev: 1691
   };
   // @ts-ignore
   const currentChainId = Number(
@@ -71,15 +72,13 @@ export const checkNetwork = async (dispatch, checkNetworkAction) => {
       })
     ).split('x')[1]
   );
-  console.log(currentChainId);
-  console.log(networks[process.env.REACT_APP_NETWORK]);
   // @ts-ignore
   if (networks[process.env.REACT_APP_NETWORK] !== currentChainId) {
-  
-    console.log(currentChainId);
+    dispatch(changeNetworkName(currentChainId))
     dispatch(checkNetworkAction(false));
     return;
   }
+  dispatch(changeNetworkName(currentChainId))
   dispatch(checkNetworkAction(true));
 };
 // @Misha instance  for DefinitionRequest

@@ -8,7 +8,7 @@ import Header from './components/header';
 import Footer from './components/footer';
 import { initRoutes } from './router';
 
-import { selectSession, connect, changeNetworkAction } from './redux/sessionReducer';
+import { selectSession, connect, changeNetworkAction, changeNetworkName } from './redux/sessionReducer';
 import { provider, onboarding, selectUtils } from './redux/utilsReducer';
 import { fnc, ethereumOff, checkNetwork } from './utils/helpers';
 import './styles/antd.css';
@@ -37,7 +37,7 @@ function App() {
     setOnboardingRef();
     if (MetaMaskOnboarding.isMetaMaskInstalled()) {
       ethereum?.on('chainChanged', () => {
-        return checkNetwork(dispatch, changeNetworkAction);
+        return checkNetwork(dispatch, changeNetworkAction, changeNetworkName );
       });
     }
     return () => {
@@ -46,16 +46,16 @@ function App() {
   }, []);
 
   useEffect(() => {
-    checkNetwork(dispatch, changeNetworkAction);
+    checkNetwork(dispatch, changeNetworkAction, changeNetworkName);
   }, [network]);
 
   const redirectF = () => {
-    // if(!network && !address) {
-    //   return '/'
-    // }
-    // if(!network && address) {
-    //   return '/change-network'
-    // }
+    if(!network && !address) {
+      return '/'
+    }
+    if(!network && address && process.env.REACT_APP_NETWORK === 'dev') {
+      return '/change-network'
+    }
     return '/';
   };
 
@@ -67,7 +67,7 @@ function App() {
         <Suspense fallback={<div>Page is loading...</div>}>
           <Header />
           <Routes>
-            {initRoutes(address)}
+            {initRoutes(address, network)}
             {redirect}
           </Routes>
           <Footer />
