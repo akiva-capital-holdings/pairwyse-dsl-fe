@@ -49,9 +49,11 @@ const UpdateRequest = ({
     for await (const step of steps) {
       console.log(`\n---\n\n🧩 Adding Term #${step.txId} to Agreement`);
       await contextFactory.methods.deployContext().send({ from: userWallet });
-      let contextsLen = parseInt(await contextFactory.methods.getDeployedLen().call(), 10);
+      let contextsLen = parseInt(await contextFactory.methods.getDeployedContextsLen().call(), 10);
       console.log({ contextsLen });
-      const transactionContextAddr = await contextFactory.methods.deployed(contextsLen - 1).call();
+      const transactionContextAddr = await contextFactory.methods
+        .deployedContexts(contextsLen - 1)
+        .call();
       console.log({ transactionContextAddr });
       const conditionsContextAddrs = [];
 
@@ -61,9 +63,11 @@ const UpdateRequest = ({
         console.log({ j });
         const deployCtxTx = await contextFactory.methods.deployContext().send({ from: userWallet });
         console.log({ deployCtxTx });
-        contextsLen = parseInt(await contextFactory.methods.getDeployedLen().call(), 10);
+        contextsLen = parseInt(await contextFactory.methods.getDeployedContextsLen().call(), 10);
         console.log({ contextsLen });
-        const conditionContextAddr = await contextFactory.methods.deployed(contextsLen - 1).call();
+        const conditionContextAddr = await contextFactory.methods
+          .deployedContexts(contextsLen - 1)
+          .call();
         console.log({ conditionContextAddr });
         conditionsContextAddrs.push(conditionContextAddr);
 
@@ -125,15 +129,9 @@ const UpdateRequest = ({
       process.env.REACT_APP_CONTEXT_FACTORY,
       provider
     );
-    const agrFactory = await createInstance(
-      'AgreementFactory',
-      `${process.env.REACT_APP_AGREEMENT_FACTORY}`,
-      provider
-    );
 
     console.log({ txsAddr: await agreementContract.methods.txs().call() });
-    console.log({ agrdeployedLen: await agrFactory.methods.getDeployedLen().call() });
-    console.log({ ctxdeployedLen: await contextFactory.methods.getDeployedLen().call() });
+    console.log({ ctxdeployedLen: await contextFactory.methods.getDeployedContextsLen().call() });
 
     await addSteps(agreementContract, contextFactory, [
       {
