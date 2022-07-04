@@ -62,7 +62,7 @@ export const checkNetwork = async (dispatch, checkNetworkAction, changeNetworkNa
     mainnet: 1,
     rinkeby: 4,
     local: 539,
-    dev: 1691
+    dev: 1691,
   };
   // @ts-ignore
   const currentChainId = Number(
@@ -74,11 +74,11 @@ export const checkNetwork = async (dispatch, checkNetworkAction, changeNetworkNa
   );
   // @ts-ignore
   if (networks[process.env.REACT_APP_NETWORK] !== currentChainId) {
-    dispatch(changeNetworkName(currentChainId))
+    dispatch(changeNetworkName(currentChainId));
     dispatch(checkNetworkAction(false));
     return;
   }
-  dispatch(changeNetworkName(currentChainId))
+  dispatch(changeNetworkName(currentChainId));
   dispatch(checkNetworkAction(true));
 };
 // @Misha instance  for DefinitionRequest

@@ -5,7 +5,7 @@ import { DownOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Contract } from 'ethers';
-import getRule, {validationAgreementModel} from '../../../utils/validate';
+import getRule, { validationAgreementModel } from '../../../utils/validate';
 import { createInstance } from '../../../utils/helpers';
 import { selectUtils } from '../../../redux/utilsReducer';
 import { selectSession } from '../../../redux/sessionReducer';
@@ -13,35 +13,33 @@ import './index.css';
 
 const { Item } = Form;
 
-const AgreementRequest = ({setLender, setError, setValue, lender, error,  value}) => {
+const AgreementRequest = ({ setLender, setError, setValue, lender, error, value }) => {
   const { address: userWallet } = useSelector(selectSession);
   const { provider } = useSelector(selectUtils);
 
   console.log('lender', lender);
-  
 
   const navigate = useNavigate();
 
   const createAgreement = async () => {
-    if(!error) {
+    if (!error) {
       const agrFactory: Contract = await createInstance(
         'AgreementFactory',
         `${process.env.REACT_APP_AGREEMENT_FACTORY}`,
         provider
       );
-  
+
       const tx = await agrFactory.methods
         .deployAgreement(process.env.REACT_APP_PARSER)
         .send({ from: userWallet });
       console.log({ tx });
-  
+
       const agrLen = parseInt(await agrFactory.methods.getDeployedAgreementsLen().call(), 10);
       console.log({ agrLen });
-  
+
       const lastAgrAddr = await agrFactory.methods.deployedAgreements(agrLen - 1).call();
       console.log({ lastAgrAddr });
-  
-    } 
+    }
   };
 
   const menu = (
@@ -61,27 +59,26 @@ const AgreementRequest = ({setLender, setError, setValue, lender, error,  value}
   );
 
   const dropDown = () => {
-  return  <Item
-    name="agreementModel"
-  >
-    <Dropdown className='dropdown' overlay={menu}>
-      <Button className={error && 'ant-input-status-error'}>
-        <Space>
-          {value}
-          <DownOutlined className='iconDropDown' />
-        </Space>
-      </Button>
-    </Dropdown>
-    <span className='ant-form-item-explain-error'>{error}</span>
-  </Item>
-  }
+    return (
+      <Item name="agreementModel">
+        <Dropdown className="dropdown" overlay={menu}>
+          <Button className={error && 'ant-input-status-error'}>
+            <Space>
+              {value}
+              <DownOutlined className="iconDropDown" />
+            </Space>
+          </Button>
+        </Dropdown>
+        <span className="ant-form-item-explain-error">{error}</span>
+      </Item>
+    );
+  };
   useEffect(() => {
-    if(error) {
-      validationAgreementModel(value, setError)
+    if (error) {
+      validationAgreementModel(value, setError);
     }
-    dropDown()
-  }, [value])
-
+    dropDown();
+  }, [value]);
 
   return (
     <div className="agreementRequest">
@@ -107,7 +104,7 @@ const AgreementRequest = ({setLender, setError, setValue, lender, error,  value}
         <div style={{ marginTop: '24px' }} className="text">
           Agreement model{' '}
         </div>
-       {dropDown()}
+        {dropDown()}
         <div style={{ marginTop: '24px' }} className="text">
           Agreement template
         </div>
@@ -120,7 +117,7 @@ const AgreementRequest = ({setLender, setError, setValue, lender, error,  value}
               style={{ height: '48px', marginRight: '16px' }}
               htmlType="submit"
               className="btn"
-              onClick={() => validationAgreementModel(value, setError) }
+              onClick={() => validationAgreementModel(value, setError)}
             >
               Create Agreement
             </Button>

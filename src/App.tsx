@@ -8,7 +8,12 @@ import Header from './components/header';
 import Footer from './components/footer';
 import { initRoutes } from './router';
 
-import { selectSession, connect, changeNetworkAction, changeNetworkName } from './redux/sessionReducer';
+import {
+  selectSession,
+  connect,
+  changeNetworkAction,
+  changeNetworkName,
+} from './redux/sessionReducer';
 import { provider, onboarding, selectUtils } from './redux/utilsReducer';
 import { fnc, ethereumOff, checkNetwork } from './utils/helpers';
 import './styles/antd.css';
@@ -37,7 +42,7 @@ function App() {
     setOnboardingRef();
     if (MetaMaskOnboarding.isMetaMaskInstalled()) {
       ethereum?.on('chainChanged', () => {
-        return checkNetwork(dispatch, changeNetworkAction, changeNetworkName );
+        return checkNetwork(dispatch, changeNetworkAction, changeNetworkName);
       });
     }
     return () => {
@@ -50,11 +55,11 @@ function App() {
   }, [network]);
 
   const redirectF = () => {
-    if(!network && !address) {
-      return '/'
+    if (!network && !address) {
+      return '/';
     }
-    if(!network && address && process.env.REACT_APP_NETWORK === 'dev') {
-      return '/change-network'
+    if (!network && address && process.env.REACT_APP_NETWORK === 'dev') {
+      return '/change-network';
     }
     return '/';
   };

@@ -11,7 +11,7 @@ interface ISession {
 const initialState: ISession = {
   address: '',
   network: false,
-  networkName: ''
+  networkName: '',
 };
 
 export const sessionReducer = createSlice({

@@ -15,11 +15,11 @@ import { ReactComponent as Delete } from '../../../images/delete.svg';
 const { Item } = Form;
 const DefinitionRequest = ({
   setAgreementDefinition: setAgreement,
-  agreementDefinition : agreement,
+  agreementDefinition: agreement,
   setspecification,
   specifications,
   setDefinition,
-  definition
+  definition,
 }) => {
   const { address: userWallet } = useSelector(selectSession);
   const { provider } = useSelector(selectUtils);
@@ -52,8 +52,7 @@ const DefinitionRequest = ({
     console.log({ value });
   };
   console.log(specifications);
-  
-  
+
   return (
     <div className="definitionRequest">
       <div className="title">Definition Request</div>
@@ -65,7 +64,11 @@ const DefinitionRequest = ({
         <div style={{ marginTop: '24px' }} className="text">
           Agreement
         </div>
-        <Item name="agreement" validateTrigger="onBlur" rules={getRule('agreement', 'agreement', agreement)}>
+        <Item
+          name="agreement"
+          validateTrigger="onBlur"
+          rules={getRule('agreement', 'agreement', agreement)}
+        >
           <Input
             className="lander"
             defaultValue={agreement}
@@ -77,7 +80,11 @@ const DefinitionRequest = ({
         <div style={{ marginTop: '24px' }} className="text">
           Definition
         </div>
-        <Item name="borrower" validateTrigger="onBlur" rules={getRule('definition', 'definition', definition)}>
+        <Item
+          name="borrower"
+          validateTrigger="onBlur"
+          rules={getRule('definition', 'definition', definition)}
+        >
           <Input
             maxLength={20}
             placeholder="Borrower"
@@ -92,11 +99,11 @@ const DefinitionRequest = ({
           {specifications.map((el) => {
             return (
               <div className="specificationInput" key={el.id}>
-               { el?.id === 1 &&
-                <div style={{ marginTop: '24px' }} className="text">
-                  Specifications
-                </div>
-                }
+                {el?.id === 1 && (
+                  <div style={{ marginTop: '24px' }} className="text">
+                    Specifications
+                  </div>
+                )}
                 <Item
                   name={`specification${el.id}`}
                   validateTrigger="onBlur"
@@ -119,29 +126,30 @@ const DefinitionRequest = ({
                   onClick={() => setspecification(specifications.filter((s) => s.id !== el.id))}
                   className="del"
                 >
-                  {el.id !== 1  && <Delete />}
+                  {el.id !== 1 && <Delete />}
                 </Button>
               </div>
             );
           })}
-          {specifications?.length === 5 || specifications?.length < 5 &&
-           <Button
-           htmlType="button"
-           className="add"
-           onClick={() =>
-             setspecification([
-               ...specifications,
-               {
-                 title: `Specification ${specifications?.length}`,
-                 value: '',
-                 id: specifications?.length + 1,
-               },
-             ])
-           }
-         >
-           Add Specification
-         </Button>
-       }
+          {specifications?.length === 5 ||
+            (specifications?.length < 5 && (
+              <Button
+                htmlType="button"
+                className="add"
+                onClick={() =>
+                  setspecification([
+                    ...specifications,
+                    {
+                      title: `Specification ${specifications?.length}`,
+                      value: '',
+                      id: specifications?.length + 1,
+                    },
+                  ])
+                }
+              >
+                Add Specification
+              </Button>
+            ))}
         </div>
         <div className="btnsContainer">
           <Button style={{ height: '48px' }} htmlType="submit" className="btn">

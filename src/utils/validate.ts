@@ -1,10 +1,10 @@
 import { ethers } from 'ethers';
 
-export const  validationAgreementModel = (value, setError) => {
-  if(value?.length > 0) {
-   setError(null)
+export const validationAgreementModel = (value, setError) => {
+  if (value?.length > 0) {
+    setError(null);
   } else {
-   setError('This field lander is required')
+    setError('This field lander is required');
   }
 };
 
@@ -17,7 +17,7 @@ export default function getRule(label: string, name: string, v?) {
   const validateMinMax = (min: number, max: number) => {
     return {
       validator: () => {
-        if (v?.length <  min) {
+        if (v?.length < min) {
           return Promise.reject(new Error(`Field ${name} must be less than ${min} symbols`));
         }
         if (v?.length > max) {
@@ -97,7 +97,7 @@ export default function getRule(label: string, name: string, v?) {
     case 'requestorLabel':
       return [validateMinMax(0, 20), validateSpace];
     case 'lander':
-      return [validateSpace]
+      return [validateSpace];
     case 'agreement':
       return [validateAddressEth, validateAddress, validateSpace];
     case 'definition':

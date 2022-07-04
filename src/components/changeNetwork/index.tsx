@@ -1,9 +1,9 @@
 /* eslint-disable no-console */
 import React, { useMemo } from 'react';
-import {useSelector} from 'react-redux'
+import { useSelector } from 'react-redux';
 import { NETWORK_OPTIONS } from '../../utils/constants';
 import { getNetworksList } from '../../utils/helpers';
-import {selectSession} from '../../redux/sessionReducer'
+import { selectSession } from '../../redux/sessionReducer';
 import '../home/index.css';
 import './index.css';
 
@@ -14,7 +14,7 @@ console.log(NETWORK_OPTIONS[process.env.REACT_APP_NETWORK].chainId);
 const handleClick = async () => {
   try {
     if (!ethereum) throw new Error('No crypto wallet found');
-   await ethereum.request({
+    await ethereum.request({
       method: 'wallet_switchEthereumChain',
       params: [
         {
@@ -22,7 +22,6 @@ const handleClick = async () => {
         },
       ],
     });
-    
   } catch (err: any) {
     if (err?.code === 4902) {
       try {
@@ -43,16 +42,18 @@ const handleClick = async () => {
 };
 console.log(ethereum?.networkVersion);
 
-const nameNetwork = () => {return useMemo(() => {
-  console.log(ethereum?.networkVersion, networksList[ethereum?.networkVersion]);
-  
-  return networksList[ethereum?.networkVersion]
-}, [ethereum?.networkVersion])}
+const nameNetwork = () => {
+  return useMemo(() => {
+    console.log(ethereum?.networkVersion, networksList[ethereum?.networkVersion]);
+
+    return networksList[ethereum?.networkVersion];
+  }, [ethereum?.networkVersion]);
+};
 
 const ChangeNetwork = () => {
-  const {network } = useSelector(selectSession);
+  const { network } = useSelector(selectSession);
   console.log('network', network);
-  
+
   return (
     <div className="changeNetwork">
       <div className="title">You Must Change Network</div>

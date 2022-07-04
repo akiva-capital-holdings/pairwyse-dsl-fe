@@ -25,8 +25,8 @@ export const NETWORK_OPTIONS = {
   local: {
     chainId: `0x${Number(539)}`,
     chainName: 'http://127.0.0.1:7545',
-    nativeCurrency: { 
-      name: 'castom',
+    nativeCurrency: {
+      name: 'custom',
       symbol: 'ETH',
       decimals: 18,
     },
@@ -35,7 +35,7 @@ export const NETWORK_OPTIONS = {
   dev: {
     chainId: `0x${Number(1691)}`,
     chainName: 'dev',
-    nativeCurrency: { 
+    nativeCurrency: {
       name: 'dev',
       symbol: 'ETH',
       decimals: 18,

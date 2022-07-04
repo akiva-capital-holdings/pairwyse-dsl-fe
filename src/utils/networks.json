@@ -8162,8 +8162,8 @@
       ]
     },
     {
-      "name": "castom",
-      "title": "Ethereum Testnet castom",
+      "name": "custom",
+      "title": "Ethereum Testnet custom",
       "chain": "ETH",
       "shortName": "loc",
       "chainId": 539,
@@ -8173,7 +8173,7 @@
     },
     {
       "name": "dev",
-      "title": "Ethereum Dev castom",
+      "title": "Ethereum Dev custom",
       "chain": "ETH",
       "shortName": "dev",
       "chainId": 1691,

@@ -14,20 +14,14 @@ import getRule from '../../../utils/validate';
 
 const { Item } = Form;
 
-const ExecutionRequest = ({
-    setAgreement, 
-    agreement, 
-    setDslID, 
-    dslId
-}) => {
+const ExecutionRequest = ({ setAgreement, agreement, setDslID, dslId }) => {
   const { address: userWallet } = useSelector(selectSession);
-//   const { provider } = useSelector(selectUtils);
+  //   const { provider } = useSelector(selectUtils);
   const navigate = useNavigate();
 
   const ExecutionSubmit = () => {
     console.log('request');
-  }
-
+  };
 
   return (
     <div className="updateRequest">
@@ -50,7 +44,11 @@ const ExecutionRequest = ({
         <div style={{ marginTop: '24px' }} className="text">
           Agreement
         </div>
-        <Item name="agreement" validateTrigger="onBlur" rules={getRule('agreement', 'agreement', agreement)}>
+        <Item
+          name="agreement"
+          validateTrigger="onBlur"
+          rules={getRule('agreement', 'agreement', agreement)}
+        >
           <Input
             className="lander"
             defaultValue={agreement}
@@ -84,4 +82,4 @@ const ExecutionRequest = ({
   );
 };
 
-export default  ExecutionRequest
+export default ExecutionRequest;
