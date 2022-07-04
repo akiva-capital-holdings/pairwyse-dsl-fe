@@ -10,7 +10,7 @@
   font-family: var(--font_family_bold);
   font-style: normal;
   font-weight: var(--font_weight_bolder);
-  font-size: var(--font_size_h1);
+  font-size: 40px;
   line-height: 50px;
   color: var(--dark_col);
 }

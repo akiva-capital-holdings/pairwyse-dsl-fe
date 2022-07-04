@@ -9,7 +9,7 @@
   font-family: var(--font_family_bold);
   font-style: normal;
   font-weight: var(--font_weight_bolder);
-  font-size: var(--font_size_h2);
+  font-size: var(--font_size_h2) !important;
   line-height: 45px;
   color: var(--dark_col);
 }
@@ -38,7 +38,7 @@
   font-weight: 500;
   font-size: 16px;
   line-height: 20px;
-  color: var(--dark_col);
+  color: var(--dark_col) !important;
 }
 .agreementRequest .btns,
 .updateRequest .btns{
@@ -88,4 +88,7 @@
   display: flex;
   justify-content: space-between;
   margin-top: 95px;
+}
+.value{
+  font-size: 16px;
 }

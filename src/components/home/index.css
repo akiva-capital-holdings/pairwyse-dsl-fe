@@ -12,7 +12,7 @@
   font-size: 60px;
   line-height: 76px;
   color: var(--dark_col);
-  margin-bottom: 72px;
+  margin-bottom: 32px;
 }
 .stepsContentContainer{
   min-width: 680px;
@@ -100,7 +100,6 @@
 .connectForm {
   padding: 80px 113px;
   width: 700px;
-  height: 377px;
   text-align: center;
   margin: 0 auto;
   background: var(--background_color);
@@ -110,7 +109,7 @@
   font-family: var(--font_family_bold);
   font-style: normal;
   font-weight: var(--font_weight_bolder);
-  font-size: 36px;
+  font-size: 35px;
   line-height: 45px;
   color: var(--dark_col);
   margin-bottom: 60px;
@@ -119,6 +118,8 @@
   width: 169px;
   height: 48px;
   margin: 0 auto;
+  font-size: 16px;
+  line-height: 20px;
 }
 .connectForm .btnSecondary {
   border: none;
