@@ -84,9 +84,7 @@ const AgreementRequest = ({ setLender, setError, setValue, lender, error, value 
     <div className="agreementRequest">
       <div className="title">Agreement Request </div>
       <Form name="agreementRequestForm" autoComplete="off" onFinish={createAgreement}>
-        <div style={{ marginTop: '24px' }} className="text">
-          Requestor
-        </div>
+        <div className="text">Requestor</div>
         <div className="value">{userWallet}</div>
         <div style={{ marginTop: '24px' }} className="text">
           Requestor label

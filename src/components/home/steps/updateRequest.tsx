@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { createInstance } from 'utils/helpers';
 import { selectUtils } from 'redux/utilsReducer';
 import { Contract } from 'ethers';
+import { v4 as uuidv4 } from 'uuid';
 import { selectSession } from '../../../redux/sessionReducer';
 import { ReactComponent as Delete } from '../../../images/delete.svg';
 import getRule from '../../../utils/validate';
@@ -148,9 +149,7 @@ const UpdateRequest = ({
     <div className="updateRequest">
       <div className="title">Update Request </div>
       <Form name="agreementRequestForm" autoComplete="off" onFinish={() => updateAgreement()}>
-        <div style={{ marginTop: '24px' }} className="text">
-          Requestor
-        </div>
+        <div className="text">Requestor</div>
         <div
           style={{
             display: 'flex',
@@ -233,7 +232,7 @@ const UpdateRequest = ({
           onClick={() =>
             setSignatories([
               ...signatories,
-              { title: `Signatory ${signatories?.length}`, value: '', id: signatories?.length + 1 },
+              { title: `Signatory ${signatories?.length}`, value: '', id: uuidv4() },
             ])
           }
         >
@@ -281,7 +280,7 @@ const UpdateRequest = ({
             onClick={() =>
               setConditions([
                 ...conditions,
-                { title: `Condition ${conditions?.length}`, value: '', id: conditions?.length + 1 },
+                { title: `Condition ${conditions?.length}`, value: '', id: uuidv4() },
               ])
             }
           >

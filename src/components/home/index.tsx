@@ -95,30 +95,6 @@ const HomePage = () => {
       />
     ),
   };
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  // const [increment, setIncrement] = useState();
-  // const [xValue, setXValue] = useState();
-  // const [incrementNumber, setIncrementNumber] = useState<any>();
-
-  // const getX = async () => {
-  //   const membershipInstance: any = await createInstance(
-  //     '0x5B46AEE383c01BCD4cD2177F93Ebb3d2Cc02fA31',
-  //     provider,
-  //   );
-  //   const x = await membershipInstance?.methods?.x()?.call()
-  //   setXValue(x);
-  // }
-
-  // const conectContract = async () => {
-  //   const membershipInstance: any = await createInstance(
-  //     '0x5B46AEE383c01BCD4cD2177F93Ebb3d2Cc02fA31',
-  //     provider,
-  //   );
-  //   const incrementBy = await membershipInstance?.methods
-  //   ?.incrementBy(`${incrementNumber}`).call()
-  //   console.log({incrementBy});
-  //   // setIncrement(incrementBy)
-  // }
 
   return (
     <>
@@ -126,29 +102,38 @@ const HomePage = () => {
         <div className="stepsContentContainer">
           <span className="title">Agreement</span>
           <div className="menu">
-            <button
-              onClick={() => onChangeStep(1)}
-              className={`navButton ${step === navSteps.stepOne && 'active'}`}
-            >
-              Creation
+            <button onClick={() => onChangeStep(1)} className={'navButton'}>
+              <span
+                style={{ textAlign: 'left', paddingBottom: '8px' }}
+                className={`${step === navSteps.stepOne && 'active'}`}
+              >
+                {' '}
+                Creation
+              </span>
             </button>
-            <button
-              onClick={() => onChangeStep(2)}
-              className={`navButton ${step === navSteps.stepTwo && 'active'}`}
-            >
-              Definition
+            <button onClick={() => onChangeStep(2)} className={'navButton'}>
+              <span
+                style={{ textAlign: 'center', margin: '0 auto', paddingBottom: '8px' }}
+                className={`${step === navSteps.stepTwo && 'active'}`}
+              >
+                Definition
+              </span>
             </button>
-            <button
-              onClick={() => onChangeStep(3)}
-              className={`navButton ${step === navSteps.stepThree && 'active'}`}
-            >
-              Update
+            <button onClick={() => onChangeStep(3)} className={'navButton'}>
+              <span
+                style={{ textAlign: 'center', margin: '0 auto', paddingBottom: '8px' }}
+                className={`${step === navSteps.stepThree && 'active'}`}
+              >
+                Update
+              </span>
             </button>
-            <button
-              onClick={() => onChangeStep(4)}
-              className={`navButton ${step === navSteps.stepFour && 'active'}`}
-            >
-              Execution
+            <button onClick={() => onChangeStep(4)} className={'navButton'}>
+              <span
+                style={{ textAlign: 'right', marginLeft: 'auto', paddingBottom: '8px' }}
+                className={`${step === navSteps.stepFour && 'active'}`}
+              >
+                Execution
+              </span>
             </button>
           </div>
           <div>{steps[step]}</div>
