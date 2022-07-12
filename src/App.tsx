@@ -4,7 +4,6 @@ import MetaMaskOnboarding from '@metamask/onboarding';
 import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
 import Web3 from 'web3';
 import detectEthereumProvider from '@metamask/detect-provider';
-import Header from './components/header';
 import Footer from './components/footer';
 import { initRoutes } from './router';
 
@@ -70,7 +69,6 @@ function App() {
     <div className="App">
       <Router>
         <Suspense fallback={<div>Page is loading...</div>}>
-          <Header />
           <Routes>
             {initRoutes(address, network)}
             {redirect}

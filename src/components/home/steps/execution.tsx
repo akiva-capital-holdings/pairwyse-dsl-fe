@@ -3,7 +3,7 @@
 /* eslint-disable no-unsafe-optional-chaining */
 /* eslint-disable arrow-body-style */
 import React from 'react';
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input, InputNumber } from 'antd';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { createInstance } from 'utils/helpers';
@@ -60,13 +60,7 @@ const ExecutionRequest = ({ setAgreement, agreement, setDslID, dslId }) => {
           ID
         </div>
         <Item name="dsl-id" validateTrigger="onBlur" rules={getRule('dsl-id', 'dsl-id', dslId)}>
-          <Input
-            className="lander"
-            defaultValue={dslId}
-            onChange={(e) => {
-              return setDslID(e?.target?.value);
-            }}
-          />
+          <InputNumber className="lander" defaultValue={dslId} onChange={(e) => setDslID(e)} />
         </Item>
         <div className="btnsContainer">
           <Button style={{ height: '48px' }} htmlType="submit" className="btn">
