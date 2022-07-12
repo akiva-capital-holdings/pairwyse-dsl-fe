@@ -6,9 +6,8 @@ import React from 'react';
 import { Button, Form, Input } from 'antd';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-// import { createInstance } from 'utils/helpers';
-// import { selectUtils } from 'redux/utilsReducer';
-// import { Contract } from 'ethers';
+import { createInstance } from 'utils/helpers';
+import { selectUtils } from 'redux/utilsReducer';
 import { selectSession } from '../../../redux/sessionReducer';
 import getRule from '../../../utils/validate';
 
@@ -16,20 +15,20 @@ const { Item } = Form;
 
 const ExecutionRequest = ({ setAgreement, agreement, setDslID, dslId }) => {
   const { address: userWallet } = useSelector(selectSession);
-  //   const { provider } = useSelector(selectUtils);
+  const { provider } = useSelector(selectUtils);
   const navigate = useNavigate();
 
-  const ExecutionSubmit = () => {
-    console.log('request');
+  const ExecutionSubmit = async () => {
+    const agreementContract = await createInstance('Agreement', agreement, provider);
+    console.log({ txsAddr: await agreementContract.methods.execute(dslId).call() });
+    // .execute(txId)
   };
 
   return (
     <div className="updateRequest">
       <div className="title">Execution</div>
       <Form name="agreementRequestForm" autoComplete="off" onFinish={() => ExecutionSubmit()}>
-        <div style={{ marginTop: '24px' }} className="text">
-          Requestor
-        </div>
+        <div className="text">Requestor</div>
         <div
           style={{
             display: 'flex',

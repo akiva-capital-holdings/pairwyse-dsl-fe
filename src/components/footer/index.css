@@ -8,7 +8,7 @@
   text-align: left;
 }
 .footerContainer .logoContainer .text {
-  font-family: var(--font_family_medium);
+  font-family: var(--font_family);
   font-style: normal;
   font-weight: 500;
   font-size: 14px;

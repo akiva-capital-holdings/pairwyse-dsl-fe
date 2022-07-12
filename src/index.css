@@ -57,6 +57,7 @@ button {
  border-radius: 4px;
  border: none;
  font-style: normal;
+ font-family: var(--font_family_bold);
  font-weight: var(--font_weight_bolder);
  font-size: var(--font_size_h6);
  line-height: 18px;

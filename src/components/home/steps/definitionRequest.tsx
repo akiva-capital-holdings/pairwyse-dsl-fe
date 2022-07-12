@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 // import { useSelector } from 'react-redux';
 // import {definitionInstance} from '../../../utils/helpers';
 import { useSelector } from 'react-redux';
+import { v4 as uuidv4 } from 'uuid';
 import { selectUtils } from 'redux/utilsReducer';
 import { createInstance, hex4Bytes } from 'utils/helpers';
 import { selectSession } from 'redux/sessionReducer';
@@ -131,25 +132,24 @@ const DefinitionRequest = ({
               </div>
             );
           })}
-          {specifications?.length === 5 ||
-            (specifications?.length < 5 && (
-              <Button
-                htmlType="button"
-                className="add"
-                onClick={() =>
-                  setspecification([
-                    ...specifications,
-                    {
-                      title: `Specification ${specifications?.length}`,
-                      value: '',
-                      id: specifications?.length + 1,
-                    },
-                  ])
-                }
-              >
-                Add Specification
-              </Button>
-            ))}
+          {specifications?.length < 5 && (
+            <Button
+              htmlType="button"
+              className="add"
+              onClick={() =>
+                setspecification([
+                  ...specifications,
+                  {
+                    title: `Specification ${specifications?.length}`,
+                    value: '',
+                    id: uuidv4(),
+                  },
+                ])
+              }
+            >
+              Add Specification
+            </Button>
+          )}
         </div>
         <div className="btnsContainer">
           <Button style={{ height: '48px' }} htmlType="submit" className="btn">
