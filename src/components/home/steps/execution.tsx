@@ -2,7 +2,6 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-unsafe-optional-chaining */
 /* eslint-disable arrow-body-style */
-import React from 'react';
 import { Button, Form, Input } from 'antd';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -13,15 +12,17 @@ import getRule from '../../../utils/validate';
 
 const { Item } = Form;
 
-const ExecutionRequest = ({ setAgreement, agreement, setDslID, dslId }) => {
+const ExecutionRequest = ({ setAgreement, agreement, setDslID, dslId, setTxValue, txValue }) => {
   const { address: userWallet } = useSelector(selectSession);
   const { provider } = useSelector(selectUtils);
   const navigate = useNavigate();
 
   const ExecutionSubmit = async () => {
     const agreementContract = await createInstance('Agreement', agreement, provider);
-    console.log({ txsAddr: await agreementContract.methods.execute(dslId).call() });
-    // .execute(txId)
+    const executeTx = await agreementContract.methods
+      .execute(dslId)
+      .send({ from: userWallet, value: txValue });
+    console.log({ txHash: executeTx.transactionHash });
   };
 
   return (
@@ -65,6 +66,22 @@ const ExecutionRequest = ({ setAgreement, agreement, setDslID, dslId }) => {
             defaultValue={dslId}
             onChange={(e) => {
               return setDslID(e?.target?.value);
+            }}
+          />
+        </Item>
+        <div style={{ marginTop: '24px' }} className="text">
+          Transaction Value (in Wei)
+        </div>
+        <Item
+          name="tx-value"
+          validateTrigger="onBlur"
+          rules={getRule('tx-value', 'tx-value', txValue)}
+        >
+          <Input
+            className="lander"
+            defaultValue={txValue}
+            onChange={(e) => {
+              return setTxValue(e?.target?.value);
             }}
           />
         </Item>
