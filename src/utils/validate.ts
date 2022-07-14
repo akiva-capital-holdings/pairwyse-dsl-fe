@@ -129,6 +129,8 @@ export default function getRule(label: string, name: string, v?) {
       return [validateSpace];
     case 'dsl-id':
       return [validateId];
+    case 'tx-value':
+      return [];
     default:
       return [defaultRule];
   }

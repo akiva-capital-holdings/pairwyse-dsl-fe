@@ -13,15 +13,17 @@ import getRule from '../../../utils/validate';
 
 const { Item } = Form;
 
-const ExecutionRequest = ({ setAgreement, agreement, setDslID, dslId }) => {
+const ExecutionRequest = ({ setAgreement, agreement, setDslID, dslId, setTxValue, txValue }) => {
   const { address: userWallet } = useSelector(selectSession);
   const { provider } = useSelector(selectUtils);
   const navigate = useNavigate();
 
   const ExecutionSubmit = async () => {
     const agreementContract = await createInstance('Agreement', agreement, provider);
-    console.log({ txsAddr: await agreementContract.methods.execute(dslId).call() });
-    // .execute(txId)
+    const executeTx = await agreementContract.methods
+      .execute(dslId)
+      .send({ from: userWallet, value: txValue });
+    console.log({ txHash: executeTx.transactionHash });
   };
 
   return (
@@ -61,6 +63,22 @@ const ExecutionRequest = ({ setAgreement, agreement, setDslID, dslId }) => {
         </div>
         <Item name="dsl-id" validateTrigger="onBlur" rules={getRule('dsl-id', 'dsl-id', dslId)}>
           <InputNumber className="lander" defaultValue={dslId} onChange={(e) => setDslID(e)} />
+        </Item>
+        <div style={{ marginTop: '24px' }} className="text">
+          Transaction Value (in Wei)
+        </div>
+        <Item
+          name="tx-value"
+          validateTrigger="onBlur"
+          rules={getRule('tx-value', 'tx-value', txValue)}
+        >
+          <Input
+            className="lander"
+            defaultValue={txValue}
+            onChange={(e) => {
+              return setTxValue(e?.target?.value);
+            }}
+          />
         </Item>
         <div className="btnsContainer">
           <Button style={{ height: '48px' }} htmlType="submit" className="btn">

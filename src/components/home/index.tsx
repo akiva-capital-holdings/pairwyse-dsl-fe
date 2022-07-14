@@ -29,9 +29,10 @@ const HomePage = () => {
   const [agreement, setAgreement] = useState('');
   const [dslId, setDslID] = useState('');
   const [transaction, setTransaction] = useState('');
-  // execition
+  // execition // TODO: fix typo
   const [agreementExecition, setAgreementExecition] = useState('');
   const [dslIdExecition, setDslIdExecition] = useState('');
+  const [txValueExecution, setTxValueExecution] = useState('');
 
   const reset = () => {
     setValue(undefined);
@@ -106,8 +107,10 @@ const HomePage = () => {
       <ExecutionRequest
         setAgreement={setAgreementExecition}
         agreement={agreementExecition}
-        setDslID={setDslIdExecition}
-        dslId={dslIdExecition}
+        setDslID={setDslIdExecition} // TODO: fix typo
+        dslId={dslIdExecition} // TODO: fix typo
+        setTxValue={setTxValueExecution}
+        txValue={txValueExecution}
       />
     ),
   };

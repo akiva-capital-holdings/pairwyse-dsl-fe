@@ -102,7 +102,9 @@ const UpdateRequest = ({
           conditionsContextAddrs
         )
         .send({ from: userWallet });
-      console.log(`\nAgreement update transaction hash: \n\t\x1b[35m${agrUpdate}\x1b[0m`);
+      console.log(
+        `\nAgreement update transaction hash: \n\t\x1b[35m${agrUpdate.transactionHash}\x1b[0m`
+      );
     }
   };
 
