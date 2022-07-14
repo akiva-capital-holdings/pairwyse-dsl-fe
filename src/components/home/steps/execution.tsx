@@ -2,7 +2,8 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-unsafe-optional-chaining */
 /* eslint-disable arrow-body-style */
-import { Button, Form, Input } from 'antd';
+import React from 'react';
+import { Button, Form, Input, InputNumber } from 'antd';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { createInstance } from 'utils/helpers';
@@ -61,13 +62,7 @@ const ExecutionRequest = ({ setAgreement, agreement, setDslID, dslId, setTxValue
           ID
         </div>
         <Item name="dsl-id" validateTrigger="onBlur" rules={getRule('dsl-id', 'dsl-id', dslId)}>
-          <Input
-            className="lander"
-            defaultValue={dslId}
-            onChange={(e) => {
-              return setDslID(e?.target?.value);
-            }}
-          />
+          <InputNumber className="lander" defaultValue={dslId} onChange={(e) => setDslID(e)} />
         </Item>
         <div style={{ marginTop: '24px' }} className="text">
           Transaction Value (in Wei)

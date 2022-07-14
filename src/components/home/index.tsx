@@ -1,6 +1,6 @@
 /* eslint-disable arrow-body-style */
 import { useState } from 'react';
-
+import Header from '../header/index';
 import { UpdateRequest, DefinitionRequest, AgreementRequest, ExecutionRequest } from './steps';
 import { mock, mockSignatories, mockDefinitions } from './mock';
 
@@ -33,6 +33,22 @@ const HomePage = () => {
   const [agreementExecition, setAgreementExecition] = useState('');
   const [dslIdExecition, setDslIdExecition] = useState('');
   const [txValueExecution, setTxValueExecution] = useState('');
+
+  const reset = () => {
+    setValue(undefined);
+    setLender('');
+    setError('');
+    setDefinition('');
+    setspecification(mockDefinitions);
+    setAgreementDefinition('');
+    setConditions(mock);
+    setSignatories(mockSignatories);
+    setAgreement('');
+    setDslID('');
+    setTransaction('');
+    setAgreementExecition('');
+    setDslIdExecition('');
+  };
 
   const onChangeStep = (v: number) => {
     switch (v) {
@@ -101,6 +117,7 @@ const HomePage = () => {
 
   return (
     <>
+      <Header onClick={reset} />
       <div className="homePage">
         <div className="stepsContentContainer">
           <span className="title">Agreement</span>

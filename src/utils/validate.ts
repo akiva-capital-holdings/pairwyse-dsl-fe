@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-loss-of-precision */
 import { ethers } from 'ethers';
 
 export const validationAgreementModel = (value, setError) => {
@@ -14,6 +15,22 @@ export default function getRule(label: string, name: string, v?) {
     message: 'This field is required',
   };
 
+  const validateId = () => {
+    return {
+      validator: () => {
+        if (v === null || v === undefined || v === '') {
+          return Promise.reject(new Error('This field is required'));
+        }
+        if (v < 1) {
+          return Promise.reject(new Error('Invalid number'));
+        }
+        if (v > 115792089237316195423570985008687907853269984665640564039457584007913129639935) {
+          return Promise.reject(new Error('Invalid number'));
+        }
+        return Promise.resolve();
+      },
+    };
+  };
   const validateMinMax = (min: number, max: number) => {
     return {
       validator: () => {
@@ -111,7 +128,7 @@ export default function getRule(label: string, name: string, v?) {
     case 'transaction':
       return [validateSpace];
     case 'dsl-id':
-      return [validateSpace];
+      return [validateId];
     case 'tx-value':
       return [];
     default:
