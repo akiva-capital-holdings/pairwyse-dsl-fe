@@ -17,8 +17,6 @@ const AgreementRequest = ({ setLender, setError, setValue, lender, error, value 
   const { address: userWallet } = useSelector(selectSession);
   const { provider } = useSelector(selectUtils);
 
-  console.log('lender', lender);
-
   const navigate = useNavigate();
 
   const createAgreement = async () => {

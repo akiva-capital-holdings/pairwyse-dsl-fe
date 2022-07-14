@@ -1,13 +1,23 @@
 /* eslint-disable arrow-body-style */
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { selectSession } from '../../redux/sessionReducer';
 import './index.css';
 
-const Header = () => {
+const Header = ({ onClick }) => {
   const { address } = useSelector(selectSession);
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+
+  const reset = () => {
+    window.history.pushState('/create-agreement', 'Sample Title', '/create-agreement');
+    navigate('/create-agreement');
+    if (pathname === '/create-agreement') {
+      window.location.reload();
+    }
+    onClick();
+  };
 
   return (
     <div className="headerContainer">
@@ -15,7 +25,7 @@ const Header = () => {
         Logo
       </div>
       {address && (
-        <button onClick={() => navigate('/create-agreement')} className="btn" type="button">
+        <button onClick={() => reset()} className="btn" type="button">
           Agreement Interaction
         </button>
       )}

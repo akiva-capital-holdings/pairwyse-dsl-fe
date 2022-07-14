@@ -32,7 +32,9 @@
 .ant-layout-content {
  margin: 0 24px 0 16px !important;
 }
-
+.ant-input-number-handler-wrap {
+  display: none;
+}
 .ant-btn.ant-btn-default.ant-dropdown-trigger:hover,
 .ant-btn.ant-btn-default.ant-dropdown-trigger:focus{
   border: none;
