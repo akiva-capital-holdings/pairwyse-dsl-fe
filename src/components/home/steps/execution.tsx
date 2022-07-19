@@ -13,7 +13,15 @@ import getRule from '../../../utils/validate';
 
 const { Item } = Form;
 
-const ExecutionRequest = ({ setAgreement, agreement, setDslID, dslId, setTxValue, txValue }) => {
+const ExecutionRequest = ({ 
+  setExecitionValue,
+  setAgreement, 
+  setTxValue, 
+  agreement,
+  setDslID,
+  txValue, 
+  dslId, 
+  }) => {
   const { address: userWallet } = useSelector(selectSession);
   const { provider } = useSelector(selectUtils);
   const navigate = useNavigate();
@@ -24,6 +32,7 @@ const ExecutionRequest = ({ setAgreement, agreement, setDslID, dslId, setTxValue
       .execute(dslId)
       .send({ from: userWallet, value: txValue });
     console.log({ txHash: executeTx.transactionHash });
+    setExecitionValue(executeTx.transactionHash)
   };
 
   return (

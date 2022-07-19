@@ -13,7 +13,7 @@ import './index.css';
 
 const { Item } = Form;
 
-const AgreementRequest = ({ setLender, setError, setValue, lender, error, value }) => {
+const AgreementRequest = ({ setLender, setError, setValue, lender, error, value, setValueAgreementRequest }) => {
   const { address: userWallet } = useSelector(selectSession);
   const { provider } = useSelector(selectUtils);
 
@@ -26,17 +26,12 @@ const AgreementRequest = ({ setLender, setError, setValue, lender, error, value 
         `${process.env.REACT_APP_AGREEMENT_FACTORY}`,
         provider
       );
-
-      const tx = await agrFactory.methods
+      const tx: {transactionHash: string} = await agrFactory.methods
         .deployAgreement(process.env.REACT_APP_PARSER)
         .send({ from: userWallet });
-      console.log({ tx });
-
       const agrLen = parseInt(await agrFactory.methods.getDeployedAgreementsLen().call(), 10);
-      console.log({ agrLen });
-
       const lastAgrAddr = await agrFactory.methods.deployedAgreements(agrLen - 1).call();
-      console.log({ lastAgrAddr });
+      setValueAgreementRequest({hash:  tx?.transactionHash, lastAgrAddr})
     }
   };
 

@@ -17,6 +17,7 @@ const { Item } = Form;
 const DefinitionRequest = ({
   setAgreementDefinition: setAgreement,
   agreementDefinition: agreement,
+  setValueDefinitionRequest,
   setspecification,
   specifications,
   setDefinition,
@@ -28,19 +29,19 @@ const DefinitionRequest = ({
 
   const defineVariable = async () => {
     // eslint-disable-next-line
-    const _agreementAddr = agreement;
+    const agreementAddr = agreement;
     // eslint-disable-next-line
     const _definition = definition;
     // eslint-disable-next-line
     const _specification = specifications[0].value;
 
     console.log({
-      _agreementAddr,
+      agreementAddr,
       _definition,
       _specification,
     });
 
-    const a = await createInstance('Agreement', _agreementAddr, provider);
+    const a = await createInstance('Agreement', agreementAddr, provider);
     const txsAddr = await a.methods.txs().call();
     console.log({ txsAddr });
     const txs = await createInstance('ConditionalTxs', txsAddr, provider);
@@ -51,8 +52,8 @@ const DefinitionRequest = ({
     // Check that the variable was set
     const value = await txs.methods.getStorageAddress(hex4Bytes(_definition)).call();
     console.log({ value });
+    setValueDefinitionRequest(value)
   };
-  console.log(specifications);
 
   return (
     <div className="definitionRequest">

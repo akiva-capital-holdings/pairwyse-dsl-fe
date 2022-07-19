@@ -17,6 +17,7 @@ import getRule from '../../../utils/validate';
 const { Item } = Form;
 
 const UpdateRequest = ({
+  setUpdateRequest,
   setSignatories,
   setTransaction,
   setConditions,
@@ -105,6 +106,7 @@ const UpdateRequest = ({
       console.log(
         `\nAgreement update transaction hash: \n\t\x1b[35m${agrUpdate.transactionHash}\x1b[0m`
       );
+      setUpdateRequest(agrUpdate.transactionHash)
     }
   };
 
