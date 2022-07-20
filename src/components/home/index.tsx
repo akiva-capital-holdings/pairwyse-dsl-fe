@@ -1,6 +1,6 @@
 /* eslint-disable arrow-body-style */
 import { useState } from 'react';
-import {CheckOutlined, CopyOutlined}  from '@ant-design/icons'
+import {CheckOutlined, CopyOutlined, CloseOutlined}  from '@ant-design/icons'
 import {notification} from 'antd'
 import Header from '../header/index';
 import { UpdateRequest, DefinitionRequest, AgreementRequest, ExecutionRequest } from './steps';
@@ -22,24 +22,24 @@ const HomePage = () => {
   const [value, setValue] = useState(undefined);
   const [lender, setLender] = useState('');
   const [error, setError] = useState(undefined);
-  const [valueAgreementRequest, setValueAgreementRequest]  = useState({hash: '', lastAgrAddr: ''})
+  const [valueAgreementRequest, setValueAgreementRequest]  = useState({hash: '', lastAgrAddr: '', submit: false})
   // definition request
   const [definition, setDefinition] = useState('');
   const [specifications, setspecification] = useState(mockDefinitions);
   const [agreementDefinition, setAgreementDefinition] = useState('');
-  const [valueDefinitionRequest, setValueDefinitionRequest] = useState({agreementAddr: ''})
+  const [valueDefinitionRequest, setValueDefinitionRequest] = useState({agreementAddr: '', submit: false})
   // update request
   const [conditions, setConditions] = useState(mock);
   const [signatories, setSignatories] = useState(mockSignatories);
   const [agreement, setAgreement] = useState('');
   const [dslId, setDslID] = useState('');
   const [transaction, setTransaction] = useState('');
-  const [valueUpdateRequest, setUpdateRequest] = useState()
+  const [valueUpdateRequest, setUpdateRequest] = useState({hash: '', submit: false})
   // execition // TODO: fix typo
   const [agreementExecition, setAgreementExecition] = useState('');
   const [dslIdExecition, setDslIdExecition] = useState('');
   const [txValueExecution, setTxValueExecution] = useState('');
-  const [execitionValue, setExecitionValue] = useState('')
+  const [execitionValue, setExecitionValue] = useState({value: '', submit: false})
   
   const reset = () => {
     setValue(undefined);
@@ -132,66 +132,111 @@ const HomePage = () => {
     });
     navigator.clipboard.writeText(`${text}`);
   };
+  const iconValue = (v) => {
+    return   v ?
+      <div className='green'>   <CheckOutlined color='#61E366' className='iconSuccess'/>Success</div>
+         : 
+      <div className='red'>   <CloseOutlined color='#E61F1F' className='iconSuccess'/>Fail</div>
+  }
+  const titleValue = (v) => {
+    console.log(v);
+    
+    return v
+      ? 'Created Agreement Addres'
+      : 'Warning! Error encounteredduring contract execution'
+
+  }
   const contentCOnteiner = {
     stepOne: (
-   valueAgreementRequest?.hash ?
-    <div className='contentCOntainer'>
+      valueAgreementRequest?.submit || valueAgreementRequest?.hash ?
+   <div className={`transactionContainer  ${ !valueAgreementRequest?.submit &&  execitionValue?.value ? 'error' : ''  }`}>
+              <div className='titleContainer'>
+              <div className='title'>Transaction</div>
+              {iconValue(!!valueAgreementRequest?.lastAgrAddr)}
+                </div>
+    <div className={`contentCOntainer ${valueAgreementRequest?.submit && 'error'}`}>
     <div className='content'>
-      <div className='title'>Created Agreement Addres</div>
-      <div className='valueContainer'>
+      <div className='title'>{titleValue(!!valueAgreementRequest?.lastAgrAddr)}</div>
+    {valueAgreementRequest?.hash &&  <div className='valueContainer'>
         <div className='value'>{valueAgreementRequest?.lastAgrAddr}</div>
         <CopyOutlined  onClick={() => onCopyClick(valueAgreementRequest?.lastAgrAddr)}/>
       </div>
+      }
     </div>
-    <div  style={{marginTop:  '12px'}} className='content'>
+    {valueAgreementRequest?.hash && <div  style={{marginTop:  '12px'}} className='content'>
       <div className='title'>Agreement Request  <br/>Transaction ID</div>
       <div className='valueContainer'>
         <div className='value'>{valueAgreementRequest?.hash}</div> 
         <CopyOutlined  onClick={() => onCopyClick(valueAgreementRequest?.hash)}/>
       </div>
-     </div>
+     </div>}
     </div> 
+    </div>
    :  null ),
     stepTwo: (
-      valueDefinitionRequest ?
-      <div className='contentCOntainer'>
-      <div className='content'>
-        <div className='title'>Created Agreement Addres</div>
-        <div className='valueContainer'>
-          <div className='value'>{valueDefinitionRequest?.agreementAddr}</div>
-          <CopyOutlined  onClick={() => onCopyClick(valueDefinitionRequest?.agreementAddr)}/>
+       valueDefinitionRequest?.submit || !!valueDefinitionRequest?.agreementAddr ?
+      <div className={`transactionContainer  ${ !valueDefinitionRequest?.agreementAddr && 'error' }`}>
+      <div className='titleContainer'>
+      <div className='title'>Transaction</div>
+      {iconValue(!!valueDefinitionRequest?.agreementAddr)}
         </div>
+      <div className={`contentCOntainer ${valueAgreementRequest?.submit && 'error'}`}>
+      <div className='content'>
+        <div className='title'>{titleValue(valueDefinitionRequest?.agreementAddr)}</div>
+      {!!valueDefinitionRequest?.agreementAddr  && <div className='valueContainer'>
+          <div className='value'>{!!valueDefinitionRequest?.agreementAddr}</div>
+          <CopyOutlined  onClick={() => onCopyClick(valueDefinitionRequest?.agreementAddr)}/>
+        </div>}
       </div>
       </div> 
+      </div>
       :  null 
     ),
     stepThree: (
-      valueUpdateRequest ?
-        <div className='contentCOntainer'>
+      !!valueUpdateRequest?.hash || valueUpdateRequest?.submit ?
+      <div className={`transactionContainer  ${ !valueUpdateRequest?.hash && 'error' }`}>
+      <div className='titleContainer'>
+      <div className='title'>Transaction</div>
+      {iconValue(!!valueUpdateRequest?.hash)}
+        </div>
+        <div className={`contentCOntainer ${!valueUpdateRequest?.hash && 'error'}`}>
         <div className='content'>
-          <div className='title'>Created Agreement Addres</div>
-          <div className='valueContainer'>
-            <div className='value'>{valueUpdateRequest}</div>
-            <CopyOutlined  onClick={() => onCopyClick(valueUpdateRequest)}/>
-          </div>
+          <div className='title'>{titleValue(!!valueUpdateRequest?.hash)}</div>
+         {!!valueUpdateRequest?.hash && <div className='valueContainer'>
+            <div className='value'>{valueUpdateRequest?.hash}</div>
+            <CopyOutlined  onClick={() => onCopyClick(valueUpdateRequest?.hash)}/>
+          </div>}
         </div>
         </div> 
+              </div> 
         :  null 
     ),
     stepFour: (
-      execitionValue ?
-       <div className='contentCOntainer'>
+       execitionValue?.submit ||  execitionValue?.value  ?
+      <div className={`transactionContainer  ${ execitionValue?.submit ||  execitionValue?.value ? 'error' : ''  }`}>
+      <div className='titleContainer'>
+      <div className='title'>Transaction</div>
+        <div className='titleSeccess'>
+        {iconValue(!!execitionValue?.value)}
+        </div>
+     </div>
+       <div className={'contentCOntainer'}>
        <div className='content'>
-         <div className='title'>Created Agreement Addres</div>
-         <div className='valueContainer'>
-           <div className='value'>{execitionValue}</div>
-           <CopyOutlined  onClick={() => onCopyClick(execitionValue)}/>
+         <div className='title'>
+         {titleValue(!!execitionValue?.value )}
+        </div>
+        {!!execitionValue?.value && <div className='valueContainer'>
+           <div className='value'>{execitionValue?.value}</div>
+           <CopyOutlined  onClick={() => onCopyClick(execitionValue?.value)}/>
          </div>
+         }
        </div>
        </div> 
+       </div>
        :  null 
     ),
   };
+  
   return (
     <>
       <Header onClick={reset} />
@@ -246,14 +291,10 @@ const HomePage = () => {
            !!valueDefinitionRequest?.agreementAddr || 
            !!valueUpdateRequest ||
            !!execitionValue 
-          )?  <div className='transactionContainer'>
-              <div className='titleContainer'>
-              <div className='title'>Transaction</div>
-              <div className='titleSeccess'>
-                <CheckOutlined color='#61E366' className='iconSuccess'/>Success</div>
-                </div>
-                {contentCOnteiner[step]}
-            </div> : null }
+          )?<>
+            {contentCOnteiner[step]}
+            </>
+          : null }
        </div>
      </div>
    </>

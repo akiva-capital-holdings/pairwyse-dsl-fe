@@ -27,12 +27,17 @@ const ExecutionRequest = ({
   const navigate = useNavigate();
 
   const ExecutionSubmit = async () => {
+   try  {
     const agreementContract = await createInstance('Agreement', agreement, provider);
     const executeTx = await agreementContract.methods
       .execute(dslId)
       .send({ from: userWallet, value: txValue });
     console.log({ txHash: executeTx.transactionHash });
-    setExecitionValue(executeTx.transactionHash)
+    setExecitionValue({hash:  executeTx.transactionHash, submit : false})
+    console.log('executeTx', executeTx);
+   } catch {
+    setExecitionValue({hash:  '', submit : true})
+   }
   };
 
   return (

@@ -106,11 +106,11 @@ const UpdateRequest = ({
       console.log(
         `\nAgreement update transaction hash: \n\t\x1b[35m${agrUpdate.transactionHash}\x1b[0m`
       );
-      setUpdateRequest(agrUpdate.transactionHash)
     }
   };
 
   const updateAgreement = async () => {
+   try {
     console.log('`updateAgreement` function call');
     // Input data
     const _dslId = parseInt(dslId, 10);
@@ -134,9 +134,10 @@ const UpdateRequest = ({
       process.env.REACT_APP_CONTEXT_FACTORY,
       provider
     );
-
-    console.log({ txsAddr: await agreementContract.methods.txs().call() });
-    console.log({ ctxdeployedLen: await contextFactory.methods.getDeployedContextsLen().call() });
+   const txsAddr = await agreementContract.methods.txs().call() 
+   const ctxdeployedLen = await contextFactory.methods.getDeployedContextsLen().call()
+    console.log({txsAddr });
+    console.log({ ctxdeployedLen});
 
     await addSteps(agreementContract, contextFactory, [
       {
@@ -147,6 +148,10 @@ const UpdateRequest = ({
         transaction: _transaction,
       },
     ]);
+    setUpdateRequest({hash: txsAddr, submit: false })
+   } catch {
+    setUpdateRequest({hash: '', submit: true })
+   }
   };
 
   return (

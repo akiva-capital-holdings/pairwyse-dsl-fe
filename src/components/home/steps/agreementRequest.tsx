@@ -20,19 +20,29 @@ const AgreementRequest = ({ setLender, setError, setValue, lender, error, value,
   const navigate = useNavigate();
 
   const createAgreement = async () => {
+   try {
     if (!error) {
       const agrFactory: Contract = await createInstance(
         'AgreementFactory',
         `${process.env.REACT_APP_AGREEMENT_FACTORY}`,
         provider
-      );
-      const tx: {transactionHash: string} = await agrFactory.methods
+        );
+        const tx: {transactionHash: string} = await agrFactory.methods
         .deployAgreement(process.env.REACT_APP_PARSER)
         .send({ from: userWallet });
-      const agrLen = parseInt(await agrFactory.methods.getDeployedAgreementsLen().call(), 10);
-      const lastAgrAddr = await agrFactory.methods.deployedAgreements(agrLen - 1).call();
-      setValueAgreementRequest({hash:  tx?.transactionHash, lastAgrAddr})
-    }
+        console.log(tx, agrFactory);
+        
+        const agrLen = parseInt(await agrFactory.methods.getDeployedAgreementsLen().call(), 10);
+        console.log(agrLen);
+        const lastAgrAddr = await agrFactory.methods.deployedAgreements(agrLen - 1).call();
+        console.log('submoit', error);
+        setValueAgreementRequest({hash:  tx?.transactionHash, lastAgrAddr, submit:  false })
+      } 
+   } catch {
+    console.log('catch');
+    
+    setValueAgreementRequest({hash:  '', lastAgrAddr:  '', submit:  true })
+   }
   };
 
   const menu = (
