@@ -34,7 +34,7 @@
 .homePage .menu .active{
   display: block;
   height: 112%;
-  width: 130px;
+  width: 105px;
   font-family: var(--font_family_bold);
   font-style: normal;
   font-weight: var(--font_weight_bolder);

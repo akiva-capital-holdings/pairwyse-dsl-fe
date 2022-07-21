@@ -64,7 +64,6 @@ export const checkNetwork = async (dispatch, checkNetworkAction, changeNetworkNa
   // @ts-ignore
   const currentChainId  = Number((await ethereum?.request({method: 'eth_chainId'}))?.split('x')[1]
   );
-  // @ts-ignore
   if (networks[process.env.REACT_APP_NETWORK] !== currentChainId) {
     dispatch(changeNetworkName(currentChainId));
     dispatch(checkNetworkAction(false));
@@ -137,8 +136,7 @@ export const ethereumOff = (dispatch, connect) => {
 };
 export const getNetworksList = () => {
   let networksList = {};
-  // eslint-disable-next-line array-callback-return
-  allNetworks.map((item) => {
+  allNetworks.forEach((item) => {
     networksList = { ...networksList, [item.chainId]: item.name };
   });
 
