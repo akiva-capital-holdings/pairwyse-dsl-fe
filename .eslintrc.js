@@ -41,8 +41,9 @@ module.exports = {
     "max-len": ["error", 180],
     "no-plusplus": ["off"],
     "no-param-reassign": [2, { "props": false }],
-    "arrow-body-style": ['error', 'always'],
+    "arrow-body-style": ["off"],
     "import/no-named-as-default": 0,
-    "no-console": "off"
+    "no-console": "off",
+    "no-underscore-dangle": 0,
   }
 }

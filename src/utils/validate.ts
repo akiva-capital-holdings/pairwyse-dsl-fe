@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-loss-of-precision */
 import { ethers } from 'ethers';
 
 export const validationAgreementModel = (value, setError) => {
@@ -24,6 +23,7 @@ export default function getRule(label: string, name: string, v?) {
         if (v < 1) {
           return Promise.reject(new Error('Invalid number'));
         }
+        // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
         if (v > 115792089237316195423570985008687907853269984665640564039457584007913129639935) {
           return Promise.reject(new Error('Invalid number'));
         }

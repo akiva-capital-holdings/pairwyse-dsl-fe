@@ -1,4 +1,3 @@
-/* eslint-disable arrow-body-style */
 import { useState } from 'react';
 import Header from '../header/index';
 import { UpdateRequest, DefinitionRequest, AgreementRequest, ExecutionRequest } from './steps';
@@ -122,7 +121,7 @@ const HomePage = () => {
         <div className="stepsContentContainer">
           <span className="title">Agreement</span>
           <div className="menu">
-            <button onClick={() => onChangeStep(1)} className={'navButton'}>
+            <button onClick={() => {return onChangeStep(1)}} className={'navButton'}>
               <span
                 style={{ textAlign: 'left', paddingBottom: '8px' }}
                 className={`${step === navSteps.stepOne && 'active'}`}
@@ -131,7 +130,8 @@ const HomePage = () => {
                 Creation
               </span>
             </button>
-            <button onClick={() => onChangeStep(2)} className={'navButton'}>
+            <button onClick={() => {return onChangeStep(2)}} 
+            className={'navButton'}>
               <span
                 style={{ textAlign: 'center', margin: '0 auto', paddingBottom: '8px' }}
                 className={`${step === navSteps.stepTwo && 'active'}`}
@@ -139,7 +139,7 @@ const HomePage = () => {
                 Definition
               </span>
             </button>
-            <button onClick={() => onChangeStep(3)} className={'navButton'}>
+            <button onClick={() => {return onChangeStep(3)}} className={'navButton'}>
               <span
                 style={{ textAlign: 'center', margin: '0 auto', paddingBottom: '8px' }}
                 className={`${step === navSteps.stepThree && 'active'}`}
@@ -147,7 +147,7 @@ const HomePage = () => {
                 Update
               </span>
             </button>
-            <button onClick={() => onChangeStep(4)} className={'navButton'}>
+            <button onClick={() => {return onChangeStep(4)}} className={'navButton'}>
               <span
                 style={{ textAlign: 'right', marginLeft: 'auto', paddingBottom: '8px' }}
                 className={`${step === navSteps.stepFour && 'active'}`}

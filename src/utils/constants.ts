@@ -43,3 +43,7 @@ export const NETWORK_OPTIONS = {
     rpcUrls: ['http://127.0.0.1:7545'],
   },
 };
+
+export default {
+  NETWORK_OPTIONS
+}

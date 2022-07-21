@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable no-unsafe-optional-chaining */
-/* eslint-disable arrow-body-style */
 import React from 'react';
 import { Button, Form, Input, InputNumber } from 'antd';
 import { useSelector } from 'react-redux';
@@ -111,21 +107,21 @@ const UpdateRequest = ({
   const updateAgreement = async () => {
     console.log('`updateAgreement` function call');
     // Input data
-    const _dslId = parseInt(dslId, 10);
-    const _agreementAddr = agreement;
-    const _signatory = signatories[0].value;
-    const _condition = conditions[0].value;
-    const _transaction = transaction;
+    const DSL_ID = parseInt(dslId, 10);
+    const AGREEMENT_ADDR = agreement;
+    const SIGNATORY = signatories[0].value;
+    const CONDITION = conditions[0].value;
+    const TRANSACTION = transaction;
 
     console.log({
-      _dslId,
-      _agreementAddr,
-      _signatory,
-      _condition,
-      _transaction,
+      DSL_ID,
+      AGREEMENT_ADDR,
+      SIGNATORY,
+      CONDITION,
+      TRANSACTION,
     });
 
-    const agreementContract = await createInstance('Agreement', _agreementAddr, provider);
+    const agreementContract = await createInstance('Agreement', AGREEMENT_ADDR, provider);
 
     const contextFactory = await createInstance(
       'ContextFactory',
@@ -138,11 +134,11 @@ const UpdateRequest = ({
 
     await addSteps(agreementContract, contextFactory, [
       {
-        txId: _dslId,
+        txId: DSL_ID,
         requiredTxs: [],
-        signatories: [_signatory],
-        conditions: [_condition],
-        transaction: _transaction,
+        signatories: [SIGNATORY],
+        conditions: [CONDITION],
+        transaction: TRANSACTION,
       },
     ]);
   };
@@ -150,7 +146,7 @@ const UpdateRequest = ({
   return (
     <div className="updateRequest">
       <div className="title">Update Request </div>
-      <Form name="agreementRequestForm" autoComplete="off" onFinish={() => updateAgreement()}>
+      <Form name="agreementRequestForm" autoComplete="off" onFinish={() => {return  updateAgreement()}}>
         <div className="text">Requestor</div>
         <div
           style={{
@@ -168,7 +164,7 @@ const UpdateRequest = ({
           ID
         </div>
         <Item name="dsl-id" validateTrigger="onBlur" rules={getRule('dsl-id', 'dsl-id', dslId)}>
-          <InputNumber className="lander" defaultValue={dslId} onChange={(e) => setDslID(e)} />
+          <InputNumber className="lander" defaultValue={dslId} onChange={(e) => {return setDslID(e)}} />
         </Item>
 
         <div style={{ marginTop: '24px' }} className="text">
@@ -201,12 +197,14 @@ const UpdateRequest = ({
                 rules={getRule('signatories', 'signatories', el.value)}
               >
                 <Input
-                  onChange={(e) =>
-                    setSignatories(
-                      signatories?.map((c) =>
-                        c?.id === el?.id ? { ...c, value: e?.target.value } : { ...c }
+                  onChange={(e) => {
+                    return  setSignatories(
+                      signatories?.map((c) => {
+                        return   c?.id === el?.id ? { ...c, value: e?.target?.value } : { ...c }
+                      }
                       )
                     )
+                   }
                   }
                   className="lander"
                   defaultValue={el?.value}
@@ -214,7 +212,9 @@ const UpdateRequest = ({
               </Item>
               <Button
                 htmlType="button"
-                onClick={() => setSignatories(signatories.filter((s) => s.id !== el.id))}
+                onClick={() => {
+                  return setSignatories(signatories.filter((s) => { return  s?.id !== el?.id}))
+                }}
                 className="del"
               >
                 {el?.id !== 1 && <Delete />}
@@ -225,11 +225,12 @@ const UpdateRequest = ({
         <Button
           htmlType="button"
           className="add"
-          onClick={() =>
-            setSignatories([
+          onClick={() => {
+            return  setSignatories([
               ...signatories,
               { title: `Signatory ${signatories?.length}`, value: '', id: uuidv4() },
             ])
+          }
           }
         >
           Add Signatory
@@ -250,19 +251,21 @@ const UpdateRequest = ({
                 >
                   <Input.TextArea
                     defaultValue={el.value}
-                    onChange={(e) =>
-                      setConditions(
-                        conditions?.map((c) =>
-                          c?.id === el?.id ? { ...c, value: e?.target.value } : { ...c }
-                        )
-                      )
+                    onChange={(e) => {
+                      return setConditions(
+                        conditions?.map((c) => {
+                          return   c?.id === el?.id ? { ...c, value: e?.target.value } : { ...c }
+                        })
+                      )}
                     }
                     style={{ minHeight: '100px' }}
                     className="lander"
                   />
                 </Item>
                 <button
-                  onClick={() => setConditions(conditions.filter((s) => s.id !== el.id))}
+                  onClick={() => {
+                     return setConditions(conditions.filter((s) => {return  s.id !== el.id}))
+                  }}
                   className="del"
                 >
                   {el?.id !== 1 && <Delete />}
@@ -273,11 +276,12 @@ const UpdateRequest = ({
           <Button
             className="add"
             htmlType="button"
-            onClick={() =>
-              setConditions([
+            onClick={() => {
+              return  setConditions([
                 ...conditions,
                 { title: `Condition ${conditions?.length}`, value: '', id: uuidv4() },
               ])
+            }
             }
           >
             Add Condition
@@ -294,7 +298,9 @@ const UpdateRequest = ({
           >
             <Input.TextArea
               defaultValue={transaction}
-              onChange={(e) => setTransaction(e.target.value)}
+              onChange={(e) => {
+                return setTransaction(e.target.value)
+              }}
               className="lander"
             />
           </Item>
@@ -303,7 +309,10 @@ const UpdateRequest = ({
           <Button style={{ height: '48px' }} htmlType="submit" className="btn">
             Request Approval
           </Button>
-          <Button onClick={() => navigate('/')} htmlType="button" className="cancel">
+          <Button onClick={() => {
+            return navigate('/')
+           }}
+           htmlType="button" className="cancel">
             Cancel
           </Button>
         </div>

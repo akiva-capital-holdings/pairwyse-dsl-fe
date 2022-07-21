@@ -1,4 +1,3 @@
-/* eslint-disable arrow-body-style */
 import React, { useEffect } from 'react';
 import { Form, Button, Menu, Dropdown, Space, Input } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
@@ -113,7 +112,9 @@ const AgreementRequest = ({ setLender, setError, setValue, lender, error, value 
               style={{ height: '48px', marginRight: '16px' }}
               htmlType="submit"
               className="btn"
-              onClick={() => validationAgreementModel(value, setError)}
+              onClick={() => {
+                return validationAgreementModel(value, setError)
+              }}
             >
               Create Agreement
             </Button>
