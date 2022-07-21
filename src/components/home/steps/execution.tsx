@@ -33,10 +33,10 @@ const ExecutionRequest = ({
       .execute(dslId)
       .send({ from: userWallet, value: txValue });
     console.log({ txHash: executeTx.transactionHash });
-    setExecitionValue({hash:  executeTx.transactionHash, submit : false})
-    console.log('executeTx', executeTx);
-   } catch {
-    setExecitionValue({hash:  '', submit : true})
+    setExecitionValue({hash:  executeTx.transactionHash, submit : true,  error: false, message:  ''})
+   } catch (e) {
+    console.dir(e)
+    setExecitionValue({hash: '', submit: true, error: true, message: e?.message})
    }
   };
 

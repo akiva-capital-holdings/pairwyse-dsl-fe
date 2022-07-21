@@ -53,13 +53,10 @@ try {
       // Check that the variable was set
       const value = await txs.methods.getStorageAddress(hex4Bytes(_definition)).call();
       console.log({ value });
-      if(value?.txsAddr) {
-        setValueDefinitionRequest({value: value?.txsAddr, submit: false})
-      } else {
-        setValueDefinitionRequest({value: '' , submit: true})
-      }
-    } catch {
-    setValueDefinitionRequest({value: '' , submit: true})
+        setValueDefinitionRequest({value, submit: true, transactionHash: tx?.transactionHash, error: false})
+    } catch (e) {
+      console.dir(e);
+     setValueDefinitionRequest({value: '', submit: true, transactionHash: '', error: true, message: e?.message})
   }
   };
 

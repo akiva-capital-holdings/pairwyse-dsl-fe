@@ -36,12 +36,12 @@ const AgreementRequest = ({ setLender, setError, setValue, lender, error, value,
         console.log(agrLen);
         const lastAgrAddr = await agrFactory.methods.deployedAgreements(agrLen - 1).call();
         console.log('submoit', error);
-        setValueAgreementRequest({hash:  tx?.transactionHash, lastAgrAddr, submit:  false })
+        setValueAgreementRequest({lastAgrAddr, error:  false, hash:  tx?.transactionHash, submit: true })
       } 
-   } catch {
+   } catch (e)  {
     console.log('catch');
-    
-    setValueAgreementRequest({hash:  '', lastAgrAddr:  '', submit:  true })
+    console.dir(e);
+    setValueAgreementRequest({lastAgrAddr:  '', error:  true, message: e?.message, submit: true })
    }
   };
 
