@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import {notification} from 'antd'
+import {shortenedAddress} from '../../utils/helpers'
 import { ReactComponent as Copy } from '../../images/copy.svg'
 import { ReactComponent as CloseIcon } from '../../images/closeIcon.svg'
 import { ReactComponent as Success } from '../../images/successIcon.svg'
@@ -180,7 +181,7 @@ console.log(valueUpdateRequest);
         : titleValueAgrement(!!valueAgreementRequest?.lastAgrAddr) }
       </div>
       {valueAgreementRequest?.lastAgrAddr &&  <div className='valueContainer'>
-        <div className='value'>{valueAgreementRequest?.lastAgrAddr}</div>
+        <div className='value'>{shortenedAddress(valueAgreementRequest?.lastAgrAddr, 9)}</div>
         <Copy  onClick={() => onCopyClick(valueAgreementRequest?.lastAgrAddr)}/>
       </div>
       }
@@ -188,7 +189,7 @@ console.log(valueUpdateRequest);
     {valueAgreementRequest?.hash && <div  style={{marginTop:  '12px'}} className='content'>
       <div className='title'>Agreement Request  <br/>Transaction ID</div>
       <div className='valueContainer'>
-        <div className='value'>{valueAgreementRequest?.hash}</div> 
+        <div className='value'>{shortenedAddress(valueAgreementRequest?.hash, 9)}</div> 
         <Copy  onClick={() => onCopyClick(valueAgreementRequest?.hash)}/>
       </div>
      </div>}
@@ -208,7 +209,7 @@ console.log(valueUpdateRequest);
         ? 'Warning! Error encountered during contract execution'
         : titleValueDefinition(!!valueDefinitionRequest?.value) }</div>
        {!!valueDefinitionRequest?.value  && <div className='valueContainer'>
-          <div className='value'>{valueDefinitionRequest?.value}</div>
+          <div className='value'>{shortenedAddress(valueDefinitionRequest?.value, 9)}</div>
           <Copy  onClick={() => onCopyClick(valueDefinitionRequest?.value)}/>
         </div>
         }
@@ -216,7 +217,7 @@ console.log(valueUpdateRequest);
       {valueDefinitionRequest?.value && <div  style={{marginTop:  '12px'}} className='content'>
       <div className='title'>Definition Request  <br/>Transaction ID</div>
       <div className='valueContainer'>
-        <div className='value'>{valueDefinitionRequest?.transactionHash}</div> 
+        <div className='value'>{shortenedAddress(valueDefinitionRequest?.transactionHash, 9)}</div> 
         <Copy  onClick={() => onCopyClick(valueDefinitionRequest?.transactionHash)}/>
       </div>
      </div>}
@@ -236,7 +237,7 @@ console.log(valueUpdateRequest);
         ? 'Warning! Error encountered during contract execution'
         : titleValueUpdateRequest(!!valueUpdateRequest?.hash) }</div>
          {!!valueUpdateRequest?.hash && <div className='valueContainer'>
-            <div className='value'>{valueUpdateRequest?.hash}</div>
+            <div className='value'>{shortenedAddress(valueUpdateRequest?.hash, 9)}</div>
             <Copy  onClick={() => onCopyClick(valueUpdateRequest?.hash)}/>
           </div>}
         </div>
@@ -259,7 +260,7 @@ console.log(valueUpdateRequest);
         : titleValueExecute(!!execitionValue?.hash) }
         </div>
         {!!execitionValue?.hash && <div className='valueContainer'>
-           <div className='value'>{execitionValue?.hash}</div>
+           <div className='value'>{shortenedAddress(execitionValue?.hash, 9)}</div>
            <Copy  onClick={() => onCopyClick(execitionValue?.hash)}/>
          </div>
          }
