@@ -17,6 +17,7 @@ const { Item } = Form;
 const DefinitionRequest = ({
   setAgreementDefinition: setAgreement,
   agreementDefinition: agreement,
+  setValueDefinitionRequest,
   setspecification,
   specifications,
   setDefinition,
@@ -27,32 +28,37 @@ const DefinitionRequest = ({
   const navigate = useNavigate();
 
   const defineVariable = async () => {
-    // eslint-disable-next-line
-    const _agreementAddr = agreement;
-    // eslint-disable-next-line
-    const _definition = definition;
-    // eslint-disable-next-line
-    const _specification = specifications[0].value;
-
-    console.log({
-      _agreementAddr,
-      _definition,
-      _specification,
-    });
-
-    const a = await createInstance('Agreement', _agreementAddr, provider);
-    const txsAddr = await a.methods.txs().call();
-    console.log({ txsAddr });
-    const txs = await createInstance('ConditionalTxs', txsAddr, provider);
-    const tx = await txs.methods
-      .setStorageAddress(hex4Bytes(_definition), _specification)
-      .send({ from: userWallet });
-    console.log({ tx });
-    // Check that the variable was set
-    const value = await txs.methods.getStorageAddress(hex4Bytes(_definition)).call();
-    console.log({ value });
+try {
+      // eslint-disable-next-line
+      const agreementAddr = agreement;
+      // eslint-disable-next-line
+      const _definition = definition;
+      // eslint-disable-next-line
+      const _specification = specifications[0].value;
+  
+      console.log({
+        agreementAddr,
+        _definition,
+        _specification,
+      });
+  
+      const a = await createInstance('Agreement', agreementAddr, provider);
+      const txsAddr = await a.methods.txs().call();
+      console.log({ txsAddr });
+      const txs = await createInstance('ConditionalTxs', txsAddr, provider);
+      const tx = await txs.methods
+        .setStorageAddress(hex4Bytes(_definition), _specification)
+        .send({ from: userWallet });
+      console.log({ tx });
+      // Check that the variable was set
+      const value = await txs.methods.getStorageAddress(hex4Bytes(_definition)).call();
+      console.log({ value });
+        setValueDefinitionRequest({value, submit: true, transactionHash: tx?.transactionHash, error: false})
+    } catch (e) {
+      console.dir(e);
+     setValueDefinitionRequest({value: '', submit: true, transactionHash: '', error: true, message: e?.message})
+  }
   };
-  console.log(specifications);
 
   return (
     <div className="definitionRequest">

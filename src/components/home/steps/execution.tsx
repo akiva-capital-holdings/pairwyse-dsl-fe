@@ -13,17 +13,31 @@ import getRule from '../../../utils/validate';
 
 const { Item } = Form;
 
-const ExecutionRequest = ({ setAgreement, agreement, setDslID, dslId, setTxValue, txValue }) => {
+const ExecutionRequest = ({ 
+  setExecitionValue,
+  setAgreement, 
+  setTxValue, 
+  agreement,
+  setDslID,
+  txValue, 
+  dslId, 
+  }) => {
   const { address: userWallet } = useSelector(selectSession);
   const { provider } = useSelector(selectUtils);
   const navigate = useNavigate();
 
   const ExecutionSubmit = async () => {
+   try  {
     const agreementContract = await createInstance('Agreement', agreement, provider);
     const executeTx = await agreementContract.methods
       .execute(dslId)
       .send({ from: userWallet, value: txValue });
     console.log({ txHash: executeTx.transactionHash });
+    setExecitionValue({hash:  executeTx.transactionHash, submit : true,  error: false, message:  ''})
+   } catch (e) {
+    console.dir(e)
+    setExecitionValue({hash: '', submit: true, error: true, message: e?.message})
+   }
   };
 
   return (
