@@ -14,6 +14,7 @@ const DefinitionRequest = ({
   setValueDefinitionRequest,
   setAgreementDefinition: setAgreement,
   agreementDefinition: agreement,
+  setValueDefinitionRequest,
   setspecification,
   specifications,
   setDefinition,

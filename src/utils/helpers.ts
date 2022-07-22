@@ -83,7 +83,7 @@ export const shortenedAddress = (address: string, size = 4) => {
 };
 
 export const handleError = ({ code, message }: Error) => {
-  if (code === 4001) {
+  if (code === 4001 || code === -32603) {
     // EIP-1193 userRejectedRequest error
     // If this happens, the user rejected the connection request.
     console.error(message);

@@ -133,3 +133,112 @@
   color: #ACA2B5;
   margin: 29px auto 0;
 }
+.transactionContainer {
+  width: 350px;
+  min-height: 200px;
+  background: #F7F5F9;
+  border-radius: 20px;
+  margin-top: 32px;
+  padding: 32px 28px 28px 28px;
+}
+.transactionContainer.error {
+  background: #FFD1D1;
+}
+.transactionContainer.error .titleContainer .titleSeccess {
+  color: #E61F1F;
+}
+.transactionContainer.error .valueContainer {
+  color: #E61F1F;
+}
+.transactionContainer .titleContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+.transactionContainer .title{
+  font-family: var(--font_family_bold);
+  font-style: normal;
+  font-weight: 800;
+  font-size: 24px;
+  line-height: 30px;
+  color: #120023;
+  margin-bottom: 0;
+}
+.transactionContainer .titleContainer .titleSeccess {
+  font-family: var(--font_family_bold);
+  font-style: normal;
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 20px;
+  color: #61E366;
+} 
+
+.contentCOntainer .content{
+  width: 294px;
+  min-height: 82px;
+  max-height: 100px;
+  background: #EAE6EE;
+  border-radius: 20px;
+  padding: 18px 24px;
+}
+.contentCOntainer .content .title {
+  font-family: var(--font_family_bold);
+  font-style: normal;
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 20px;
+  color: #120023;
+  margin-bottom: 6px;
+
+}
+.transactionContainer .contentCOntainer .content .valueContainer {
+  justify-content: space-between;
+  font-family: var(--font_family_medium);
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  color: #120023;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: flex;
+}
+.transactionContainer.error .contentCOntainer .content .title {
+  font-family: var(--font_family_medium);
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  color: #E61F1F;
+  }
+.contentCOntainer  .content .valueContainer .value{
+  max-width: 220px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.transactionContainer.error .red {
+  color: #E61F1F;
+  display: flex;
+  align-items: center;
+  font-family: var(--font_weight_bolder);
+  font-style: normal;
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 20px;
+}
+.transactionContainer.error .red  > svg ,
+.transactionContainer .green  > svg{
+  margin-right: 6px;
+}
+
+.transactionContainer .green {
+  color: #61E366;
+  display: flex;
+  align-items: center;
+  font-family: var(--font_weight_bolder);
+  font-style: normal;
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 20px;;
+}
