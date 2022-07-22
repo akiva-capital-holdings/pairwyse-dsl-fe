@@ -1,11 +1,14 @@
 /* eslint-disable arrow-body-style */
 import { useState } from 'react';
-import {CheckOutlined, CopyOutlined, CloseOutlined}  from '@ant-design/icons'
 import {notification} from 'antd'
+import { ReactComponent as Copy } from '../../images/copy.svg'
+import { ReactComponent as CloseIcon } from '../../images/closeIcon.svg'
+import { ReactComponent as Success } from '../../images/successIcon.svg'
+
+
 import Header from '../header/index';
 import { UpdateRequest, DefinitionRequest, AgreementRequest, ExecutionRequest } from './steps';
 import { mock, mockSignatories, mockDefinitions } from './mock';
-import { ReactComponent as Copy } from '../../images/copy.svg';
 
 import './index.css';
 
@@ -137,9 +140,9 @@ console.log(valueUpdateRequest);
     console.log(v);
     
     return   v ?
-    <div className='red'>   <CloseOutlined color='#E61F1F' className='iconSuccess'/>Fail</div>
+    <div className='red'>   <CloseIcon color='#E61F1F' className='iconSuccess'/>Fail</div>
     : 
-    <div className='green'>   <CheckOutlined color='#61E366' className='iconSuccess'/>Success</div>
+    <div className='green'>   <Success color='#61E366' className='iconSuccess'/>Success</div>
   }
 
   const titleValueAgrement = (v) => {
@@ -149,17 +152,17 @@ console.log(valueUpdateRequest);
   }
   const titleValueDefinition = (v) => {
     return v
-    ? 'Definition Request value'
+    ? 'Definition Transaction ID'
     : 'No transactions yet'
   }
   const titleValueUpdateRequest = (v) => {
     return v
-    ? 'Update Request value'
+    ? 'Update Request Transaction ID'
     : 'No transactions yet'
   }
   const titleValueExecute = (v) => {
     return v
-    ? 'Execute value'
+    ? 'Execution Transaction ID'
     : 'No transactions yet'
   }
 
@@ -174,12 +177,12 @@ console.log(valueUpdateRequest);
     <div className='content'>
       <div className='title'>
         {valueAgreementRequest?.error && valueAgreementRequest?.message  
-        ? valueAgreementRequest?.message 
+        ? 'Warning! Error encountered during contract execution'
         : titleValueAgrement(!!valueAgreementRequest?.lastAgrAddr) }
       </div>
       {valueAgreementRequest?.lastAgrAddr &&  <div className='valueContainer'>
         <div className='value'>{valueAgreementRequest?.lastAgrAddr}</div>
-        <CopyOutlined  onClick={() => onCopyClick(valueAgreementRequest?.lastAgrAddr)}/>
+        <Copy  onClick={() => onCopyClick(valueAgreementRequest?.lastAgrAddr)}/>
       </div>
       }
     </div>
@@ -187,7 +190,7 @@ console.log(valueUpdateRequest);
       <div className='title'>Agreement Request  <br/>Transaction ID</div>
       <div className='valueContainer'>
         <div className='value'>{valueAgreementRequest?.hash}</div> 
-        <CopyOutlined  onClick={() => onCopyClick(valueAgreementRequest?.hash)}/>
+        <Copy  onClick={() => onCopyClick(valueAgreementRequest?.hash)}/>
       </div>
      </div>}
     </div> 
@@ -203,11 +206,11 @@ console.log(valueUpdateRequest);
       <div className='content'>
         <div className='title'>
         {valueDefinitionRequest?.error && valueDefinitionRequest?.message  
-        ? valueDefinitionRequest?.message 
+        ? 'Warning! Error encountered during contract execution'
         : titleValueDefinition(!!valueDefinitionRequest?.value) }</div>
        {!!valueDefinitionRequest?.value  && <div className='valueContainer'>
           <div className='value'>{valueDefinitionRequest?.value}</div>
-          <CopyOutlined  onClick={() => onCopyClick(valueDefinitionRequest?.value)}/>
+          <Copy  onClick={() => onCopyClick(valueDefinitionRequest?.value)}/>
         </div>
         }
       </div>
@@ -215,7 +218,7 @@ console.log(valueUpdateRequest);
       <div className='title'>Definition Request  <br/>Transaction ID</div>
       <div className='valueContainer'>
         <div className='value'>{valueDefinitionRequest?.transactionHash}</div> 
-        <CopyOutlined  onClick={() => onCopyClick(valueDefinitionRequest?.transactionHash)}/>
+        <Copy  onClick={() => onCopyClick(valueDefinitionRequest?.transactionHash)}/>
       </div>
      </div>}
       </div> 
@@ -231,11 +234,11 @@ console.log(valueUpdateRequest);
         <div className='content'>
           <div className='title'>
           {valueUpdateRequest?.error && valueUpdateRequest?.message  
-        ? valueDefinitionRequest?.message 
+        ? 'Warning! Error encountered during contract execution'
         : titleValueUpdateRequest(!!valueUpdateRequest?.hash) }</div>
          {!!valueUpdateRequest?.hash && <div className='valueContainer'>
             <div className='value'>{valueUpdateRequest?.hash}</div>
-            <CopyOutlined  onClick={() => onCopyClick(valueUpdateRequest?.hash)}/>
+            <Copy  onClick={() => onCopyClick(valueUpdateRequest?.hash)}/>
           </div>}
         </div>
         </div> 
@@ -253,12 +256,12 @@ console.log(valueUpdateRequest);
        <div className='content'>
          <div className='title'>
          {execitionValue?.error && execitionValue?.message  
-        ? execitionValue?.message
+        ? 'Warning! Error encountered during contract execution'
         : titleValueExecute(!!execitionValue?.hash) }
         </div>
         {!!execitionValue?.hash && <div className='valueContainer'>
            <div className='value'>{execitionValue?.hash}</div>
-           <CopyOutlined  onClick={() => onCopyClick(execitionValue?.hash)}/>
+           <Copy  onClick={() => onCopyClick(execitionValue?.hash)}/>
          </div>
          }
        </div>

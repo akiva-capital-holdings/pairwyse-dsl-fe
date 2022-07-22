@@ -32,6 +32,7 @@ const UpdateRequest = ({
   const { address: userWallet } = useSelector(selectSession);
   const { provider } = useSelector(selectUtils);
   const navigate = useNavigate();
+  let hash = '' 
 
   type TxObject = {
     txId: number;
@@ -104,10 +105,14 @@ const UpdateRequest = ({
         conditionsContextAddrs
       )
       .send({ from: userWallet });
+      if(agrUpdate?.transactionHash){
+        hash = agrUpdate?.transactionHash
+      }
     console.log(
       `\nAgreement update transaction hash: \n\t\x1b[35m${agrUpdate.transactionHash}\x1b[0m`
     );
   } 
+  setUpdateRequest({hash,  submit: true, error: false, message: '',  })
 } catch (e) {
   console.dir(e)
   setUpdateRequest({hash: '', submit: true, error: true, message: JSON.parse(e?.message) })
