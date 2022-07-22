@@ -11,7 +11,6 @@ import { ReactComponent as Delete } from '../../../images/delete.svg';
 
 const { Item } = Form;
 const DefinitionRequest = ({
-  setValueDefinitionRequest,
   setAgreementDefinition: setAgreement,
   agreementDefinition: agreement,
   setValueDefinitionRequest,
