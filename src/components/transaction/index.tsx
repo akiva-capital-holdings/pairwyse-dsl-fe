@@ -1,9 +1,9 @@
-/* eslint-disable arrow-body-style */
 import React, { useState } from 'react';
 import { Table, Empty, notification, Layout, Menu, Input } from 'antd';
 import type { ColumnsType } from 'antd/lib/table';
 import { useSelector } from 'react-redux';
 import Header from 'components/header';
+import { shortenedAddress } from '../../utils/helpers';
 import { selectSession } from '../../redux/sessionReducer';
 import { ReactComponent as Copy } from '../../images/copy.svg';
 import { ReactComponent as CopyWhite } from '../../images/coppyWhite.svg';
@@ -40,34 +40,55 @@ const columns: ColumnsType<MockType> = [
     title: 'Tx ID',
     dataIndex: 'txID',
     key: 'txID',
-    render: (txID) => (
-      <div className="status">
-        <div style={{ textOverflow: 'ellipsis', overflow: 'hiden' }}>{txID}</div>
-        <Copy className="copy" onClick={() => onCopyClick(txID)} />
-      </div>
-    ),
+    render: (txID) => {
+      return (
+        <div className="status">
+          <div style={{ textOverflow: 'ellipsis', overflow: 'hiden' }}>{txID}</div>
+          <Copy
+            className="copy"
+            onClick={() => {
+              return onCopyClick(txID);
+            }}
+          />
+        </div>
+      );
+    },
   },
   {
     title: 'Agreement Address',
     dataIndex: 'agreementAddress',
     key: 'agreementAddress',
-    render: (agreementAddress) => (
-      <div className="status">
-        <div style={{ textOverflow: 'ellipsis', overflow: 'hiden' }}>{agreementAddress}</div>
-        <Copy className="copy" onClick={() => onCopyClick(agreementAddress)} />
-      </div>
-    ),
+    render: (agreementAddress) => {
+      return (
+        <div className="status">
+          <div style={{ textOverflow: 'ellipsis', overflow: 'hiden' }}>{agreementAddress}</div>
+          <Copy
+            className="copy"
+            onClick={() => {
+              return onCopyClick(agreementAddress);
+            }}
+          />
+        </div>
+      );
+    },
   },
   {
     title: 'Tx Originator',
     key: 'txOriginator',
     dataIndex: 'txOriginator',
-    render: (txOriginator) => (
-      <div className="status">
-        <div style={{ textOverflow: 'ellipsis', overflow: 'hiden' }}>{txOriginator}</div>
-        <Copy className="copy" onClick={() => onCopyClick(txOriginator)} />
-      </div>
-    ),
+    render: (txOriginator) => {
+      return (
+        <div className="status">
+          <div style={{ textOverflow: 'ellipsis', overflow: 'hiden' }}>{txOriginator}</div>
+          <Copy
+            className="copy"
+            onClick={() => {
+              return onCopyClick(txOriginator);
+            }}
+          />
+        </div>
+      );
+    },
   },
   {
     title: 'Tx Type',
@@ -85,36 +106,50 @@ const mock = [
   {
     date: '11.03.2022',
     txID: '0x7ac8c...',
-    agreementAddress: '0x7ac91528cf...',
-    txOriginator: '0x25eca5c18c...',
+    agreementAddress: shortenedAddress('0x976EA74026E726554dB657fA54763abd0C3a0aa9'),
+    txOriginator: shortenedAddress('0x976EA74026E726554dB657fA54763abd0C3a0aa9'),
     txType: 'Agreement Created',
     txStatus: 'Approval Requested',
   },
   {
     date: '12.03.2022',
     txID: '0x7ac9c...',
-    agreementAddress: '1x7ac91528cf...',
-    txOriginator: '0x20eca5c18c...',
+    agreementAddress: shortenedAddress('0x976EA74026E726554dB657fA54763abd0C3a0aa9'),
+    txOriginator: shortenedAddress('0x976EA74026E726554dB657fA54763abd0C3a0aa9'),
     txType: 'Agreement',
     txStatus: 'Approval Requested',
   },
 ];
 const Transaction = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [transactions, setTransactions] = useState([mock]);
   const { address } = useSelector(selectSession);
   const [collapsed, setCollapsed] = useState(false);
 
   return (
     <>
-      <Header onClick={() => setTransactions([mock])} />
+      <Header
+        onClick={() => {
+          return setTransactions([mock]);
+        }}
+      />
       <Layout style={{ minHeight: '700px' }}>
-        <Sider collapsible collapsed={collapsed} onCollapse={() => setCollapsed(!collapsed)}>
+        <Sider
+          collapsible
+          collapsed={collapsed}
+          onCollapse={() => {
+            return setCollapsed(!collapsed);
+          }}
+        >
           <div className="addressContainer">
             <div className="img" />
             <div style={{ display: 'flex', maxWidth: '150px', margin: '0 auto' }}>
-              <div className="address">{address}</div>
-              <CopyWhite className="copy" onClick={() => onCopyClick(address)} />
+              <div className="address">{shortenedAddress(address)}</div>
+              <CopyWhite
+                className="copy"
+                onClick={() => {
+                  return onCopyClick(address);
+                }}
+              />
             </div>
           </div>
           <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']} accessKey={'1'}>
@@ -130,13 +165,7 @@ const Transaction = () => {
               <span className="title">Transactions</span>
             </div>
             <div className="ahRight">
-              <Search
-                // onSearch={onSubmit}
-                className="searchInput"
-                // value={search}
-                // onChange={(v: any) => setSearch(v?.target?.value)}
-                placeholder="Search"
-              />
+              <Search className="searchInput" placeholder="Search" />
             </div>
           </div>
           <Content style={{ display: 'block', margin: '24px 16px 0' }}>

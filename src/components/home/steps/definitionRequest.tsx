@@ -1,10 +1,6 @@
-/* eslint-disable no-unsafe-optional-chaining */
-/* eslint-disable arrow-body-style */
 import React from 'react';
 import { Button, Input, Form } from 'antd';
 import { useNavigate } from 'react-router-dom';
-// import { useSelector } from 'react-redux';
-// import {definitionInstance} from '../../../utils/helpers';
 import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { selectUtils } from 'redux/utilsReducer';
@@ -28,45 +24,52 @@ const DefinitionRequest = ({
   const navigate = useNavigate();
 
   const defineVariable = async () => {
-try {
-      // eslint-disable-next-line
-      const agreementAddr = agreement;
-      // eslint-disable-next-line
-      const _definition = definition;
-      // eslint-disable-next-line
-      const _specification = specifications[0].value;
-  
+    try {
+      const AGREEMENT_ADDR = agreement;
+      const DEFINITION = definition;
+      const SPETIFICATION = specifications[0].value;
+
       console.log({
-        agreementAddr,
-        _definition,
-        _specification,
+        AGREEMENT_ADDR,
+        DEFINITION,
+        SPETIFICATION,
       });
-  
-      const a = await createInstance('Agreement', agreementAddr, provider);
+      const a = await createInstance('Agreement', AGREEMENT_ADDR, provider);
       const txsAddr = await a.methods.txs().call();
       console.log({ txsAddr });
       const txs = await createInstance('ConditionalTxs', txsAddr, provider);
       const tx = await txs.methods
-        .setStorageAddress(hex4Bytes(_definition), _specification)
+        .setStorageAddress(hex4Bytes(DEFINITION), SPETIFICATION)
         .send({ from: userWallet });
       console.log({ tx });
       // Check that the variable was set
-      const value = await txs.methods.getStorageAddress(hex4Bytes(_definition)).call();
+      const value = await txs.methods.getStorageAddress(hex4Bytes(DEFINITION)).call();
       console.log({ value });
-        setValueDefinitionRequest({value, submit: true, transactionHash: tx?.transactionHash, error: false})
+      setValueDefinitionRequest({
+        value,
+        submit: true,
+        transactionHash: tx?.transactionHash,
+        error: false,
+      });
     } catch (e) {
       console.dir(e);
-     setValueDefinitionRequest({value: '', submit: true, transactionHash: '', error: true, message: e?.message})
-  }
+      setValueDefinitionRequest({
+        value: '',
+        submit: true,
+        transactionHash: '',
+        error: true,
+        message: e?.message,
+      });
+    }
   };
+
+  console.log(specifications);
 
   return (
     <div className="definitionRequest">
       <div className="title">Definition Request</div>
       <Form name="agreementRequestForm" autoComplete="off" onFinish={defineVariable}>
-        <div style={{ marginTop: '24px' }} className="text">
-          Requestor
-        </div>
+        <div className="text">Requestor</div>
         <div className="value">{userWallet}</div>
         <div style={{ marginTop: '24px' }} className="text">
           Agreement
@@ -118,19 +121,25 @@ try {
                 >
                   <Input
                     defaultValue={el.value}
-                    onChange={(e) =>
-                      setspecification(
-                        specifications?.map((c) =>
-                          c?.id === el?.id ? { ...c, value: e?.target.value } : { ...c }
-                        )
-                      )
-                    }
+                    onChange={(e) => {
+                      return setspecification(
+                        specifications?.map((c) => {
+                          return c?.id === el?.id ? { ...c, value: e?.target.value } : { ...c };
+                        })
+                      );
+                    }}
                     className="lander"
                   />
                 </Item>
                 <Button
                   htmlType="button"
-                  onClick={() => setspecification(specifications.filter((s) => s.id !== el.id))}
+                  onClick={() => {
+                    return setspecification(
+                      specifications.filter((s) => {
+                        return s.id !== el.id;
+                      })
+                    );
+                  }}
                   className="del"
                 >
                   {el.id !== 1 && <Delete />}
@@ -142,16 +151,16 @@ try {
             <Button
               htmlType="button"
               className="add"
-              onClick={() =>
-                setspecification([
+              onClick={() => {
+                return setspecification([
                   ...specifications,
                   {
                     title: `Specification ${specifications?.length}`,
                     value: '',
                     id: uuidv4(),
                   },
-                ])
-              }
+                ]);
+              }}
             >
               Add Specification
             </Button>

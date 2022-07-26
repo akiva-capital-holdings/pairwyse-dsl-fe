@@ -1,4 +1,4 @@
-import React, { useEffect, Suspense } from 'react';
+import { useEffect, Suspense } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import MetaMaskOnboarding from '@metamask/onboarding';
 import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';

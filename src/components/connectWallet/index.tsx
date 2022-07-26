@@ -1,4 +1,3 @@
-/* eslint-disable arrow-body-style */
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Header from 'components/header';
@@ -13,13 +12,18 @@ const ConnectWallet = () => {
 
   return (
     <>
-    <Header onClick={() => {}}/>
-    <div className="connectForm">
-      <div className="title">Please Connect your wallet</div>
-      <button className="btn" onClick={() => connectWallet(onboarding, dispatch, connect)}>
-        Connect Wallet
-      </button>
-    </div>
+      <Header onClick={() => {}} />
+      <div className="connectForm">
+        <div className="title">Please Connect your wallet</div>
+        <button
+          className="btn"
+          onClick={() => {
+            return connectWallet(onboarding, dispatch, connect);
+          }}
+        >
+          Connect Wallet
+        </button>
+      </div>
     </>
   );
 };

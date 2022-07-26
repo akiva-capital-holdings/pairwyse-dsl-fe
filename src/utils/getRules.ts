@@ -1,4 +1,3 @@
-/* eslint-disable arrow-body-style */
 export default function getRule(label: string) {
   const defaultRule = {
     required: true,

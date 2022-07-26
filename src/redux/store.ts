@@ -1,4 +1,3 @@
-/* eslint-disable arrow-body-style */
 import { AnyAction, configureStore, Reducer } from '@reduxjs/toolkit';
 import { persistStore, persistCombineReducers } from 'reduxjs-toolkit-persist';
 import autoMergeLevel1 from 'reduxjs-toolkit-persist/lib/stateReconciler/autoMergeLevel1';
@@ -26,7 +25,9 @@ const persistedReducer: Reducer<any, AnyAction> = persistCombineReducers<RootSta
 
 export const store = configureStore({
   reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }),
+  middleware: (getDefaultMiddleware) => {
+    return getDefaultMiddleware({ serializableCheck: false });
+  },
 });
 
 export const persistor = persistStore(store);

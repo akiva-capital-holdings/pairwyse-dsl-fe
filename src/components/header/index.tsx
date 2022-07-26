@@ -1,4 +1,3 @@
-/* eslint-disable arrow-body-style */
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -21,11 +20,23 @@ const Header = ({ onClick }) => {
 
   return (
     <div className="headerContainer">
-      <div style={{ cursor: 'pointer' }} onClick={() => navigate('/')} className="logo">
+      <div
+        style={{ cursor: 'pointer' }}
+        onClick={() => {
+          return navigate('/');
+        }}
+        className="logo"
+      >
         Logo
       </div>
       {address && (
-        <button onClick={() => reset()} className="btn" type="button">
+        <button
+          onClick={() => {
+            return reset();
+          }}
+          className="btn"
+          type="button"
+        >
           Agreement Interaction
         </button>
       )}

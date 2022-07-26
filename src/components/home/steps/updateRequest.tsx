@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable no-unsafe-optional-chaining */
-/* eslint-disable arrow-body-style */
 import React from 'react';
 import { Button, Form, Input, InputNumber } from 'antd';
 import { useSelector } from 'react-redux';
@@ -32,7 +28,7 @@ const UpdateRequest = ({
   const { address: userWallet } = useSelector(selectSession);
   const { provider } = useSelector(selectUtils);
   const navigate = useNavigate();
-  let hash = '' 
+  let hash = '';
 
   type TxObject = {
     txId: number;
@@ -47,129 +43,140 @@ const UpdateRequest = ({
     contextFactory: Contract,
     steps: TxObject[]
   ) => {
-   try {
-  console.log('`addSteps` function call');
+    try {
+      console.log('`addSteps` function call');
 
-  for await (const step of steps) {
-    console.log(`\n---\n\n🧩 Adding Term #${step.txId} to Agreement`);
-    await contextFactory.methods.deployContext().send({ from: userWallet });
-    let contextsLen = parseInt(await contextFactory.methods.getDeployedContextsLen().call(), 10);
-    console.log({ contextsLen });
-    const transactionContextAddr = await contextFactory.methods
-      .deployedContexts(contextsLen - 1)
-      .call();
-    console.log({ transactionContextAddr });
-    const conditionsContextAddrs = [];
+      for await (const step of steps) {
+        console.log(`\n---\n\n🧩 Adding Term #${step.txId} to Agreement`);
+        await contextFactory.methods.deployContext().send({ from: userWallet });
+        let contextsLen = parseInt(
+          await contextFactory.methods.getDeployedContextsLen().call(),
+          10
+        );
+        console.log({ contextsLen });
+        const transactionContextAddr = await contextFactory.methods
+          .deployedContexts(contextsLen - 1)
+          .call();
+        console.log({ transactionContextAddr });
+        const conditionsContextAddrs = [];
 
-    console.log('\nTerm Conditions');
+        console.log('\nTerm Conditions');
 
-    for (let j = 0; j < step.conditions.length; j++) {
-      console.log({ j });
-      const deployCtxTx = await contextFactory.methods.deployContext().send({ from: userWallet });
-      console.log({ deployCtxTx });
-      contextsLen = parseInt(await contextFactory.methods.getDeployedContextsLen().call(), 10);
-      console.log({ contextsLen });
-      const conditionContextAddr = await contextFactory.methods
-        .deployedContexts(contextsLen - 1)
-        .call();
-      console.log({ conditionContextAddr });
-      conditionsContextAddrs.push(conditionContextAddr);
+        for (let j = 0; j < step.conditions.length; j++) {
+          console.log({ j });
+          const deployCtxTx = await contextFactory.methods
+            .deployContext()
+            .send({ from: userWallet });
+          console.log({ deployCtxTx });
+          contextsLen = parseInt(await contextFactory.methods.getDeployedContextsLen().call(), 10);
+          console.log({ contextsLen });
+          const conditionContextAddr = await contextFactory.methods
+            .deployedContexts(contextsLen - 1)
+            .call();
+          console.log({ conditionContextAddr });
+          conditionsContextAddrs.push(conditionContextAddr);
 
-      console.log(`Parsing a condition #${j}`);
-      const agrParseTx = await agreementContract.methods
-        .parse(step.conditions[j], conditionContextAddr)
-        .send({ from: userWallet });
-      console.log({ agrParseTx });
-      console.log(
-        `\n\taddress: \x1b[35m${conditionContextAddr}\x1b[0m\n\tcondition ${j + 1}:\n\t\x1b[33m${
-          step.conditions[j]
-        }\x1b[0m`
-      );
-    }
+          console.log(`Parsing a condition #${j}`);
+          const agrParseTx = await agreementContract.methods
+            .parse(step.conditions[j], conditionContextAddr)
+            .send({ from: userWallet });
+          console.log({ agrParseTx });
+          console.log(
+            `\n\taddress: \x1b[35m${conditionContextAddr}\x1b[0m\n\tcondition ${
+              j + 1
+            }:\n\t\x1b[33m${step.conditions[j]}\x1b[0m`
+          );
+        }
 
-    console.log('Parsing transaction');
-    await agreementContract.methods
-      .parse(step.transaction, transactionContextAddr)
-      .send({ from: userWallet });
-    console.log('\nTerm transaction');
-    console.log(`\n\taddress: \x1b[35m${transactionContextAddr}\x1b[0m`);
-    console.log(`\t\x1b[33m${step.transaction}\x1b[0m`);
-    const agrUpdate = await agreementContract.methods
-      .update(
-        step.txId,
-        step.requiredTxs,
-        step.signatories,
-        step.transaction,
-        step.conditions,
-        transactionContextAddr,
-        conditionsContextAddrs
-      )
-      .send({ from: userWallet });
-      if(agrUpdate?.transactionHash){
-        hash = agrUpdate?.transactionHash
+        console.log('Parsing transaction');
+        await agreementContract.methods
+          .parse(step.transaction, transactionContextAddr)
+          .send({ from: userWallet });
+        console.log('\nTerm transaction');
+        console.log(`\n\taddress: \x1b[35m${transactionContextAddr}\x1b[0m`);
+        console.log(`\t\x1b[33m${step.transaction}\x1b[0m`);
+        const agrUpdate = await agreementContract.methods
+          .update(
+            step.txId,
+            step.requiredTxs,
+            step.signatories,
+            step.transaction,
+            step.conditions,
+            transactionContextAddr,
+            conditionsContextAddrs
+          )
+          .send({ from: userWallet });
+        if (agrUpdate?.transactionHash) {
+          hash = agrUpdate?.transactionHash;
+        }
+        console.log(
+          `\nAgreement update transaction hash: \n\t\x1b[35m${agrUpdate.transactionHash}\x1b[0m`
+        );
       }
-    console.log(
-      `\nAgreement update transaction hash: \n\t\x1b[35m${agrUpdate.transactionHash}\x1b[0m`
-    );
-  } 
-  setUpdateRequest({hash,  submit: true, error: false, message: '',  })
-} catch (e) {
-  console.dir(e)
-  setUpdateRequest({hash: '', submit: true, error: true, message: JSON.parse(e?.message) })
-  }
-};
+      setUpdateRequest({ hash, submit: true, error: false, message: '' });
+    } catch (e) {
+      console.dir(e);
+      setUpdateRequest({ hash: '', submit: true, error: true, message: JSON.parse(e?.message) });
+    }
+  };
 
   const updateAgreement = async () => {
-   try {
-    console.log('`updateAgreement` function call');
-    // Input data
-    const _dslId = parseInt(dslId, 10);
-    const _agreementAddr = agreement;
-    const _signatory = signatories[0].value;
-    const _condition = conditions[0].value;
-    const _transaction = transaction;
+    try {
+      console.log('`updateAgreement` function call');
+      // Input data
+      const DSL_ID = parseInt(dslId, 10);
+      const AGREEMENT_ADDR = agreement;
+      const SIGNATORY = signatories[0].value;
+      const CONDITION = conditions[0].value;
+      const TRANSACTION = transaction;
 
-    console.log({
-      _dslId,
-      _agreementAddr,
-      _signatory,
-      _condition,
-      _transaction,
-    });
+      console.log({
+        DSL_ID,
+        AGREEMENT_ADDR,
+        SIGNATORY,
+        CONDITION,
+        TRANSACTION,
+      });
 
-    const agreementContract = await createInstance('Agreement', _agreementAddr, provider);
+      const agreementContract = await createInstance('Agreement', AGREEMENT_ADDR, provider);
 
-    const contextFactory = await createInstance(
-      'ContextFactory',
-      process.env.REACT_APP_CONTEXT_FACTORY,
-      provider
-    );
-   const txsAddr = await agreementContract.methods.txs().call() 
-   const ctxdeployedLen = await contextFactory.methods.getDeployedContextsLen().call()
-    console.log({txsAddr });
-    console.log({ ctxdeployedLen});
+      const contextFactory = await createInstance(
+        'ContextFactory',
+        process.env.REACT_APP_CONTEXT_FACTORY,
+        provider
+      );
+      const txsAddr = await agreementContract.methods.txs().call();
+      const ctxdeployedLen = await contextFactory.methods.getDeployedContextsLen().call();
+      console.log({ txsAddr });
+      console.log({ ctxdeployedLen });
 
-    await addSteps(agreementContract, contextFactory, [
-      {
-        txId: _dslId,
-        requiredTxs: [],
-        signatories: [_signatory],
-        conditions: [_condition],
-        transaction: _transaction,
-      },
-    ]);
-    console.log(txsAddr, ctxdeployedLen);
-    // setUpdateRequest({hash: `\n\t\x1b[35m${agrUpdate.transactionHash}\x1b[0m`, submit: false })
-   } catch (e){
-    console.dir(e);
-    setUpdateRequest({hash: '', submit: true, error: true, message: e?.message })
-   }
+      await addSteps(agreementContract, contextFactory, [
+        {
+          txId: DSL_ID,
+          requiredTxs: [],
+          signatories: [SIGNATORY],
+          conditions: [CONDITION],
+          transaction: TRANSACTION,
+        },
+      ]);
+      console.log(txsAddr, ctxdeployedLen);
+      // setUpdateRequest({hash: `\n\t\x1b[35m${agrUpdate.transactionHash}\x1b[0m`, submit: false })
+    } catch (e) {
+      console.dir(e);
+      setUpdateRequest({ hash: '', submit: true, error: true, message: e?.message });
+    }
   };
 
   return (
     <div className="updateRequest">
       <div className="title">Update Request </div>
-      <Form name="agreementRequestForm" autoComplete="off" onFinish={() => updateAgreement()}>
+      <Form
+        name="agreementRequestForm"
+        autoComplete="off"
+        onFinish={() => {
+          return updateAgreement();
+        }}
+      >
         <div className="text">Requestor</div>
         <div
           style={{
@@ -187,7 +194,13 @@ const UpdateRequest = ({
           ID
         </div>
         <Item name="dsl-id" validateTrigger="onBlur" rules={getRule('dsl-id', 'dsl-id', dslId)}>
-          <InputNumber className="lander" defaultValue={dslId} onChange={(e) => setDslID(e)} />
+          <InputNumber
+            className="lander"
+            defaultValue={dslId}
+            onChange={(e) => {
+              return setDslID(e);
+            }}
+          />
         </Item>
 
         <div style={{ marginTop: '24px' }} className="text">
@@ -220,20 +233,26 @@ const UpdateRequest = ({
                 rules={getRule('signatories', 'signatories', el.value)}
               >
                 <Input
-                  onChange={(e) =>
-                    setSignatories(
-                      signatories?.map((c) =>
-                        c?.id === el?.id ? { ...c, value: e?.target.value } : { ...c }
-                      )
-                    )
-                  }
+                  onChange={(e) => {
+                    return setSignatories(
+                      signatories?.map((c) => {
+                        return c?.id === el?.id ? { ...c, value: e?.target?.value } : { ...c };
+                      })
+                    );
+                  }}
                   className="lander"
                   defaultValue={el?.value}
                 />
               </Item>
               <Button
                 htmlType="button"
-                onClick={() => setSignatories(signatories.filter((s) => s.id !== el.id))}
+                onClick={() => {
+                  return setSignatories(
+                    signatories.filter((s) => {
+                      return s?.id !== el?.id;
+                    })
+                  );
+                }}
                 className="del"
               >
                 {el?.id !== 1 && <Delete />}
@@ -244,12 +263,12 @@ const UpdateRequest = ({
         <Button
           htmlType="button"
           className="add"
-          onClick={() =>
-            setSignatories([
+          onClick={() => {
+            return setSignatories([
               ...signatories,
               { title: `Signatory ${signatories?.length}`, value: '', id: uuidv4() },
-            ])
-          }
+            ]);
+          }}
         >
           Add Signatory
         </Button>
@@ -269,19 +288,25 @@ const UpdateRequest = ({
                 >
                   <Input.TextArea
                     defaultValue={el.value}
-                    onChange={(e) =>
-                      setConditions(
-                        conditions?.map((c) =>
-                          c?.id === el?.id ? { ...c, value: e?.target.value } : { ...c }
-                        )
-                      )
-                    }
+                    onChange={(e) => {
+                      return setConditions(
+                        conditions?.map((c) => {
+                          return c?.id === el?.id ? { ...c, value: e?.target.value } : { ...c };
+                        })
+                      );
+                    }}
                     style={{ minHeight: '100px' }}
                     className="lander"
                   />
                 </Item>
                 <button
-                  onClick={() => setConditions(conditions.filter((s) => s.id !== el.id))}
+                  onClick={() => {
+                    return setConditions(
+                      conditions.filter((s) => {
+                        return s.id !== el.id;
+                      })
+                    );
+                  }}
                   className="del"
                 >
                   {el?.id !== 1 && <Delete />}
@@ -292,12 +317,12 @@ const UpdateRequest = ({
           <Button
             className="add"
             htmlType="button"
-            onClick={() =>
-              setConditions([
+            onClick={() => {
+              return setConditions([
                 ...conditions,
                 { title: `Condition ${conditions?.length}`, value: '', id: uuidv4() },
-              ])
-            }
+              ]);
+            }}
           >
             Add Condition
           </Button>
@@ -313,7 +338,9 @@ const UpdateRequest = ({
           >
             <Input.TextArea
               defaultValue={transaction}
-              onChange={(e) => setTransaction(e.target.value)}
+              onChange={(e) => {
+                return setTransaction(e.target.value);
+              }}
               className="lander"
             />
           </Item>
@@ -322,7 +349,13 @@ const UpdateRequest = ({
           <Button style={{ height: '48px' }} htmlType="submit" className="btn">
             Request Approval
           </Button>
-          <Button onClick={() => navigate('/')} htmlType="button" className="cancel">
+          <Button
+            onClick={() => {
+              return navigate('/');
+            }}
+            htmlType="button"
+            className="cancel"
+          >
             Cancel
           </Button>
         </div>
