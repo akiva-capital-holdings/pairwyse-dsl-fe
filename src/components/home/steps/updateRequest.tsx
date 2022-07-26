@@ -129,7 +129,6 @@ const UpdateRequest = ({
       ]);
       console.log(txsAddr, ctxdeployedLen);
     } catch (e) {
-      console.dir(e);
       setUpdateRequest({ hash: '', submit: true, error: true, message: e?.message });
     }
   };

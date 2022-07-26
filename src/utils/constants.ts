@@ -33,7 +33,7 @@ export const NETWORK_OPTIONS = {
     rpcUrls: ['http://127.0.0.1:7545'],
   },
   dev: {
-    chainId: `0x${'7a69'}`,
+    chainId: '0x7a69',
     chainName: 'dev',
     nativeCurrency: {
       name: 'dev',
