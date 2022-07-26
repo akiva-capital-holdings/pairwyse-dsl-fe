@@ -58,7 +58,12 @@ const HomePage = () => {
   const [agreementExecition, setAgreementExecition] = useState('');
   const [dslIdExecition, setDslIdExecition] = useState('');
   const [txValueExecution, setTxValueExecution] = useState('');
-  const [execitionValue, setExecitionValue] = useState({hash: '', submit : false,  error: false, message:  ''})
+  const [execitionValue, setExecitionValue] = useState({
+    hash: '',
+    submit: false,
+    error: false,
+    message: '',
+  });
 
   const reset = () => {
     setValue(undefined);
@@ -152,11 +157,20 @@ const HomePage = () => {
     navigator.clipboard.writeText(`${text}`);
   };
   const iconValue = (v) => {
-    return   v ?
-    <div className='red'>   <CloseIcon color='#E61F1F' className='iconSuccess'/>Fail</div>
-    : 
-    <div className='green'>   <Success color='#61E366' className='iconSuccess'/>Success</div>
-  }
+    return v ? (
+      <div className="red">
+        {' '}
+        <CloseIcon color="#E61F1F" className="iconSuccess" />
+        Fail
+      </div>
+    ) : (
+      <div className="green">
+        {' '}
+        <Success color="#61E366" className="iconSuccess" />
+        Success
+      </div>
+    );
+  };
 
   const titleValueAgrement = (v) => {
     return v ? 'Created Agreement Address' : 'No transactions yet';

@@ -28,20 +28,31 @@ const DefinitionRequest = ({
       const AGREEMENT_ADDR = agreement;
       const DEFINITION = definition;
       const SPETIFICATION = specifications[0].value;
-    
-          const a = await createInstance('Agreement', AGREEMENT_ADDR, provider);
-          const txsAddr = await a.methods.txs().call();
-          const txs = await createInstance('ConditionalTxs', txsAddr, provider);
-          const tx = await txs.methods
-            .setStorageAddress(hex4Bytes(DEFINITION), SPETIFICATION)
-            .send({ from: userWallet });
-          // Check that the variable was set
-          const value = await txs.methods.getStorageAddress(hex4Bytes(DEFINITION)).call();
-            setValueDefinitionRequest({value, submit: true, transactionHash: tx?.transactionHash, error: false})
-        } catch (e) {
-         setValueDefinitionRequest({value: '', submit: true, transactionHash: '', error: true, message: e?.message})
-      }
-      };
+
+      const a = await createInstance('Agreement', AGREEMENT_ADDR, provider);
+      const txsAddr = await a.methods.txs().call();
+      const txs = await createInstance('ConditionalTxs', txsAddr, provider);
+      const tx = await txs.methods
+        .setStorageAddress(hex4Bytes(DEFINITION), SPETIFICATION)
+        .send({ from: userWallet });
+      // Check that the variable was set
+      const value = await txs.methods.getStorageAddress(hex4Bytes(DEFINITION)).call();
+      setValueDefinitionRequest({
+        value,
+        submit: true,
+        transactionHash: tx?.transactionHash,
+        error: false,
+      });
+    } catch (e) {
+      setValueDefinitionRequest({
+        value: '',
+        submit: true,
+        transactionHash: '',
+        error: true,
+        message: e?.message,
+      });
+    }
+  };
 
   return (
     <div className="definitionRequest">

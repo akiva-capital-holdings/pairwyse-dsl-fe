@@ -24,34 +24,42 @@ const ExecutionRequest = ({
   const navigate = useNavigate();
 
   const ExecutionSubmit = async () => {
-   try  {
-    const agreementContract = await createInstance('Agreement', agreement, provider);
-    const executeTx = await agreementContract.methods
-      .execute(dslId)
-      .send({ from: userWallet, value: txValue });
-    setExecitionValue({hash:  executeTx.transactionHash, submit : true,  error: false, message:  ''})
-   } catch (e) {
-    setExecitionValue({hash: '', submit: true, error: true, message: e?.message})
-   }
+    try {
+      const agreementContract = await createInstance('Agreement', agreement, provider);
+      const executeTx = await agreementContract.methods
+        .execute(dslId)
+        .send({ from: userWallet, value: txValue });
+      setExecitionValue({
+        hash: executeTx.transactionHash,
+        submit: true,
+        error: false,
+        message: '',
+      });
+    } catch (e) {
+      setExecitionValue({ hash: '', submit: true, error: true, message: e?.message });
+    }
   };
 
-  const formater =  (n) =>  {
-  return  n.split('').reduce((acc, e, i) => {
-      if(i%3 === 0 && i !== 1 && i !== n.length - 1){
-          acc.push(e)
-          acc.push(',')
-      } else {
-          acc.push(e)
-      }
-      return acc
-     },[]).join('')
-  }
+  const formater = (n) => {
+    return n
+      .split('')
+      .reduce((acc, e, i) => {
+        if (i % 3 === 0 && i !== 1 && i !== n.length - 1) {
+          acc.push(e);
+          acc.push(',');
+        } else {
+          acc.push(e);
+        }
+        return acc;
+      }, [])
+      .join('');
+  };
 
   useEffect(() => {
     form.setFieldsValue({
-      'tx-value': txValue
+      'tx-value': txValue,
     });
-  }, [txValue])
+  }, [txValue]);
 
   return (
     <div className="updateRequest">

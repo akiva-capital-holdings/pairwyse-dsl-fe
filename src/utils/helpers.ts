@@ -65,7 +65,7 @@ export const checkNetwork = async (dispatch, checkNetworkAction, changeNetworkNa
   };
   // @ts-ignore
 
-  const currentChainId  = (await ethereum?.request({method: 'eth_chainId'}))?.split('x')[1]
+  const currentChainId = (await ethereum?.request({ method: 'eth_chainId' }))?.split('x')[1];
   if (networks[process.env.REACT_APP_NETWORK] !== currentChainId) {
     dispatch(changeNetworkName(currentChainId));
     dispatch(checkNetworkAction(false));
