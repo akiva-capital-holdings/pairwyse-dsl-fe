@@ -25,7 +25,9 @@ const persistedReducer: Reducer<any, AnyAction> = persistCombineReducers<RootSta
 
 export const store = configureStore({
   reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) => {return getDefaultMiddleware({ serializableCheck: false })},
+  middleware: (getDefaultMiddleware) => {
+    return getDefaultMiddleware({ serializableCheck: false });
+  },
 });
 
 export const persistor = persistStore(store);

@@ -44,6 +44,4 @@ export const NETWORK_OPTIONS = {
   },
 };
 
-export default {
-  NETWORK_OPTIONS
-}
+export default { NETWORK_OPTIONS };

@@ -25,42 +25,51 @@ const DefinitionRequest = ({
 
   const defineVariable = async () => {
     try {
-      const AGREEMENT_ADDR= agreement;
+      const AGREEMENT_ADDR = agreement;
       const DEFINITION = definition;
       const SPETIFICATION = specifications[0].value;
-      
+
       console.log({
         AGREEMENT_ADDR,
         DEFINITION,
         SPETIFICATION,
       });
-          const a = await createInstance('Agreement', AGREEMENT_ADDR, provider);
-          const txsAddr = await a.methods.txs().call();
-          console.log({ txsAddr });
-          const txs = await createInstance('ConditionalTxs', txsAddr, provider);
-          const tx = await txs.methods
-            .setStorageAddress(hex4Bytes(DEFINITION), SPETIFICATION)
-            .send({ from: userWallet });
-          console.log({ tx });
-          // Check that the variable was set
-          const value = await txs.methods.getStorageAddress(hex4Bytes(DEFINITION)).call();
-          console.log({ value });
-            setValueDefinitionRequest({value, submit: true, transactionHash: tx?.transactionHash, error: false})
-        } catch (e) {
-          console.dir(e);
-         setValueDefinitionRequest({value: '', submit: true, transactionHash: '', error: true, message: e?.message})
-      }
-      };
-    
+      const a = await createInstance('Agreement', AGREEMENT_ADDR, provider);
+      const txsAddr = await a.methods.txs().call();
+      console.log({ txsAddr });
+      const txs = await createInstance('ConditionalTxs', txsAddr, provider);
+      const tx = await txs.methods
+        .setStorageAddress(hex4Bytes(DEFINITION), SPETIFICATION)
+        .send({ from: userWallet });
+      console.log({ tx });
+      // Check that the variable was set
+      const value = await txs.methods.getStorageAddress(hex4Bytes(DEFINITION)).call();
+      console.log({ value });
+      setValueDefinitionRequest({
+        value,
+        submit: true,
+        transactionHash: tx?.transactionHash,
+        error: false,
+      });
+    } catch (e) {
+      console.dir(e);
+      setValueDefinitionRequest({
+        value: '',
+        submit: true,
+        transactionHash: '',
+        error: true,
+        message: e?.message,
+      });
+    }
+  };
+
   console.log(specifications);
 
   return (
     <div className="definitionRequest">
       <div className="title">Definition Request</div>
       <Form name="agreementRequestForm" autoComplete="off" onFinish={defineVariable}>
-        <div className="text">
-          Requestor
-        </div>
+        <div className="text">Requestor</div>
         <div className="value">{userWallet}</div>
         <div style={{ marginTop: '24px' }} className="text">
           Agreement
@@ -115,18 +124,21 @@ const DefinitionRequest = ({
                     onChange={(e) => {
                       return setspecification(
                         specifications?.map((c) => {
-                          return c?.id === el?.id ? { ...c, value: e?.target.value } : { ...c }
+                          return c?.id === el?.id ? { ...c, value: e?.target.value } : { ...c };
                         })
-                      )
-                    }
-                    }
+                      );
+                    }}
                     className="lander"
                   />
                 </Item>
                 <Button
                   htmlType="button"
                   onClick={() => {
-                    return setspecification(specifications.filter((s) => { return s.id !== el.id}))
+                    return setspecification(
+                      specifications.filter((s) => {
+                        return s.id !== el.id;
+                      })
+                    );
                   }}
                   className="del"
                 >
@@ -139,16 +151,16 @@ const DefinitionRequest = ({
             <Button
               htmlType="button"
               className="add"
-              onClick={() => { return  setspecification([
-                    ...specifications,
-                    {
-                      title: `Specification ${specifications?.length}`,
-                      value: '',
-                      id: uuidv4(),
-                    },
-                  ])
-                }
-              }
+              onClick={() => {
+                return setspecification([
+                  ...specifications,
+                  {
+                    title: `Specification ${specifications?.length}`,
+                    value: '',
+                    id: uuidv4(),
+                  },
+                ]);
+              }}
             >
               Add Specification
             </Button>
@@ -160,7 +172,7 @@ const DefinitionRequest = ({
           </Button>
           <Button
             onClick={() => {
-               return navigate('/')
+              return navigate('/');
             }}
             htmlType="button"
             className="cancel"

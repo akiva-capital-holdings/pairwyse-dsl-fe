@@ -31,6 +31,8 @@ export const sessionReducer = createSlice({
 
 export const { connect, changeNetworkAction, changeNetworkName } = sessionReducer.actions;
 
-export const selectSession = (state: RootState) => {return state.session};
+export const selectSession = (state: RootState) => {
+  return state.session;
+};
 
 export default sessionReducer.reducer;

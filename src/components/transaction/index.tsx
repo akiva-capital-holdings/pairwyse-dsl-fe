@@ -3,7 +3,7 @@ import { Table, Empty, notification, Layout, Menu, Input } from 'antd';
 import type { ColumnsType } from 'antd/lib/table';
 import { useSelector } from 'react-redux';
 import Header from 'components/header';
-import {shortenedAddress} from '../../utils/helpers'
+import { shortenedAddress } from '../../utils/helpers';
 import { selectSession } from '../../redux/sessionReducer';
 import { ReactComponent as Copy } from '../../images/copy.svg';
 import { ReactComponent as CopyWhite } from '../../images/coppyWhite.svg';
@@ -40,21 +40,36 @@ const columns: ColumnsType<MockType> = [
     title: 'Tx ID',
     dataIndex: 'txID',
     key: 'txID',
-    render: (txID) => {return   <div className="status">
-    <div style={{ textOverflow: 'ellipsis', overflow: 'hiden' }}>{txID}</div>
-    <Copy className="copy" onClick={() => {return onCopyClick(txID)}} />
-  </div>
-  },
+    render: (txID) => {
+      return (
+        <div className="status">
+          <div style={{ textOverflow: 'ellipsis', overflow: 'hiden' }}>{txID}</div>
+          <Copy
+            className="copy"
+            onClick={() => {
+              return onCopyClick(txID);
+            }}
+          />
+        </div>
+      );
+    },
   },
   {
     title: 'Agreement Address',
     dataIndex: 'agreementAddress',
     key: 'agreementAddress',
-    render: (agreementAddress) => { 
-      return  <div className="status">
-      <div style={{ textOverflow: 'ellipsis', overflow: 'hiden' }}>{agreementAddress}</div>
-      <Copy className="copy" onClick={() => {return onCopyClick(agreementAddress)}} />
-    </div>
+    render: (agreementAddress) => {
+      return (
+        <div className="status">
+          <div style={{ textOverflow: 'ellipsis', overflow: 'hiden' }}>{agreementAddress}</div>
+          <Copy
+            className="copy"
+            onClick={() => {
+              return onCopyClick(agreementAddress);
+            }}
+          />
+        </div>
+      );
     },
   },
   {
@@ -62,10 +77,17 @@ const columns: ColumnsType<MockType> = [
     key: 'txOriginator',
     dataIndex: 'txOriginator',
     render: (txOriginator) => {
-      return  <div className="status">
-      <div style={{ textOverflow: 'ellipsis', overflow: 'hiden' }}>{txOriginator}</div>
-      <Copy className="copy" onClick={() => {return onCopyClick(txOriginator)}} />
-    </div>
+      return (
+        <div className="status">
+          <div style={{ textOverflow: 'ellipsis', overflow: 'hiden' }}>{txOriginator}</div>
+          <Copy
+            className="copy"
+            onClick={() => {
+              return onCopyClick(txOriginator);
+            }}
+          />
+        </div>
+      );
     },
   },
   {
@@ -105,14 +127,29 @@ const Transaction = () => {
 
   return (
     <>
-      <Header onClick={() => {return setTransactions([mock])}} />
+      <Header
+        onClick={() => {
+          return setTransactions([mock]);
+        }}
+      />
       <Layout style={{ minHeight: '700px' }}>
-        <Sider collapsible collapsed={collapsed} onCollapse={() => {return setCollapsed(!collapsed)}}>
+        <Sider
+          collapsible
+          collapsed={collapsed}
+          onCollapse={() => {
+            return setCollapsed(!collapsed);
+          }}
+        >
           <div className="addressContainer">
             <div className="img" />
             <div style={{ display: 'flex', maxWidth: '150px', margin: '0 auto' }}>
               <div className="address">{shortenedAddress(address)}</div>
-              <CopyWhite className="copy" onClick={() => {return onCopyClick(address)}} />
+              <CopyWhite
+                className="copy"
+                onClick={() => {
+                  return onCopyClick(address);
+                }}
+              />
             </div>
           </div>
           <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']} accessKey={'1'}>
@@ -128,10 +165,7 @@ const Transaction = () => {
               <span className="title">Transactions</span>
             </div>
             <div className="ahRight">
-              <Search
-                className="searchInput"
-                placeholder="Search"
-              />
+              <Search className="searchInput" placeholder="Search" />
             </div>
           </div>
           <Content style={{ display: 'block', margin: '24px 16px 0' }}>

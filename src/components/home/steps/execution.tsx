@@ -9,54 +9,66 @@ import getRule from '../../../utils/validate';
 
 const { Item } = Form;
 
-const ExecutionRequest = ({ 
+const ExecutionRequest = ({
   setExecitionValue,
-  setAgreement, 
-  setTxValue, 
+  setAgreement,
+  setTxValue,
   agreement,
   setDslID,
-  txValue, 
-  dslId, 
-  }) => {
+  txValue,
+  dslId,
+}) => {
   const { address: userWallet } = useSelector(selectSession);
   const { provider } = useSelector(selectUtils);
   const navigate = useNavigate();
 
   const ExecutionSubmit = async () => {
-   try  {
-    const agreementContract = await createInstance('Agreement', agreement, provider);
-    const executeTx = await agreementContract.methods
-      .execute(dslId)
-      .send({ from: userWallet, value: txValue });
-    console.log({ txHash: executeTx.transactionHash });
-    setExecitionValue({hash:  executeTx.transactionHash, submit : true,  error: false, message:  ''})
-   } catch (e) {
-    console.dir(e)
-    setExecitionValue({hash: '', submit: true, error: true, message: e?.message})
-   }
+    try {
+      const agreementContract = await createInstance('Agreement', agreement, provider);
+      const executeTx = await agreementContract.methods
+        .execute(dslId)
+        .send({ from: userWallet, value: txValue });
+      console.log({ txHash: executeTx.transactionHash });
+      setExecitionValue({
+        hash: executeTx.transactionHash,
+        submit: true,
+        error: false,
+        message: '',
+      });
+    } catch (e) {
+      console.dir(e);
+      setExecitionValue({ hash: '', submit: true, error: true, message: e?.message });
+    }
   };
 
-  const formater =  (n) =>  {
-   return n.split('').reduce((acc, e, i) => {
-      if(i%3 === 0 && i !== 1 && i !== n.length - 1){
-          acc.push(e)
-          acc.push(',')
-      } else {
-          acc.push(e)
-      }
-      console.log(acc);
-      
-      return acc
-     },[]).join('')
-  }
-console.log(txValue);
+  const formater = (n) => {
+    return n
+      .split('')
+      .reduce((acc, e, i) => {
+        if (i % 3 === 0 && i !== 1 && i !== n.length - 1) {
+          acc.push(e);
+          acc.push(',');
+        } else {
+          acc.push(e);
+        }
+        console.log(acc);
+
+        return acc;
+      }, [])
+      .join('');
+  };
+  console.log(txValue);
 
   return (
     <div className="updateRequest">
       <div className="title">Execution</div>
-      <Form name="agreementRequestForm" autoComplete="off" onFinish={() => {
-        return ExecutionSubmit()
-      }}>
+      <Form
+        name="agreementRequestForm"
+        autoComplete="off"
+        onFinish={() => {
+          return ExecutionSubmit();
+        }}
+      >
         <div className="text">Requestor</div>
         <div
           style={{
@@ -88,10 +100,18 @@ console.log(txValue);
         <div style={{ marginTop: '24px' }} className="text">
           ID
         </div>
-        <Item name="dsl-id" validateTrigger="onBlur" rules={getRule('dsl-id', 'dsl-id', dslId)}>
-          <InputNumber className="lander" defaultValue={dslId} onChange={(e) =>  {
-           return setDslID(e)
-          }} />
+        <Item
+          name="dsl-id"
+          validateTrigger="onBlur"
+          rules={getRule('dsl-id', 'dsl-id', dslId, provider)}
+        >
+          <InputNumber
+            className="lander"
+            defaultValue={dslId}
+            onChange={(e) => {
+              return setDslID(e);
+            }}
+          />
         </Item>
         <div style={{ marginTop: '24px' }} className="text">
           Transaction Value (in Wei)
@@ -113,9 +133,13 @@ console.log(txValue);
           <Button style={{ height: '48px' }} htmlType="submit" className="btn">
             Execute
           </Button>
-          <Button onClick={() => {
-            return  navigate('/')
-          }} htmlType="button" className="cancel">
+          <Button
+            onClick={() => {
+              return navigate('/');
+            }}
+            htmlType="button"
+            className="cancel"
+          >
             Cancel
           </Button>
         </div>

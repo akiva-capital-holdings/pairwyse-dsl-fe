@@ -20,11 +20,23 @@ const Header = ({ onClick }) => {
 
   return (
     <div className="headerContainer">
-      <div style={{ cursor: 'pointer' }} onClick={() => {return navigate('/')}} className="logo">
+      <div
+        style={{ cursor: 'pointer' }}
+        onClick={() => {
+          return navigate('/');
+        }}
+        className="logo"
+      >
         Logo
       </div>
       {address && (
-        <button onClick={() => {return reset()}} className="btn" type="button">
+        <button
+          onClick={() => {
+            return reset();
+          }}
+          className="btn"
+          type="button"
+        >
           Agreement Interaction
         </button>
       )}

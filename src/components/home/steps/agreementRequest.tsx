@@ -12,36 +12,49 @@ import './index.css';
 
 const { Item } = Form;
 
-const AgreementRequest = ({ setLender, setError, setValue, lender, error, value, setValueAgreementRequest }) => {
+const AgreementRequest = ({
+  setLender,
+  setError,
+  setValue,
+  lender,
+  error,
+  value,
+  setValueAgreementRequest,
+}) => {
   const { address: userWallet } = useSelector(selectSession);
   const { provider } = useSelector(selectUtils);
 
   const navigate = useNavigate();
 
   const createAgreement = async () => {
-   try {
-    if (!error) {
-      const agrFactory: Contract = await createInstance(
-        'AgreementFactory',
-        `${process.env.REACT_APP_AGREEMENT_FACTORY}`,
-        provider
+    try {
+      if (!error) {
+        const agrFactory: Contract = await createInstance(
+          'AgreementFactory',
+          `${process.env.REACT_APP_AGREEMENT_FACTORY}`,
+          provider
         );
-        const tx: {transactionHash: string} = await agrFactory.methods
-        .deployAgreement(process.env.REACT_APP_PARSER)
-        .send({ from: userWallet });
+        const tx: { transactionHash: string } = await agrFactory.methods
+          .deployAgreement(process.env.REACT_APP_PARSER)
+          .send({ from: userWallet });
         console.log(tx, agrFactory);
-        
+
         const agrLen = parseInt(await agrFactory.methods.getDeployedAgreementsLen().call(), 10);
         console.log(agrLen);
         const lastAgrAddr = await agrFactory.methods.deployedAgreements(agrLen - 1).call();
         console.log('submoit', error);
-        setValueAgreementRequest({lastAgrAddr, error:  false, hash:  tx?.transactionHash, submit: true })
-      } 
-   } catch (e)  {
-    console.log('catch');
-    console.dir(e);
-    setValueAgreementRequest({lastAgrAddr:  '', error:  true, message: e?.message, submit: true })
-   }
+        setValueAgreementRequest({
+          lastAgrAddr,
+          error: false,
+          hash: tx?.transactionHash,
+          submit: true,
+        });
+      }
+    } catch (e) {
+      console.log('catch');
+      console.dir(e);
+      setValueAgreementRequest({ lastAgrAddr: '', error: true, message: e?.message, submit: true });
+    }
   };
 
   const menu = (
@@ -118,7 +131,7 @@ const AgreementRequest = ({ setLender, setError, setValue, lender, error, value,
               htmlType="submit"
               className="btn"
               onClick={() => {
-                return validationAgreementModel(value, setError)
+                return validationAgreementModel(value, setError);
               }}
             >
               Create Agreement

@@ -23,12 +23,14 @@ const contractNames = {
 type ContractName = keyof typeof contractNames;
 
 export const hex4Bytes = (str: string) => {
-  return  ethers.utils
-  .keccak256(ethers.utils.toUtf8Bytes(str))
-  .split('')
-  .map((x, i) => {return (i < 10 ? x : '0')})
-  .join('');
-}
+  return ethers.utils
+    .keccak256(ethers.utils.toUtf8Bytes(str))
+    .split('')
+    .map((x, i) => {
+      return i < 10 ? x : '0';
+    })
+    .join('');
+};
 
 const getContractABI = (name: ContractName): string => {
   switch (name) {
@@ -62,7 +64,8 @@ export const checkNetwork = async (dispatch, checkNetworkAction, changeNetworkNa
     dev: 1691,
   };
   // @ts-ignore
-  const currentChainId  = Number((await ethereum?.request({method: 'eth_chainId'}))?.split('x')[1]
+  const currentChainId = Number(
+    (await ethereum?.request({ method: 'eth_chainId' }))?.split('x')[1]
   );
   if (networks[process.env.REACT_APP_NETWORK] !== currentChainId) {
     dispatch(changeNetworkName(currentChainId));
@@ -77,9 +80,10 @@ export const shortenedAddress = (address: string, size = 4) => {
   if (address && size !== 0) {
     if (size && size > 0 && size <= 19) {
       return `${_.slice(address, 0, size).join('')}...${_.slice(address, -size).join('')}`;
-    } return address;
+    }
+    return address;
   }
-   return address
+  return address;
 };
 
 export const handleError = ({ code, message }: Error) => {
@@ -103,7 +107,9 @@ export const connectWallet = (onboarding, dispatch, connect) => {
   if (MetaMaskOnboarding.isMetaMaskInstalled()) {
     ethereum
       .request({ method: 'eth_requestAccounts' })
-      .then((data) => {return setToken(data, dispatch, connect)})
+      .then((data) => {
+        return setToken(data, dispatch, connect);
+      })
       .catch(handleError);
   } else {
     onboarding.startOnboarding();
@@ -126,12 +132,16 @@ export const sign = async (from: string, provider: any) => {
 };
 
 export const fnc = (dispatch, connect) => {
-  ethereum?.on('accountsChanged', (data) => {return setToken(data, dispatch, connect)});
+  ethereum?.on('accountsChanged', (data) => {
+    return setToken(data, dispatch, connect);
+  });
 };
 
 export const ethereumOff = (dispatch, connect) => {
   if (ethereum?.off) {
-    ethereum?.off('accountsChanged', (data) => {return setToken(data, dispatch, connect)});
+    ethereum?.off('accountsChanged', (data) => {
+      return setToken(data, dispatch, connect);
+    });
   }
 };
 export const getNetworksList = () => {

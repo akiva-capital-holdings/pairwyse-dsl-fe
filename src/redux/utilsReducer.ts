@@ -26,6 +26,8 @@ export const utilsReducer = createSlice({
 
 export const { onboarding, provider } = utilsReducer.actions;
 
-export const selectUtils = (state: RootState) => {return state.utils};
+export const selectUtils = (state: RootState) => {
+  return state.utils;
+};
 
 export default utilsReducer.reducer;

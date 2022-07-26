@@ -8,7 +8,13 @@ export const validationAgreementModel = (value, setError) => {
   }
 };
 
-export default function getRule(label: string, name: string, v?) {
+export default function getRule(label: string, name: string, v?, provider?) {
+  let BN;
+
+  if (provider) {
+    BN = provider.utils.BN;
+  }
+
   const defaultRule = {
     required: true,
     message: 'This field is required',
@@ -24,13 +30,19 @@ export default function getRule(label: string, name: string, v?) {
           return Promise.reject(new Error('Invalid number'));
         }
         // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
-        if (v > 115792089237316195423570985008687907853269984665640564039457584007913129639935) {
-          return Promise.reject(new Error('Invalid number'));
+        if (BN) {
+          if (
+            new BN(`${v}`) >
+            new BN('115792089237316195423570985008687907853269984665640564039457584007913129639935')
+          ) {
+            return Promise.reject(new Error('Invalid number'));
+          }
         }
         return Promise.resolve();
       },
     };
   };
+
   const validateMinMax = (min: number, max: number) => {
     return {
       validator: () => {
