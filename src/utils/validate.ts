@@ -1,4 +1,7 @@
-import { ethers } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
+
+const MAX_UINT256 =
+  '115792089237316195423570985008687907853269984665640564039457584007913129639935';
 
 export const validationAgreementModel = (value, setError) => {
   if (value?.length > 0) {
@@ -8,13 +11,7 @@ export const validationAgreementModel = (value, setError) => {
   }
 };
 
-export default function getRule(label: string, name: string, v?, provider?) {
-  let BN;
-
-  if (provider) {
-    BN = provider.utils.BN;
-  }
-
+export default function getRule(label: string, name: string, v?: string) {
   const defaultRule = {
     required: true,
     message: 'This field is required',
@@ -26,17 +23,11 @@ export default function getRule(label: string, name: string, v?, provider?) {
         if (v === null || v === undefined || v === '') {
           return Promise.reject(new Error('This field is required'));
         }
-        if (v < 1) {
+        if (parseInt(v, 10) < 1) {
           return Promise.reject(new Error('Invalid number'));
         }
-        // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
-        if (BN) {
-          if (
-            new BN(`${v}`) >
-            new BN('115792089237316195423570985008687907853269984665640564039457584007913129639935')
-          ) {
-            return Promise.reject(new Error('Invalid number'));
-          }
+        if (BigNumber.from(v).gt(MAX_UINT256)) {
+          return Promise.reject(new Error('Invalid number'));
         }
         return Promise.resolve();
       },

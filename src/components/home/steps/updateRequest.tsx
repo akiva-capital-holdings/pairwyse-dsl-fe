@@ -193,11 +193,7 @@ const UpdateRequest = ({
         <div style={{ marginTop: '24px' }} className="text">
           ID
         </div>
-        <Item
-          name="dsl-id"
-          validateTrigger="onBlur"
-          rules={getRule('dsl-id', 'dsl-id', dslId, provider)}
-        >
+        <Item name="dsl-id" validateTrigger="onBlur" rules={getRule('dsl-id', 'dsl-id', dslId)}>
           <InputNumber
             className="lander"
             defaultValue={dslId}
