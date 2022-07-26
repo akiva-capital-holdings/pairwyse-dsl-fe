@@ -8176,9 +8176,9 @@
       "title": "Ethereum Dev custom",
       "chain": "ETH",
       "shortName": "dev",
-      "chainId": 1691,
-      "networkId": 1691,
-      "rpc": [" http://54.91.95.131:8545"],
+      "chainId": 31337,
+      "networkId": 31337,
+      "rpc": ["http://192.168.221.1:8545"],
       "faucets": []
     }
   ]

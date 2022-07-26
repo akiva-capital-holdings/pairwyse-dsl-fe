@@ -1,14 +1,11 @@
 import React, { useMemo } from 'react';
-import { useSelector } from 'react-redux';
 import { NETWORK_OPTIONS } from '../../utils/constants';
 import { getNetworksList } from '../../utils/helpers';
-import { selectSession } from '../../redux/sessionReducer';
 import '../home/index.css';
 import './index.css';
 
 const networksList: {} = getNetworksList();
 const { ethereum }: any = window;
-console.log(NETWORK_OPTIONS[process.env.REACT_APP_NETWORK].chainId);
 
 const handleClick = async () => {
   try {
@@ -39,19 +36,15 @@ const handleClick = async () => {
     console.error(err?.message);
   }
 };
-console.log(ethereum?.networkVersion);
 
 const nameNetwork = () => {
   return useMemo(() => {
-    console.log(ethereum?.networkVersion, networksList[ethereum?.networkVersion]);
-
     return networksList[ethereum?.networkVersion];
   }, [ethereum?.networkVersion]);
 };
 
 const ChangeNetwork = () => {
-  const { network } = useSelector(selectSession);
-  console.log('network', network);
+  // const { network } = useSelector(selectSession);
 
   return (
     <div className="changeNetwork">

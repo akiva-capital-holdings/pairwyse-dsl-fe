@@ -64,7 +64,6 @@ const HomePage = () => {
     error: false,
     message: '',
   });
-  console.log(valueUpdateRequest);
 
   const reset = () => {
     setValue(undefined);
@@ -158,8 +157,6 @@ const HomePage = () => {
     navigator.clipboard.writeText(`${text}`);
   };
   const iconValue = (v) => {
-    console.log(v);
-
     return v ? (
       <div className="red">
         {' '}
@@ -332,7 +329,6 @@ const HomePage = () => {
       </div>
     ),
   };
-  console.log(valueUpdateRequest?.message);
 
   return (
     <>

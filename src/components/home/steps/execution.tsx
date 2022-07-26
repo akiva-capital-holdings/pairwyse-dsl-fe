@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button, Form, Input, InputNumber } from 'antd';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -19,6 +19,7 @@ const ExecutionRequest = ({
   dslId,
 }) => {
   const { address: userWallet } = useSelector(selectSession);
+  const [form] = Form.useForm();
   const { provider } = useSelector(selectUtils);
   const navigate = useNavigate();
 
@@ -28,7 +29,6 @@ const ExecutionRequest = ({
       const executeTx = await agreementContract.methods
         .execute(dslId)
         .send({ from: userWallet, value: txValue });
-      console.log({ txHash: executeTx.transactionHash });
       setExecitionValue({
         hash: executeTx.transactionHash,
         submit: true,
@@ -36,7 +36,6 @@ const ExecutionRequest = ({
         message: '',
       });
     } catch (e) {
-      console.dir(e);
       setExecitionValue({ hash: '', submit: true, error: true, message: e?.message });
     }
   };
@@ -51,13 +50,16 @@ const ExecutionRequest = ({
         } else {
           acc.push(e);
         }
-        console.log(acc);
-
         return acc;
       }, [])
       .join('');
   };
-  console.log(txValue);
+
+  useEffect(() => {
+    form.setFieldsValue({
+      'tx-value': txValue,
+    });
+  }, [txValue]);
 
   return (
     <div className="updateRequest">
@@ -119,7 +121,7 @@ const ExecutionRequest = ({
         >
           <Input
             className="lander"
-            defaultValue={txValue}
+            value={txValue}
             onChange={(e) => {
               return setTxValue(formater(e?.target?.value));
             }}

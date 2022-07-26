@@ -29,22 +29,14 @@ const DefinitionRequest = ({
       const DEFINITION = definition;
       const SPETIFICATION = specifications[0].value;
 
-      console.log({
-        AGREEMENT_ADDR,
-        DEFINITION,
-        SPETIFICATION,
-      });
       const a = await createInstance('Agreement', AGREEMENT_ADDR, provider);
       const txsAddr = await a.methods.txs().call();
-      console.log({ txsAddr });
       const txs = await createInstance('ConditionalTxs', txsAddr, provider);
       const tx = await txs.methods
         .setStorageAddress(hex4Bytes(DEFINITION), SPETIFICATION)
         .send({ from: userWallet });
-      console.log({ tx });
       // Check that the variable was set
       const value = await txs.methods.getStorageAddress(hex4Bytes(DEFINITION)).call();
-      console.log({ value });
       setValueDefinitionRequest({
         value,
         submit: true,
@@ -52,7 +44,6 @@ const DefinitionRequest = ({
         error: false,
       });
     } catch (e) {
-      console.dir(e);
       setValueDefinitionRequest({
         value: '',
         submit: true,
@@ -62,8 +53,6 @@ const DefinitionRequest = ({
       });
     }
   };
-
-  console.log(specifications);
 
   return (
     <div className="definitionRequest">
