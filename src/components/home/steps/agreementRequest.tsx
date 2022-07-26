@@ -34,27 +34,16 @@ const AgreementRequest = ({
           `${process.env.REACT_APP_AGREEMENT_FACTORY}`,
           provider
         );
-        const tx: { transactionHash: string } = await agrFactory.methods
-          .deployAgreement(process.env.REACT_APP_PARSER)
-          .send({ from: userWallet });
-        console.log(tx, agrFactory);
-
+        const tx: {transactionHash: string} = await agrFactory.methods
+        .deployAgreement(process.env.REACT_APP_PARSER)
+        .send({ from: userWallet });
         const agrLen = parseInt(await agrFactory.methods.getDeployedAgreementsLen().call(), 10);
-        console.log(agrLen);
         const lastAgrAddr = await agrFactory.methods.deployedAgreements(agrLen - 1).call();
-        console.log('submoit', error);
-        setValueAgreementRequest({
-          lastAgrAddr,
-          error: false,
-          hash: tx?.transactionHash,
-          submit: true,
-        });
-      }
-    } catch (e) {
-      console.log('catch');
-      console.dir(e);
-      setValueAgreementRequest({ lastAgrAddr: '', error: true, message: e?.message, submit: true });
-    }
+        setValueAgreementRequest({lastAgrAddr, error:  false, hash:  tx?.transactionHash, submit: true })
+      } 
+   } catch (e)  {
+    setValueAgreementRequest({lastAgrAddr:  '', error:  true, message: e?.message, submit: true })
+   }
   };
 
   const menu = (

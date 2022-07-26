@@ -33,14 +33,14 @@ export const NETWORK_OPTIONS = {
     rpcUrls: ['http://127.0.0.1:7545'],
   },
   dev: {
-    chainId: `0x${Number(1691)}`,
+    chainId: `0x${'7a69'}`,
     chainName: 'dev',
     nativeCurrency: {
       name: 'dev',
       symbol: 'ETH',
       decimals: 18,
     },
-    rpcUrls: ['http://127.0.0.1:7545'],
+    rpcUrls: ['http://192.168.221.1:8545'],
   },
 };
 

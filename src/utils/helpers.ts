@@ -61,12 +61,11 @@ export const checkNetwork = async (dispatch, checkNetworkAction, changeNetworkNa
     mainnet: 1,
     rinkeby: 4,
     local: 539,
-    dev: 1691,
+    dev: '7a69',
   };
   // @ts-ignore
-  const currentChainId = Number(
-    (await ethereum?.request({ method: 'eth_chainId' }))?.split('x')[1]
-  );
+
+  const currentChainId  = (await ethereum?.request({method: 'eth_chainId'}))?.split('x')[1]
   if (networks[process.env.REACT_APP_NETWORK] !== currentChainId) {
     dispatch(changeNetworkName(currentChainId));
     dispatch(checkNetworkAction(false));

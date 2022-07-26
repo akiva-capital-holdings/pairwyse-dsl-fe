@@ -43,128 +43,90 @@ const UpdateRequest = ({
     contextFactory: Contract,
     steps: TxObject[]
   ) => {
-    try {
-      console.log('`addSteps` function call');
-
-      for await (const step of steps) {
-        console.log(`\n---\n\n🧩 Adding Term #${step.txId} to Agreement`);
-        await contextFactory.methods.deployContext().send({ from: userWallet });
-        let contextsLen = parseInt(
-          await contextFactory.methods.getDeployedContextsLen().call(),
-          10
-        );
-        console.log({ contextsLen });
-        const transactionContextAddr = await contextFactory.methods
-          .deployedContexts(contextsLen - 1)
-          .call();
-        console.log({ transactionContextAddr });
-        const conditionsContextAddrs = [];
-
-        console.log('\nTerm Conditions');
-
-        for (let j = 0; j < step.conditions.length; j++) {
-          console.log({ j });
-          const deployCtxTx = await contextFactory.methods
-            .deployContext()
-            .send({ from: userWallet });
-          console.log({ deployCtxTx });
-          contextsLen = parseInt(await contextFactory.methods.getDeployedContextsLen().call(), 10);
-          console.log({ contextsLen });
-          const conditionContextAddr = await contextFactory.methods
-            .deployedContexts(contextsLen - 1)
-            .call();
-          console.log({ conditionContextAddr });
-          conditionsContextAddrs.push(conditionContextAddr);
-
-          console.log(`Parsing a condition #${j}`);
-          const agrParseTx = await agreementContract.methods
-            .parse(step.conditions[j], conditionContextAddr)
-            .send({ from: userWallet });
-          console.log({ agrParseTx });
-          console.log(
-            `\n\taddress: \x1b[35m${conditionContextAddr}\x1b[0m\n\tcondition ${
-              j + 1
-            }:\n\t\x1b[33m${step.conditions[j]}\x1b[0m`
-          );
-        }
-
-        console.log('Parsing transaction');
-        await agreementContract.methods
-          .parse(step.transaction, transactionContextAddr)
-          .send({ from: userWallet });
-        console.log('\nTerm transaction');
-        console.log(`\n\taddress: \x1b[35m${transactionContextAddr}\x1b[0m`);
-        console.log(`\t\x1b[33m${step.transaction}\x1b[0m`);
-        const agrUpdate = await agreementContract.methods
-          .update(
-            step.txId,
-            step.requiredTxs,
-            step.signatories,
-            step.transaction,
-            step.conditions,
-            transactionContextAddr,
-            conditionsContextAddrs
-          )
-          .send({ from: userWallet });
-        if (agrUpdate?.transactionHash) {
-          hash = agrUpdate?.transactionHash;
-        }
-        console.log(
-          `\nAgreement update transaction hash: \n\t\x1b[35m${agrUpdate.transactionHash}\x1b[0m`
-        );
-      }
-      setUpdateRequest({ hash, submit: true, error: false, message: '' });
-    } catch (e) {
-      console.dir(e);
-      setUpdateRequest({ hash: '', submit: true, error: true, message: JSON.parse(e?.message) });
+   try {
+  for await (const step of steps) {
+    await contextFactory.methods.deployContext().send({ from: userWallet });
+    let contextsLen = parseInt(await contextFactory.methods.getDeployedContextsLen().call(), 10);
+    const transactionContextAddr = await contextFactory.methods
+      .deployedContexts(contextsLen - 1)
+      .call();
+    const conditionsContextAddrs = [];
+    for (let j = 0; j < step.conditions.length; j++) {
+      const deployCtxTx = await contextFactory.methods.deployContext().send({ from: userWallet });
+      console.log({ deployCtxTx });
+      contextsLen = parseInt(await contextFactory.methods.getDeployedContextsLen().call(), 10);
+      const conditionContextAddr = await contextFactory.methods
+        .deployedContexts(contextsLen - 1)
+        .call();
+      conditionsContextAddrs.push(conditionContextAddr);
+      const agrParseTx = await agreementContract.methods
+        .parse(step.conditions[j], conditionContextAddr)
+        .send({ from: userWallet });
+      console.log({ agrParseTx });
+      console.log(
+        `\n\taddress: \x1b[35m${conditionContextAddr}\x1b[0m\n\tcondition ${j + 1}:\n\t\x1b[33m${
+          step.conditions[j]
+        }\x1b[0m`
+      );
     }
-  };
+
+    await agreementContract.methods
+      .parse(step.transaction, transactionContextAddr)
+      .send({ from: userWallet });
+    const agrUpdate = await agreementContract.methods
+      .update(
+        step.txId,
+        step.requiredTxs,
+        step.signatories,
+        step.transaction,
+        step.conditions,
+        transactionContextAddr,
+        conditionsContextAddrs
+      )
+      .send({ from: userWallet });
+      if(agrUpdate?.transactionHash){
+        hash = agrUpdate?.transactionHash
+      }
+  } 
+  setUpdateRequest({hash,  submit: true, error: false, message: '',  })
+} catch (e) {
+  setUpdateRequest({hash: '', submit: true, error: true, message: JSON.parse(e?.message) })
+  }
+};
 
   const updateAgreement = async () => {
-    try {
-      console.log('`updateAgreement` function call');
-      // Input data
-      const DSL_ID = parseInt(dslId, 10);
-      const AGREEMENT_ADDR = agreement;
-      const SIGNATORY = signatories[0].value;
-      const CONDITION = conditions[0].value;
-      const TRANSACTION = transaction;
+   try {
+    // Input data
+    const DSL_ID = parseInt(dslId, 10);
+    const AGREEMENT_ADDR = agreement;
+    const SIGNATORY = signatories[0].value;
+    const CONDITION = conditions[0].value;
+    const TRANSACTION = transaction;
 
-      console.log({
-        DSL_ID,
-        AGREEMENT_ADDR,
-        SIGNATORY,
-        CONDITION,
-        TRANSACTION,
-      });
+    const agreementContract = await createInstance('Agreement', AGREEMENT_ADDR, provider);
 
-      const agreementContract = await createInstance('Agreement', AGREEMENT_ADDR, provider);
+    const contextFactory = await createInstance(
+      'ContextFactory',
+      process.env.REACT_APP_CONTEXT_FACTORY,
+      provider
+    );
+   const txsAddr = await agreementContract.methods.txs().call() 
+   const ctxdeployedLen = await contextFactory.methods.getDeployedContextsLen().call()
 
-      const contextFactory = await createInstance(
-        'ContextFactory',
-        process.env.REACT_APP_CONTEXT_FACTORY,
-        provider
-      );
-      const txsAddr = await agreementContract.methods.txs().call();
-      const ctxdeployedLen = await contextFactory.methods.getDeployedContextsLen().call();
-      console.log({ txsAddr });
-      console.log({ ctxdeployedLen });
-
-      await addSteps(agreementContract, contextFactory, [
-        {
-          txId: DSL_ID,
-          requiredTxs: [],
-          signatories: [SIGNATORY],
-          conditions: [CONDITION],
-          transaction: TRANSACTION,
-        },
-      ]);
-      console.log(txsAddr, ctxdeployedLen);
-      // setUpdateRequest({hash: `\n\t\x1b[35m${agrUpdate.transactionHash}\x1b[0m`, submit: false })
-    } catch (e) {
-      console.dir(e);
-      setUpdateRequest({ hash: '', submit: true, error: true, message: e?.message });
-    }
+    await addSteps(agreementContract, contextFactory, [
+      {
+        txId: DSL_ID,
+        requiredTxs: [],
+        signatories: [SIGNATORY],
+        conditions: [CONDITION],
+        transaction: TRANSACTION,
+      },
+    ]);
+    console.log(txsAddr, ctxdeployedLen);
+   } catch (e){
+    console.dir(e);
+    setUpdateRequest({hash: '', submit: true, error: true, message: e?.message })
+   }
   };
 
   return (
