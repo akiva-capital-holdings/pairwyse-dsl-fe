@@ -36,6 +36,7 @@ const ExecutionRequest = ({
         message: '',
       });
     } catch (e) {
+      console.error(e);
       setExecitionValue({ hash: '', submit: true, error: true, message: e?.message });
     }
   };

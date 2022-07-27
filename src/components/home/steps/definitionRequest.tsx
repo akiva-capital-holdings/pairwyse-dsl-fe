@@ -44,6 +44,7 @@ const DefinitionRequest = ({
         error: false,
       });
     } catch (e) {
+      console.error(e);
       setValueDefinitionRequest({
         value: '',
         submit: true,
