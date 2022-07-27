@@ -40,20 +40,20 @@ const ExecutionRequest = ({
     }
   };
 
-  const formater = (n) => {
-    return n
-      .split('')
-      .reduce((acc, e, i) => {
-        if (i % 3 === 0 && i !== 1 && i !== n.length - 1) {
-          acc.push(e);
-          acc.push(',');
-        } else {
-          acc.push(e);
-        }
-        return acc;
-      }, [])
-      .join('');
-  };
+  // const formater = (n) => {
+  //   return n
+  //     .split('')
+  //     .reduce((acc, e, i) => {
+  //       if (i % 3 === 0 && i !== 1 && i !== n.length - 1) {
+  //         acc.push(e);
+  //         acc.push(',');
+  //       } else {
+  //         acc.push(e);
+  //       }
+  //       return acc;
+  //     }, [])
+  //     .join('');
+  // };
 
   useEffect(() => {
     form.setFieldsValue({
@@ -123,7 +123,7 @@ const ExecutionRequest = ({
             className="lander"
             value={txValue}
             onChange={(e) => {
-              return setTxValue(formater(e?.target?.value));
+              return setTxValue(e?.target?.value);
             }}
           />
         </Item>
