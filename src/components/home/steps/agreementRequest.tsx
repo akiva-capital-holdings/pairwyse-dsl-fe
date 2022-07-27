@@ -47,7 +47,7 @@ const AgreementRequest = ({
         });
       }
     } catch (e) {
-      console.log(e);
+      console.error(e);
       setValueAgreementRequest({ lastAgrAddr: '', error: true, message: e?.message, submit: true });
     }
   };
