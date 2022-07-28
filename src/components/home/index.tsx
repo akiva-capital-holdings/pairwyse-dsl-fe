@@ -2,15 +2,15 @@ import { useState } from 'react';
 import { notification } from 'antd';
 import { shortenedAddress } from '../../utils/helpers';
 import {
-  initialDefinitionRequestValue, 
+  initialDefinitionRequestValue,
   initialUpdateRequestValue,
   titleValueUpdateRequest,
   initialExecitionValue,
-  initialAgreementValue, 
+  initialAgreementValue,
   titleValueDefinition,
   titleValueAgrement,
   titleValueExecute,
-} from './initialValue'
+} from './initialValue';
 import { ReactComponent as Copy } from '../../images/copy.svg';
 import { ReactComponent as CloseIcon } from '../../images/closeIcon.svg';
 import { ReactComponent as Success } from '../../images/successIcon.svg';
@@ -29,7 +29,7 @@ const navSteps = {
 };
 
 const HomePage = () => {
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(navSteps.stepOne);
   // agrement request
   const [value, setValue] = useState(undefined);
@@ -40,7 +40,9 @@ const HomePage = () => {
   const [definition, setDefinition] = useState('');
   const [specifications, setspecification] = useState(mockDefinitions);
   const [agreementDefinition, setAgreementDefinition] = useState('');
-  const [valueDefinitionRequest, setValueDefinitionRequest] = useState(initialDefinitionRequestValue);
+  const [valueDefinitionRequest, setValueDefinitionRequest] = useState(
+    initialDefinitionRequestValue
+  );
   // update request
   const [conditions, setConditions] = useState(mock);
   const [signatories, setSignatories] = useState(mockSignatories);
@@ -154,7 +156,7 @@ const HomePage = () => {
     });
     navigator.clipboard.writeText(`${text}`);
   };
-  
+
   const iconValue = (v) => {
     return v ? (
       <div className="red">
@@ -170,8 +172,6 @@ const HomePage = () => {
       </div>
     );
   };
-
-
 
   const contentCOnteiner = {
     stepOne: (
