@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Form, Button, Menu, Dropdown, Space, Input } from 'antd';
+import { Form, Button, Menu, Dropdown, Space, Input, Spin } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -13,9 +13,11 @@ import './index.css';
 const { Item } = Form;
 
 const AgreementRequest = ({
+  setLoading,
   setLender,
   setError,
   setValue,
+  loading,
   lender,
   error,
   value,
@@ -27,6 +29,7 @@ const AgreementRequest = ({
   const navigate = useNavigate();
 
   const createAgreement = async () => {
+    setLoading(true);
     try {
       if (!error) {
         const agrFactory: Contract = await createInstance(
@@ -45,10 +48,12 @@ const AgreementRequest = ({
           hash: tx?.transactionHash,
           submit: true,
         });
+        setLoading(false);
       }
     } catch (e) {
       console.error(e);
       setValueAgreementRequest({ lastAgrAddr: '', error: true, message: e?.message, submit: true });
+      setLoading(false);
     }
   };
 
@@ -92,60 +97,63 @@ const AgreementRequest = ({
 
   return (
     <div className="agreementRequest">
-      <div className="title">Agreement Request </div>
-      <Form name="agreementRequestForm" autoComplete="off" onFinish={createAgreement}>
-        <div className="text">Requestor</div>
-        <div className="value">{userWallet}</div>
-        <div style={{ marginTop: '24px' }} className="text">
-          Requestor label
-        </div>
-        <Item name="lander" validateTrigger="onBlur" rules={getRule('lander', 'lander', lender)}>
-          <Input
-            className="lander"
-            placeholder="Lender"
-            defaultValue={lender}
-            onChange={(e) => {
-              return setLender(e?.target?.value);
-            }}
-          />
-        </Item>
-        <div style={{ marginTop: '24px' }} className="text">
-          Agreement model{' '}
-        </div>
-        {dropDown()}
-        <div style={{ marginTop: '24px' }} className="text">
-          Agreement template
-        </div>
-        <div className="value">
-          {value === ' ' ? '' : '0x0000000000000000000000000000000000000000'}
-        </div>
-        <div className="btns">
-          <div style={{ display: 'flex' }}>
-            <Button
-              style={{ height: '48px', marginRight: '16px' }}
-              htmlType="submit"
-              className="btn"
-              onClick={() => {
-                return validationAgreementModel(value, setError);
+      <Spin spinning={loading}>
+        <div className="title">Agreement Request </div>
+        <Form name="agreementRequestForm" autoComplete="off" onFinish={createAgreement}>
+          <div className="text">Requestor</div>
+          <div className="value">{userWallet}</div>
+          <div style={{ marginTop: '24px' }} className="text">
+            Requestor label
+          </div>
+          <Item name="lander" validateTrigger="onBlur" rules={getRule('lander', 'lander', lender)}>
+            <Input
+              className="lander"
+              placeholder="Lender"
+              defaultValue={lender}
+              onChange={(e) => {
+                return setLender(e?.target?.value);
               }}
+            />
+          </Item>
+          <div style={{ marginTop: '24px' }} className="text">
+            Agreement model{' '}
+          </div>
+          {dropDown()}
+          <div style={{ marginTop: '24px' }} className="text">
+            Agreement template
+          </div>
+          <div className="value">
+            {value === ' ' ? '' : '0x0000000000000000000000000000000000000000'}
+          </div>
+          <div className="btns">
+            <div style={{ display: 'flex' }}>
+              <Button
+                style={{ height: '48px', marginRight: '16px' }}
+                disabled={loading}
+                htmlType="submit"
+                className="btn"
+                onClick={() => {
+                  return validationAgreementModel(value, setError);
+                }}
+              >
+                Create Agreement
+              </Button>
+              <Button htmlType="button" className="btnSecondary">
+                Validate Contract
+              </Button>
+            </div>
+            <Button
+              onClick={() => {
+                return navigate('/');
+              }}
+              htmlType="button"
+              className="cancel"
             >
-              Create Agreement
-            </Button>
-            <Button htmlType="button" className="btnSecondary">
-              Validate Contract
+              Cancel
             </Button>
           </div>
-          <Button
-            onClick={() => {
-              return navigate('/');
-            }}
-            htmlType="button"
-            className="cancel"
-          >
-            Cancel
-          </Button>
-        </div>
-      </Form>
+        </Form>
+      </Spin>
     </div>
   );
 };

@@ -12,6 +12,9 @@
   line-height: 20px;
   color: var(--dark_col);
 }
+.ant-spin-dot-item {
+  background-color: black !important;
+}
 .ant-dropdown-menu.ant-dropdown-menu-root.ant-dropdown-menu-vertical.ant-dropdown-menu-light.menu{
   background-color: var(--background_color);
   box-shadow: unset;

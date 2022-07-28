@@ -10,6 +10,37 @@ export const validationAgreementModel = (value, setError) => {
     setError('This field lander is required');
   }
 };
+export const validationTxValue = (txValue, setError, setErrorMessage) => {
+  const fixValue = txValue?.replace(/,/gi, '');
+  const reg = /[a-zA-Zа-яА-Я]+/;
+  const reqSimbols = /^[!@#$%^&*()_+~`]$/;
+  if (reqSimbols.test(fixValue)) {
+    setError(true);
+    setErrorMessage('Invalid number');
+    return;
+  }
+  if (reg.test(fixValue)) {
+    setError(true);
+    setErrorMessage('Invalid number');
+    return;
+  }
+  if (fixValue === null || txValue === undefined || txValue === '') {
+    setError(true);
+    setErrorMessage('This field is required');
+    return;
+  }
+  if (parseInt(fixValue, 10) < 1) {
+    setError(true);
+    setErrorMessage('Invalid number');
+    return;
+  }
+  if (BigNumber.from(fixValue).gt(MAX_UINT256)) {
+    setError(true);
+    setErrorMessage('Invalid number');
+  }
+  setError(false);
+  setErrorMessage('');
+};
 
 export default function getRule(label: string, name: string, v?: string) {
   const defaultRule = {

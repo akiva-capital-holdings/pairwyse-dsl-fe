@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Form, Input, InputNumber } from 'antd';
+import { Button, Form, Input, InputNumber, Spin } from 'antd';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { createInstance } from 'utils/helpers';
@@ -21,8 +21,10 @@ const UpdateRequest = ({
   transaction,
   signatories,
   conditions,
+  setLoading,
   agreement,
   setDslID,
+  loading,
   dslId,
 }) => {
   const { address: userWallet } = useSelector(selectSession);
@@ -43,6 +45,7 @@ const UpdateRequest = ({
     contextFactory: Contract,
     steps: TxObject[]
   ) => {
+    setLoading(true);
     try {
       for await (const step of steps) {
         await contextFactory.methods.deployContext().send({ from: userWallet });
@@ -94,8 +97,10 @@ const UpdateRequest = ({
         }
       }
       setUpdateRequest({ hash, submit: true, error: false, message: '' });
+      setLoading(false);
     } catch (e) {
       setUpdateRequest({ hash: '', submit: true, error: true, message: JSON.parse(e?.message) });
+      setLoading(false);
     }
   };
 
@@ -131,202 +136,205 @@ const UpdateRequest = ({
     } catch (e) {
       console.error(e);
       setUpdateRequest({ hash: '', submit: true, error: true, message: e?.message });
+      setLoading(false);
     }
   };
 
   return (
     <div className="updateRequest">
       <div className="title">Update Request </div>
-      <Form
-        name="agreementRequestForm"
-        autoComplete="off"
-        onFinish={() => {
-          return updateAgreement();
-        }}
-      >
-        <div className="text">Requestor</div>
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginBottom: '24px',
-          }}
-          className="value"
-        >
-          {userWallet}
-        </div>
-
-        <div style={{ marginTop: '24px' }} className="text">
-          ID
-        </div>
-        <Item name="dsl-id" validateTrigger="onBlur" rules={getRule('dsl-id', 'dsl-id', dslId)}>
-          <InputNumber
-            className="lander"
-            defaultValue={dslId}
-            onChange={(e) => {
-              return setDslID(e);
-            }}
-          />
-        </Item>
-
-        <div style={{ marginTop: '24px' }} className="text">
-          Agreement
-        </div>
-        <Item
-          name="agreement"
-          validateTrigger="onBlur"
-          rules={getRule('agreement', 'agreement', agreement)}
-        >
-          <Input
-            className="lander"
-            defaultValue={agreement}
-            onChange={(e) => {
-              return setAgreement(e?.target?.value);
-            }}
-          />
-        </Item>
-        {signatories.map((el) => {
-          return (
-            <div className="specificationInput" key={el.id}>
-              {el?.id === 1 && (
-                <div style={{ marginTop: '24px' }} className="text">
-                  Signatories
-                </div>
-              )}
-              <Item
-                name={`signatories${el.id}`}
-                validateTrigger="onBlur"
-                rules={getRule('signatories', 'signatories', el.value)}
-              >
-                <Input
-                  onChange={(e) => {
-                    return setSignatories(
-                      signatories?.map((c) => {
-                        return c?.id === el?.id ? { ...c, value: e?.target?.value } : { ...c };
-                      })
-                    );
-                  }}
-                  className="lander"
-                  defaultValue={el?.value}
-                />
-              </Item>
-              <Button
-                htmlType="button"
-                onClick={() => {
-                  return setSignatories(
-                    signatories.filter((s) => {
-                      return s?.id !== el?.id;
-                    })
-                  );
-                }}
-                className="del"
-              >
-                {el?.id !== 1 && <Delete />}
-              </Button>
-            </div>
-          );
-        })}
-        <Button
-          htmlType="button"
-          className="add"
-          onClick={() => {
-            return setSignatories([
-              ...signatories,
-              { title: `Signatory ${signatories?.length}`, value: '', id: uuidv4() },
-            ]);
+      <Spin spinning={loading}>
+        <Form
+          name="agreementRequestForm"
+          autoComplete="off"
+          onFinish={() => {
+            return updateAgreement();
           }}
         >
-          Add Signatory
-        </Button>
-        <div className="specification">
-          {conditions.map((el) => {
+          <div className="text">Requestor</div>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginBottom: '24px',
+            }}
+            className="value"
+          >
+            {userWallet}
+          </div>
+
+          <div style={{ marginTop: '24px' }} className="text">
+            ID
+          </div>
+          <Item name="dsl-id" validateTrigger="onBlur" rules={getRule('dsl-id', 'dsl-id', dslId)}>
+            <InputNumber
+              className="lander"
+              defaultValue={dslId}
+              onChange={(e) => {
+                return setDslID(e);
+              }}
+            />
+          </Item>
+
+          <div style={{ marginTop: '24px' }} className="text">
+            Agreement
+          </div>
+          <Item
+            name="agreement"
+            validateTrigger="onBlur"
+            rules={getRule('agreement', 'agreement', agreement)}
+          >
+            <Input
+              className="lander"
+              defaultValue={agreement}
+              onChange={(e) => {
+                return setAgreement(e?.target?.value);
+              }}
+            />
+          </Item>
+          {signatories.map((el) => {
             return (
               <div className="specificationInput" key={el.id}>
                 {el?.id === 1 && (
                   <div style={{ marginTop: '24px' }} className="text">
-                    Conditions
+                    Signatories
                   </div>
                 )}
                 <Item
-                  name={`condition${el.id + 1}`}
+                  name={`signatories${el.id}`}
                   validateTrigger="onBlur"
-                  rules={getRule('condition', 'condition', el.value)}
+                  rules={getRule('signatories', 'signatories', el.value)}
                 >
-                  <Input.TextArea
-                    defaultValue={el.value}
+                  <Input
                     onChange={(e) => {
-                      return setConditions(
-                        conditions?.map((c) => {
-                          return c?.id === el?.id ? { ...c, value: e?.target.value } : { ...c };
+                      return setSignatories(
+                        signatories?.map((c) => {
+                          return c?.id === el?.id ? { ...c, value: e?.target?.value } : { ...c };
                         })
                       );
                     }}
-                    style={{ minHeight: '100px' }}
                     className="lander"
+                    defaultValue={el?.value}
                   />
                 </Item>
-                <button
+                <Button
+                  htmlType="button"
                   onClick={() => {
-                    return setConditions(
-                      conditions.filter((s) => {
-                        return s.id !== el.id;
+                    return setSignatories(
+                      signatories.filter((s) => {
+                        return s?.id !== el?.id;
                       })
                     );
                   }}
                   className="del"
                 >
                   {el?.id !== 1 && <Delete />}
-                </button>
+                </Button>
               </div>
             );
           })}
           <Button
-            className="add"
             htmlType="button"
+            className="add"
             onClick={() => {
-              return setConditions([
-                ...conditions,
-                { title: `Condition ${conditions?.length}`, value: '', id: uuidv4() },
+              return setSignatories([
+                ...signatories,
+                { title: `Signatory ${signatories?.length}`, value: '', id: uuidv4() },
               ]);
             }}
           >
-            Add Condition
+            Add Signatory
           </Button>
-        </div>
-        <div className="specificationInput">
-          <div style={{ marginTop: '24px' }} className="text">
-            Transaction
-          </div>
-          <Item
-            name="transaction"
-            validateTrigger="onBlur"
-            rules={getRule('transaction', 'transaction', transaction)}
-          >
-            <Input.TextArea
-              defaultValue={transaction}
-              onChange={(e) => {
-                return setTransaction(e.target.value);
+          <div className="specification">
+            {conditions.map((el) => {
+              return (
+                <div className="specificationInput" key={el.id}>
+                  {el?.id === 1 && (
+                    <div style={{ marginTop: '24px' }} className="text">
+                      Conditions
+                    </div>
+                  )}
+                  <Item
+                    name={`condition${el.id + 1}`}
+                    validateTrigger="onBlur"
+                    rules={getRule('condition', 'condition', el.value)}
+                  >
+                    <Input.TextArea
+                      defaultValue={el.value}
+                      onChange={(e) => {
+                        return setConditions(
+                          conditions?.map((c) => {
+                            return c?.id === el?.id ? { ...c, value: e?.target.value } : { ...c };
+                          })
+                        );
+                      }}
+                      style={{ minHeight: '100px' }}
+                      className="lander"
+                    />
+                  </Item>
+                  <button
+                    onClick={() => {
+                      return setConditions(
+                        conditions.filter((s) => {
+                          return s.id !== el.id;
+                        })
+                      );
+                    }}
+                    className="del"
+                  >
+                    {el?.id !== 1 && <Delete />}
+                  </button>
+                </div>
+              );
+            })}
+            <Button
+              className="add"
+              htmlType="button"
+              onClick={() => {
+                return setConditions([
+                  ...conditions,
+                  { title: `Condition ${conditions?.length}`, value: '', id: uuidv4() },
+                ]);
               }}
-              className="lander"
-            />
-          </Item>
-        </div>
-        <div className="btnsContainer">
-          <Button style={{ height: '48px' }} htmlType="submit" className="btn">
-            Request Approval
-          </Button>
-          <Button
-            onClick={() => {
-              return navigate('/');
-            }}
-            htmlType="button"
-            className="cancel"
-          >
-            Cancel
-          </Button>
-        </div>
-      </Form>
+            >
+              Add Condition
+            </Button>
+          </div>
+          <div className="specificationInput">
+            <div style={{ marginTop: '24px' }} className="text">
+              Transaction
+            </div>
+            <Item
+              name="transaction"
+              validateTrigger="onBlur"
+              rules={getRule('transaction', 'transaction', transaction)}
+            >
+              <Input.TextArea
+                defaultValue={transaction}
+                onChange={(e) => {
+                  return setTransaction(e.target.value);
+                }}
+                className="lander"
+              />
+            </Item>
+          </div>
+          <div className="btnsContainer">
+            <Button disabled={loading} style={{ height: '48px' }} htmlType="submit" className="btn">
+              Request Approval
+            </Button>
+            <Button
+              onClick={() => {
+                return navigate('/');
+              }}
+              htmlType="button"
+              className="cancel"
+            >
+              Cancel
+            </Button>
+          </div>
+        </Form>
+      </Spin>
     </div>
   );
 };
