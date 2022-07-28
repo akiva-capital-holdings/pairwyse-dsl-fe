@@ -1,6 +1,16 @@
 import { useState } from 'react';
 import { notification } from 'antd';
 import { shortenedAddress } from '../../utils/helpers';
+import {
+  initialDefinitionRequestValue, 
+  initialUpdateRequestValue,
+  titleValueUpdateRequest,
+  initialExecitionValue,
+  initialAgreementValue, 
+  titleValueDefinition,
+  titleValueAgrement,
+  titleValueExecute,
+} from './initialValue'
 import { ReactComponent as Copy } from '../../images/copy.svg';
 import { ReactComponent as CloseIcon } from '../../images/closeIcon.svg';
 import { ReactComponent as Success } from '../../images/successIcon.svg';
@@ -19,66 +29,45 @@ const navSteps = {
 };
 
 const HomePage = () => {
+  const [loading, setLoading] = useState(false)
   const [step, setStep] = useState(navSteps.stepOne);
   // agrement request
   const [value, setValue] = useState(undefined);
   const [lender, setLender] = useState('');
   const [error, setError] = useState(undefined);
-  const [valueAgreementRequest, setValueAgreementRequest] = useState({
-    lastAgrAddr: '',
-    error: false,
-    hash: '',
-    message: '',
-    submit: false,
-  });
+  const [valueAgreementRequest, setValueAgreementRequest] = useState(initialAgreementValue);
   // definition request
   const [definition, setDefinition] = useState('');
   const [specifications, setspecification] = useState(mockDefinitions);
   const [agreementDefinition, setAgreementDefinition] = useState('');
-  const [valueDefinitionRequest, setValueDefinitionRequest] = useState({
-    value: '',
-    submit: false,
-    transactionHash: '',
-    error: false,
-    message: '',
-  });
+  const [valueDefinitionRequest, setValueDefinitionRequest] = useState(initialDefinitionRequestValue);
   // update request
   const [conditions, setConditions] = useState(mock);
   const [signatories, setSignatories] = useState(mockSignatories);
   const [agreement, setAgreement] = useState('');
   const [dslId, setDslID] = useState('');
   const [transaction, setTransaction] = useState('');
-  const [valueUpdateRequest, setUpdateRequest] = useState({
-    hash: '',
-    submit: false,
-    error: false,
-    message: '',
-  });
+  const [valueUpdateRequest, setUpdateRequest] = useState(initialUpdateRequestValue);
   // execition // TODO: fix typo
   const [agreementExecition, setAgreementExecition] = useState('');
   const [dslIdExecition, setDslIdExecition] = useState('');
   const [txValueExecution, setTxValueExecution] = useState('');
-  const [execitionValue, setExecitionValue] = useState({
-    hash: '',
-    submit: false,
-    error: false,
-    message: '',
-  });
+  const [execitionValue, setExecitionValue] = useState(initialExecitionValue);
 
   const reset = () => {
-    setValue(undefined);
-    setLender('');
-    setError('');
-    setDefinition('');
     setspecification(mockDefinitions);
-    setAgreementDefinition('');
-    setConditions(mock);
     setSignatories(mockSignatories);
-    setAgreement('');
-    setDslID('');
-    setTransaction('');
+    setAgreementDefinition('');
     setAgreementExecition('');
     setDslIdExecition('');
+    setValue(undefined);
+    setConditions(mock);
+    setTransaction('');
+    setDefinition('');
+    setAgreement('');
+    setLender('');
+    setError('');
+    setDslID('');
   };
 
   const onChangeStep = (v: number) => {
@@ -103,9 +92,11 @@ const HomePage = () => {
     stepOne: (
       <AgreementRequest
         setValueAgreementRequest={setValueAgreementRequest}
+        setLoading={setLoading}
         setLender={setLender}
         setError={setError}
         setValue={setValue}
+        loading={loading}
         lender={lender}
         error={error}
         value={value}
@@ -119,7 +110,9 @@ const HomePage = () => {
         setspecification={setspecification}
         specifications={specifications}
         setDefinition={setDefinition}
+        setLoading={setLoading}
         definition={definition}
+        loading={loading}
       />
     ),
     stepThree: (
@@ -132,8 +125,10 @@ const HomePage = () => {
         transaction={transaction}
         signatories={signatories}
         conditions={conditions}
+        setLoading={setLoading}
         agreement={agreement}
         setDslID={setDslID}
+        loading={loading}
         dslId={dslId}
       />
     ),
@@ -146,9 +141,12 @@ const HomePage = () => {
         setTxValue={setTxValueExecution}
         agreement={agreementExecition}
         txValue={txValueExecution}
+        setLoading={setLoading}
+        loading={loading}
       />
     ),
   };
+
   const onCopyClick = (text: string) => {
     notification.info({
       message: 'Copied',
@@ -156,6 +154,7 @@ const HomePage = () => {
     });
     navigator.clipboard.writeText(`${text}`);
   };
+  
   const iconValue = (v) => {
     return v ? (
       <div className="red">
@@ -172,18 +171,7 @@ const HomePage = () => {
     );
   };
 
-  const titleValueAgrement = (v) => {
-    return v ? 'Created Agreement Address' : 'No transactions yet';
-  };
-  const titleValueDefinition = (v) => {
-    return v ? 'Definition Transaction ID' : 'No transactions yet';
-  };
-  const titleValueUpdateRequest = (v) => {
-    return v ? 'Update Request Transaction ID' : 'No transactions yet';
-  };
-  const titleValueExecute = (v) => {
-    return v ? 'Execution Transaction ID' : 'No transactions yet';
-  };
+
 
   const contentCOnteiner = {
     stepOne: (

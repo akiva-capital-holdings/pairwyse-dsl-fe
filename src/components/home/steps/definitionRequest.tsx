@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Input, Form } from 'antd';
+import { Button, Input, Form, Spin } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
@@ -18,12 +18,15 @@ const DefinitionRequest = ({
   specifications,
   setDefinition,
   definition,
+  setLoading,
+  loading
 }) => {
   const { address: userWallet } = useSelector(selectSession);
   const { provider } = useSelector(selectUtils);
   const navigate = useNavigate();
 
   const defineVariable = async () => {
+    setLoading(true)
     try {
       const AGREEMENT_ADDR = agreement;
       const DEFINITION = definition;
@@ -43,6 +46,7 @@ const DefinitionRequest = ({
         transactionHash: tx?.transactionHash,
         error: false,
       });
+      setLoading(false)
     } catch (e) {
       console.error(e);
       setValueDefinitionRequest({
@@ -52,13 +56,15 @@ const DefinitionRequest = ({
         error: true,
         message: e?.message,
       });
+      setLoading(false)
     }
   };
 
   return (
     <div className="definitionRequest">
       <div className="title">Definition Request</div>
-      <Form name="agreementRequestForm" autoComplete="off" onFinish={defineVariable}>
+      <Spin spinning={loading}>
+       <Form name="agreementRequestForm" autoComplete="off" onFinish={defineVariable}>
         <div className="text">Requestor</div>
         <div className="value">{userWallet}</div>
         <div style={{ marginTop: '24px' }} className="text">
@@ -157,7 +163,7 @@ const DefinitionRequest = ({
           )}
         </div>
         <div className="btnsContainer">
-          <Button style={{ height: '48px' }} htmlType="submit" className="btn">
+          <Button disabled={loading} style={{ height: '48px' }} htmlType="submit" className="btn">
             Request Approval
           </Button>
           <Button
@@ -171,6 +177,7 @@ const DefinitionRequest = ({
           </Button>
         </div>
       </Form>
+      </Spin>
     </div>
   );
 };

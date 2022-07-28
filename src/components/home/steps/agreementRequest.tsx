@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Form, Button, Menu, Dropdown, Space, Input } from 'antd';
+import { Form, Button, Menu, Dropdown, Space, Input, Spin } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -13,9 +13,11 @@ import './index.css';
 const { Item } = Form;
 
 const AgreementRequest = ({
+  setLoading, 
   setLender,
   setError,
   setValue,
+  loading,
   lender,
   error,
   value,
@@ -27,6 +29,7 @@ const AgreementRequest = ({
   const navigate = useNavigate();
 
   const createAgreement = async () => {
+    setLoading(true)
     try {
       if (!error) {
         const agrFactory: Contract = await createInstance(
@@ -45,10 +48,12 @@ const AgreementRequest = ({
           hash: tx?.transactionHash,
           submit: true,
         });
+        setLoading(false)
       }
     } catch (e) {
       console.error(e);
       setValueAgreementRequest({ lastAgrAddr: '', error: true, message: e?.message, submit: true });
+      setLoading(false)
     }
   };
 
@@ -92,6 +97,7 @@ const AgreementRequest = ({
 
   return (
     <div className="agreementRequest">
+      <Spin spinning={loading}>
       <div className="title">Agreement Request </div>
       <Form name="agreementRequestForm" autoComplete="off" onFinish={createAgreement}>
         <div className="text">Requestor</div>
@@ -123,6 +129,7 @@ const AgreementRequest = ({
           <div style={{ display: 'flex' }}>
             <Button
               style={{ height: '48px', marginRight: '16px' }}
+              disabled={loading}
               htmlType="submit"
               className="btn"
               onClick={() => {
@@ -146,6 +153,7 @@ const AgreementRequest = ({
           </Button>
         </div>
       </Form>
+      </Spin>
     </div>
   );
 };

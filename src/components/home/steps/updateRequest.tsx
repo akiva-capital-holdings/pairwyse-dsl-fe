@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Form, Input, InputNumber } from 'antd';
+import { Button, Form, Input, InputNumber, Spin } from 'antd';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { createInstance } from 'utils/helpers';
@@ -21,8 +21,10 @@ const UpdateRequest = ({
   transaction,
   signatories,
   conditions,
+  setLoading,
   agreement,
   setDslID,
+  loading,
   dslId,
 }) => {
   const { address: userWallet } = useSelector(selectSession);
@@ -43,6 +45,7 @@ const UpdateRequest = ({
     contextFactory: Contract,
     steps: TxObject[]
   ) => {
+    setLoading(true)
     try {
       for await (const step of steps) {
         await contextFactory.methods.deployContext().send({ from: userWallet });
@@ -94,8 +97,10 @@ const UpdateRequest = ({
         }
       }
       setUpdateRequest({ hash, submit: true, error: false, message: '' });
+      setLoading(false)
     } catch (e) {
       setUpdateRequest({ hash: '', submit: true, error: true, message: JSON.parse(e?.message) });
+      setLoading(false)
     }
   };
 
@@ -131,12 +136,14 @@ const UpdateRequest = ({
     } catch (e) {
       console.error(e);
       setUpdateRequest({ hash: '', submit: true, error: true, message: e?.message });
+      setLoading(false)
     }
   };
 
   return (
     <div className="updateRequest">
       <div className="title">Update Request </div>
+      <Spin spinning={loading}>
       <Form
         name="agreementRequestForm"
         autoComplete="off"
@@ -313,7 +320,7 @@ const UpdateRequest = ({
           </Item>
         </div>
         <div className="btnsContainer">
-          <Button style={{ height: '48px' }} htmlType="submit" className="btn">
+          <Button disabled={loading} style={{ height: '48px' }} htmlType="submit" className="btn">
             Request Approval
           </Button>
           <Button
@@ -327,6 +334,7 @@ const UpdateRequest = ({
           </Button>
         </div>
       </Form>
+      </Spin>
     </div>
   );
 };
