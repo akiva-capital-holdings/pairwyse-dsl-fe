@@ -50,6 +50,43 @@
 .definitionRequest .specificationInput,
 .updateRequest .specificationInput {
   position: relative;
+  max-width: 450px;
+}
+.definitionRequest .container {
+  background: #F7F5F9;
+  border-radius: 20px;
+  width: 680px;
+  height: 119px;
+  padding: 20px 28px 28px 28px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.definitionRequest .btnType {
+  background: #EAE6EE;
+  border-radius: 8px;
+  width: 150px;
+  height: 48px;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  color: #120023;
+  text-align: left;
+  border: unset;
+  padding-left: 16px;
+}
+.definitionRequest .container > div > span {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 15px;
+  color: #ACA2B5;
+  display: inline-block;
+  margin-bottom: 8px;
+}
+.definitionRequest .container:last-child {
+ margin-bottom: 0;
 }
 .definitionRequest .del,
 .updateRequest  .del{
