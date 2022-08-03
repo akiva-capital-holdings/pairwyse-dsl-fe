@@ -227,7 +227,7 @@ const UpdateRequest = ({
                 return setValueRequiredTransactions(e?.target?.value);
               }} 
               value={valueRequiredTransactions}/>
-              <button onClick={() => addTransaction()} className='ant-btn ant-btn-default add btnRequiredTransactions' type='button'>Add Transaction</button>
+              <button onClick={() => addTransaction()} className='ant-btn ant-btn-default add btnRequiredTransactions' type='button'>Add ID</button>
             </Item>
             {error && <div style={{marginBottom: '8px'}} className="ant-form-item-explain-error">{errorMessage}</div>}
             <div className='numTransactionCoontainer'>
