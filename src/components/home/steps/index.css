@@ -92,3 +92,47 @@
 .value{
   font-size: 16px;
 }
+.updateRequest .requiredTransactions{
+  height: 48px;
+  position: relative;
+}
+.updateRequest .btnRequiredTransactions{
+  right: 0;
+  position: absolute;
+  top: -8%;
+}
+.updateRequest .numTransactionCoontainer{
+  display: flex;
+  max-width: 680px;
+  flex-wrap: wrap;
+}
+.updateRequest .numTransaction{
+  display: flex;
+  height: 35px;
+  background: #120023;
+  border-radius: 30px;
+  padding:  8px 8px 10px 16px;
+  color: #fff;
+  margin-right: 8px;
+  margin-bottom: 8px;
+}
+.updateRequest .numTransaction .textNum {
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 15px;
+  color: #FFFFFF;
+  margin-right: 8px;
+}
+.updateRequest .numTransaction .btnNum{
+  border-radius: 50%;
+  border: unset;
+  width: 14px;
+  height: 14px;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #EAE6EE;
+  opacity: 0.5;
+  cursor: pointer;
+}
