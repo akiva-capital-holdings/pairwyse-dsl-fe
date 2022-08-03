@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { Button, Form, Input, InputNumber, Spin } from 'antd';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -8,7 +8,8 @@ import { Contract } from 'ethers';
 import { v4 as uuidv4 } from 'uuid';
 import { selectSession } from '../../../redux/sessionReducer';
 import { ReactComponent as Delete } from '../../../images/delete.svg';
-import getRule from '../../../utils/validate';
+import {ReactComponent as Cloose} from '../../../images/close.svg'
+import getRule, {validationTxValue} from '../../../utils/validate';
 
 const { Item } = Form;
 
@@ -22,13 +23,19 @@ const UpdateRequest = ({
   signatories,
   conditions,
   setLoading,
+  setNumbers,
   agreement,
   setDslID,
+  numbers,
   loading,
   dslId,
 }) => {
   const { address: userWallet } = useSelector(selectSession);
   const { provider } = useSelector(selectUtils);
+  const [valueRequiredTransactions, setValueRequiredTransactions] = useState('')
+  const [errorMessage, setErrorMessage] = useState('');
+  const [error, setError] = useState(false);
+
   const navigate = useNavigate();
   let hash = '';
 
@@ -140,6 +147,18 @@ const UpdateRequest = ({
     }
   };
 
+  const addTransaction = () => {
+   if(validationTxValue(valueRequiredTransactions, setError, setErrorMessage)) {
+    setNumbers([...numbers, { value: valueRequiredTransactions,  id: uuidv4()}])
+    setValueRequiredTransactions('')
+   }
+  }
+
+  useEffect(() => {
+    setError(false)
+    setErrorMessage('')
+  }, [valueRequiredTransactions])
+
   return (
     <div className="updateRequest">
       <div className="title">Update Request </div>
@@ -193,6 +212,41 @@ const UpdateRequest = ({
               }}
             />
           </Item>
+          <div style={{ marginTop: '24px' }} className="text">
+          Required Transactions
+          </div>
+          <Item
+            name="requiredTransactions"
+            validateTrigger="onBlur"
+            className='requiredTransactions'
+            style={{marginBottom: '8px'}}
+            >
+             <Input    
+             className={`lander ${error && 'ant-input-status-error'}`}
+              onChange={(e) => {
+                return setValueRequiredTransactions(e?.target?.value);
+              }} 
+              value={valueRequiredTransactions}/>
+              <button onClick={() => addTransaction()} className='ant-btn ant-btn-default add btnRequiredTransactions' type='button'>Add Transaction</button>
+            </Item>
+            {error && <div style={{marginBottom: '8px'}} className="ant-form-item-explain-error">{errorMessage}</div>}
+            <div className='numTransactionCoontainer'>
+             {numbers?.map((el) => {
+              return <div key={el?.id} className='numTransaction'>
+                  <div className='textNum'>{el?.value}</div>
+                   <button     
+                   onClick={() => {
+                    return setNumbers(
+                      numbers.filter((s) => {
+                        return s?.id !== el?.id;
+                      })
+                    );
+                  }} className='btnNum' type='button'>
+                    <Cloose/>
+                  </button>
+               </div>
+             })}
+            </div>
           {signatories.map((el) => {
             return (
               <div className="specificationInput" key={el.id}>

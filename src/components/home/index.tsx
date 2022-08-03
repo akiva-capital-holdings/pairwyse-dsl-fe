@@ -50,6 +50,7 @@ const HomePage = () => {
   const [dslId, setDslID] = useState('');
   const [transaction, setTransaction] = useState('');
   const [valueUpdateRequest, setUpdateRequest] = useState(initialUpdateRequestValue);
+  const [numbers, setNumbers] = useState([])
   // execition // TODO: fix typo
   const [agreementExecition, setAgreementExecition] = useState('');
   const [dslIdExecition, setDslIdExecition] = useState('');
@@ -128,8 +129,10 @@ const HomePage = () => {
         signatories={signatories}
         conditions={conditions}
         setLoading={setLoading}
+        setNumbers={setNumbers}
         agreement={agreement}
         setDslID={setDslID}
+        numbers={numbers}
         loading={loading}
         dslId={dslId}
       />
