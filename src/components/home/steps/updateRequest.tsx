@@ -129,11 +129,11 @@ const UpdateRequest = ({
       );
       const txsAddr = await agreementContract.methods.txs().call();
       const ctxdeployedLen = await contextFactory.methods.getDeployedContextsLen().call();
-
+      const numId = numbers?.map(el => el?.value)
       await addSteps(agreementContract, contextFactory, [
         {
           txId: DSL_ID,
-          requiredTxs: [],
+          requiredTxs: [...numId],
           signatories: [SIGNATORY],
           conditions: [CONDITION],
           transaction: TRANSACTION,
@@ -149,7 +149,7 @@ const UpdateRequest = ({
 
   const addTransaction = () => {
    if(validationTxValue(valueRequiredTransactions, setError, setErrorMessage)) {
-    setNumbers([...numbers, { value: valueRequiredTransactions,  id: uuidv4()}])
+    setNumbers([...numbers, { value: +valueRequiredTransactions,  id: uuidv4()}])
     setValueRequiredTransactions('')
    }
   }
