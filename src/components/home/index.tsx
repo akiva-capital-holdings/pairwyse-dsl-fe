@@ -200,7 +200,7 @@ const HomePage = () => {
                 <div className="value">
                   {shortenedAddress(valueAgreementRequest?.lastAgrAddr, 9)}
                 </div>
-                <Copy onClick={() => onCopyClick(valueAgreementRequest?.lastAgrAddr)} />
+                <Copy style={{cursor: 'pointer'}} onClick={() => onCopyClick(valueAgreementRequest?.lastAgrAddr)} />
               </div>
             )}
           </div>
@@ -212,7 +212,7 @@ const HomePage = () => {
               </div>
               <div className="valueContainer">
                 <div className="value">{shortenedAddress(valueAgreementRequest?.hash, 9)}</div>
-                <Copy onClick={() => onCopyClick(valueAgreementRequest?.hash)} />
+                <Copy style={{cursor: 'pointer'}}  onClick={() => onCopyClick(valueAgreementRequest?.hash)} />
               </div>
             </div>
           )}
@@ -240,7 +240,7 @@ const HomePage = () => {
             {!!valueDefinitionRequest?.value && (
               <div className="valueContainer">
                 <div className="value">{shortenedAddress(valueDefinitionRequest?.value, 9)}</div>
-                <Copy onClick={() => onCopyClick(valueDefinitionRequest?.value)} />
+                <Copy style={{cursor: 'pointer'}}  onClick={() => onCopyClick(valueDefinitionRequest?.value)} />
               </div>
             )}
           </div>
@@ -254,7 +254,7 @@ const HomePage = () => {
                 <div className="value">
                   {shortenedAddress(valueDefinitionRequest?.transactionHash, 9)}
                 </div>
-                <Copy onClick={() => onCopyClick(valueDefinitionRequest?.transactionHash)} />
+                <Copy style={{cursor: 'pointer'}}  onClick={() => onCopyClick(valueDefinitionRequest?.transactionHash)} />
               </div>
             </div>
           )}
@@ -282,7 +282,7 @@ const HomePage = () => {
             {!!valueUpdateRequest?.hash && (
               <div className="valueContainer">
                 <div className="value">{shortenedAddress(valueUpdateRequest?.hash, 9)}</div>
-                <Copy onClick={() => onCopyClick(valueUpdateRequest?.hash)} />
+                <Copy style={{cursor: 'pointer'}}  onClick={() => onCopyClick(valueUpdateRequest?.hash)} />
               </div>
             )}
           </div>
@@ -312,7 +312,7 @@ const HomePage = () => {
             {!!execitionValue?.hash && (
               <div className="valueContainer">
                 <div className="value">{shortenedAddress(execitionValue?.hash, 9)}</div>
-                <Copy onClick={() => onCopyClick(execitionValue?.hash)} />
+                <Copy style={{cursor: 'pointer'}}  onClick={() => onCopyClick(execitionValue?.hash)} />
               </div>
             )}
           </div>

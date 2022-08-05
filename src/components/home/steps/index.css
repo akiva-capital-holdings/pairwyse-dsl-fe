@@ -87,10 +87,12 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
-  margin-top: 95px;
+  margin-top: 80px;
 }
 .value{
   font-size: 16px;
+  font-family: var(--font_family);
+  font-weight: 500;
 }
 .updateRequest .requiredTransactions{
   height: 48px;

@@ -51,7 +51,7 @@ button {
 }
 
 .btn{
- min-width: 160px;
+ min-width: 113px;
  height: 40px;
  background: #120023;
  border-radius: 4px;
@@ -59,7 +59,7 @@ button {
  font-style: normal;
  font-family: var(--font_family_bold);
  font-weight: var(--font_weight_bolder);
- font-size: var(--font_size_h6);
+ font-size: 16px;
  line-height: 18px;
  color: var(--white_color);
  padding-left: 16px;
