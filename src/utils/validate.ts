@@ -1,7 +1,8 @@
 import { BigNumber, ethers } from 'ethers';
 
 const MAX_UINT256 =
-  '115792089237316195423570985008687907853269984665640564039457584007913129639935';
+  '115792089999999998705389791257259974578919570896256373317739096412496154591232';
+  
 
 export const validationAgreementModel = (value, setError) => {
   if (value?.length > 0) {
@@ -11,12 +12,14 @@ export const validationAgreementModel = (value, setError) => {
   }
 };
 export const validationTxValue = (txValue, setError, setErrorMessage) => {
+  console.log(txValue);
+  
   const fixValue = txValue?.replace(/,/gi, '');
   const reg = /[a-zA-Zа-яА-Я]+/;
   if (fixValue === null || fixValue === undefined || fixValue === '') {
-    setError(true);
-    setErrorMessage('This field is required');
-    return false;
+    setError(false);
+    setErrorMessage('');
+    return true;
   }
   if (+fixValue === 0) {
     setError(false);
@@ -60,10 +63,14 @@ export default function getRule(label: string, name: string, v?: string) {
   };
 
   const validateId = () => {
+    const fixValue = v?.replace(/,/gi, '');
     return {
       validator: () => {
         if (v === null || v === undefined || v === '') {
           return Promise.reject(new Error('This field is required'));
+        }
+        if(!fixValue.match(/\d+/g)) {
+          return Promise.reject(new Error('Invalid number'));
         }
         if (parseInt(v, 10) < 1) {
           return Promise.reject(new Error('Invalid number'));

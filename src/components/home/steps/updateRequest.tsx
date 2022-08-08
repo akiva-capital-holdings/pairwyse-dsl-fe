@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { Button, Form, Input, InputNumber, Spin } from 'antd';
+import { Button, Form, Input, Spin } from 'antd';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { createInstance } from 'utils/helpers';
@@ -187,11 +187,11 @@ const UpdateRequest = ({
             ID
           </div>
           <Item name="dsl-id" validateTrigger="onBlur" rules={getRule('dsl-id', 'dsl-id', dslId)}>
-            <InputNumber
+            <Input
               className="lander"
               defaultValue={dslId}
               onChange={(e) => {
-                return setDslID(e);
+                return setDslID(e?.target?.value);
               }}
             />
           </Item>
