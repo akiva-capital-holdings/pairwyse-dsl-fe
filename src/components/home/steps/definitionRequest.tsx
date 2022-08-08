@@ -26,8 +26,8 @@ const DefinitionRequest = ({
   const { address: userWallet } = useSelector(selectSession);
   const { provider } = useSelector(selectUtils);
   const [visible , setVisible] = useState(false)
+  const [activeMenu, setActiveMenu] = useState(undefined)
   const navigate = useNavigate();
-  console.log(specifications);
 
   const defineVariable = async () => {
     setLoading(true);
@@ -69,13 +69,14 @@ const DefinitionRequest = ({
      return c?.id === id ? { ...c, type } : { ...c };
    })
    setspecification(update)   
+   setActiveMenu(undefined)
+   setVisible(!visible)
  }
   
 const menuType = (value) => {
-  console.log(value);
-  return   <div>
+  return   <div className='menuType'>
     <button onClick={() => updateTypeSpetification(value.id, 'text' )} type='button'>Address</button>
-    <button  onClick={() => updateTypeSpetification(value.id, 'number' )} type='button'>Number</button>
+    <button onClick={() => updateTypeSpetification(value.id, 'number' )} type='button'>Number</button>
   </div>
 }
 
@@ -137,8 +138,11 @@ const typeContent = {
                   <div className='container'> 
                  <div className='type'>       
                  <span>Type</span>
-                   <button type='button' className='btnType' onClick={() => setVisible(!visible)}>{typeContent[el?.type]}</button>
-                   {visible && menuType(el)}
+                   <button type='button' className={`btnType ${el?.id === activeMenu ?  'open' : '' }`} onClick={() => {
+                    setActiveMenu(activeMenu === el?.id ? undefined :   el?.id) 
+                    setVisible(!visible)
+                   }}>{typeContent[el?.type]} <div className='icon'/></button>
+                   {visible  && activeMenu === el?.id && menuType(el)}
                  </div>
                  <div >
                   <span>Value</span>
@@ -157,7 +161,7 @@ const typeContent = {
                             })
                           );
                         }}
-                        className="lander"
+                        className="lander inputMenuType"
                       />
                     </Item>
                   </div>
@@ -184,7 +188,7 @@ const typeContent = {
                 htmlType="button"
                 className="add"
                 onClick={() => {
-                  return setspecification([
+                   setspecification([
                     ...specifications,
                     {
                       title: `Specification ${specifications?.length}`,
@@ -193,6 +197,8 @@ const typeContent = {
                       type: 'text'
                     },
                   ]);
+                  setActiveMenu(undefined)
+                  setVisible(false)
                 }}
               >
                 Add Specification

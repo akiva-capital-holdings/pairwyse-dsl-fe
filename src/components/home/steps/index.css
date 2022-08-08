@@ -96,6 +96,12 @@
   top: 12px;
   border: none;
 }
+.definitionRequest .del {
+  right: -50%;
+}
+.definitionRequest .inputMenuType{
+ width: 450px !important;
+}
 .definitionRequest .add,
 .updateRequest .add {
   font-family: var(--font_family_bold);
