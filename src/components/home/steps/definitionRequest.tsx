@@ -1,5 +1,7 @@
-import React from 'react';
-import { Button, Input, Form, Spin } from 'antd';
+import React, {useState} from 'react';
+import { Button, Input, Form, Spin,
+  //  Dropdown, Menu, Space 
+  } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
@@ -23,6 +25,8 @@ const DefinitionRequest = ({
 }) => {
   const { address: userWallet } = useSelector(selectSession);
   const { provider } = useSelector(selectUtils);
+  const [visible , setVisible] = useState(false)
+  const [activeMenu, setActiveMenu] = useState(undefined)
   const navigate = useNavigate();
 
   const defineVariable = async () => {
@@ -60,6 +64,27 @@ const DefinitionRequest = ({
     }
   };
 
+ const updateTypeSpetification = (id,  type) => {
+  const update =  specifications?.map((c) => {
+     return c?.id === id ? { ...c, type } : { ...c };
+   })
+   setspecification(update)   
+   setActiveMenu(undefined)
+   setVisible(!visible)
+ }
+  
+const menuType = (value) => {
+  return   <div className='menuType'>
+    <button onClick={() => updateTypeSpetification(value.id, 'text' )} type='button'>Address</button>
+    <button onClick={() => updateTypeSpetification(value.id, 'number' )} type='button'>Number</button>
+  </div>
+}
+
+
+const typeContent = {
+  'text' : 'Address',
+  'number': 'Numder'
+}
   return (
     <div className="definitionRequest">
       <div className="title">Definition Request</div>
@@ -110,23 +135,37 @@ const DefinitionRequest = ({
                       Specifications
                     </div>
                   )}
-                  <Item
-                    name={`specification${el.id}`}
-                    validateTrigger="onBlur"
-                    rules={getRule('specification', 'specification', el.value)}
-                  >
-                    <Input
-                      defaultValue={el.value}
-                      onChange={(e) => {
-                        return setspecification(
-                          specifications?.map((c) => {
-                            return c?.id === el?.id ? { ...c, value: e?.target.value } : { ...c };
-                          })
-                        );
-                      }}
-                      className="lander"
-                    />
-                  </Item>
+                  <div className='container'> 
+                 <div className='type'>       
+                 <span>Type</span>
+                   <button type='button' className={`btnType ${el?.id === activeMenu ?  'open' : '' }`} onClick={() => {
+                    setActiveMenu(activeMenu === el?.id ? undefined :   el?.id) 
+                    setVisible(!visible)
+                   }}>{typeContent[el?.type]} <div className='icon'/></button>
+                   {visible  && activeMenu === el?.id && menuType(el)}
+                 </div>
+                 <div >
+                  <span>Value</span>
+                   <Item
+                      name={`specification${el.id}`}
+                      validateTrigger="onBlur"
+                      rules={getRule('specification', 'specification', el.value)}
+                     >
+                      <Input
+                        type={el?.type}
+                        defaultValue={el.value}
+                        onChange={(e) => {
+                          return setspecification(
+                            specifications?.map((c) => {
+                              return c?.id === el?.id ? { ...c, value: e?.target.value } : { ...c };
+                            })
+                          );
+                        }}
+                        className="lander inputMenuType"
+                      />
+                    </Item>
+                  </div>
+                  </div>
                   <Button
                     htmlType="button"
                     onClick={() => {
@@ -143,19 +182,23 @@ const DefinitionRequest = ({
                 </div>
               );
             })}
+
             {specifications?.length < 5 && (
               <Button
                 htmlType="button"
                 className="add"
                 onClick={() => {
-                  return setspecification([
+                   setspecification([
                     ...specifications,
                     {
                       title: `Specification ${specifications?.length}`,
                       value: '',
                       id: uuidv4(),
+                      type: 'text'
                     },
                   ]);
+                  setActiveMenu(undefined)
+                  setVisible(false)
                 }}
               >
                 Add Specification
