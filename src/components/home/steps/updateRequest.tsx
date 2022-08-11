@@ -234,7 +234,7 @@ const UpdateRequest = ({
              {numbers?.map((el) => {
               return <div key={el?.id} className='numTransaction'>
                   <div className='textNum'>{el?.value}</div>
-                   <button     
+                   <button   
                    onClick={() => {
                     return setNumbers(
                       numbers.filter((s) => {
@@ -328,6 +328,7 @@ const UpdateRequest = ({
                     />
                   </Item>
                   <button
+                    type='button'
                     onClick={() => {
                       return setConditions(
                         conditions.filter((s) => {

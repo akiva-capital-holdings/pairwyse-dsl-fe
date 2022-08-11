@@ -30,6 +30,7 @@ const DefinitionRequest = ({
   const navigate = useNavigate();
 
   const defineVariable = async () => {
+    
     setLoading(true);
     try {
       const AGREEMENT_ADDR = agreement;
