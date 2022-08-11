@@ -84,7 +84,7 @@ const menuType = (value) => {
 
 const typeContent = {
   'text' : 'Address',
-  'number': 'Numder'
+  'number': 'Number'
 }
   return (
     <div className="definitionRequest">
