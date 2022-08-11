@@ -58,7 +58,7 @@ export const validationTxValue = (txValue, setError, setErrorMessage, req) => {
   return true
 };
 
-export default function getRule(label: string, name: string, v?: string) {
+export default function getRule(label: string, name: string, v?: string, type?: string) {
   const defaultRule = {
     required: true,
     message: 'This field is required',
@@ -99,9 +99,14 @@ export default function getRule(label: string, name: string, v?: string) {
   const ruAlfabet = /^[а-яА-ЯёЁ]+$/;
 
   const validateField = () => {
+    const fixValue = v?.replace(/,/gi, '');
     return {
       validator: () => {
         if (!v) return Promise.resolve();
+        if (BigNumber.from(fixValue).gt(MAX_UINT256))  return  Promise.reject(new Error('Invalid number'))
+        if(parseInt(fixValue, 10) < 1){
+          return Promise.reject(new Error('Invalid number'))
+        }
         if (simbols.test(v)) return Promise.resolve();
         return Promise.reject(new Error('This field is required'));
       },
@@ -170,7 +175,8 @@ export default function getRule(label: string, name: string, v?: string) {
     case 'definition':
       return [validateSpace];
     case 'specification':
-      return [validateField, validateMinMax(0, 42), validateSpace];
+      if(type === 'Address') return [validateAddressEth, validateAddress, validateSpace];
+      return [validateField,  validateSpace];
     case 'condition':
       return [validateFieldCondition, validation, validateSpace];
     case 'signatories':

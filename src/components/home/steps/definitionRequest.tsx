@@ -149,7 +149,7 @@ const typeContent = {
                    <Item
                       name={`specification${el.id}`}
                       validateTrigger="onBlur"
-                      rules={getRule('specification', 'specification', el.value)}
+                      rules={getRule('specification', 'specification', el.value, typeContent[el?.type])}
                      >
                       <Input
                         type={el?.type}
