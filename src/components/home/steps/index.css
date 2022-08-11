@@ -50,6 +50,9 @@
 .definitionRequest .specificationInput,
 .updateRequest .specificationInput {
   position: relative;
+
+}
+.definitionRequest .specificationInput {
   max-width: 450px;
 }
 .definitionRequest .container {

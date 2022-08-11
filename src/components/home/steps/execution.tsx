@@ -103,7 +103,7 @@ const ExecutionRequest = ({
           </div>
           <input
             onBlur={() => {
-              return validationTxValue(txValue, setError, setErrorMessage);
+              return validationTxValue(txValue, setError, setErrorMessage, true);
             }}
             className={`ant-input lander ${error && 'ant-input-status-error'}`}
             onChange={(e) => {
