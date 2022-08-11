@@ -148,7 +148,7 @@ const UpdateRequest = ({
   };
 
   const addTransaction = () => {
-   if(validationTxValue(valueRequiredTransactions, setError, setErrorMessage)) {
+   if(validationTxValue(valueRequiredTransactions, setError, setErrorMessage, false)) {
     setNumbers([...numbers, { value: +valueRequiredTransactions,  id: uuidv4()}])
     setValueRequiredTransactions('')
    }

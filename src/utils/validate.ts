@@ -10,9 +10,14 @@ export const validationAgreementModel = (value, setError) => {
     setError('This field lander is required');
   }
 };
-export const validationTxValue = (txValue, setError, setErrorMessage) => {
+export const validationTxValue = (txValue, setError, setErrorMessage, req) => {
   const fixValue = txValue?.replace(/,/gi, '');
   const reg = /[a-zA-Zа-яА-Я]+/;
+  if(req) {
+    setError(false);
+    setErrorMessage('');
+    return true;
+  }
   if (fixValue === null || fixValue === undefined || fixValue === '') {
     setError(true);
     setErrorMessage('This field is required');
