@@ -154,6 +154,13 @@ const UpdateRequest = ({
    }
   }
 
+  const validateTrasactionId = () => {
+    if(numbers?.length === 0 ) {
+      setErrorMessage('This field is required')
+      setError(true)
+    }
+  }
+
   useEffect(() => {
     setError(false)
     setErrorMessage('')
@@ -375,7 +382,7 @@ const UpdateRequest = ({
             </Item>
           </div>
           <div className="btnsContainer">
-            <Button disabled={loading} style={{ height: '48px' }} htmlType="submit" className="btn">
+            <Button disabled={loading} style={{ height: '48px' }} onClick={validateTrasactionId} htmlType="submit" className="btn">
               Request Approval
             </Button>
             <Button
