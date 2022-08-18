@@ -67,7 +67,7 @@ export default function getRule(label: string, name: string, v?: string, type?: 
   const validateId = () => {
     return {
       validator: () => {
-        if(Number.isInteger(v)) {
+        if(!Number.isInteger(+v)) {
           return Promise.reject(new Error('Invalid number'));
         }
         if (v === null || v === undefined || v === '') {
