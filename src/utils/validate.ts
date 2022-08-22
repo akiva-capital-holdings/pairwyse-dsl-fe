@@ -18,6 +18,12 @@ export const validationTxValue = (txValue, setError, setErrorMessage, req) => {
     setErrorMessage('');
     return true;
   }
+  if(!Number.isInteger(fixValue)) {
+    setError(true);
+    setErrorMessage('Invalid number');
+    return false;
+  }
+  
   if (fixValue === null || fixValue === undefined || fixValue === '') {
     setError(true);
     setErrorMessage('This field is required');
