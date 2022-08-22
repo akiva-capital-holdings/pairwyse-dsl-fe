@@ -158,7 +158,7 @@ const UpdateRequest = ({
     setError(false)
     setErrorMessage('')
   }, [valueRequiredTransactions])
-  console.log(dslId);
+
   
   return (
     <div className="updateRequest">
