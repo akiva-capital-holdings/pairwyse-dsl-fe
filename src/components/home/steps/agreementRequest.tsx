@@ -1,13 +1,14 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
+import Web3 from 'web3';
 import { Form, Button, Menu, Dropdown, Space, Input, Spin } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Contract } from 'ethers';
+import { getContractABI } from 'utils/helpers';
 import getRule, { validationAgreementModel } from '../../../utils/validate';
-import { createInstance } from '../../../utils/helpers';
 import { selectUtils } from '../../../redux/utilsReducer';
 import { selectSession } from '../../../redux/sessionReducer';
+import { bytecode as agreementBytecode } from '../../../data/contract-bytecode/agreement.json';
 import './index.css';
 
 const { Item } = Form;
@@ -24,7 +25,7 @@ const AgreementRequest = ({
   setValueAgreementRequest,
 }) => {
   const { address: userWallet } = useSelector(selectSession);
-  const { provider } = useSelector(selectUtils);
+  const { provider } = useSelector(selectUtils) as { provider: Web3 };
 
   const navigate = useNavigate();
 
@@ -32,23 +33,36 @@ const AgreementRequest = ({
     setLoading(true);
     try {
       if (!error) {
-        const agrFactory: Contract = await createInstance(
-          'AgreementFactory',
-          `${process.env.REACT_APP_AGREEMENT_FACTORY}`,
-          provider
-        );
-        const tx: { transactionHash: string } = await agrFactory.methods
-          .deployAgreement(process.env.REACT_APP_PARSER)
-          .send({ from: userWallet });
-        const agrLen = parseInt(await agrFactory.methods.getDeployedAgreementsLen().call(), 10);
-        const lastAgrAddr = await agrFactory.methods.deployedAgreements(agrLen - 1).call();
-        setValueAgreementRequest({
-          lastAgrAddr,
-          error: false,
-          hash: tx?.transactionHash,
-          submit: true,
-        });
-        setLoading(false);
+        // @ts-ignore
+        const agreementInstance = new provider.eth.Contract(getContractABI('Agreement'));
+
+        let transactionHash = '';
+        agreementInstance
+          .deploy({
+            data: agreementBytecode,
+            arguments: [process.env.REACT_APP_PARSER],
+          })
+          .send({ from: userWallet })
+          .on('error', (err) => {
+            console.error({ err });
+          })
+          .on('transactionHash', (txHash) => {
+            transactionHash = txHash;
+            // console.log({ transactionHash });
+          })
+          // .on('receipt', (receipt) => {
+          //   // contains the new contract address
+          //   console.log({ agreementAddr: receipt.contractAddress });
+          // })
+          .then((newContractInstance) => {
+            setValueAgreementRequest({
+              lastAgrAddr: newContractInstance.options.address,
+              error: false,
+              hash: transactionHash,
+              submit: true,
+            });
+            setLoading(false);
+          });
       }
     } catch (e) {
       console.error(e);

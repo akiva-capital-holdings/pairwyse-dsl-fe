@@ -32,7 +32,7 @@ export const hex4Bytes = (str: string) => {
     .join('');
 };
 
-const getContractABI = (name: ContractName): string => {
+export const getContractABI = (name: ContractName): string => {
   switch (name) {
     case contractNames.Agreement:
       return agreementABI as unknown as string;
@@ -47,6 +47,7 @@ const getContractABI = (name: ContractName): string => {
   }
 };
 
+// TODO: make not `async`
 export const createInstance = async (
   name: ContractName,
   address: string,
