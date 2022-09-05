@@ -2,7 +2,6 @@ import MetaMaskOnboarding from '@metamask/onboarding';
 import { Contract, ethers } from 'ethers';
 import _ from 'lodash';
 import agreementABI from '../data/contract-abi/agreement.json';
-import agreementFactoryABI from '../data/contract-abi/agreementFactory.json';
 import conditionalTxsABI from '../data/contract-abi/conditionalTxs.json';
 import contextFactoryABI from '../data/contract-abi/contextFactory.json';
 import allNetworks from './networks.json';
@@ -16,7 +15,6 @@ interface Error {
 
 const contractNames = {
   Agreement: 'Agreement',
-  AgreementFactory: 'AgreementFactory',
   ConditionalTxs: 'ConditionalTxs',
   ContextFactory: 'ContextFactory',
 };
@@ -36,8 +34,6 @@ export const getContractABI = (name: ContractName): string => {
   switch (name) {
     case contractNames.Agreement:
       return agreementABI as unknown as string;
-    case contractNames.AgreementFactory:
-      return agreementFactoryABI as unknown as string;
     case contractNames.ConditionalTxs:
       return conditionalTxsABI as unknown as string;
     case contractNames.ContextFactory:
