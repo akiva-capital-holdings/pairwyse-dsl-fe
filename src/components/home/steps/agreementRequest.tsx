@@ -4,11 +4,10 @@ import { Form, Button, Menu, Dropdown, Space, Input, Spin } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { getContractABI } from 'utils/helpers';
+import { getContractABI, getContractBytecode } from 'utils/helpers';
 import getRule, { validationAgreementModel } from '../../../utils/validate';
 import { selectUtils } from '../../../redux/utilsReducer';
 import { selectSession } from '../../../redux/sessionReducer';
-import { bytecode as agreementBytecode } from '../../../data/contract-bytecode/agreement.json';
 import './index.css';
 
 const { Item } = Form;
@@ -39,7 +38,7 @@ const AgreementRequest = ({
         let transactionHash = '';
         agreementInstance
           .deploy({
-            data: agreementBytecode,
+            data: getContractBytecode('Agreement'),
             arguments: [process.env.REACT_APP_PARSER],
           })
           .send({ from: userWallet })

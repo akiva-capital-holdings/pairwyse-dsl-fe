@@ -1,9 +1,8 @@
 import MetaMaskOnboarding from '@metamask/onboarding';
 import { Contract, ethers } from 'ethers';
 import _ from 'lodash';
-import agreementABI from '../data/contract-abi/agreement.json';
-import conditionalTxsABI from '../data/contract-abi/conditionalTxs.json';
-import contextFactoryABI from '../data/contract-abi/contextFactory.json';
+import { abi as agreementABI, bytecode as agreementBytecode } from '../data/agreement.json';
+import { abi as contextFactoryABI } from '../data/contextFactory.json';
 import allNetworks from './networks.json';
 
 const { ethereum }: any = window;
@@ -33,22 +32,21 @@ export const hex4Bytes = (str: string) => {
 export const getContractABI = (name: ContractName): string => {
   switch (name) {
     case contractNames.Agreement:
-      return agreementABI as unknown as string;
-    case contractNames.ConditionalTxs:
-      return conditionalTxsABI as unknown as string;
+      return JSON.stringify(agreementABI);
     case contractNames.ContextFactory:
-      return contextFactoryABI as unknown as string;
+      return JSON.stringify(contextFactoryABI);
     default:
       return '';
   }
 };
 
+export const getContractBytecode = (name: ContractName): string => {
+  if (name === contractNames.Agreement) return agreementBytecode;
+  return '';
+};
+
 // TODO: make not `async`
-export const createInstance = async (
-  name: ContractName,
-  address: string,
-  provider
-): Promise<Contract> => {
+export const createInstance = (name: ContractName, address: string, provider): Contract => {
   const abi = getContractABI(name);
   return new provider.eth.Contract(abi, address);
 };
