@@ -1,6 +1,7 @@
 import MetaMaskOnboarding from '@metamask/onboarding';
 import { Contract, ethers } from 'ethers';
 import _ from 'lodash';
+import { AbiItem } from 'web3-utils';
 import { abi as agreementABI, bytecode as agreementBytecode } from '../data/agreement.json';
 import { abi as contextFactoryABI } from '../data/contextFactory.json';
 import allNetworks from './networks.json';
@@ -29,14 +30,14 @@ export const hex4Bytes = (str: string) => {
     .join('');
 };
 
-export const getContractABI = (name: ContractName): string => {
+export const getContractABI = (name: ContractName): AbiItem[] => {
   switch (name) {
     case contractNames.Agreement:
-      return JSON.stringify(agreementABI);
+      return agreementABI as AbiItem[];
     case contractNames.ContextFactory:
-      return JSON.stringify(contextFactoryABI);
+      return contextFactoryABI as AbiItem[];
     default:
-      return '';
+      return [];
   }
 };
 

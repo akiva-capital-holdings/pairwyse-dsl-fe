@@ -14,7 +14,13 @@
       "type": "event"
     },
     {
-      "inputs": [],
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_app",
+          "type": "address"
+        }
+      ],
       "name": "deployContext",
       "outputs": [
         {
