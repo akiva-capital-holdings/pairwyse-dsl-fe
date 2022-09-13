@@ -1,10 +1,9 @@
 import MetaMaskOnboarding from '@metamask/onboarding';
 import { Contract, ethers } from 'ethers';
 import _ from 'lodash';
-import agreementABI from '../data/contract-abi/agreement.json';
-import agreementFactoryABI from '../data/contract-abi/agreementFactory.json';
-import conditionalTxsABI from '../data/contract-abi/conditionalTxs.json';
-import contextFactoryABI from '../data/contract-abi/contextFactory.json';
+import { AbiItem } from 'web3-utils';
+import { abi as agreementABI, bytecode as agreementBytecode } from '../data/agreement.json';
+import { abi as contextFactoryABI } from '../data/contextFactory.json';
 import allNetworks from './networks.json';
 
 const { ethereum }: any = window;
@@ -16,7 +15,6 @@ interface Error {
 
 const contractNames = {
   Agreement: 'Agreement',
-  AgreementFactory: 'AgreementFactory',
   ConditionalTxs: 'ConditionalTxs',
   ContextFactory: 'ContextFactory',
 };
@@ -32,26 +30,24 @@ export const hex4Bytes = (str: string) => {
     .join('');
 };
 
-const getContractABI = (name: ContractName): string => {
+export const getContractABI = (name: ContractName): AbiItem[] => {
   switch (name) {
     case contractNames.Agreement:
-      return agreementABI as unknown as string;
-    case contractNames.AgreementFactory:
-      return agreementFactoryABI as unknown as string;
-    case contractNames.ConditionalTxs:
-      return conditionalTxsABI as unknown as string;
+      return agreementABI as AbiItem[];
     case contractNames.ContextFactory:
-      return contextFactoryABI as unknown as string;
+      return contextFactoryABI as AbiItem[];
     default:
-      return '';
+      return [];
   }
 };
 
-export const createInstance = async (
-  name: ContractName,
-  address: string,
-  provider
-): Promise<Contract> => {
+export const getContractBytecode = (name: ContractName): string => {
+  if (name === contractNames.Agreement) return agreementBytecode;
+  return '';
+};
+
+// TODO: make not `async`
+export const createInstance = (name: ContractName, address: string, provider): Contract => {
   const abi = getContractABI(name);
   return new provider.eth.Contract(abi, address);
 };

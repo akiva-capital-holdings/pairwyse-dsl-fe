@@ -29,7 +29,7 @@ const ExecutionRequest = ({
   const ExecutionSubmit = async () => {
     setLoading(true);
     try {
-      const agreementContract = await createInstance('Agreement', agreement, provider);
+      const agreementContract = createInstance('Agreement', agreement, provider);
       const executeTx = await agreementContract.methods
         .execute(dslId)
         .send({ from: userWallet, value: txValue?.replace(/,/gi, '') });
@@ -39,12 +39,11 @@ const ExecutionRequest = ({
         error: false,
         message: '',
       });
-      setLoading(false);
-    } catch (e) {
-      console.error(e);
-      setExecitionValue({ hash: '', submit: true, error: true, message: e?.message });
-      setLoading(false);
+    } catch (err) {
+      console.error(err);
+      setExecitionValue({ hash: '', submit: true, error: true, message: err?.message });
     }
+    setLoading(false);
   };
 
   return (

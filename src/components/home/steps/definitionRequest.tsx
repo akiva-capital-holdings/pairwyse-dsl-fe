@@ -1,7 +1,11 @@
-import React, {useState} from 'react';
-import { Button, Input, Form, Spin,
-  //  Dropdown, Menu, Space 
-  } from 'antd';
+import React, { useState } from 'react';
+import {
+  Button,
+  Input,
+  Form,
+  Spin,
+  //  Dropdown, Menu, Space
+} from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
@@ -25,28 +29,23 @@ const DefinitionRequest = ({
 }) => {
   const { address: userWallet } = useSelector(selectSession);
   const { provider } = useSelector(selectUtils);
-  const [visible , setVisible] = useState(false)
-  const [activeMenu, setActiveMenu] = useState(undefined)
+  const [visible, setVisible] = useState(false);
+  const [activeMenu, setActiveMenu] = useState(undefined);
   const navigate = useNavigate();
 
   const defineVariable = async () => {
-    
     setLoading(true);
     try {
       const AGREEMENT_ADDR = agreement;
       const DEFINITION = definition;
       const SPETIFICATION = specifications[0].value;
 
-      const a = await createInstance('Agreement', AGREEMENT_ADDR, provider);
-      const txsAddr = await a.methods.txs().call();
-      const txs = await createInstance('ConditionalTxs', txsAddr, provider);
-      const tx = await txs.methods
+      const agreementInstance = createInstance('Agreement', AGREEMENT_ADDR, provider);
+      const tx = await agreementInstance.methods
         .setStorageAddress(hex4Bytes(DEFINITION), SPETIFICATION)
         .send({ from: userWallet });
-      // Check that the variable was set
-      const value = await txs.methods.getStorageAddress(hex4Bytes(DEFINITION)).call();
       setValueDefinitionRequest({
-        value,
+        value: 'definition',
         submit: true,
         transactionHash: tx?.transactionHash,
         error: false,
@@ -65,27 +64,32 @@ const DefinitionRequest = ({
     }
   };
 
- const updateTypeSpetification = (id,  type) => {
-  const update =  specifications?.map((c) => {
-     return c?.id === id ? { ...c, type } : { ...c };
-   })
-   setspecification(update)   
-   setActiveMenu(undefined)
-   setVisible(!visible)
- }
-  
-const menuType = (value) => {
-  return   <div className='menuType'>
-    <button onClick={() => updateTypeSpetification(value.id, 'text' )} type='button'>Address</button>
-    <button onClick={() => updateTypeSpetification(value.id, 'number' )} type='button'>Number</button>
-  </div>
-}
+  const updateTypeSpetification = (id, type) => {
+    const update = specifications?.map((c) => {
+      return c?.id === id ? { ...c, type } : { ...c };
+    });
+    setspecification(update);
+    setActiveMenu(undefined);
+    setVisible(!visible);
+  };
 
+  const menuType = (value) => {
+    return (
+      <div className="menuType">
+        <button onClick={() => updateTypeSpetification(value.id, 'text')} type="button">
+          Address
+        </button>
+        <button onClick={() => updateTypeSpetification(value.id, 'number')} type="button">
+          Number
+        </button>
+      </div>
+    );
+  };
 
-const typeContent = {
-  'text' : 'Address',
-  'number': 'Number'
-}
+  const typeContent = {
+    text: 'Address',
+    number: 'Number',
+  };
   return (
     <div className="definitionRequest">
       <div className="title">Definition Request</div>
@@ -136,36 +140,49 @@ const typeContent = {
                       Specifications
                     </div>
                   )}
-                  <div className='container'> 
-                 <div className='type'>       
-                 <span>Type</span>
-                   <button type='button' className={`btnType ${el?.id === activeMenu ?  'open' : '' }`} onClick={() => {
-                    setActiveMenu(activeMenu === el?.id ? undefined :   el?.id) 
-                    setVisible(!visible)
-                   }}>{typeContent[el?.type]} <div className='icon'/></button>
-                   {visible  && activeMenu === el?.id && menuType(el)}
-                 </div>
-                 <div >
-                  <span>Value</span>
-                   <Item
-                      name={`specification${el.id}`}
-                      validateTrigger="onBlur"
-                      rules={getRule('specification', 'specification', el.value, typeContent[el?.type])}
-                     >
-                      <Input
-                        type={el?.type}
-                        defaultValue={el.value}
-                        onChange={(e) => {
-                          return setspecification(
-                            specifications?.map((c) => {
-                              return c?.id === el?.id ? { ...c, value: e?.target.value } : { ...c };
-                            })
-                          );
+                  <div className="container">
+                    <div className="type">
+                      <span>Type</span>
+                      <button
+                        type="button"
+                        className={`btnType ${el?.id === activeMenu ? 'open' : ''}`}
+                        onClick={() => {
+                          setActiveMenu(activeMenu === el?.id ? undefined : el?.id);
+                          setVisible(!visible);
                         }}
-                        className="lander inputMenuType"
-                      />
-                    </Item>
-                  </div>
+                      >
+                        {typeContent[el?.type]} <div className="icon" />
+                      </button>
+                      {visible && activeMenu === el?.id && menuType(el)}
+                    </div>
+                    <div>
+                      <span>Value</span>
+                      <Item
+                        name={`specification${el.id}`}
+                        validateTrigger="onBlur"
+                        rules={getRule(
+                          'specification',
+                          'specification',
+                          el.value,
+                          typeContent[el?.type]
+                        )}
+                      >
+                        <Input
+                          type={el?.type}
+                          defaultValue={el.value}
+                          onChange={(e) => {
+                            return setspecification(
+                              specifications?.map((c) => {
+                                return c?.id === el?.id
+                                  ? { ...c, value: e?.target.value }
+                                  : { ...c };
+                              })
+                            );
+                          }}
+                          className="lander inputMenuType"
+                        />
+                      </Item>
+                    </div>
                   </div>
                   <Button
                     htmlType="button"
@@ -189,17 +206,17 @@ const typeContent = {
                 htmlType="button"
                 className="add"
                 onClick={() => {
-                   setspecification([
+                  setspecification([
                     ...specifications,
                     {
                       title: `Specification ${specifications?.length}`,
                       value: '',
                       id: uuidv4(),
-                      type: 'text'
+                      type: 'text',
                     },
                   ]);
-                  setActiveMenu(undefined)
-                  setVisible(false)
+                  setActiveMenu(undefined);
+                  setVisible(false);
                 }}
               >
                 Add Specification

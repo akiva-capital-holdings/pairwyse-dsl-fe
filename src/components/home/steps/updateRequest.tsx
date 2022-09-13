@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Form, Input, Spin } from 'antd';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -8,8 +8,8 @@ import { Contract } from 'ethers';
 import { v4 as uuidv4 } from 'uuid';
 import { selectSession } from '../../../redux/sessionReducer';
 import { ReactComponent as Delete } from '../../../images/delete.svg';
-import {ReactComponent as Cloose} from '../../../images/close.svg'
-import getRule, {validationTxValue} from '../../../utils/validate';
+import { ReactComponent as Cloose } from '../../../images/close.svg';
+import getRule, { validationTxValue } from '../../../utils/validate';
 
 const { Item } = Form;
 
@@ -32,7 +32,7 @@ const UpdateRequest = ({
 }) => {
   const { address: userWallet } = useSelector(selectSession);
   const { provider } = useSelector(selectUtils);
-  const [valueRequiredTransactions, setValueRequiredTransactions] = useState('')
+  const [valueRequiredTransactions, setValueRequiredTransactions] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [error, setError] = useState(false);
 
@@ -49,13 +49,14 @@ const UpdateRequest = ({
 
   const addSteps = async (
     agreementContract: Contract,
+    agreementAddr: string,
     contextFactory: Contract,
     steps: TxObject[]
   ) => {
     setLoading(true);
     try {
       for await (const step of steps) {
-        await contextFactory.methods.deployContext().send({ from: userWallet });
+        await contextFactory.methods.deployContext(agreementAddr).send({ from: userWallet });
         let contextsLen = parseInt(
           await contextFactory.methods.getDeployedContextsLen().call(),
           10
@@ -66,7 +67,7 @@ const UpdateRequest = ({
         const conditionsContextAddrs = [];
         for (let j = 0; j < step.conditions.length; j++) {
           const deployCtxTx = await contextFactory.methods
-            .deployContext()
+            .deployContext(agreementAddr)
             .send({ from: userWallet });
           console.log({ deployCtxTx });
           contextsLen = parseInt(await contextFactory.methods.getDeployedContextsLen().call(), 10);
@@ -75,7 +76,7 @@ const UpdateRequest = ({
             .call();
           conditionsContextAddrs.push(conditionContextAddr);
           const agrParseTx = await agreementContract.methods
-            .parse(step.conditions[j], conditionContextAddr)
+            .parse(step.conditions[j], conditionContextAddr, process.env.REACT_APP_PREPROCESSOR)
             .send({ from: userWallet });
           console.log({ agrParseTx });
           console.log(
@@ -86,7 +87,7 @@ const UpdateRequest = ({
         }
 
         await agreementContract.methods
-          .parse(step.transaction, transactionContextAddr)
+          .parse(step.transaction, transactionContextAddr, process.env.REACT_APP_PREPROCESSOR)
           .send({ from: userWallet });
         const agrUpdate = await agreementContract.methods
           .update(
@@ -106,6 +107,7 @@ const UpdateRequest = ({
       setUpdateRequest({ hash, submit: true, error: false, message: '' });
       setLoading(false);
     } catch (e) {
+      console.error({ e });
       setUpdateRequest({ hash: '', submit: true, error: true, message: JSON.parse(e?.message) });
       setLoading(false);
     }
@@ -120,17 +122,15 @@ const UpdateRequest = ({
       const CONDITION = conditions[0].value;
       const TRANSACTION = transaction;
 
-      const agreementContract = await createInstance('Agreement', AGREEMENT_ADDR, provider);
+      const agreementContract = createInstance('Agreement', AGREEMENT_ADDR, provider);
 
-      const contextFactory = await createInstance(
+      const contextFactory = createInstance(
         'ContextFactory',
         process.env.REACT_APP_CONTEXT_FACTORY,
         provider
       );
-      const txsAddr = await agreementContract.methods.txs().call();
-      const ctxdeployedLen = await contextFactory.methods.getDeployedContextsLen().call();
-      const numId = numbers?.map(el => el?.value)
-      await addSteps(agreementContract, contextFactory, [
+      const numId = numbers?.map((el) => el?.value);
+      await addSteps(agreementContract, AGREEMENT_ADDR, contextFactory, [
         {
           txId: DSL_ID,
           requiredTxs: [...numId],
@@ -139,7 +139,7 @@ const UpdateRequest = ({
           transaction: TRANSACTION,
         },
       ]);
-      console.log(txsAddr, ctxdeployedLen);
+      // console.log(txsAddr, ctxdeployedLen);
     } catch (e) {
       console.error(e);
       setUpdateRequest({ hash: '', submit: true, error: true, message: e?.message });
@@ -148,25 +148,24 @@ const UpdateRequest = ({
   };
 
   const addTransaction = () => {
-   if(validationTxValue(valueRequiredTransactions, setError, setErrorMessage, false)) {
-    setNumbers([...numbers, { value: +valueRequiredTransactions,  id: uuidv4()}])
-    setValueRequiredTransactions('')
-   }
-  }
+    if (validationTxValue(valueRequiredTransactions, setError, setErrorMessage, false)) {
+      setNumbers([...numbers, { value: +valueRequiredTransactions, id: uuidv4() }]);
+      setValueRequiredTransactions('');
+    }
+  };
 
   const validateTrasactionId = () => {
-    if(numbers?.length === 0 ) {
-      setErrorMessage('This field is required')
-      setError(true)
+    if (numbers?.length === 0) {
+      setErrorMessage('This field is required');
+      // setError(true); // TODO: enable when we make "Required Transactions" input non-required
     }
-  }
+  };
 
   useEffect(() => {
-    setError(false)
-    setErrorMessage('')
-  }, [valueRequiredTransactions])
+    setError(false);
+    setErrorMessage('');
+  }, [valueRequiredTransactions]);
 
-  
   return (
     <div className="updateRequest">
       <div className="title">Update Request </div>
@@ -221,40 +220,56 @@ const UpdateRequest = ({
             />
           </Item>
           <div style={{ marginTop: '24px' }} className="text">
-          Required Transactions
+            Required Transactions
           </div>
           <Item
             name="requiredTransactions"
             validateTrigger="onChange"
-            className='requiredTransactions'
-            style={{marginBottom: '8px'}}
-            >
-             <Input    
-             className={`lander ${error && 'ant-input-status-error'}`}
+            className="requiredTransactions"
+            style={{ marginBottom: '8px' }}
+          >
+            <Input
+              className={`lander ${error && 'ant-input-status-error'}`}
               onChange={(e) => {
                 return setValueRequiredTransactions(e?.target?.value);
-              }} 
-              value={valueRequiredTransactions}/>
-              <button onClick={() => addTransaction()} className='ant-btn ant-btn-default add btnRequiredTransactions' type='button'>Add ID</button>
-            </Item>
-            {error && <div style={{marginBottom: '8px'}} className="ant-form-item-explain-error">{errorMessage}</div>}
-            <div className='numTransactionCoontainer'>
-             {numbers?.map((el) => {
-              return <div key={el?.id} className='numTransaction'>
-                  <div className='textNum'>{el?.value}</div>
-                   <button   
-                   onClick={() => {
-                    return setNumbers(
-                      numbers.filter((s) => {
-                        return s?.id !== el?.id;
-                      })
-                    );
-                  }} className='btnNum' type='button'>
-                    <Cloose/>
-                  </button>
-               </div>
-             })}
+              }}
+              value={valueRequiredTransactions}
+            />
+            <button
+              onClick={() => addTransaction()}
+              className="ant-btn ant-btn-default add btnRequiredTransactions"
+              type="button"
+            >
+              Add ID
+            </button>
+          </Item>
+          {error && (
+            <div style={{ marginBottom: '8px' }} className="ant-form-item-explain-error">
+              {errorMessage}
             </div>
+          )}
+          <div className="numTransactionCoontainer">
+            {numbers?.map((el) => {
+              return (
+                <div key={el?.id} className="numTransaction">
+                  <div className="textNum">{el?.value}</div>
+                  <button
+                    onClick={() => {
+                      return setNumbers(
+                        numbers.filter((s) => {
+                          return s?.id !== el?.id;
+                        })
+                      );
+                    }}
+                    className="btnNum"
+                    type="button"
+                  >
+                    <Cloose />
+                  </button>
+                </div>
+              );
+            })}
+          </div>
           {signatories.map((el) => {
             return (
               <div className="specificationInput" key={el.id}>
@@ -336,7 +351,7 @@ const UpdateRequest = ({
                     />
                   </Item>
                   <button
-                    type='button'
+                    type="button"
                     onClick={() => {
                       return setConditions(
                         conditions.filter((s) => {
@@ -383,7 +398,13 @@ const UpdateRequest = ({
             </Item>
           </div>
           <div className="btnsContainer">
-            <Button disabled={loading} style={{ height: '48px' }} onClick={validateTrasactionId} htmlType="submit" className="btn">
+            <Button
+              disabled={loading}
+              style={{ height: '48px' }}
+              onClick={validateTrasactionId}
+              htmlType="submit"
+              className="btn"
+            >
               Request Approval
             </Button>
             <Button
