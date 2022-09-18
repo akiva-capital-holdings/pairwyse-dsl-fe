@@ -27,7 +27,7 @@ const DefinitionRequest = ({
   setLoading,
   loading,
 }) => {
-  const { address: userWallet } = useSelector(selectSession);
+  const { address: userWallet, agreementAddress} = useSelector(selectSession);
   const { provider } = useSelector(selectUtils);
   const [visible, setVisible] = useState(false);
   const [activeMenu, setActiveMenu] = useState(undefined);
@@ -107,7 +107,7 @@ const DefinitionRequest = ({
           >
             <Input
               className="lander"
-              defaultValue={agreement}
+              defaultValue={agreementAddress.length>0?agreementAddress:agreement}
               onChange={(e) => {
                 return setAgreement(e?.target?.value);
               }}

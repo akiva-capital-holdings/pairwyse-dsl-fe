@@ -5,12 +5,14 @@ interface ISession {
   address: string;
   network: boolean;
   networkName: string;
+  agreementAddress: string;
 }
 
 const initialState: ISession = {
   address: '',
   network: false,
   networkName: '',
+  agreementAddress:'',
 };
 
 export const sessionReducer = createSlice({
@@ -26,10 +28,13 @@ export const sessionReducer = createSlice({
     changeNetworkName: (state: any, action: PayloadAction<any>) => {
       state.networkName = action.payload;
     },
+    changeAgreementAddress: (state: any, action: PayloadAction<any>) => {
+      state.agreementAddress = action.payload;
+    },
   },
 });
 
-export const { connect, changeNetworkAction, changeNetworkName } = sessionReducer.actions;
+export const { connect, changeNetworkAction, changeNetworkName, changeAgreementAddress} = sessionReducer.actions;
 
 export const selectSession = (state: RootState) => {
   return state.session;

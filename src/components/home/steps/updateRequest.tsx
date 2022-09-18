@@ -30,7 +30,7 @@ const UpdateRequest = ({
   loading,
   dslId,
 }) => {
-  const { address: userWallet } = useSelector(selectSession);
+  const { address: userWallet, agreementAddress} = useSelector(selectSession);
   const { provider } = useSelector(selectUtils);
   const [valueRequiredTransactions, setValueRequiredTransactions] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -213,7 +213,7 @@ const UpdateRequest = ({
           >
             <Input
               className="lander"
-              defaultValue={agreement}
+              defaultValue={agreementAddress.length>0?agreementAddress:agreement}
               onChange={(e) => {
                 return setAgreement(e?.target?.value);
               }}
