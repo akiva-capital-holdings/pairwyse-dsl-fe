@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { notification } from 'antd';
 import { shortenedAddress } from '../../utils/helpers';
 import {
@@ -11,6 +12,7 @@ import {
   titleValueAgrement,
   titleValueExecute,
 } from './initialValue';
+import { selectSession } from '../../redux/sessionReducer';
 import { ReactComponent as Copy } from '../../images/copy.svg';
 import { ReactComponent as CloseIcon } from '../../images/closeIcon.svg';
 import { ReactComponent as Success } from '../../images/successIcon.svg';
@@ -29,6 +31,8 @@ const navSteps = {
 };
 
 const HomePage = () => {
+  
+  const { agreementAddress } = useSelector(selectSession);
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(navSteps.stepOne);
   // agrement request
@@ -56,6 +60,22 @@ const HomePage = () => {
   const [dslIdExecition, setDslIdExecition] = useState('');
   const [txValueExecution, setTxValueExecution] = useState('');
   const [execitionValue, setExecitionValue] = useState(initialExecitionValue);
+
+  useEffect(() => {
+    setValueAgreementRequest({
+      lastAgrAddr: agreementAddress,
+      error: false,
+      hash: '',
+      message: '',
+      submit: false,
+    });
+  }, []);
+
+  useEffect(() => {
+    setAgreementDefinition(valueAgreementRequest.lastAgrAddr);
+    setAgreement(valueAgreementRequest.lastAgrAddr);
+    setAgreementExecition(valueAgreementRequest.lastAgrAddr);
+    }, [valueAgreementRequest])
 
   const reset = () => {
     setspecification(mockDefinitions);

@@ -23,7 +23,7 @@ const AgreementRequest = ({
   value,
   setValueAgreementRequest,
 }) => {
-  const { address: userWallet, agreementAddress} = useSelector(selectSession);
+  const { address: userWallet } = useSelector(selectSession);
   const { provider } = useSelector(selectUtils) as { provider: Web3 };
   const dispatch = useDispatch();
 
@@ -103,16 +103,6 @@ const AgreementRequest = ({
       </Item>
     );
   };
-  useEffect(() => {
-    if (agreementAddress.length > 0) {
-      setValueAgreementRequest({
-              lastAgrAddr: agreementAddress,
-              error: false,
-              hash: '',
-              submit: false,
-      });
-    }
-  },[])
   useEffect(() => {
     if (error) {
       validationAgreementModel(value, setError);
