@@ -2,12 +2,12 @@ import { useEffect } from 'react';
 import Web3 from 'web3';
 import { Form, Button, Menu, Dropdown, Space, Input, Spin } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { getContractABI, getContractBytecode } from 'utils/helpers';
 import getRule, { validationAgreementModel } from '../../../utils/validate';
 import { selectUtils } from '../../../redux/utilsReducer';
-import { selectSession } from '../../../redux/sessionReducer';
+import { selectSession, changeAgreementAddress } from '../../../redux/sessionReducer';
 import './index.css';
 
 const { Item } = Form;
@@ -25,6 +25,7 @@ const AgreementRequest = ({
 }) => {
   const { address: userWallet } = useSelector(selectSession);
   const { provider } = useSelector(selectUtils) as { provider: Web3 };
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
@@ -60,6 +61,7 @@ const AgreementRequest = ({
               hash: transactionHash,
               submit: true,
             });
+            dispatch(changeAgreementAddress(newContractInstance.options.address))
             setLoading(false);
           });
       }

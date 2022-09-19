@@ -230,6 +230,7 @@ const UpdateRequest = ({
           >
             <Input
               className={`lander ${error && 'ant-input-status-error'}`}
+              placeholder="Type transaction number here"
               onChange={(e) => {
                 return setValueRequiredTransactions(e?.target?.value);
               }}
