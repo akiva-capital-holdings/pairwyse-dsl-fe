@@ -61,7 +61,7 @@ const AgreementRequest = ({
               hash: transactionHash,
               submit: true,
             });
-            dispatch(changeAgreementAddress(newContractInstance.options.address))
+            dispatch(changeAgreementAddress(newContractInstance.options.address));
             setLoading(false);
           });
       }
