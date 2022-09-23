@@ -154,6 +154,9 @@
   max-width: 680px;
   flex-wrap: wrap;
 }
+.updateRequest .error {
+  padding-top: 14px;
+}
 .updateRequest .numTransaction{
   display: flex;
   height: 35px;
