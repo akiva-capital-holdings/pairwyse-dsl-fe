@@ -1,4 +1,4 @@
-import { Button, Form, Input, InputNumber, Spin } from 'antd';
+import { Button, Form, Input, Spin } from 'antd';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { createInstance } from 'utils/helpers';
@@ -88,11 +88,12 @@ const ExecutionRequest = ({
             ID
           </div>
           <Item name="dsl-id" validateTrigger="onBlur" rules={getRule('dsl-id', 'dsl-id', dslId)}>
-            <InputNumber
+            <Input
               className="lander"
               defaultValue={dslId}
               onChange={(e) => {
-                return setDslID(e);
+                form.validateFields(['dsl-id'])
+                setDslID(e?.target?.value)
               }}
             />
           </Item>
