@@ -109,8 +109,10 @@ const ExecutionRequest = ({
               onChange={(e) => {
                 form.validateFields(['transaction-value-in-wei'])
                   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                  .then(v =>
-                    form.setFieldValue('transaction-value-in-wei', String(e?.target?.value.replace(/,/gi, '')).replace(/(.)(?=(\d{3})+$)/g, '$1,')))
+                  .then(v => {
+                    const valueАormatting = String(e?.target?.value.replace(/,/gi, '')).replace(/(.)(?=(\d{3})+$)/g, '$1,');
+                    form.setFieldValue('transaction-value-in-wei', valueАormatting)
+                  })
                   // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 setTxValue(e?.target?.value.replace(/[\s.,%]/g, ''))
               }}
