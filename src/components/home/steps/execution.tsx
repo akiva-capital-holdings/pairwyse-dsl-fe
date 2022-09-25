@@ -111,7 +111,9 @@ const ExecutionRequest = ({
                   // eslint-disable-next-line @typescript-eslint/no-unused-vars
                   .then(v => {
                     const valueАormatting = String(e?.target?.value.replace(/,/gi, '')).replace(/(.)(?=(\d{3})+$)/g, '$1,');
-                    form.setFieldValue('transaction-value-in-wei', valueАormatting)
+                    form.setFieldsValue({
+                      'transaction-value-in-wei': valueАormatting,
+                  });
                   })
                   // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 setTxValue(e?.target?.value.replace(/[\s.,%]/g, ''))
