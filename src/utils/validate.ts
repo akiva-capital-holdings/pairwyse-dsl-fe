@@ -10,59 +10,6 @@ export const validationAgreementModel = (value, setError) => {
     setError('This field lander is required');
   }
 };
-export const validationTxValue = (txValue, setError, setErrorMessage, req) => {
-  const fixValue = txValue?.replace(/,/gi, '');
-  const reg = /[a-zA-Zа-яА-Я]+/;
-  if(req) {
-    setError(false);
-    setErrorMessage('');
-    return true;
-  }
-  if(!Number.isInteger(fixValue)) {
-    setError(true);
-    setErrorMessage('Invalid number');
-    return false;
-  }
-  
-  if (fixValue === null || fixValue === undefined || fixValue === '') {
-    setError(true);
-    setErrorMessage('This field is required');
-    return false;
-  }
-  if (+fixValue === 0) {
-    setError(false);
-    setErrorMessage('');
-   return  true
-  }
-  if(!fixValue.match(/\d+/g)) {
-    setError(true);
-    setErrorMessage('Invalid number');
-    return false;
-  }
-  if(fixValue.match(/\d+/g).join().split('').length !== fixValue.length) {
-    setError(true);
-    setErrorMessage('Invalid number');
-    return false;
-  }
-  if (reg.test(fixValue)) {
-    setError(true);
-    setErrorMessage('Invalid number');
-    return false;
-  }
-  if (parseInt(fixValue, 10) < 1) {
-    setError(true);
-    setErrorMessage('Invalid number');
-    return false;
-  }
-  if (BigNumber.from(fixValue).gt(MAX_UINT256)) {
-    setError(true);
-    setErrorMessage('Invalid number');
-   return  false
-  }
-  setError(false);
-  setErrorMessage('');
-  return true
-};
 
 export default function getRule(label: string, name: string, v?: string, type?: string) {
   const defaultRule = {
@@ -193,6 +140,10 @@ export default function getRule(label: string, name: string, v?: string, type?: 
     case 'transaction':
       return [validateSpace];
     case 'dsl-id':
+      return [validateId];
+    case 'requiredTransactions':
+      return [validateId];
+    case 'transaction-value-in-wei':
       return [validateId];
     case 'tx-value':
       return [];

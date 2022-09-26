@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
 import { Button, Form, Input, InputNumber, Spin } from 'antd';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { createInstance } from 'utils/helpers';
 import { selectUtils } from 'redux/utilsReducer';
 import { selectSession } from '../../../redux/sessionReducer';
-import getRule, { validationTxValue } from '../../../utils/validate';
+import getRule from '../../../utils/validate';
 
 const { Item } = Form;
 
@@ -21,9 +20,8 @@ const ExecutionRequest = ({
   dslId,
 }) => {
   const { address: userWallet } = useSelector(selectSession);
-  const [error, setError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
   const { provider } = useSelector(selectUtils);
+  const [form] = Form.useForm();
   const navigate = useNavigate();
 
   const ExecutionSubmit = async () => {
@@ -52,6 +50,7 @@ const ExecutionRequest = ({
       <Spin spinning={loading}>
         <Form
           name="agreementRequestForm"
+          form = {form}
           autoComplete="off"
           onFinish={() => {
             return ExecutionSubmit();
@@ -100,17 +99,27 @@ const ExecutionRequest = ({
           <div style={{ marginTop: '24px' }} className="text">
             Transaction Value (in Wei)
           </div>
-          <input
-            onBlur={() => {
-              return validationTxValue(txValue, setError, setErrorMessage, true);
-            }}
-            className={`ant-input lander ${error && 'ant-input-status-error'}`}
-            onChange={(e) => {
-              return setTxValue(e.target.value);
-            }}
-            value={String(txValue?.replace(/,/gi, '')).replace(/(.)(?=(\d{3})+$)/g, '$1,')}
-          ></input>
-          {error && <div className="ant-form-item-explain-error">{errorMessage}</div>}
+          <Item
+            name="transaction-value-in-wei"
+            validateTrigger="onChange"
+            rules={getRule('transaction-value-in-wei', 'transaction-value-in-wei', txValue)}
+          >
+            <Input
+              className={'ant-input lander'}
+              onChange={(e) => {
+                form.validateFields(['transaction-value-in-wei'])
+                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                  .then(v => {
+                    const valueАormatting = String(e?.target?.value.replace(/,/gi, '')).replace(/(.)(?=(\d{3})+$)/g, '$1,');
+                    form.setFieldsValue({
+                      'transaction-value-in-wei': valueАormatting,
+                  });
+                  })
+                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                setTxValue(e?.target?.value.replace(/[\s.,%]/g, ''))
+              }}
+          />
+          </Item>
           <div className="btnsContainer">
             <Button disabled={loading} style={{ height: '48px' }} htmlType="submit" className="btn">
               Execute

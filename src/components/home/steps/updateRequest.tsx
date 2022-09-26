@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Button, Form, Input, Spin } from 'antd';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -9,7 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { selectSession } from '../../../redux/sessionReducer';
 import { ReactComponent as Delete } from '../../../images/delete.svg';
 import { ReactComponent as Cloose } from '../../../images/close.svg';
-import getRule, { validationTxValue } from '../../../utils/validate';
+import getRule from '../../../utils/validate';
 
 const { Item } = Form;
 
@@ -33,8 +33,8 @@ const UpdateRequest = ({
   const { address: userWallet } = useSelector(selectSession);
   const { provider } = useSelector(selectUtils);
   const [valueRequiredTransactions, setValueRequiredTransactions] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
-  const [error, setError] = useState(false);
+  const [errorRequiredTransactions, setErrorRequiredTransactions] = useState(false);
+  const [form] = Form.useForm();
 
   const navigate = useNavigate();
   let hash = '';
@@ -80,8 +80,7 @@ const UpdateRequest = ({
             .send({ from: userWallet });
           console.log({ agrParseTx });
           console.log(
-            `\n\taddress: \x1b[35m${conditionContextAddr}\x1b[0m\n\tcondition ${
-              j + 1
+            `\n\taddress: \x1b[35m${conditionContextAddr}\x1b[0m\n\tcondition ${j + 1
             }:\n\t\x1b[33m${step.conditions[j]}\x1b[0m`
           );
         }
@@ -148,24 +147,22 @@ const UpdateRequest = ({
   };
 
   const addTransaction = () => {
-    if (validationTxValue(valueRequiredTransactions, setError, setErrorMessage, false)) {
-      setNumbers([...numbers, { value: +valueRequiredTransactions, id: uuidv4() }]);
-      setValueRequiredTransactions('');
-    }
+    setErrorRequiredTransactions(false);
+    form.validateFields(['requiredTransactions'])
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      .then(v =>setNumbers([...numbers, { value: +valueRequiredTransactions, id: uuidv4() }]))
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      .catch(err => setErrorRequiredTransactions(true));
   };
 
   const validateTrasactionId = () => {
     if (numbers?.length === 0) {
-      setErrorMessage('This field is required');
+      setErrorRequiredTransactions(true)
       // setError(true); // TODO: enable when we make "Required Transactions" input non-required
+    } else {
+      setValueRequiredTransactions(numbers[numbers.length-1].value)
     }
   };
-
-  useEffect(() => {
-    setError(false);
-    setErrorMessage('');
-  }, [valueRequiredTransactions]);
-
   return (
     <div className="updateRequest">
       <div className="title">Update Request </div>
@@ -173,6 +170,7 @@ const UpdateRequest = ({
         <Form
           name="agreementRequestForm"
           autoComplete="off"
+          form = {form}
           onFinish={() => {
             return updateAgreement();
           }}
@@ -226,13 +224,23 @@ const UpdateRequest = ({
             name="requiredTransactions"
             validateTrigger="onChange"
             className="requiredTransactions"
+            rules={getRule('requiredTransactions', 'requiredTransactions', valueRequiredTransactions)}
             style={{ marginBottom: '8px' }}
           >
             <Input
-              className={`lander ${error && 'ant-input-status-error'}`}
+              className={'lander'}
               placeholder="Type transaction number here"
               onChange={(e) => {
-                return setValueRequiredTransactions(e?.target?.value);
+                if (numbers?.length !== 0 && e?.target?.value === '') {
+                  setValueRequiredTransactions(e?.target?.value)
+                } else {
+                  form.validateFields(['requiredTransactions'])
+                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                 .then(v => setErrorRequiredTransactions(false))
+                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                  .catch(err => setErrorRequiredTransactions(true));
+                  setValueRequiredTransactions(e?.target?.value)
+                }
               }}
               value={valueRequiredTransactions}
             />
@@ -244,12 +252,8 @@ const UpdateRequest = ({
               Add ID
             </button>
           </Item>
-          {error && (
-            <div style={{ marginBottom: '8px' }} className="ant-form-item-explain-error">
-              {errorMessage}
-            </div>
-          )}
-          <div className="numTransactionCoontainer">
+          <div className={errorRequiredTransactions ? 'numTransactionCoontainer error' :
+            'numTransactionCoontainer'}>
             {numbers?.map((el) => {
               return (
                 <div key={el?.id} className="numTransaction">
