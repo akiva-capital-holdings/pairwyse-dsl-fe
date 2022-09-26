@@ -10,6 +10,8 @@ import { selectUtils } from '../../../redux/utilsReducer';
 import { selectSession, changeAgreementAddress } from '../../../redux/sessionReducer';
 import './index.css';
 
+// TODO: in all project `"lander" -> "lender"`
+
 const { Item } = Form;
 
 const AgreementRequest = ({
