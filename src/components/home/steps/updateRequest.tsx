@@ -224,7 +224,8 @@ const UpdateRequest = ({
             name="requiredTransactions"
             validateTrigger="onChange"
             className="requiredTransactions"
-            rules={getRule('requiredTransactions', 'requiredTransactions', valueRequiredTransactions)}
+            rules={numbers?.length === 0 && valueRequiredTransactions === '' ?getRule('requiredTransactions', 'tx-value', valueRequiredTransactions): getRule(
+          'requiredTransactions', 'requiredTransactions', valueRequiredTransactions)}
             style={{ marginBottom: '8px' }}
           >
             <Input
