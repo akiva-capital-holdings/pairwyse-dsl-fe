@@ -20,7 +20,7 @@ export default function getRule(label: string, name: string, v?: string, type?: 
   const validateId = () => {
     return {
       validator: () => {
-        if(!Number.isInteger(+v)) {
+        if (!Number.isInteger(+v)) {
           return Promise.reject(new Error('Invalid number'));
         }
         if (v === null || v === undefined || v === '') {
@@ -59,9 +59,10 @@ export default function getRule(label: string, name: string, v?: string, type?: 
     return {
       validator: () => {
         if (!v) return Promise.resolve();
-        if (BigNumber.from(fixValue).gt(MAX_UINT256))  return  Promise.reject(new Error('Invalid number'))
-        if(parseInt(fixValue, 10) < 1){
-          return Promise.reject(new Error('Invalid number'))
+        if (BigNumber.from(fixValue).gt(MAX_UINT256))
+          return Promise.reject(new Error('Invalid number'));
+        if (parseInt(fixValue, 10) < 1) {
+          return Promise.reject(new Error('Invalid number'));
         }
         if (simbols.test(v)) return Promise.resolve();
         return Promise.reject(new Error('This field is required'));
@@ -131,8 +132,8 @@ export default function getRule(label: string, name: string, v?: string, type?: 
     case 'definition':
       return [validateSpace];
     case 'specification':
-      if(type === 'Address') return [validateAddressEth, validateAddress, validateSpace];
-      return [validateField,  validateSpace];
+      if (type === 'Address') return [validateAddressEth, validateAddress, validateSpace];
+      return [validateField, validateSpace];
     case 'condition':
       return [validateFieldCondition, validation, validateSpace];
     case 'signatories':

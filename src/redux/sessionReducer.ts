@@ -12,7 +12,7 @@ const initialState: ISession = {
   address: '',
   network: false,
   networkName: '',
-  agreementAddress:'',
+  agreementAddress: '',
 };
 
 export const sessionReducer = createSlice({
@@ -34,7 +34,8 @@ export const sessionReducer = createSlice({
   },
 });
 
-export const { connect, changeNetworkAction, changeNetworkName, changeAgreementAddress} = sessionReducer.actions;
+export const { connect, changeNetworkAction, changeNetworkName, changeAgreementAddress } =
+  sessionReducer.actions;
 
 export const selectSession = (state: RootState) => {
   return state.session;
