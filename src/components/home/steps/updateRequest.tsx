@@ -80,7 +80,8 @@ const UpdateRequest = ({
             .send({ from: userWallet });
           console.log({ agrParseTx });
           console.log(
-            `\n\taddress: \x1b[35m${conditionContextAddr}\x1b[0m\n\tcondition ${j + 1
+            `\n\taddress: \x1b[35m${conditionContextAddr}\x1b[0m\n\tcondition ${
+              j + 1
             }:\n\t\x1b[33m${step.conditions[j]}\x1b[0m`
           );
         }
@@ -148,19 +149,19 @@ const UpdateRequest = ({
 
   const addTransaction = () => {
     setErrorRequiredTransactions(false);
-    form.validateFields(['requiredTransactions'])
+    form
+      .validateFields(['requiredTransactions'])
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      .then(v =>setNumbers([...numbers, { value: +valueRequiredTransactions, id: uuidv4() }]))
+      .then((v) => setNumbers([...numbers, { value: +valueRequiredTransactions, id: uuidv4() }]))
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      .catch(err => setErrorRequiredTransactions(true));
+      .catch((err) => setErrorRequiredTransactions(true));
   };
 
   const validateTrasactionId = () => {
     if (numbers?.length === 0) {
-      setErrorRequiredTransactions(true)
-      // setError(true); // TODO: enable when we make "Required Transactions" input non-required
+      setErrorRequiredTransactions(true);
     } else {
-      setValueRequiredTransactions(numbers[numbers.length-1].value)
+      setValueRequiredTransactions(numbers[numbers.length - 1].value);
     }
   };
   return (
@@ -170,7 +171,7 @@ const UpdateRequest = ({
         <Form
           name="agreementRequestForm"
           autoComplete="off"
-          form = {form}
+          form={form}
           onFinish={() => {
             return updateAgreement();
           }}
@@ -224,8 +225,11 @@ const UpdateRequest = ({
             name="requiredTransactions"
             validateTrigger="onChange"
             className="requiredTransactions"
-            rules={numbers?.length === 0 && valueRequiredTransactions === '' ?getRule('requiredTransactions', 'tx-value', valueRequiredTransactions): getRule(
-          'requiredTransactions', 'requiredTransactions', valueRequiredTransactions)}
+            rules={
+              numbers?.length === 0 && valueRequiredTransactions === ''
+                ? getRule('requiredTransactions', 'tx-value', valueRequiredTransactions)
+                : getRule('requiredTransactions', 'requiredTransactions', valueRequiredTransactions)
+            }
             style={{ marginBottom: '8px' }}
           >
             <Input
@@ -233,14 +237,15 @@ const UpdateRequest = ({
               placeholder="Type transaction number here"
               onChange={(e) => {
                 if (numbers?.length !== 0 && e?.target?.value === '') {
-                  setValueRequiredTransactions(e?.target?.value)
+                  setValueRequiredTransactions(e?.target?.value);
                 } else {
-                  form.validateFields(['requiredTransactions'])
-                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                 .then(v => setErrorRequiredTransactions(false))
-                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                  .catch(err => setErrorRequiredTransactions(true));
-                  setValueRequiredTransactions(e?.target?.value)
+                  form
+                    .validateFields(['requiredTransactions'])
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                    .then((v) => setErrorRequiredTransactions(false))
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                    .catch((err) => setErrorRequiredTransactions(true));
+                  setValueRequiredTransactions(e?.target?.value);
                 }
               }}
               value={valueRequiredTransactions}
@@ -253,8 +258,13 @@ const UpdateRequest = ({
               Add ID
             </button>
           </Item>
-          <div className={errorRequiredTransactions ? 'numTransactionCoontainer error' :
-            'numTransactionCoontainer'}>
+          <div
+            className={
+              errorRequiredTransactions
+                ? 'numTransactionCoontainer error'
+                : 'numTransactionCoontainer'
+            }
+          >
             {numbers?.map((el) => {
               return (
                 <div key={el?.id} className="numTransaction">

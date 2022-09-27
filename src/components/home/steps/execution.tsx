@@ -50,7 +50,7 @@ const ExecutionRequest = ({
       <Spin spinning={loading}>
         <Form
           name="agreementRequestForm"
-          form = {form}
+          form={form}
           autoComplete="off"
           onFinish={() => {
             return ExecutionSubmit();
@@ -92,8 +92,8 @@ const ExecutionRequest = ({
               className="lander"
               defaultValue={dslId}
               onChange={(e) => {
-                form.validateFields(['dsl-id'])
-                setDslID(e?.target?.value)
+                form.validateFields(['dsl-id']);
+                setDslID(e?.target?.value);
               }}
             />
           </Item>
@@ -108,18 +108,22 @@ const ExecutionRequest = ({
             <Input
               className={'ant-input lander'}
               onChange={(e) => {
-                form.validateFields(['transaction-value-in-wei'])
+                form
+                  .validateFields(['transaction-value-in-wei'])
                   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                  .then(v => {
-                    const valueАormatting = String(e?.target?.value.replace(/,/gi, '')).replace(/(.)(?=(\d{3})+$)/g, '$1,');
+                  .then((v) => {
+                    const valueАormatting = String(e?.target?.value.replace(/,/gi, '')).replace(
+                      /(.)(?=(\d{3})+$)/g,
+                      '$1,'
+                    );
                     form.setFieldsValue({
                       'transaction-value-in-wei': valueАormatting,
+                    });
                   });
-                  })
-                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                setTxValue(e?.target?.value.replace(/[\s.,%]/g, ''))
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                setTxValue(e?.target?.value.replace(/[\s.,%]/g, ''));
               }}
-          />
+            />
           </Item>
           <div className="btnsContainer">
             <Button disabled={loading} style={{ height: '48px' }} htmlType="submit" className="btn">

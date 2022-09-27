@@ -46,7 +46,6 @@ export const getContractBytecode = (name: ContractName): string => {
   return '';
 };
 
-// TODO: make not `async`
 export const createInstance = (name: ContractName, address: string, provider): Contract => {
   const abi = getContractABI(name);
   return new provider.eth.Contract(abi, address);
