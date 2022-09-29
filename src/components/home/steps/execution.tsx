@@ -1,4 +1,6 @@
-import { Button, Form, Input, Spin } from 'antd';
+import { Button, Form, Menu, Dropdown, Space, Input, Spin } from 'antd';
+import { DownOutlined } from '@ant-design/icons';
+import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { createInstance } from 'utils/helpers';
@@ -21,13 +23,13 @@ const ExecutionRequest = ({
 }) => {
   const { address: userWallet } = useSelector(selectSession);
   const { provider } = useSelector(selectUtils);
+  const [ recordIds, setrecordIds] = useState([]);
   const [form] = Form.useForm();
   const navigate = useNavigate();
-
+  const agreementContract = createInstance('Agreement', agreement, provider);
   const ExecutionSubmit = async () => {
     setLoading(true);
     try {
-      const agreementContract = createInstance('Agreement', agreement, provider);
       const executeTx = await agreementContract.methods
         .execute(dslId)
         .send({ from: userWallet, value: txValue?.replace(/,/gi, '') });
@@ -43,6 +45,53 @@ const ExecutionRequest = ({
     }
     setLoading(false);
   };
+
+  const GetActiveRecordIds = async () => {
+    try {
+      const array = await agreementContract.methods
+        .getActiveRecords()
+        .call();
+      setrecordIds(array);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const menu = (
+    <Menu className="menu">
+      {recordIds.map((v, i) => {
+       return <Menu.Item key={i}>
+        <button
+          onClick={() => {
+            return setDslID(v);
+          }}
+          type="button"
+        >
+          {v}
+        </button>
+      </Menu.Item>
+     })}
+      <Menu.Divider />
+    </Menu>
+  );
+
+  const dropDown = () => {
+    return (
+      <Item name="agreementModel">
+        <Dropdown className="dropdown" overlay={menu}>
+          <Button>
+            <Space>
+              {dslId}
+              <DownOutlined className="iconDropDown" />
+            </Space>
+          </Button>
+        </Dropdown>
+      </Item>
+    );
+  };
+  useEffect(() => {
+    GetActiveRecordIds();
+  }, []);
 
   return (
     <div className="updateRequest">
@@ -87,16 +136,7 @@ const ExecutionRequest = ({
           <div style={{ marginTop: '24px' }} className="text">
             ID
           </div>
-          <Item name="dsl-id" validateTrigger="onBlur" rules={getRule('dsl-id', 'dsl-id', dslId)}>
-            <Input
-              className="lander"
-              defaultValue={dslId}
-              onChange={(e) => {
-                form.validateFields(['dsl-id']);
-                setDslID(e?.target?.value);
-              }}
-            />
-          </Item>
+          {dropDown()}
           <div style={{ marginTop: '24px' }} className="text">
             Transaction Value (in Wei)
           </div>
@@ -110,8 +150,7 @@ const ExecutionRequest = ({
               onChange={(e) => {
                 form
                   .validateFields(['transaction-value-in-wei'])
-                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                  .then((v) => {
+                  .then(() => {
                     const valueАormatting = String(e?.target?.value.replace(/,/gi, '')).replace(
                       /(.)(?=(\d{3})+$)/g,
                       '$1,'
@@ -126,7 +165,7 @@ const ExecutionRequest = ({
             />
           </Item>
           <div className="btnsContainer">
-            <Button disabled={loading} style={{ height: '48px' }} htmlType="submit" className="btn">
+            <Button disabled={recordIds.length===0} style={{ height: '48px' }} htmlType="submit" className="btn">
               Execute
             </Button>
             <Button
