@@ -42,7 +42,10 @@ const AgreementRequest = ({
         agreementInstance
           .deploy({
             data: getContractBytecode('Agreement'),
-            arguments: [process.env.REACT_APP_PARSER],
+            arguments: [
+              process.env.REACT_APP_PARSER,
+              userWallet, // msg.sender would be the simulation of multisig wallet
+            ],
           })
           .send({ from: userWallet })
           .on('error', (err) => {

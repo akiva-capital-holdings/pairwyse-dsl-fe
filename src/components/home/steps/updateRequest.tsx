@@ -66,19 +66,15 @@ const UpdateRequest = ({
           .call();
         const conditionsContextAddrs = [];
         for (let j = 0; j < step.conditions.length; j++) {
-          const deployCtxTx = await contextFactory.methods
-            .deployContext(agreementAddr)
-            .send({ from: userWallet });
-          console.log({ deployCtxTx });
+          await contextFactory.methods.deployContext(agreementAddr).send({ from: userWallet });
           contextsLen = parseInt(await contextFactory.methods.getDeployedContextsLen().call(), 10);
           const conditionContextAddr = await contextFactory.methods
             .deployedContexts(contextsLen - 1)
             .call();
           conditionsContextAddrs.push(conditionContextAddr);
-          const agrParseTx = await agreementContract.methods
+          await agreementContract.methods
             .parse(step.conditions[j], conditionContextAddr, process.env.REACT_APP_PREPROCESSOR)
             .send({ from: userWallet });
-          console.log({ agrParseTx });
           console.log(
             `\n\taddress: \x1b[35m${conditionContextAddr}\x1b[0m\n\tcondition ${
               j + 1
@@ -86,6 +82,11 @@ const UpdateRequest = ({
           );
         }
 
+        console.log({
+          tx: step.transaction,
+          transactionContextAddr,
+          preprocessor: process.env.REACT_APP_PREPROCESSOR,
+        });
         await agreementContract.methods
           .parse(step.transaction, transactionContextAddr, process.env.REACT_APP_PREPROCESSOR)
           .send({ from: userWallet });

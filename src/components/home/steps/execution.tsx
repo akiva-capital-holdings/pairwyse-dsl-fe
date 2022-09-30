@@ -23,7 +23,7 @@ const ExecutionRequest = ({
 }) => {
   const { address: userWallet } = useSelector(selectSession);
   const { provider } = useSelector(selectUtils);
-  const [ recordIds, setrecordIds] = useState([]);
+  const [recordIds, setrecordIds] = useState([]);
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const agreementContract = createInstance('Agreement', agreement, provider);
@@ -48,9 +48,7 @@ const ExecutionRequest = ({
 
   const GetActiveRecordIds = async () => {
     try {
-      const array = await agreementContract.methods
-        .getActiveRecords()
-        .call();
+      const array = await agreementContract.methods.getActiveRecords().call();
       setrecordIds(array);
     } catch (err) {
       console.error(err);
@@ -60,18 +58,20 @@ const ExecutionRequest = ({
   const menu = (
     <Menu className="menu">
       {recordIds.map((v, i) => {
-       return <Menu.Item key={i}>
-        <button
-          onClick={() => {
-            return setDslID(v);
-          }}
+        return (
+          <Menu.Item key={i}>
+            <button
+              onClick={() => {
+                return setDslID(v);
+              }}
               type="button"
               className="dropdownButton"
-        >
-          {v}
-        </button>
-      </Menu.Item>
-     })}
+            >
+              {v}
+            </button>
+          </Menu.Item>
+        );
+      })}
       <Menu.Divider />
     </Menu>
   );
@@ -79,7 +79,9 @@ const ExecutionRequest = ({
   const dropDown = () => {
     return (
       <Item name="agreementModel">
-        {recordIds.length === 0 ? <div className="lander">You have not created any record</div> :
+        {recordIds.length === 0 ? (
+          <div className="lander">There is no active records in the Agreement</div>
+        ) : (
           <Dropdown className="dropdown" overlay={menu}>
             <Button>
               <Space>
@@ -87,7 +89,8 @@ const ExecutionRequest = ({
                 <DownOutlined className="iconDropDown" />
               </Space>
             </Button>
-          </Dropdown>}
+          </Dropdown>
+        )}
       </Item>
     );
   };
@@ -145,29 +148,36 @@ const ExecutionRequest = ({
           <Item
             name="transaction-value-in-wei"
             validateTrigger="onChange"
-            rules={getRule('transaction-value-in-wei', 'transaction-value-in-wei', txValue)}
+            rules={
+              txValue?.length === 0
+                ? getRule('transaction-value-in-wei', 'tx-value', txValue)
+                : getRule('transaction-value-in-wei', 'transaction-value-in-wei', txValue)
+            }
           >
             <Input
               className={'ant-input lander'}
               onChange={(e) => {
-                form
-                  .validateFields(['transaction-value-in-wei'])
-                  .then(() => {
-                    const valueАormatting = String(e?.target?.value.replace(/,/gi, '')).replace(
-                      /(.)(?=(\d{3})+$)/g,
-                      '$1,'
-                    );
-                    form.setFieldsValue({
-                      'transaction-value-in-wei': valueАormatting,
-                    });
+                form.validateFields(['transaction-value-in-wei']).then(() => {
+                  const valueАormatting = String(e?.target?.value.replace(/,/gi, '')).replace(
+                    /(.)(?=(\d{3})+$)/g,
+                    '$1,'
+                  );
+                  form.setFieldsValue({
+                    'transaction-value-in-wei': valueАormatting,
                   });
+                });
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 setTxValue(e?.target?.value.replace(/[\s.,%]/g, ''));
               }}
             />
           </Item>
           <div className="btnsContainer">
-            <Button disabled={recordIds.length===0} style={{ height: '48px' }} htmlType="submit" className="btn">
+            <Button
+              disabled={recordIds.length === 0}
+              style={{ height: '48px' }}
+              htmlType="submit"
+              className="btn"
+            >
               Execute
             </Button>
             <Button
