@@ -65,7 +65,8 @@ const ExecutionRequest = ({
           onClick={() => {
             return setDslID(v);
           }}
-          type="button"
+              type="button"
+              className="dropdownButton"
         >
           {v}
         </button>
@@ -78,14 +79,15 @@ const ExecutionRequest = ({
   const dropDown = () => {
     return (
       <Item name="agreementModel">
-        <Dropdown className="dropdown" overlay={menu}>
-          <Button>
-            <Space>
-              {dslId}
-              <DownOutlined className="iconDropDown" />
-            </Space>
-          </Button>
-        </Dropdown>
+        {recordIds.length === 0 ? <div className="lander">You have not created any record</div> :
+          <Dropdown className="dropdown" overlay={menu}>
+            <Button>
+              <Space>
+                {dslId}
+                <DownOutlined className="iconDropDown" />
+              </Space>
+            </Button>
+          </Dropdown>}
       </Item>
     );
   };
