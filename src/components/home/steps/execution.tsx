@@ -1,4 +1,4 @@
-import { Button, Form, Menu, Dropdown, Space, Input, Spin } from 'antd';
+import { Button, Form, Menu, Dropdown, Input, Spin } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
@@ -83,11 +83,13 @@ const ExecutionRequest = ({
           <div className="lander">There is no active records in the Agreement</div>
         ) : (
           <Dropdown className="dropdown" overlay={menu}>
-            <Button>
-              <Space>
-                {dslId}
+              <Button>
+                <Input
+                  className="lander"
+                  placeholder='Select Record ID to execute'
+                  value={dslId}
+                />
                 <DownOutlined className="iconDropDown" />
-              </Space>
             </Button>
           </Dropdown>
         )}
@@ -173,7 +175,7 @@ const ExecutionRequest = ({
           </Item>
           <div className="btnsContainer">
             <Button
-              disabled={recordIds.length === 0}
+              disabled={dslId ===''}
               style={{ height: '48px' }}
               htmlType="submit"
               className="btn"
