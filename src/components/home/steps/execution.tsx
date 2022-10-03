@@ -1,4 +1,6 @@
-import { Button, Form, Input, Spin } from 'antd';
+import { Button, Form, Menu, Dropdown, Input, Spin } from 'antd';
+import { DownOutlined } from '@ant-design/icons';
+import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { createInstance } from 'utils/helpers';
@@ -21,13 +23,13 @@ const ExecutionRequest = ({
 }) => {
   const { address: userWallet } = useSelector(selectSession);
   const { provider } = useSelector(selectUtils);
+  const [recordIds, setrecordIds] = useState([]);
   const [form] = Form.useForm();
   const navigate = useNavigate();
-
+  const agreementContract = createInstance('Agreement', agreement, provider);
   const ExecutionSubmit = async () => {
     setLoading(true);
     try {
-      const agreementContract = createInstance('Agreement', agreement, provider);
       const executeTx = await agreementContract.methods
         .execute(dslId)
         .send({ from: userWallet, value: txValue?.replace(/,/gi, '') });
@@ -43,6 +45,56 @@ const ExecutionRequest = ({
     }
     setLoading(false);
   };
+
+  const GetActiveRecordIds = async () => {
+    try {
+      const array = await agreementContract.methods.getActiveRecords().call();
+      setrecordIds(array);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const menu = (
+    <Menu className="menu">
+      {recordIds.map((v, i) => {
+        return (
+          <Menu.Item key={i}>
+            <button
+              onClick={() => {
+                return setDslID(v);
+              }}
+              type="button"
+              className="dropdownButton"
+            >
+              {v}
+            </button>
+          </Menu.Item>
+        );
+      })}
+      <Menu.Divider />
+    </Menu>
+  );
+
+  const dropDown = () => {
+    return (
+      <Item name="agreementModel">
+        {recordIds.length === 0 ? (
+          <div className="lander">There is no active records in the Agreement</div>
+        ) : (
+          <Dropdown className="dropdown" overlay={menu}>
+            <Button>
+              <Input className="lander" placeholder="Select Record ID to execute" value={dslId} />
+              <DownOutlined className="iconDropDown" />
+            </Button>
+          </Dropdown>
+        )}
+      </Item>
+    );
+  };
+  useEffect(() => {
+    GetActiveRecordIds();
+  }, []);
 
   return (
     <div className="updateRequest">
@@ -87,46 +139,43 @@ const ExecutionRequest = ({
           <div style={{ marginTop: '24px' }} className="text">
             ID
           </div>
-          <Item name="dsl-id" validateTrigger="onBlur" rules={getRule('dsl-id', 'dsl-id', dslId)}>
-            <Input
-              className="lander"
-              defaultValue={dslId}
-              onChange={(e) => {
-                form.validateFields(['dsl-id']);
-                setDslID(e?.target?.value);
-              }}
-            />
-          </Item>
+          {dropDown()}
           <div style={{ marginTop: '24px' }} className="text">
             Transaction Value (in Wei)
           </div>
           <Item
             name="transaction-value-in-wei"
             validateTrigger="onChange"
-            rules={getRule('transaction-value-in-wei', 'transaction-value-in-wei', txValue)}
+            rules={
+              txValue?.length === 0
+                ? getRule('transaction-value-in-wei', 'tx-value', txValue)
+                : getRule('transaction-value-in-wei', 'transaction-value-in-wei', txValue)
+            }
           >
             <Input
               className={'ant-input lander'}
               onChange={(e) => {
-                form
-                  .validateFields(['transaction-value-in-wei'])
-                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                  .then((v) => {
-                    const valueАormatting = String(e?.target?.value.replace(/,/gi, '')).replace(
-                      /(.)(?=(\d{3})+$)/g,
-                      '$1,'
-                    );
-                    form.setFieldsValue({
-                      'transaction-value-in-wei': valueАormatting,
-                    });
+                form.validateFields(['transaction-value-in-wei']).then(() => {
+                  const valueFormatting = String(e?.target?.value.replace(/,/gi, '')).replace(
+                    /(.)(?=(\d{3})+$)/g,
+                    '$1,'
+                  );
+                  form.setFieldsValue({
+                    'transaction-value-in-wei': valueFormatting,
                   });
+                });
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 setTxValue(e?.target?.value.replace(/[\s.,%]/g, ''));
               }}
             />
           </Item>
           <div className="btnsContainer">
-            <Button disabled={loading} style={{ height: '48px' }} htmlType="submit" className="btn">
+            <Button
+              disabled={dslId === ''}
+              style={{ height: '48px' }}
+              htmlType="submit"
+              className="btn"
+            >
               Execute
             </Button>
             <Button
