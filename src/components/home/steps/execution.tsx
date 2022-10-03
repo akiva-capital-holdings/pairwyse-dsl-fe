@@ -83,13 +83,9 @@ const ExecutionRequest = ({
           <div className="lander">There is no active records in the Agreement</div>
         ) : (
           <Dropdown className="dropdown" overlay={menu}>
-              <Button>
-                <Input
-                  className="lander"
-                  placeholder='Select Record ID to execute'
-                  value={dslId}
-                />
-                <DownOutlined className="iconDropDown" />
+            <Button>
+              <Input className="lander" placeholder="Select Record ID to execute" value={dslId} />
+              <DownOutlined className="iconDropDown" />
             </Button>
           </Dropdown>
         )}
@@ -160,12 +156,12 @@ const ExecutionRequest = ({
               className={'ant-input lander'}
               onChange={(e) => {
                 form.validateFields(['transaction-value-in-wei']).then(() => {
-                  const valueАormatting = String(e?.target?.value.replace(/,/gi, '')).replace(
+                  const valueFormatting = String(e?.target?.value.replace(/,/gi, '')).replace(
                     /(.)(?=(\d{3})+$)/g,
                     '$1,'
                   );
                   form.setFieldsValue({
-                    'transaction-value-in-wei': valueАormatting,
+                    'transaction-value-in-wei': valueFormatting,
                   });
                 });
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -175,7 +171,7 @@ const ExecutionRequest = ({
           </Item>
           <div className="btnsContainer">
             <Button
-              disabled={dslId ===''}
+              disabled={dslId === ''}
               style={{ height: '48px' }}
               htmlType="submit"
               className="btn"
