@@ -1,11 +1,13 @@
 .agreementRequest,
 .definitionRequest,
-.updateRequest{
+.updateRequest,
+.executeRequest{
   margin-top: 60px;
 }
 .agreementRequest .title,
 .definitionRequest .title,
-.updateRequest .title {
+.updateRequest .title,
+.executeRequest .title {
   font-family: var(--font_family_bold);
   font-style: normal;
   font-weight: var(--font_weight_bolder);
@@ -15,7 +17,8 @@
 }
 .agreementRequest .text,
 .definitionRequest .text,
-.updateRequest .text {
+.updateRequest .text,
+.executeRequest .text {
   font-family: var(--font_family);
   font-style: normal;
   font-weight: 500;
@@ -26,7 +29,8 @@
 }
 .agreementRequest .lander ,
 .definitionRequest .lander,
-.updateRequest .lander{
+.updateRequest .lander,
+.executeRequest .lander{
   background: var(--background_color);
   border-radius: 8px;
   max-width: 680px;
@@ -129,7 +133,8 @@
   border: none
 }
 .definitionRequest .btnsContainer,
-.updateRequest  .btnsContainer {
+.updateRequest  .btnsContainer,
+.executeRequest .btnsContainer {
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -149,7 +154,8 @@
   position: absolute;
   top: -8%;
 }
-.updateRequest .numTransactionCoontainer{
+.updateRequest .numTransactionCoontainer,
+.executeRequest .numTransactionCoontainer{
   display: flex;
   max-width: 680px;
   flex-wrap: wrap;
@@ -157,7 +163,8 @@
 .updateRequest .error {
   padding-top: 14px;
 }
-.updateRequest .numTransaction{
+.updateRequest .numTransaction,
+.executeRequest .numTransaction{
   display: flex;
   height: 35px;
   background: #120023;
@@ -167,7 +174,8 @@
   margin-right: 8px;
   margin-bottom: 8px;
 }
-.updateRequest .numTransaction .textNum {
+.updateRequest .numTransaction .textNum,
+.executeRequest .numTransaction .textNum {
   font-weight: 700;
   font-size: 12px;
   line-height: 15px;
@@ -186,4 +194,8 @@
   background: #EAE6EE;
   opacity: 0.5;
   cursor: pointer;
+}
+
+.mainButton {
+  color: #ACA2B5;
 }

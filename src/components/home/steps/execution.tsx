@@ -1,4 +1,4 @@
-import { Button, Form, Menu, Dropdown, Input, Spin } from 'antd';
+import { Button, Form, Menu, Space, Dropdown, Input, Spin } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
@@ -24,6 +24,10 @@ const ExecutionRequest = ({
   const { address: userWallet } = useSelector(selectSession);
   const { provider } = useSelector(selectUtils);
   const [recordIds, setrecordIds] = useState([]);
+  const [conditions, setConditions] = useState([]);
+  const [requiredRecirds, setRequiredRecirds] = useState([]);
+  const [signatories, setSignatories] = useState([]);
+  const [transaction, setTransaction] = useState([]);
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const agreementContract = createInstance('Agreement', agreement, provider);
@@ -46,10 +50,26 @@ const ExecutionRequest = ({
     setLoading(false);
   };
 
-  const GetActiveRecordIds = async () => {
+  const GetRecordValues = async () => {
+    try {
+      const {
+        txsConditions,
+        txsRequiredRecords,
+        txsSignatories,
+        txsTransaction } = await agreementContract.methods.getRecord(dslId).call();
+      setConditions(txsConditions);
+      setRequiredRecirds(txsRequiredRecords);
+      setSignatories(txsSignatories);
+      setTransaction(txsTransaction);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+    const GetActiveRecordIds = async () => {
     try {
       const array = await agreementContract.methods.getActiveRecords().call();
-      setrecordIds(array);
+      setrecordIds(array)
     } catch (err) {
       console.error(err);
     }
@@ -65,7 +85,6 @@ const ExecutionRequest = ({
                 return setDslID(v);
               }}
               type="button"
-              className="dropdownButton"
             >
               {v}
             </button>
@@ -84,20 +103,72 @@ const ExecutionRequest = ({
         ) : (
           <Dropdown className="dropdown" overlay={menu}>
             <Button>
-              <Input className="lander" placeholder="Select Record ID to execute" value={dslId} />
-              <DownOutlined className="iconDropDown" />
+              {dslId ?
+                <Space>
+                  {dslId}
+                  <DownOutlined className="iconDropDown" />
+                </Space> :
+                <Space className="mainButton">
+                  Select Record ID to execute
+                  <DownOutlined className="iconDropDown" />
+                </Space>}
             </Button>
           </Dropdown>
         )}
       </Item>
     );
   };
+  function recordReview(){
+    if (dslId) {
+      return (
+        <div>
+          <div style={{ marginTop: '24px' }} className="text">Required Records</div>
+          <div className="numTransactionCoontainer">
+            {requiredRecirds?.map((el) => {
+              return (
+                <div key={el?.id} className="numTransaction">
+                  <div className="textNum">{el}</div>
+                </div>
+              );
+            })}
+          </div>
+          {signatories?.map((el, id) => {
+              return (
+                <div key={el?.id}>
+                  <div style={{ marginTop: '24px' }} className="text">
+                    Signatory {id+1}
+                  </div>
+                  <div className="value">{el}</div>
+                </div>
+              );
+          })}
+          {conditions?.map((el, id) => {
+              return (
+                <div key={el?.id}>
+                  <div style={{ marginTop: '24px' }} className="text">
+                    Condition {id+1}
+                  </div>
+                  <div className="lander">{el}</div>
+                </div>
+              );
+          })}
+          <div style={{ marginTop: '24px' }} className="text">
+            Record Transaction
+          </div>
+          <div className="lander">{transaction}</div>
+        </div>
+      )
+    } return false
+  }
   useEffect(() => {
     GetActiveRecordIds();
   }, []);
+  useEffect(() => {
+    GetRecordValues();
+  }, [dslId]);
 
   return (
-    <div className="updateRequest">
+    <div className="executeRequest">
       <div className="title">Execution</div>
       <Spin spinning={loading}>
         <Form
@@ -140,6 +211,7 @@ const ExecutionRequest = ({
             ID
           </div>
           {dropDown()}
+          {recordReview()}
           <div style={{ marginTop: '24px' }} className="text">
             Transaction Value (in Wei)
           </div>
