@@ -38,7 +38,8 @@
   },
   "scripts": {
     "start": "craco start",
-    "start:locale": "env-cmd -f .env.locale craco start",
+    "start:localhost": "env-cmd -f .env.localhost craco start",
+    "start:rinkeby": "env-cmd -f .env.rinkeby craco start",
     "build": "craco build",
     "build:dev": "env-cmd -f .env.development craco  build",
     "test": "react-scripts test",

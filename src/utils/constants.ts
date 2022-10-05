@@ -22,7 +22,7 @@ export const NETWORK_OPTIONS = {
     rpcUrls: ['https://blockexplorer.rinkeby.boba.network/api/eth-rpc'],
     blockExplorerUrls: ['https://rinkeby.etherscan.io'],
   },
-  local: {
+  localhost: {
     chainId: `0x${Number(539)}`,
     chainName: 'http://127.0.0.1:7545',
     nativeCurrency: {

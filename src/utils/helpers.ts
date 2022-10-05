@@ -2,8 +2,10 @@ import MetaMaskOnboarding from '@metamask/onboarding';
 import { Contract, ethers } from 'ethers';
 import _ from 'lodash';
 import { AbiItem } from 'web3-utils';
-import { abi as agreementABI, bytecode as agreementBytecode } from '../data/agreement.json';
+import { abi as agreementABI } from '../data/agreement.json';
 import { abi as contextFactoryABI } from '../data/contextFactory.json';
+import { bytecode as agreementBytecodeLocalhost } from '../data/bytecode/localhost/agreement.json';
+import { bytecode as agreementBytecodeRinkeby } from '../data/bytecode/rinkeby/agreement.json';
 import allNetworks from './networks.json';
 
 const { ethereum }: any = window;
@@ -15,7 +17,6 @@ interface Error {
 
 const contractNames = {
   Agreement: 'Agreement',
-  ConditionalTxs: 'ConditionalTxs',
   ContextFactory: 'ContextFactory',
 };
 type ContractName = keyof typeof contractNames;
@@ -42,7 +43,10 @@ export const getContractABI = (name: ContractName): AbiItem[] => {
 };
 
 export const getContractBytecode = (name: ContractName): string => {
-  if (name === contractNames.Agreement) return agreementBytecode;
+  if (name === contractNames.Agreement) {
+    if (process.env.REACT_APP_NETWORK === 'localhost') return agreementBytecodeLocalhost;
+    if (process.env.REACT_APP_NETWORK === 'rinkeby') return agreementBytecodeRinkeby;
+  }
   return '';
 };
 
@@ -55,7 +59,7 @@ export const checkNetwork = async (dispatch, checkNetworkAction, changeNetworkNa
   const networks = {
     mainnet: 1,
     rinkeby: 4,
-    local: 539,
+    localhost: 539,
     dev: '7a69',
   };
   // @ts-ignore
