@@ -23,7 +23,7 @@ const ExecutionRequest = ({
 }) => {
   const { address: userWallet } = useSelector(selectSession);
   const { provider } = useSelector(selectUtils);
-  const [recordIds, setrecordIds] = useState([]);
+  const [recordIds, setRecordIds] = useState([]);
   const [conditions, setConditions] = useState([]);
   const [requiredRecirds, setRequiredRecirds] = useState([]);
   const [signatories, setSignatories] = useState([]);
@@ -69,7 +69,7 @@ const ExecutionRequest = ({
     const GetActiveRecordIds = async () => {
     try {
       const array = await agreementContract.methods.getActiveRecords().call();
-      setrecordIds(array)
+      setRecordIds(array);
     } catch (err) {
       console.error(err);
     }
