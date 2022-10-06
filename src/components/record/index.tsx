@@ -13,11 +13,11 @@ const { Search } = Input;
 
 interface MockType {
   date: string;
-  rdID: string;
+  recordID: string;
   agreementAddress: string;
-  rdOriginator: string;
-  rdType: string;
-  rdStatus: string;
+  recordOriginator: string;
+  recordType: string;
+  recordStatus: string;
 }
 
 const onCopyClick = (e) => {
@@ -37,17 +37,17 @@ const columns: ColumnsType<MockType> = [
     dataIndex: 'date',
   },
   {
-    title: 'Rd ID',
-    dataIndex: 'rdID',
-    key: 'rdID',
-    render: (rdID) => {
+    title: 'Record ID',
+    dataIndex: 'recordID',
+    key: 'recordID',
+    render: (recordID) => {
       return (
         <div className="status">
-          <div style={{ textOverflow: 'ellipsis', overflow: 'hiden' }}>{rdID}</div>
+          <div style={{ textOverflow: 'ellipsis', overflow: 'hiden' }}>{recordID}</div>
           <Copy
             className="copy"
             onClick={() => {
-              return onCopyClick(rdID);
+              return onCopyClick(recordID);
             }}
           />
         </div>
@@ -73,17 +73,17 @@ const columns: ColumnsType<MockType> = [
     },
   },
   {
-    title: 'Rd Originator',
-    key: 'rdOriginator',
-    dataIndex: 'rdOriginator',
-    render: (rdOriginator) => {
+    title: 'Record Originator',
+    key: 'recordOriginator',
+    dataIndex: 'recordOriginator',
+    render: (recordOriginator) => {
       return (
         <div className="status">
-          <div style={{ textOverflow: 'ellipsis', overflow: 'hiden' }}>{rdOriginator}</div>
+          <div style={{ textOverflow: 'ellipsis', overflow: 'hiden' }}>{recordOriginator}</div>
           <Copy
             className="copy"
             onClick={() => {
-              return onCopyClick(rdOriginator);
+              return onCopyClick(recordOriginator);
             }}
           />
         </div>
@@ -91,33 +91,33 @@ const columns: ColumnsType<MockType> = [
     },
   },
   {
-    title: 'Rd Type',
-    key: 'rdType',
-    dataIndex: 'rdType',
+    title: 'Record Type',
+    key: 'recordType',
+    dataIndex: 'recordType',
   },
   {
-    title: 'Rd Status',
-    key: 'rdStatus',
-    dataIndex: 'rdStatus',
+    title: 'Record Status',
+    key: 'recordStatus',
+    dataIndex: 'recordStatus',
   },
 ];
 
 const mock = [
   {
     date: '11.03.2022',
-    rdID: '0x7ac8c...',
+    recordID: '0x7ac8c...',
     agreementAddress: shortenedAddress('0x976EA74026E726554dB657fA54763abd0C3a0aa9'),
-    rdOriginator: shortenedAddress('0x976EA74026E726554dB657fA54763abd0C3a0aa9'),
-    rdType: 'Agreement Created',
-    rdStatus: 'Approval Requested',
+    recordOriginator: shortenedAddress('0x976EA74026E726554dB657fA54763abd0C3a0aa9'),
+    recordType: 'Agreement Created',
+    recordStatus: 'Approval Requested',
   },
   {
     date: '12.03.2022',
-    rdID: '0x7ac9c...',
+    recordID: '0x7ac9c...',
     agreementAddress: shortenedAddress('0x976EA74026E726554dB657fA54763abd0C3a0aa9'),
-    rdOriginator: shortenedAddress('0x976EA74026E726554dB657fA54763abd0C3a0aa9'),
-    rdType: 'Agreement',
-    rdStatus: 'Approval Requested',
+    recordOriginator: shortenedAddress('0x976EA74026E726554dB657fA54763abd0C3a0aa9'),
+    recordType: 'Agreement',
+    recordStatus: 'Approval Requested',
   },
 ];
 const Record = () => {

@@ -57,7 +57,7 @@ const HomePage = () => {
   // execition // TODO: fix typo
   const [agreementExecition, setAgreementExecition] = useState('');
   const [dslIdExecition, setDslIdExecition] = useState('');
-  const [rdValueExecution, setRdValueExecution] = useState('');
+  const [rdValueExecution, setRecordValueExecution] = useState('');
   const [execitionValue, setExecitionValue] = useState(initialExecitionValue);
 
   useEffect(() => {
@@ -162,7 +162,7 @@ const HomePage = () => {
         dslId={dslIdExecition} // TODO: fix typo
         setExecitionValue={setExecitionValue}
         setAgreement={setAgreementExecition}
-        setRdValue={setRdValueExecution}
+        setRecordValue={setRecordValueExecution}
         agreement={agreementExecition}
         rdValue={rdValueExecution}
         setLoading={setLoading}
@@ -279,9 +279,7 @@ const HomePage = () => {
                 Record ID
               </div>
               <div className="valueContainer">
-                <div className="value">
-                  {shortenedAddress(valueDefinitionRequest?.hash, 9)}
-                </div>
+                <div className="value">{shortenedAddress(valueDefinitionRequest?.hash, 9)}</div>
                 <Copy
                   style={{ cursor: 'pointer' }}
                   onClick={() => onCopyClick(valueDefinitionRequest?.hash)}

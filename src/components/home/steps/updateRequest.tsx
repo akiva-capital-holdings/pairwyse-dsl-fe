@@ -39,9 +39,9 @@ const UpdateRequest = ({
   const navigate = useNavigate();
   let hash = '';
 
-  type RdObject = {
-    rdId: number;
-    requiredRds: number[];
+  type RecordObject = {
+    recordId: number;
+    requiredRecords: number[];
     signatories: string[];
     conditions: string[];
     record: string;
@@ -51,7 +51,7 @@ const UpdateRequest = ({
     agreementContract: Contract,
     agreementAddr: string,
     contextFactory: Contract,
-    steps: RdObject[]
+    steps: RecordObject[]
   ) => {
     setLoading(true);
     try {
@@ -92,8 +92,8 @@ const UpdateRequest = ({
           .send({ from: userWallet });
         const agrUpdate = await agreementContract.methods
           .update(
-            step.rdId,
-            step.requiredRds,
+            step.recordId,
+            step.requiredRecords,
             step.signatories,
             step.record,
             step.conditions,
@@ -133,8 +133,8 @@ const UpdateRequest = ({
       const numId = numbers?.map((el) => el?.value);
       await addSteps(agreementContract, AGREEMENT_ADDR, contextFactory, [
         {
-          rdId: DSL_ID,
-          requiredRds: [...numId],
+          recordId: DSL_ID,
+          requiredRecords: [...numId],
           signatories: [SIGNATORY],
           conditions: [CONDITION],
           record: RECORD,
@@ -228,7 +228,7 @@ const UpdateRequest = ({
             className="requiredRecords"
             rules={
               numbers?.length === 0 && valueRequiredRecords === ''
-                ? getRule('requiredRecords', 'rd-value', valueRequiredRecords)
+                ? getRule('requiredRecords', 'record-value', valueRequiredRecords)
                 : getRule('requiredRecords', 'requiredRecords', valueRequiredRecords)
             }
             style={{ marginBottom: '8px' }}
@@ -260,11 +260,7 @@ const UpdateRequest = ({
             </button>
           </Item>
           <div
-            className={
-              errorRequiredRecords
-                ? 'numRecordCoontainer error'
-                : 'numRecordCoontainer'
-            }
+            className={errorRequiredRecords ? 'numRecordCoontainer error' : 'numRecordCoontainer'}
           >
             {numbers?.map((el) => {
               return (

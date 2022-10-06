@@ -23,7 +23,7 @@
         {
           "indexed": false,
           "internalType": "uint256",
-          "name": "rdId",
+          "name": "recordId",
           "type": "uint256"
         },
         {
@@ -204,22 +204,22 @@
       "outputs": [
         {
           "internalType": "uint256[]",
-          "name": "rdsRequiredRecords",
+          "name": "recordRequiredRecords",
           "type": "uint256[]"
         },
         {
           "internalType": "address[]",
-          "name": "rdsSignatories",
+          "name": "recordSignatories",
           "type": "address[]"
         },
         {
           "internalType": "string[]",
-          "name": "rdsConditions",
+          "name": "recordConditions",
           "type": "string[]"
         },
         {
           "internalType": "string",
-          "name": "rdsTransaction",
+          "name": "recordTransaction",
           "type": "string"
         }
       ],
@@ -541,7 +541,7 @@
           "type": "uint256"
         }
       ],
-      "name": "rds",
+      "name": "records",
       "outputs": [
         {
           "internalType": "address",

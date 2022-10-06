@@ -13,7 +13,7 @@ const { Item } = Form;
 const ExecutionRequest = ({
   setExecitionValue,
   setAgreement,
-  setRdValue,
+  setRecordValue,
   setLoading,
   agreement,
   setDslID,
@@ -34,11 +34,11 @@ const ExecutionRequest = ({
   const ExecutionSubmit = async () => {
     setLoading(true);
     try {
-      const executeRd = await agreementContract.methods
+      const executeRecord = await agreementContract.methods
         .execute(dslId)
         .send({ from: userWallet, value: rdValue?.replace(/,/gi, '') });
       setExecitionValue({
-        hash: executeRd.transactionHash,
+        hash: executeRecord.transactionHash,
         submit: true,
         error: false,
         message: '',
@@ -52,24 +52,21 @@ const ExecutionRequest = ({
 
   const GetRecordValues = async () => {
     try {
-      const {
-        rdsConditions,
-        rdsRequiredRecords,
-        rdsSignatories,
-        rdsTransaction } = await agreementContract.methods.getRecord(dslId).call();
-      setConditions(rdsConditions);
-      setRequiredRecirds(rdsRequiredRecords);
-      setSignatories(rdsSignatories);
-      setRecord(rdsTransaction);
+      const { recordConditions, recordRequiredRecords, recordSignatories, recordTransaction } =
+        await agreementContract.methods.getRecord(dslId).call();
+      setConditions(recordConditions);
+      setRequiredRecirds(recordRequiredRecords);
+      setSignatories(recordSignatories);
+      setRecord(recordTransaction);
     } catch (err) {
       console.error(err);
     }
   };
 
-    const GetActiveRecordIds = async () => {
+  const GetActiveRecordIds = async () => {
     try {
       const array = await agreementContract.methods.getActiveRecords().call();
-      setrecordIds(array)
+      setrecordIds(array);
     } catch (err) {
       console.error(err);
     }
@@ -103,26 +100,30 @@ const ExecutionRequest = ({
         ) : (
           <Dropdown className="dropdown" overlay={menu}>
             <Button>
-              {dslId ?
+              {dslId ? (
                 <Space>
                   {dslId}
                   <DownOutlined className="iconDropDown" />
-                </Space> :
+                </Space>
+              ) : (
                 <Space className="mainButton">
                   Select Record ID to execute
                   <DownOutlined className="iconDropDown" />
-                </Space>}
+                </Space>
+              )}
             </Button>
           </Dropdown>
         )}
       </Item>
     );
   };
-  function recordReview(){
+  function recordReview() {
     if (dslId) {
       return (
         <div>
-          <div style={{ marginTop: '24px' }} className="text">Required Records</div>
+          <div style={{ marginTop: '24px' }} className="text">
+            Required Records
+          </div>
           <div className="numRecordCoontainer">
             {requiredRecirds?.map((el) => {
               return (
@@ -133,32 +134,33 @@ const ExecutionRequest = ({
             })}
           </div>
           {signatories?.map((el, id) => {
-              return (
-                <div key={el?.id}>
-                  <div style={{ marginTop: '24px' }} className="text">
-                    Signatory {id+1}
-                  </div>
-                  <div className="value">{el}</div>
+            return (
+              <div key={el?.id}>
+                <div style={{ marginTop: '24px' }} className="text">
+                  Signatory {id + 1}
                 </div>
-              );
+                <div className="value">{el}</div>
+              </div>
+            );
           })}
           {conditions?.map((el, id) => {
-              return (
-                <div key={el?.id}>
-                  <div style={{ marginTop: '24px' }} className="text">
-                    Condition {id+1}
-                  </div>
-                  <div className="lander">{el}</div>
+            return (
+              <div key={el?.id}>
+                <div style={{ marginTop: '24px' }} className="text">
+                  Condition {id + 1}
                 </div>
-              );
+                <div className="lander">{el}</div>
+              </div>
+            );
           })}
           <div style={{ marginTop: '24px' }} className="text">
             Create a Record
           </div>
           <div className="lander">{record}</div>
         </div>
-      )
-    } return false
+      );
+    }
+    return false;
   }
   useEffect(() => {
     GetActiveRecordIds();
@@ -220,7 +222,7 @@ const ExecutionRequest = ({
             validateTrigger="onChange"
             rules={
               rdValue?.length === 0
-                ? getRule('record-value-in-wei', 'rd-value', rdValue)
+                ? getRule('record-value-in-wei', 'record-value', rdValue)
                 : getRule('record-value-in-wei', 'record-value-in-wei', rdValue)
             }
           >
@@ -237,7 +239,7 @@ const ExecutionRequest = ({
                   });
                 });
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                setRdValue(e?.target?.value.replace(/[\s.,%]/g, ''));
+                setRecordValue(e?.target?.value.replace(/[\s.,%]/g, ''));
               }}
             />
           </Item>

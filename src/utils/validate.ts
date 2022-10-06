@@ -146,7 +146,7 @@ export default function getRule(label: string, name: string, v?: string, type?: 
       return [validateId];
     case 'record-value-in-wei':
       return [validateId];
-    case 'rd-value':
+    case 'record-value':
       return [];
     default:
       return [defaultRule];

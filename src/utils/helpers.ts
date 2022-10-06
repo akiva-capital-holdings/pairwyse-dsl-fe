@@ -15,7 +15,6 @@ interface Error {
 
 const contractNames = {
   Agreement: 'Agreement',
-  ConditionalRds: 'ConditionalRds',
   ContextFactory: 'ContextFactory',
 };
 type ContractName = keyof typeof contractNames;
