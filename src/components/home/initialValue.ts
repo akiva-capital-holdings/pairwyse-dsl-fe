@@ -9,7 +9,7 @@ export const initialAgreementValue = {
 export const initialDefinitionRequestValue = {
   value: '',
   submit: false,
-  transactionHash: '',
+  hash: '',
   error: false,
   message: '',
 };
@@ -29,19 +29,19 @@ export const initialExecitionValue = {
 };
 
 export const titleValueAgrement = (v) => {
-  return v ? 'Created Agreement Address' : 'No transactions yet';
+  return v ? 'Created Agreement Address' : 'No records yet';
 };
 
 export const titleValueDefinition = (v) => {
-  return v ? 'Definition Transaction ID' : 'No transactions yet';
+  return v ? 'Definition Record ID' : 'No records yet';
 };
 
 export const titleValueUpdateRequest = (v) => {
-  return v ? 'Update Request Transaction ID' : 'No transactions yet';
+  return v ? 'Update Request Record ID' : 'No records yet';
 };
 
 export const titleValueExecute = (v) => {
-  return v ? 'Execution Transaction ID' : 'No transactions yet';
+  return v ? 'Execution Record ID' : 'No records yet';
 };
 
 export default {

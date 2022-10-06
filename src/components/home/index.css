@@ -133,7 +133,7 @@
   color: #ACA2B5;
   margin: 29px auto 0;
 }
-.transactionContainer {
+.recordContainer {
   width: 350px;
   min-height: 200px;
   background: #F7F5F9;
@@ -141,22 +141,22 @@
   margin-top: 32px;
   padding: 32px 28px 28px 28px;
 }
-.transactionContainer.error {
+.recordContainer.error {
   background: #FFD1D1;
 }
-.transactionContainer.error .titleContainer .titleSeccess {
+.recordContainer.error .titleContainer .titleSeccess {
   color: #E61F1F;
 }
-.transactionContainer.error .valueContainer {
+.recordContainer.error .valueContainer {
   color: #E61F1F;
 }
-.transactionContainer .titleContainer {
+.recordContainer .titleContainer {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 24px;
 }
-.transactionContainer .title{
+.recordContainer .title{
   font-family: var(--font_family_bold);
   font-style: normal;
   font-weight: 800;
@@ -165,7 +165,7 @@
   color: #120023;
   margin-bottom: 0;
 }
-.transactionContainer .titleContainer .titleSeccess {
+.recordContainer .titleContainer .titleSeccess {
   font-family: var(--font_family_bold);
   font-style: normal;
   font-weight: 800;
@@ -192,7 +192,7 @@
   margin-bottom: 6px;
 
 }
-.transactionContainer .contentCOntainer .content .valueContainer {
+.recordContainer .contentCOntainer .content .valueContainer {
   justify-content: space-between;
   font-family: var(--font_family_medium);
   font-style: normal;
@@ -204,7 +204,7 @@
   overflow: hidden;
   display: flex;
 }
-.transactionContainer.error .contentCOntainer .content .title {
+.recordContainer.error .contentCOntainer .content .title {
   font-family: var(--font_family_medium);
   font-style: normal;
   font-weight: 500;
@@ -217,7 +217,7 @@
   text-overflow: ellipsis;
   overflow: hidden;
 }
-.transactionContainer.error .red {
+.recordContainer.error .red {
   color: #E61F1F;
   display: flex;
   align-items: center;
@@ -227,12 +227,12 @@
   font-size: 16px;
   line-height: 20px;
 }
-.transactionContainer.error .red  > svg ,
-.transactionContainer .green  > svg{
+.recordContainer.error .red  > svg ,
+.recordContainer .green  > svg{
   margin-right: 6px;
 }
 
-.transactionContainer .green {
+.recordContainer .green {
   color: #61E366;
   display: flex;
   align-items: center;

@@ -961,18 +961,18 @@
     },
     {
       "name": "XinFin Apothem Testnet",
-      "chain": "TXDC",
+      "chain": "RDDC",
       "rpc": [
         "https://rpc.apothem.network"
       ],
       "faucets": [],
       "nativeCurrency": {
         "name": "XinFinTest",
-        "symbol": "TXDC",
+        "symbol": "RDDC",
         "decimals": 18
       },
       "infoURL": "https://xinfin.org",
-      "shortName": "TXDC",
+      "shortName": "RDDC",
       "chainId": 51,
       "networkId": 51
     },
@@ -4548,7 +4548,7 @@
     },
     {
       "name": "Bittex Mainnet",
-      "chain": "BTX",
+      "chain": "BRD",
       "rpc": [
         "https://rpc1.bittexscan.info",
         "https://rpc2.bittexscan.info"
@@ -4556,11 +4556,11 @@
       "faucets": [],
       "nativeCurrency": {
         "name": "Bittex",
-        "symbol": "BTX",
+        "symbol": "BRD",
         "decimals": 18
       },
       "infoURL": "https://bittexscan.com",
-      "shortName": "btx",
+      "shortName": "brd",
       "chainId": 3690,
       "networkId": 3690,
       "icon": "ethereum",
@@ -4662,7 +4662,7 @@
       "faucets": [],
       "nativeCurrency": {
         "name": "IoTeX",
-        "symbol": "IOTX",
+        "symbol": "IORD",
         "decimals": 18
       },
       "infoURL": "https://iotex.io",
@@ -4688,7 +4688,7 @@
       ],
       "nativeCurrency": {
         "name": "IoTeX",
-        "symbol": "IOTX",
+        "symbol": "IORD",
         "decimals": 18
       },
       "infoURL": "https://iotex.io",
@@ -7530,7 +7530,7 @@
       "chain": "AQUA",
       "rpc": [
         "https://c.onical.org",
-        "https://tx.aquacha.in/api"
+        "https://rd.aquacha.in/api"
       ],
       "faucets": [
         "https://aquacha.in/faucet"

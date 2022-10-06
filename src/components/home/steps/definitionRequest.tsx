@@ -41,13 +41,13 @@ const DefinitionRequest = ({
       const SPETIFICATION = specifications[0].value;
 
       const agreementInstance = createInstance('Agreement', AGREEMENT_ADDR, provider);
-      const tx = await agreementInstance.methods
+      const rd = await agreementInstance.methods
         .setStorageAddress(hex4Bytes(DEFINITION), SPETIFICATION)
         .send({ from: userWallet });
       setValueDefinitionRequest({
         value: 'definition',
         submit: true,
-        transactionHash: tx?.transactionHash,
+        hash: rd?.transactionHash,
         error: false,
       });
       setLoading(false);
@@ -56,7 +56,7 @@ const DefinitionRequest = ({
       setValueDefinitionRequest({
         value: '',
         submit: true,
-        transactionHash: '',
+        hash: '',
         error: true,
         message: e?.message,
       });

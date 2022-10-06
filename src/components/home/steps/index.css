@@ -145,17 +145,17 @@
   font-family: var(--font_family);
   font-weight: 500;
 }
-.updateRequest .requiredTransactions{
+.updateRequest .requiredRecords{
   height: 48px;
   position: relative;
 }
-.updateRequest .btnRequiredTransactions{
+.updateRequest .btnRequiredRecords{
   right: 0;
   position: absolute;
   top: -8%;
 }
-.updateRequest .numTransactionCoontainer,
-.executeRequest .numTransactionCoontainer{
+.updateRequest .numRecordCoontainer,
+.executeRequest .numRecordCoontainer{
   display: flex;
   max-width: 680px;
   flex-wrap: wrap;
@@ -163,8 +163,8 @@
 .updateRequest .error {
   padding-top: 14px;
 }
-.updateRequest .numTransaction,
-.executeRequest .numTransaction{
+.updateRequest .numRecord,
+.executeRequest .numRecord{
   display: flex;
   height: 35px;
   background: #120023;
@@ -174,15 +174,15 @@
   margin-right: 8px;
   margin-bottom: 8px;
 }
-.updateRequest .numTransaction .textNum,
-.executeRequest .numTransaction .textNum {
+.updateRequest .numRecord .textNum,
+.executeRequest .numRecord .textNum {
   font-weight: 700;
   font-size: 12px;
   line-height: 15px;
   color: #FFFFFF;
   margin-right: 8px;
 }
-.updateRequest .numTransaction .btnNum{
+.updateRequest .numRecord .btnNum{
   border-radius: 50%;
   border: unset;
   width: 14px;

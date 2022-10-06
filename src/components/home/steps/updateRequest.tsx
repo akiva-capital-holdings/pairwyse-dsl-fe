@@ -16,10 +16,10 @@ const { Item } = Form;
 const UpdateRequest = ({
   setUpdateRequest,
   setSignatories,
-  setTransaction,
+  setRecord,
   setConditions,
   setAgreement,
-  transaction,
+  record,
   signatories,
   conditions,
   setLoading,
@@ -32,26 +32,26 @@ const UpdateRequest = ({
 }) => {
   const { address: userWallet } = useSelector(selectSession);
   const { provider } = useSelector(selectUtils);
-  const [valueRequiredTransactions, setValueRequiredTransactions] = useState('');
-  const [errorRequiredTransactions, setErrorRequiredTransactions] = useState(false);
+  const [valueRequiredRecords, setValueRequiredRecords] = useState('');
+  const [errorRequiredRecords, setErrorRequiredRecords] = useState(false);
   const [form] = Form.useForm();
 
   const navigate = useNavigate();
   let hash = '';
 
-  type TxObject = {
-    txId: number;
-    requiredTxs: number[];
+  type RdObject = {
+    rdId: number;
+    requiredRds: number[];
     signatories: string[];
     conditions: string[];
-    transaction: string;
+    record: string;
   };
 
   const addSteps = async (
     agreementContract: Contract,
     agreementAddr: string,
     contextFactory: Contract,
-    steps: TxObject[]
+    steps: RdObject[]
   ) => {
     setLoading(true);
     try {
@@ -61,7 +61,7 @@ const UpdateRequest = ({
           await contextFactory.methods.getDeployedContextsLen().call(),
           10
         );
-        const transactionContextAddr = await contextFactory.methods
+        const recordContextAddr = await contextFactory.methods
           .deployedContexts(contextsLen - 1)
           .call();
         const conditionsContextAddrs = [];
@@ -83,21 +83,21 @@ const UpdateRequest = ({
         }
 
         console.log({
-          tx: step.transaction,
-          transactionContextAddr,
+          rd: step.record,
+          recordContextAddr,
           preprocessor: process.env.REACT_APP_PREPROCESSOR,
         });
         await agreementContract.methods
-          .parse(step.transaction, transactionContextAddr, process.env.REACT_APP_PREPROCESSOR)
+          .parse(step.record, recordContextAddr, process.env.REACT_APP_PREPROCESSOR)
           .send({ from: userWallet });
         const agrUpdate = await agreementContract.methods
           .update(
-            step.txId,
-            step.requiredTxs,
+            step.rdId,
+            step.requiredRds,
             step.signatories,
-            step.transaction,
+            step.record,
             step.conditions,
-            transactionContextAddr,
+            recordContextAddr,
             conditionsContextAddrs
           )
           .send({ from: userWallet });
@@ -121,7 +121,7 @@ const UpdateRequest = ({
       const AGREEMENT_ADDR = agreement;
       const SIGNATORY = signatories[0].value;
       const CONDITION = conditions[0].value;
-      const TRANSACTION = transaction;
+      const RECORD = record;
 
       const agreementContract = createInstance('Agreement', AGREEMENT_ADDR, provider);
 
@@ -133,14 +133,14 @@ const UpdateRequest = ({
       const numId = numbers?.map((el) => el?.value);
       await addSteps(agreementContract, AGREEMENT_ADDR, contextFactory, [
         {
-          txId: DSL_ID,
-          requiredTxs: [...numId],
+          rdId: DSL_ID,
+          requiredRds: [...numId],
           signatories: [SIGNATORY],
           conditions: [CONDITION],
-          transaction: TRANSACTION,
+          record: RECORD,
         },
       ]);
-      // console.log(txsAddr, ctxdeployedLen);
+      // console.log(rdsAddr, crddeployedLen);
     } catch (e) {
       console.error(e);
       setUpdateRequest({ hash: '', submit: true, error: true, message: e?.message });
@@ -148,21 +148,21 @@ const UpdateRequest = ({
     }
   };
 
-  const addTransaction = () => {
-    setErrorRequiredTransactions(false);
+  const addRecord = () => {
+    setErrorRequiredRecords(false);
     form
-      .validateFields(['requiredTransactions'])
+      .validateFields(['requiredRecords'])
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      .then((v) => setNumbers([...numbers, { value: +valueRequiredTransactions, id: uuidv4() }]))
+      .then((v) => setNumbers([...numbers, { value: +valueRequiredRecords, id: uuidv4() }]))
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      .catch((err) => setErrorRequiredTransactions(true));
+      .catch((err) => setErrorRequiredRecords(true));
   };
 
-  const validateTrasactionId = () => {
+  const validateRecordId = () => {
     if (numbers?.length === 0) {
-      setErrorRequiredTransactions(true);
+      setErrorRequiredRecords(true);
     } else {
-      setValueRequiredTransactions(numbers[numbers.length - 1].value);
+      setValueRequiredRecords(numbers[numbers.length - 1].value);
     }
   };
   return (
@@ -220,40 +220,40 @@ const UpdateRequest = ({
             />
           </Item>
           <div style={{ marginTop: '24px' }} className="text">
-            Required Transactions
+            Required Records
           </div>
           <Item
-            name="requiredTransactions"
+            name="requiredRecords"
             validateTrigger="onChange"
-            className="requiredTransactions"
+            className="requiredRecords"
             rules={
-              numbers?.length === 0 && valueRequiredTransactions === ''
-                ? getRule('requiredTransactions', 'tx-value', valueRequiredTransactions)
-                : getRule('requiredTransactions', 'requiredTransactions', valueRequiredTransactions)
+              numbers?.length === 0 && valueRequiredRecords === ''
+                ? getRule('requiredRecords', 'rd-value', valueRequiredRecords)
+                : getRule('requiredRecords', 'requiredRecords', valueRequiredRecords)
             }
             style={{ marginBottom: '8px' }}
           >
             <Input
               className={'lander'}
-              placeholder="Type transaction number here"
+              placeholder="Type record number here"
               onChange={(e) => {
                 if (numbers?.length !== 0 && e?.target?.value === '') {
-                  setValueRequiredTransactions(e?.target?.value);
+                  setValueRequiredRecords(e?.target?.value);
                 } else {
                   form
-                    .validateFields(['requiredTransactions'])
+                    .validateFields(['requiredRecords'])
                     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                    .then((v) => setErrorRequiredTransactions(false))
+                    .then((v) => setErrorRequiredRecords(false))
                     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                    .catch((err) => setErrorRequiredTransactions(true));
-                  setValueRequiredTransactions(e?.target?.value);
+                    .catch((err) => setErrorRequiredRecords(true));
+                  setValueRequiredRecords(e?.target?.value);
                 }
               }}
-              value={valueRequiredTransactions}
+              value={valueRequiredRecords}
             />
             <button
-              onClick={() => addTransaction()}
-              className="ant-btn ant-btn-default add btnRequiredTransactions"
+              onClick={() => addRecord()}
+              className="ant-btn ant-btn-default add btnRequiredRecords"
               type="button"
             >
               Add ID
@@ -261,14 +261,14 @@ const UpdateRequest = ({
           </Item>
           <div
             className={
-              errorRequiredTransactions
-                ? 'numTransactionCoontainer error'
-                : 'numTransactionCoontainer'
+              errorRequiredRecords
+                ? 'numRecordCoontainer error'
+                : 'numRecordCoontainer'
             }
           >
             {numbers?.map((el) => {
               return (
-                <div key={el?.id} className="numTransaction">
+                <div key={el?.id} className="numRecord">
                   <div className="textNum">{el?.value}</div>
                   <button
                     onClick={() => {
@@ -398,17 +398,17 @@ const UpdateRequest = ({
           </div>
           <div className="specificationInput">
             <div style={{ marginTop: '24px' }} className="text">
-              Transaction
+              Record
             </div>
             <Item
-              name="transaction"
+              name="record"
               validateTrigger="onBlur"
-              rules={getRule('transaction', 'transaction', transaction)}
+              rules={getRule('record', 'record', record)}
             >
               <Input.TextArea
-                defaultValue={transaction}
+                defaultValue={record}
                 onChange={(e) => {
-                  return setTransaction(e.target.value);
+                  return setRecord(e.target.value);
                 }}
                 className="lander"
               />
@@ -418,7 +418,7 @@ const UpdateRequest = ({
             <Button
               disabled={loading}
               style={{ height: '48px' }}
-              onClick={validateTrasactionId}
+              onClick={validateRecordId}
               htmlType="submit"
               className="btn"
             >

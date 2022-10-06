@@ -13,11 +13,11 @@ const { Item } = Form;
 const ExecutionRequest = ({
   setExecitionValue,
   setAgreement,
-  setTxValue,
+  setRdValue,
   setLoading,
   agreement,
   setDslID,
-  txValue,
+  rdValue,
   loading,
   dslId,
 }) => {
@@ -27,18 +27,18 @@ const ExecutionRequest = ({
   const [conditions, setConditions] = useState([]);
   const [requiredRecirds, setRequiredRecirds] = useState([]);
   const [signatories, setSignatories] = useState([]);
-  const [transaction, setTransaction] = useState([]);
+  const [record, setRecord] = useState([]);
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const agreementContract = createInstance('Agreement', agreement, provider);
   const ExecutionSubmit = async () => {
     setLoading(true);
     try {
-      const executeTx = await agreementContract.methods
+      const executeRd = await agreementContract.methods
         .execute(dslId)
-        .send({ from: userWallet, value: txValue?.replace(/,/gi, '') });
+        .send({ from: userWallet, value: rdValue?.replace(/,/gi, '') });
       setExecitionValue({
-        hash: executeTx.transactionHash,
+        hash: executeRd.transactionHash,
         submit: true,
         error: false,
         message: '',
@@ -53,14 +53,14 @@ const ExecutionRequest = ({
   const GetRecordValues = async () => {
     try {
       const {
-        txsConditions,
-        txsRequiredRecords,
-        txsSignatories,
-        txsTransaction } = await agreementContract.methods.getRecord(dslId).call();
-      setConditions(txsConditions);
-      setRequiredRecirds(txsRequiredRecords);
-      setSignatories(txsSignatories);
-      setTransaction(txsTransaction);
+        rdsConditions,
+        rdsRequiredRecords,
+        rdsSignatories,
+        rdsTransaction } = await agreementContract.methods.getRecord(dslId).call();
+      setConditions(rdsConditions);
+      setRequiredRecirds(rdsRequiredRecords);
+      setSignatories(rdsSignatories);
+      setRecord(rdsTransaction);
     } catch (err) {
       console.error(err);
     }
@@ -123,10 +123,10 @@ const ExecutionRequest = ({
       return (
         <div>
           <div style={{ marginTop: '24px' }} className="text">Required Records</div>
-          <div className="numTransactionCoontainer">
+          <div className="numRecordCoontainer">
             {requiredRecirds?.map((el) => {
               return (
-                <div key={el?.id} className="numTransaction">
+                <div key={el?.id} className="numRecord">
                   <div className="textNum">{el}</div>
                 </div>
               );
@@ -153,9 +153,9 @@ const ExecutionRequest = ({
               );
           })}
           <div style={{ marginTop: '24px' }} className="text">
-            Record Transaction
+            Create a Record
           </div>
-          <div className="lander">{transaction}</div>
+          <div className="lander">{record}</div>
         </div>
       )
     } return false
@@ -213,31 +213,31 @@ const ExecutionRequest = ({
           {dropDown()}
           {recordReview()}
           <div style={{ marginTop: '24px' }} className="text">
-            Transaction Value (in Wei)
+            Record Value (in Wei)
           </div>
           <Item
-            name="transaction-value-in-wei"
+            name="record-value-in-wei"
             validateTrigger="onChange"
             rules={
-              txValue?.length === 0
-                ? getRule('transaction-value-in-wei', 'tx-value', txValue)
-                : getRule('transaction-value-in-wei', 'transaction-value-in-wei', txValue)
+              rdValue?.length === 0
+                ? getRule('record-value-in-wei', 'rd-value', rdValue)
+                : getRule('record-value-in-wei', 'record-value-in-wei', rdValue)
             }
           >
             <Input
               className={'ant-input lander'}
               onChange={(e) => {
-                form.validateFields(['transaction-value-in-wei']).then(() => {
+                form.validateFields(['record-value-in-wei']).then(() => {
                   const valueFormatting = String(e?.target?.value.replace(/,/gi, '')).replace(
                     /(.)(?=(\d{3})+$)/g,
                     '$1,'
                   );
                   form.setFieldsValue({
-                    'transaction-value-in-wei': valueFormatting,
+                    'record-value-in-wei': valueFormatting,
                   });
                 });
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                setTxValue(e?.target?.value.replace(/[\s.,%]/g, ''));
+                setRdValue(e?.target?.value.replace(/[\s.,%]/g, ''));
               }}
             />
           </Item>
