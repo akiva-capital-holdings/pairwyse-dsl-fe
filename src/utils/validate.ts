@@ -138,15 +138,15 @@ export default function getRule(label: string, name: string, v?: string, type?: 
       return [validateFieldCondition, validation, validateSpace];
     case 'signatories':
       return [validateAddressEth, validateAddress, validateSpace];
-    case 'transaction':
+    case 'record':
       return [validateSpace];
     case 'dsl-id':
       return [validateId];
-    case 'requiredTransactions':
+    case 'requiredRecords':
       return [validateId];
-    case 'transaction-value-in-wei':
+    case 'record-value-in-wei':
       return [validateId];
-    case 'tx-value':
+    case 'record-value':
       return [];
     default:
       return [defaultRule];

@@ -13,11 +13,11 @@ const { Search } = Input;
 
 interface MockType {
   date: string;
-  txID: string;
+  recordID: string;
   agreementAddress: string;
-  txOriginator: string;
-  txType: string;
-  txStatus: string;
+  recordOriginator: string;
+  recordType: string;
+  recordStatus: string;
 }
 
 const onCopyClick = (e) => {
@@ -37,17 +37,17 @@ const columns: ColumnsType<MockType> = [
     dataIndex: 'date',
   },
   {
-    title: 'Tx ID',
-    dataIndex: 'txID',
-    key: 'txID',
-    render: (txID) => {
+    title: 'Record ID',
+    dataIndex: 'recordID',
+    key: 'recordID',
+    render: (recordID) => {
       return (
         <div className="status">
-          <div style={{ textOverflow: 'ellipsis', overflow: 'hiden' }}>{txID}</div>
+          <div style={{ textOverflow: 'ellipsis', overflow: 'hiden' }}>{recordID}</div>
           <Copy
             className="copy"
             onClick={() => {
-              return onCopyClick(txID);
+              return onCopyClick(recordID);
             }}
           />
         </div>
@@ -73,17 +73,17 @@ const columns: ColumnsType<MockType> = [
     },
   },
   {
-    title: 'Tx Originator',
-    key: 'txOriginator',
-    dataIndex: 'txOriginator',
-    render: (txOriginator) => {
+    title: 'Record Originator',
+    key: 'recordOriginator',
+    dataIndex: 'recordOriginator',
+    render: (recordOriginator) => {
       return (
         <div className="status">
-          <div style={{ textOverflow: 'ellipsis', overflow: 'hiden' }}>{txOriginator}</div>
+          <div style={{ textOverflow: 'ellipsis', overflow: 'hiden' }}>{recordOriginator}</div>
           <Copy
             className="copy"
             onClick={() => {
-              return onCopyClick(txOriginator);
+              return onCopyClick(recordOriginator);
             }}
           />
         </div>
@@ -91,37 +91,37 @@ const columns: ColumnsType<MockType> = [
     },
   },
   {
-    title: 'Tx Type',
-    key: 'txType',
-    dataIndex: 'txType',
+    title: 'Record Type',
+    key: 'recordType',
+    dataIndex: 'recordType',
   },
   {
-    title: 'Tx Status',
-    key: 'txStatus',
-    dataIndex: 'txStatus',
+    title: 'Record Status',
+    key: 'recordStatus',
+    dataIndex: 'recordStatus',
   },
 ];
 
 const mock = [
   {
     date: '11.03.2022',
-    txID: '0x7ac8c...',
+    recordID: '0x7ac8c...',
     agreementAddress: shortenedAddress('0x976EA74026E726554dB657fA54763abd0C3a0aa9'),
-    txOriginator: shortenedAddress('0x976EA74026E726554dB657fA54763abd0C3a0aa9'),
-    txType: 'Agreement Created',
-    txStatus: 'Approval Requested',
+    recordOriginator: shortenedAddress('0x976EA74026E726554dB657fA54763abd0C3a0aa9'),
+    recordType: 'Agreement Created',
+    recordStatus: 'Approval Requested',
   },
   {
     date: '12.03.2022',
-    txID: '0x7ac9c...',
+    recordID: '0x7ac9c...',
     agreementAddress: shortenedAddress('0x976EA74026E726554dB657fA54763abd0C3a0aa9'),
-    txOriginator: shortenedAddress('0x976EA74026E726554dB657fA54763abd0C3a0aa9'),
-    txType: 'Agreement',
-    txStatus: 'Approval Requested',
+    recordOriginator: shortenedAddress('0x976EA74026E726554dB657fA54763abd0C3a0aa9'),
+    recordType: 'Agreement',
+    recordStatus: 'Approval Requested',
   },
 ];
-const Transaction = () => {
-  const [transactions, setTransactions] = useState([mock]);
+const Record = () => {
+  const [records, setRecords] = useState([mock]);
   const { address } = useSelector(selectSession);
   const [collapsed, setCollapsed] = useState(false);
 
@@ -129,7 +129,7 @@ const Transaction = () => {
     <>
       <Header
         onClick={() => {
-          return setTransactions([mock]);
+          return setRecords([mock]);
         }}
       />
       <Layout style={{ minHeight: '700px' }}>
@@ -153,7 +153,7 @@ const Transaction = () => {
             </div>
           </div>
           <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']} accessKey={'1'}>
-            <Menu.Item key="1">Transactions</Menu.Item>
+            <Menu.Item key="1">Records</Menu.Item>
             <Menu.Item key="2">Payments</Menu.Item>
             <Menu.Item key="3">Users</Menu.Item>
             <Menu.Item key="4">Settings</Menu.Item>
@@ -162,7 +162,7 @@ const Transaction = () => {
         <Layout>
           <div className="header">
             <div className="ahLeft">
-              <span className="title">Transactions</span>
+              <span className="title">Records</span>
             </div>
             <div className="ahRight">
               <Search className="searchInput" placeholder="Search" />
@@ -170,7 +170,7 @@ const Transaction = () => {
           </div>
           <Content style={{ display: 'block', margin: '24px 16px 0' }}>
             <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
-              {transactions?.length ? (
+              {records?.length ? (
                 <div className="userList">
                   <Table dataSource={mock} columns={columns} rowKey="id" />
                 </div>
@@ -185,4 +185,4 @@ const Transaction = () => {
   );
 };
 
-export default Transaction;
+export default Record;

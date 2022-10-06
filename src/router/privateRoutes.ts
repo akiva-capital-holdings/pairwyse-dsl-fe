@@ -1,12 +1,12 @@
 /* eslint-disable arrow-body-style */
 import { lazy } from 'react';
 
-const Transaction = lazy(() => import('../components/transaction'));
+const Record = lazy(() => import('../components/record'));
 const Home = lazy(() => import('../components/home'));
 
 const privateRoutes = [
   {
-    component: Transaction,
+    component: Record,
     path: '/',
   },
   {

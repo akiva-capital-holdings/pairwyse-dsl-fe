@@ -51,13 +51,13 @@ const HomePage = () => {
   const [signatories, setSignatories] = useState(mockSignatories);
   const [agreement, setAgreement] = useState('');
   const [dslId, setDslID] = useState('');
-  const [transaction, setTransaction] = useState('');
+  const [record, setRecord] = useState('');
   const [valueUpdateRequest, setUpdateRequest] = useState(initialUpdateRequestValue);
   const [numbers, setNumbers] = useState([]);
   // execition // TODO: fix typo
   const [agreementExecition, setAgreementExecition] = useState('');
   const [dslIdExecition, setDslIdExecition] = useState('');
-  const [txValueExecution, setTxValueExecution] = useState('');
+  const [rdValueExecution, setRecordValueExecution] = useState('');
   const [execitionValue, setExecitionValue] = useState(initialExecitionValue);
 
   useEffect(() => {
@@ -84,7 +84,7 @@ const HomePage = () => {
     setDslIdExecition('');
     setValue(undefined);
     setConditions(mock);
-    setTransaction('');
+    setRecord('');
     setDefinition('');
     setAgreement('');
     setLender('');
@@ -141,10 +141,10 @@ const HomePage = () => {
       <UpdateRequest
         setUpdateRequest={setUpdateRequest}
         setSignatories={setSignatories}
-        setTransaction={setTransaction}
+        setRecord={setRecord}
         setConditions={setConditions}
         setAgreement={setAgreement}
-        transaction={transaction}
+        record={record}
         signatories={signatories}
         conditions={conditions}
         setLoading={setLoading}
@@ -162,9 +162,9 @@ const HomePage = () => {
         dslId={dslIdExecition} // TODO: fix typo
         setExecitionValue={setExecitionValue}
         setAgreement={setAgreementExecition}
-        setTxValue={setTxValueExecution}
+        setRecordValue={setRecordValueExecution}
         agreement={agreementExecition}
-        txValue={txValueExecution}
+        rdValue={rdValueExecution}
         setLoading={setLoading}
         loading={loading}
       />
@@ -198,12 +198,12 @@ const HomePage = () => {
   const contentCOnteiner = {
     stepOne: (
       <div
-        className={`transactionContainer  ${
+        className={`recordContainer  ${
           valueAgreementRequest?.error && !valueAgreementRequest?.lastAgrAddr ? 'error' : ''
         }`}
       >
         <div className="titleContainer">
-          <div className="title">Transaction</div>
+          <div className="title">Record</div>
           {valueAgreementRequest?.submit &&
             iconValue(valueAgreementRequest?.error && !!valueAgreementRequest?.message)}
         </div>
@@ -230,7 +230,7 @@ const HomePage = () => {
             <div style={{ marginTop: '12px' }} className="content">
               <div className="title">
                 Agreement Request <br />
-                Transaction ID
+                Record ID
               </div>
               <div className="valueContainer">
                 <div className="value">{shortenedAddress(valueAgreementRequest?.hash, 9)}</div>
@@ -246,12 +246,12 @@ const HomePage = () => {
     ),
     stepTwo: (
       <div
-        className={`transactionContainer  ${
+        className={`recordContainer  ${
           valueDefinitionRequest?.error && !valueDefinitionRequest?.value ? 'error' : ''
         }`}
       >
         <div className="titleContainer">
-          <div className="title">Transaction</div>
+          <div className="title">Record</div>
           {valueDefinitionRequest?.submit &&
             iconValue(valueDefinitionRequest?.error && !!valueDefinitionRequest?.message)}
         </div>
@@ -276,15 +276,13 @@ const HomePage = () => {
             <div style={{ marginTop: '12px' }} className="content">
               <div className="title">
                 Definition Request <br />
-                Transaction ID
+                Record ID
               </div>
               <div className="valueContainer">
-                <div className="value">
-                  {shortenedAddress(valueDefinitionRequest?.transactionHash, 9)}
-                </div>
+                <div className="value">{shortenedAddress(valueDefinitionRequest?.hash, 9)}</div>
                 <Copy
                   style={{ cursor: 'pointer' }}
-                  onClick={() => onCopyClick(valueDefinitionRequest?.transactionHash)}
+                  onClick={() => onCopyClick(valueDefinitionRequest?.hash)}
                 />
               </div>
             </div>
@@ -294,12 +292,12 @@ const HomePage = () => {
     ),
     stepThree: (
       <div
-        className={`transactionContainer  ${
+        className={`recordContainer  ${
           valueUpdateRequest?.error && !valueUpdateRequest?.hash ? 'error' : ''
         }`}
       >
         <div className="titleContainer">
-          <div className="title">Transaction</div>
+          <div className="title">Record</div>
           {valueUpdateRequest?.submit &&
             iconValue(valueUpdateRequest?.error && !!valueUpdateRequest?.message)}
         </div>
@@ -325,12 +323,12 @@ const HomePage = () => {
     ),
     stepFour: (
       <div
-        className={`transactionContainer  ${
+        className={`recordContainer  ${
           execitionValue?.error && !execitionValue?.hash ? 'error' : ''
         }`}
       >
         <div className="titleContainer">
-          <div className="title">Transaction</div>
+          <div className="title">Record</div>
           <div className="titleSeccess">
             {execitionValue?.submit &&
               iconValue(execitionValue?.error && !!execitionValue?.message)}

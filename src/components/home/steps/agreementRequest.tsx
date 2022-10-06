@@ -38,7 +38,7 @@ const AgreementRequest = ({
         // @ts-ignore
         const agreementInstance = new provider.eth.Contract(getContractABI('Agreement'));
 
-        let transactionHash = '';
+        let recordHash = '';
         agreementInstance
           .deploy({
             data: getContractBytecode('Agreement'),
@@ -51,9 +51,9 @@ const AgreementRequest = ({
           .on('error', (err) => {
             console.error({ err });
           })
-          .on('transactionHash', (txHash) => {
-            transactionHash = txHash;
-            // console.log({ transactionHash });
+          .on('transactionHash', (rdHash) => {
+            recordHash = rdHash;
+            // console.log({ recordHash });
           })
           // .on('receipt', (receipt) => {
           //   // contains the new contract address
@@ -63,7 +63,7 @@ const AgreementRequest = ({
             setValueAgreementRequest({
               lastAgrAddr: newContractInstance.options.address,
               error: false,
-              hash: transactionHash,
+              hash: recordHash,
               submit: true,
             });
             dispatch(changeAgreementAddress(newContractInstance.options.address));
