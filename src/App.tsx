@@ -1,34 +1,29 @@
 import { useEffect, Suspense } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import MetaMaskOnboarding from '@metamask/onboarding';
+import { useMetaMask } from 'metamask-react';
 import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
 import Web3 from 'web3';
 import detectEthereumProvider from '@metamask/detect-provider';
 import Footer from './components/footer';
 import { initRoutes } from './router';
-
 import {
   selectSession,
-  connect,
   changeNetworkAction,
-  changeNetworkName,
 } from './redux/sessionReducer';
-import { provider, onboarding, selectUtils } from './redux/utilsReducer';
-import { fnc, ethereumOff, checkNetwork } from './utils/helpers';
+import {
+  provider,
+  selectUtils
+} from './redux/utilsReducer';
 import './styles/antd.css';
 import 'antd/dist/antd.css';
 
 function App() {
-  const { address, network } = useSelector(selectSession);
-  const { onboarding: onboardingStore, provider: providerStore } = useSelector(selectUtils);
+  const { network } = useSelector(selectSession);
+  const { provider: providerStore } = useSelector(selectUtils);
+  const { status, account, chainId } = useMetaMask();
   const dispatch = useDispatch();
-  const { ethereum }: any = window;
 
   const setOnboardingRef = async () => {
-    if (!onboardingStore || Object.keys(onboardingStore).length === 0) {
-      const meta: any = new MetaMaskOnboarding();
-      await dispatch(onboarding({ meta }));
-    }
     if (!providerStore || Object.keys(providerStore).length === 0) {
       const p: any = await detectEthereumProvider().catch();
       const web3 = new Web3(p);
@@ -36,28 +31,38 @@ function App() {
     }
   };
 
-  useEffect(() => {
-    fnc(dispatch, connect);
-    setOnboardingRef();
-    if (MetaMaskOnboarding.isMetaMaskInstalled()) {
-      ethereum?.on('chainChanged', () => {
-        return checkNetwork(dispatch, changeNetworkAction, changeNetworkName);
-      });
-    }
-    return () => {
-      ethereumOff(dispatch, connect);
-    };
-  }, []);
+  const checkNetwork = async () => {
+  const networks = {
+    mainnet: 1,
+    rinkeby: 4,
+    local: 539,
+    dev: '7a69',
+  };
+  // @ts-ignore
+    const currentChainId = chainId?.split('x')[1];
+  if (networks[process.env.REACT_APP_NETWORK] !== Number(currentChainId)) {
+    dispatch(changeNetworkAction(false));
+    return;
+  }
+  dispatch(changeNetworkAction(true));
+};
 
   useEffect(() => {
-    checkNetwork(dispatch, changeNetworkAction, changeNetworkName);
+    setOnboardingRef();
+    if (status === 'connected') {
+      checkNetwork();
+    }
+  }, [status]);
+
+  useEffect(() => {
+    checkNetwork();
   }, [network]);
 
   const redirectF = () => {
-    if (!network && !address) {
+    if (!network && !account) {
       return '/';
     }
-    if (!network && address && process.env.REACT_APP_NETWORK === 'dev') {
+    if (!network && account && process.env.REACT_APP_NETWORK === 'dev') {
       return '/change-network';
     }
     return '/';
@@ -70,7 +75,7 @@ function App() {
       <Router>
         <Suspense fallback={<div>Page is loading...</div>}>
           <Routes>
-            {initRoutes(address, network)}
+            {initRoutes(account, network)}
             {redirect}
           </Routes>
           <Footer />

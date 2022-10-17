@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { createInstance } from 'utils/helpers';
 import { selectUtils } from 'redux/utilsReducer';
-import { selectSession } from '../../../redux/sessionReducer';
+import { useMetaMask } from 'metamask-react';
 import getRule from '../../../utils/validate';
 
 const { Item } = Form;
@@ -21,7 +21,7 @@ const ExecutionRequest = ({
   loading,
   dslId,
 }) => {
-  const { address: userWallet } = useSelector(selectSession);
+  const { account } = useMetaMask();
   const { provider } = useSelector(selectUtils);
   const [recordIds, setRecordIds] = useState([]);
   const [conditions, setConditions] = useState([]);
@@ -36,7 +36,7 @@ const ExecutionRequest = ({
     try {
       const executeRecord = await agreementContract.methods
         .execute(dslId)
-        .send({ from: userWallet, value: rdValue?.replace(/,/gi, '') });
+        .send({ from: account, value: rdValue?.replace(/,/gi, '') });
       setExecitionValue({
         hash: executeRecord.transactionHash,
         submit: true,
@@ -191,7 +191,7 @@ const ExecutionRequest = ({
             }}
             className="value"
           >
-            {userWallet}
+            {account}
           </div>
           <div style={{ marginTop: '24px' }} className="text">
             Agreement

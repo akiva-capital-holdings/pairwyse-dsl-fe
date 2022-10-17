@@ -1,10 +1,12 @@
 import MetaMaskOnboarding from '@metamask/onboarding';
 import { Contract, ethers } from 'ethers';
+// import { useSelector } from 'react-redux';
 import _ from 'lodash';
 import { AbiItem } from 'web3-utils';
 import { abi as agreementABI, bytecode as agreementBytecode } from '../data/agreement.json';
 import { abi as contextFactoryABI } from '../data/contextFactory.json';
 import allNetworks from './networks.json';
+
 
 const { ethereum }: any = window;
 
@@ -18,6 +20,8 @@ const contractNames = {
   ContextFactory: 'ContextFactory',
 };
 type ContractName = keyof typeof contractNames;
+
+// const { chainId } = useSelector(selectUtils);
 
 export const hex4Bytes = (str: string) => {
   return ethers.utils
@@ -60,6 +64,7 @@ export const checkNetwork = async (dispatch, checkNetworkAction, changeNetworkNa
   // @ts-ignore
 
   const currentChainId = (await ethereum?.request({ method: 'eth_chainId' }))?.split('x')[1];
+  // console.log(chainId.split('x')[1]);
   if (networks[process.env.REACT_APP_NETWORK] !== currentChainId) {
     dispatch(changeNetworkName(currentChainId));
     dispatch(checkNetworkAction(false));
@@ -133,6 +138,7 @@ export const fnc = (dispatch, connect) => {
 export const ethereumOff = (dispatch, connect) => {
   if (ethereum?.off) {
     ethereum?.off('accountsChanged', (data) => {
+      console.log(data);
       return setToken(data, dispatch, connect);
     });
   }

@@ -4,10 +4,11 @@ import { Form, Button, Menu, Dropdown, Space, Input, Spin } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useMetaMask } from 'metamask-react';
 import { getContractABI, getContractBytecode } from 'utils/helpers';
 import getRule, { validationAgreementModel } from '../../../utils/validate';
 import { selectUtils } from '../../../redux/utilsReducer';
-import { selectSession, changeAgreementAddress } from '../../../redux/sessionReducer';
+import { changeAgreementAddress } from '../../../redux/sessionReducer';
 import './index.css';
 
 // TODO: in all project `"lander" -> "lender"`
@@ -25,7 +26,7 @@ const AgreementRequest = ({
   value,
   setValueAgreementRequest,
 }) => {
-  const { address: userWallet } = useSelector(selectSession);
+  const { account } = useMetaMask();
   const { provider } = useSelector(selectUtils) as { provider: Web3 };
   const dispatch = useDispatch();
 
@@ -44,10 +45,10 @@ const AgreementRequest = ({
             data: getContractBytecode('Agreement'),
             arguments: [
               process.env.REACT_APP_PARSER,
-              userWallet, // msg.sender would be the simulation of multisig wallet
+              account, // msg.sender would be the simulation of multisig wallet
             ],
           })
-          .send({ from: userWallet })
+          .send({ from: account })
           .on('error', (err) => {
             console.error({ err });
           })
@@ -121,7 +122,7 @@ const AgreementRequest = ({
         <div className="title">Agreement Request </div>
         <Form name="agreementRequestForm" autoComplete="off" onFinish={createAgreement}>
           <div className="text">Requestor</div>
-          <div className="value">{userWallet}</div>
+          <div className="value">{account}</div>
           <div style={{ marginTop: '24px' }} className="text">
             Requestor label
           </div>
