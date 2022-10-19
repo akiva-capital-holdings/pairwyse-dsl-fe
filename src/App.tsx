@@ -1,4 +1,5 @@
 import { useEffect, Suspense } from 'react';
+import { provider } from 'web3-core';
 import { useSelector, useDispatch } from 'react-redux';
 import { useMetaMask } from 'metamask-react';
 import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
@@ -11,7 +12,7 @@ import {
   changeNetworkAction,
 } from './redux/sessionReducer';
 import {
-  provider,
+  utilsProvider,
   selectUtils
 } from './redux/utilsReducer';
 import './styles/antd.css';
@@ -19,15 +20,15 @@ import 'antd/dist/antd.css';
 
 function App() {
   const { network } = useSelector(selectSession);
-  const { provider: providerStore } = useSelector(selectUtils);
+  const { utilsProvider: providerStore } = useSelector(selectUtils);
   const { status, account, chainId } = useMetaMask();
   const dispatch = useDispatch();
 
   const setOnboardingRef = async () => {
     if (!providerStore || Object.keys(providerStore).length === 0) {
-      const p: any = await detectEthereumProvider().catch();
+      const p: provider = await detectEthereumProvider().catch() as provider;
       const web3 = new Web3(p);
-      await dispatch(provider(web3));
+      await dispatch(utilsProvider(web3));
     }
   };
 

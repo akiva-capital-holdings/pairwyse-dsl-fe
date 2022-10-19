@@ -1,11 +1,20 @@
 import React, { useMemo } from 'react';
+import { useMetaMask } from 'metamask-react';
 import { NETWORK_OPTIONS } from '../../utils/constants';
 import { getNetworksList } from '../../utils/helpers';
+
 import '../home/index.css';
 import './index.css';
 
-const networksList: {} = getNetworksList();
-const { ethereum }: any = window;
+interface Error {
+  code: string | number;
+  message: string;
+}
+
+const ChangeNetwork = () => {
+  // const { network } = useSelector(selectSession);
+  const { ethereum } = useMetaMask();
+  const networksList: {} = getNetworksList();
 
 const handleClick = async () => {
   try {
@@ -18,8 +27,9 @@ const handleClick = async () => {
         },
       ],
     });
-  } catch (err: any) {
-    if (err?.code === 4902) {
+  } catch (err) {
+    const {code} = err as Error;
+    if (code === 4902) {
       try {
         await ethereum.request({
           method: 'wallet_addEthereumChain',
@@ -29,8 +39,9 @@ const handleClick = async () => {
             },
           ],
         });
-      } catch (error: any) {
-        console.error(error?.message);
+      } catch (error) {
+        const {message} = error as Error;
+        console.error(message);
       }
     }
     console.error(err?.message);
@@ -42,9 +53,6 @@ const nameNetwork = () => {
     return networksList[ethereum?.networkVersion];
   }, [ethereum?.networkVersion]);
 };
-
-const ChangeNetwork = () => {
-  // const { network } = useSelector(selectSession);
 
   return (
     <div className="changeNetwork">

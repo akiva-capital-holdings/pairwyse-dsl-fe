@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import Web3 from 'web3';
 import { Form, Button, Menu, Dropdown, Space, Input, Spin } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux';
@@ -27,7 +26,7 @@ const AgreementRequest = ({
   setValueAgreementRequest,
 }) => {
   const { account } = useMetaMask();
-  const { provider } = useSelector(selectUtils) as { provider: Web3 };
+  const { utilsProvider } = useSelector(selectUtils);
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
@@ -37,7 +36,7 @@ const AgreementRequest = ({
     try {
       if (!error) {
         // @ts-ignore
-        const agreementInstance = new provider.eth.Contract(getContractABI('Agreement'));
+        const agreementInstance = new utilsProvider.eth.Contract(getContractABI('Agreement'));
 
         let recordHash = '';
         agreementInstance

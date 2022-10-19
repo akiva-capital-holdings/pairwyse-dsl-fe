@@ -22,7 +22,7 @@ const ExecutionRequest = ({
   dslId,
 }) => {
   const { account } = useMetaMask();
-  const { provider } = useSelector(selectUtils);
+  const { utilsProvider } = useSelector(selectUtils);
   const [recordIds, setRecordIds] = useState([]);
   const [conditions, setConditions] = useState([]);
   const [requiredRecirds, setRequiredRecirds] = useState([]);
@@ -30,7 +30,7 @@ const ExecutionRequest = ({
   const [record, setRecord] = useState([]);
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  const agreementContract = createInstance('Agreement', agreement, provider);
+  const agreementContract = createInstance('Agreement', agreement, utilsProvider);
   const ExecutionSubmit = async () => {
     setLoading(true);
     try {

@@ -28,7 +28,7 @@ const DefinitionRequest = ({
   loading,
 }) => {
   const { account } = useMetaMask();
-  const { provider } = useSelector(selectUtils);
+  const { utilsProvider } = useSelector(selectUtils);
   const [visible, setVisible] = useState(false);
   const [activeMenu, setActiveMenu] = useState(undefined);
   const navigate = useNavigate();
@@ -40,7 +40,7 @@ const DefinitionRequest = ({
       const DEFINITION = definition;
       const SPETIFICATION = specifications[0].value;
 
-      const agreementInstance = createInstance('Agreement', AGREEMENT_ADDR, provider);
+      const agreementInstance = createInstance('Agreement', AGREEMENT_ADDR, utilsProvider);
       const rd = await agreementInstance.methods
         .setStorageAddress(hex4Bytes(DEFINITION), SPETIFICATION)
         .send({ from: account });

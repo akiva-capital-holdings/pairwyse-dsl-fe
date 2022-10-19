@@ -31,7 +31,7 @@ const UpdateRequest = ({
   dslId,
 }) => {
   const { account } = useMetaMask();
-  const { provider } = useSelector(selectUtils);
+  const { utilsProvider } = useSelector(selectUtils);
   const [valueRequiredRecords, setValueRequiredRecords] = useState('');
   const [errorRequiredRecords, setErrorRequiredRecords] = useState(false);
   const [form] = Form.useForm();
@@ -123,12 +123,12 @@ const UpdateRequest = ({
       const CONDITION = conditions[0].value;
       const RECORD = record;
 
-      const agreementContract = createInstance('Agreement', AGREEMENT_ADDR, provider);
+      const agreementContract = createInstance('Agreement', AGREEMENT_ADDR, utilsProvider);
 
       const contextFactory = createInstance(
         'ContextFactory',
         process.env.REACT_APP_CONTEXT_FACTORY,
-        provider
+        utilsProvider
       );
       const numId = numbers?.map((el) => el?.value);
       await addSteps(agreementContract, AGREEMENT_ADDR, contextFactory, [
