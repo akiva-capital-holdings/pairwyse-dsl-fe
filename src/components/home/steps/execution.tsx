@@ -10,21 +10,23 @@ import getRule from '../../../utils/validate';
 
 const { Item } = Form;
 
-interface Execition{
-    setExecitionValue: React.Dispatch<React.SetStateAction<{
-    hash: string;
-    submit: boolean;
-    error: boolean;
-    message: string;
-    }>>;
-    setAgreement: React.Dispatch<React.SetStateAction<string>>;
-    setRecordValue: React.Dispatch<React.SetStateAction<string>>;
-    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-    agreement: string;
-    setDslID: React.Dispatch<React.SetStateAction<string>>;
-    rdValue: string;
-    loading: boolean;
-    dslId: string;
+interface Execition {
+  setExecitionValue: React.Dispatch<
+    React.SetStateAction<{
+      hash: string;
+      submit: boolean;
+      error: boolean;
+      message: string;
+    }>
+  >;
+  setAgreement: React.Dispatch<React.SetStateAction<string>>;
+  setRecordValue: React.Dispatch<React.SetStateAction<string>>;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  agreement: string;
+  setDslID: React.Dispatch<React.SetStateAction<string>>;
+  rdValue: string;
+  loading: boolean;
+  dslId: string;
 }
 
 const ExecutionRequest = ({
@@ -138,7 +140,7 @@ const ExecutionRequest = ({
             Required Records
           </div>
           <div className="numRecordCoontainer">
-            {requiredRecirds?.map((el,elId) => {
+            {requiredRecirds?.map((el, elId) => {
               return (
                 <div key={elId} className="numRecord">
                   <div className="textNum">{el}</div>
@@ -181,7 +183,9 @@ const ExecutionRequest = ({
   }, []);
 
   useEffect(() => {
-    if (dslId) { GetRecordValues() }
+    if (dslId) {
+      GetRecordValues();
+    }
   }, [dslId]);
 
   return (

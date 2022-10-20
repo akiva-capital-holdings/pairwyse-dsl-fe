@@ -18,31 +18,37 @@ import { ReactComponent as Delete } from '../../../images/delete.svg';
 const { Item } = Form;
 
 interface Definition {
-  setAgreementDefinition:React.Dispatch<React.SetStateAction<string>>;
-  agreementDefinition:string;
-  setValueDefinitionRequest:React.Dispatch<React.SetStateAction<{
-    value: string;
-    submit: boolean;
-    hash: string;
-    error: boolean;
-    message: string;
-}>>;
-  setspecification:React.Dispatch<React.SetStateAction<{
+  setAgreementDefinition: React.Dispatch<React.SetStateAction<string>>;
+  agreementDefinition: string;
+  setValueDefinitionRequest: React.Dispatch<
+    React.SetStateAction<{
+      value: string;
+      submit: boolean;
+      hash: string;
+      error: boolean;
+      message: string;
+    }>
+  >;
+  setspecification: React.Dispatch<
+    React.SetStateAction<
+      {
+        title: string;
+        value: string;
+        id: number;
+        type: string;
+      }[]
+    >
+  >;
+  specifications: {
     title: string;
     value: string;
     id: number;
     type: string;
-}[]>>;
-  specifications:{
-    title: string;
-    value: string;
-    id: number;
-    type: string;
-}[];
-  setDefinition:React.Dispatch<React.SetStateAction<string>>;
-  definition:string;
-  setLoading:React.Dispatch<React.SetStateAction<boolean>>;
-  loading:boolean;
+  }[];
+  setDefinition: React.Dispatch<React.SetStateAction<string>>;
+  definition: string;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  loading: boolean;
 }
 
 const DefinitionRequest = ({

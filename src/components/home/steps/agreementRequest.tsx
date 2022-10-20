@@ -13,22 +13,24 @@ import './index.css';
 
 const { Item } = Form;
 
-interface Agreement{
-  setLoading:React.Dispatch<React.SetStateAction<boolean>>;
-  setLender:React.Dispatch<React.SetStateAction<string>>;
-  setError:React.Dispatch<string>;
-  setValue:React.Dispatch<string>;
-  loading:boolean;
-  lender:string;
-  error:string;
-  value:string;
-  setValueAgreementRequest:React.Dispatch<React.SetStateAction<{
-    lastAgrAddr: string;
-    error: boolean;
-    hash: string;
-    message: string;
-    submit: boolean;
-}>>;
+interface Agreement {
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  setLender: React.Dispatch<React.SetStateAction<string>>;
+  setError: React.Dispatch<string>;
+  setValue: React.Dispatch<string>;
+  loading: boolean;
+  lender: string;
+  error: string;
+  value: string;
+  setValueAgreementRequest: React.Dispatch<
+    React.SetStateAction<{
+      lastAgrAddr: string;
+      error: boolean;
+      hash: string;
+      message: string;
+      submit: boolean;
+    }>
+  >;
 }
 
 const AgreementRequest = ({
@@ -74,7 +76,7 @@ const AgreementRequest = ({
               lastAgrAddr: newContractInstance.options.address,
               error: false,
               hash: recordHash,
-              message:'',
+              message: '',
               submit: true,
             });
             dispatch(changeAgreementAddress(newContractInstance.options.address));
@@ -83,7 +85,13 @@ const AgreementRequest = ({
       }
     } catch (e) {
       console.error(e);
-      setValueAgreementRequest({ lastAgrAddr: '', error: true, hash:'', message: e?.message, submit: true });
+      setValueAgreementRequest({
+        lastAgrAddr: '',
+        error: true,
+        hash: '',
+        message: e?.message,
+        submit: true,
+      });
       setLoading(false);
     }
   };

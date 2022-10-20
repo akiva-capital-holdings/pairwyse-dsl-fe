@@ -5,17 +5,14 @@ import '../home/index.css';
 import './index.css';
 
 const ConnectWallet = () => {
-    const { connect } = useMetaMask();
+  const { connect } = useMetaMask();
 
   return (
     <>
       <Header onClick={() => {}} />
       <div className="connectForm">
         <div className="title">Please Connect your wallet</div>
-        <button
-          className="btn"
-          onClick={connect}
-        >
+        <button className="btn" onClick={connect}>
           Connect Wallet
         </button>
       </div>
