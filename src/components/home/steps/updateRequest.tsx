@@ -13,43 +13,53 @@ import getRule from '../../../utils/validate';
 
 const { Item } = Form;
 
-interface Update{
-  setUpdateRequest:React.Dispatch<React.SetStateAction<{
-    hash: string;
-    submit: boolean;
-    error: boolean;
-    message: string;
-}>>;
-  setSignatories:React.Dispatch<React.SetStateAction<{
-    title: string;
-    value: string;
-    id: number;
-}[]>>;
-  setRecord:React.Dispatch<React.SetStateAction<string>>;
-  setConditions:React.Dispatch<React.SetStateAction<{
-    title: string;
-    value: string;
-    id: number;
-}[]>>;
-  setAgreement:React.Dispatch<React.SetStateAction<string>>;
-  record:string;
-  signatories:{
-    title: string;
-    value: string;
-    id: number;
-}[];
-  conditions:{
+interface Update {
+  setUpdateRequest: React.Dispatch<
+    React.SetStateAction<{
+      hash: string;
+      submit: boolean;
+      error: boolean;
+      message: string;
+    }>
+  >;
+  setSignatories: React.Dispatch<
+    React.SetStateAction<
+      {
+        title: string;
+        value: string;
+        id: number;
+      }[]
+    >
+  >;
+  setRecord: React.Dispatch<React.SetStateAction<string>>;
+  setConditions: React.Dispatch<
+    React.SetStateAction<
+      {
+        title: string;
+        value: string;
+        id: number;
+      }[]
+    >
+  >;
+  setAgreement: React.Dispatch<React.SetStateAction<string>>;
+  record: string;
+  signatories: {
     title: string;
     value: string;
     id: number;
   }[];
-  setLoading:React.Dispatch<React.SetStateAction<boolean>>;
-  setNumbers:React.Dispatch<React.SetStateAction<number[]>>;
-  agreement:string;
-  setDslID:React.Dispatch<React.SetStateAction<string>>;
+  conditions: {
+    title: string;
+    value: string;
+    id: number;
+  }[];
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  setNumbers: React.Dispatch<React.SetStateAction<number[]>>;
+  agreement: string;
+  setDslID: React.Dispatch<React.SetStateAction<string>>;
   numbers: number[];
-  loading:boolean;
-  dslId:string;
+  loading: boolean;
+  dslId: string;
 }
 
 const UpdateRequest = ({
@@ -203,7 +213,7 @@ const UpdateRequest = ({
     if (numbers?.length === 0) {
       setErrorRequiredRecords(true);
     } else {
-      setValueRequiredRecords(numbers[numbers.length - 1]);
+      setValueRequiredRecords(numbers[numbers.length - 1].toString());
     }
   };
   return (
@@ -269,8 +279,8 @@ const UpdateRequest = ({
             className="requiredRecords"
             rules={
               // numbers?.length === 0 && valueRequiredRecords?.toString() === ''?
-                 getRule('requiredRecords', 'record-value', valueRequiredRecords?.toString())
-                // : getRule('requiredRecords', 'requiredRecords', valueRequiredRecords?.toString())
+              getRule('requiredRecords', 'record-value', valueRequiredRecords?.toString())
+              // : getRule('requiredRecords', 'requiredRecords', valueRequiredRecords?.toString())
             }
             style={{ marginBottom: '8px' }}
           >
@@ -279,7 +289,7 @@ const UpdateRequest = ({
               placeholder="Type record number here"
               onChange={(e) => {
                 if (numbers?.length !== 0 && e?.target?.value === '') {
-                  setValueRequiredRecords(Number(e?.target?.value));
+                  setValueRequiredRecords(e?.target?.value);
                 } else {
                   form
                     .validateFields(['requiredRecords'])
@@ -287,7 +297,7 @@ const UpdateRequest = ({
                     .then((v) => setErrorRequiredRecords(false))
                     // eslint-disable-next-line @typescript-eslint/no-unused-vars
                     .catch((err) => setErrorRequiredRecords(true));
-                  setValueRequiredRecords(Number(e?.target?.value));
+                  setValueRequiredRecords(e?.target?.value);
                 }
               }}
               value={valueRequiredRecords}
@@ -303,7 +313,7 @@ const UpdateRequest = ({
           <div
             className={errorRequiredRecords ? 'numRecordCoontainer error' : 'numRecordCoontainer'}
           >
-            {numbers?.map((el,elId) => {
+            {numbers?.map((el, elId) => {
               return (
                 <div key={elId} className="numRecord">
                   <div className="textNum">{el}</div>
