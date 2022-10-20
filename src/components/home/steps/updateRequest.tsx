@@ -2,11 +2,11 @@ import { useState } from 'react';
 import { Button, Form, Input, Spin } from 'antd';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useMetaMask } from 'metamask-react';
 import { createInstance } from 'utils/helpers';
 import { selectUtils } from 'redux/utilsReducer';
 import { Contract } from 'ethers';
 import { v4 as uuidv4 } from 'uuid';
-import { selectSession } from '../../../redux/sessionReducer';
 import { ReactComponent as Delete } from '../../../images/delete.svg';
 import { ReactComponent as Cloose } from '../../../images/close.svg';
 import getRule from '../../../utils/validate';
@@ -30,8 +30,8 @@ const UpdateRequest = ({
   loading,
   dslId,
 }) => {
-  const { address: userWallet } = useSelector(selectSession);
-  const { provider } = useSelector(selectUtils);
+  const { account } = useMetaMask();
+  const { utilsProvider } = useSelector(selectUtils);
   const [valueRequiredRecords, setValueRequiredRecords] = useState('');
   const [errorRequiredRecords, setErrorRequiredRecords] = useState(false);
   const [form] = Form.useForm();
@@ -56,7 +56,7 @@ const UpdateRequest = ({
     setLoading(true);
     try {
       for await (const step of steps) {
-        await contextFactory.methods.deployContext(agreementAddr).send({ from: userWallet });
+        await contextFactory.methods.deployContext(agreementAddr).send({ from: account });
         let contextsLen = parseInt(
           await contextFactory.methods.getDeployedContextsLen().call(),
           10
@@ -66,7 +66,7 @@ const UpdateRequest = ({
           .call();
         const conditionsContextAddrs = [];
         for (let j = 0; j < step.conditions.length; j++) {
-          await contextFactory.methods.deployContext(agreementAddr).send({ from: userWallet });
+          await contextFactory.methods.deployContext(agreementAddr).send({ from: account });
           contextsLen = parseInt(await contextFactory.methods.getDeployedContextsLen().call(), 10);
           const conditionContextAddr = await contextFactory.methods
             .deployedContexts(contextsLen - 1)
@@ -74,7 +74,7 @@ const UpdateRequest = ({
           conditionsContextAddrs.push(conditionContextAddr);
           await agreementContract.methods
             .parse(step.conditions[j], conditionContextAddr, process.env.REACT_APP_PREPROCESSOR)
-            .send({ from: userWallet });
+            .send({ from: account });
           console.log(
             `\n\taddress: \x1b[35m${conditionContextAddr}\x1b[0m\n\tcondition ${
               j + 1
@@ -89,7 +89,7 @@ const UpdateRequest = ({
         });
         await agreementContract.methods
           .parse(step.record, recordContextAddr, process.env.REACT_APP_PREPROCESSOR)
-          .send({ from: userWallet });
+          .send({ from: account });
         const agrUpdate = await agreementContract.methods
           .update(
             step.recordId,
@@ -100,7 +100,7 @@ const UpdateRequest = ({
             recordContextAddr,
             conditionsContextAddrs
           )
-          .send({ from: userWallet });
+          .send({ from: account });
         if (agrUpdate?.transactionHash) {
           hash = agrUpdate?.transactionHash;
         }
@@ -123,12 +123,12 @@ const UpdateRequest = ({
       const CONDITION = conditions[0].value;
       const RECORD = record;
 
-      const agreementContract = createInstance('Agreement', AGREEMENT_ADDR, provider);
+      const agreementContract = createInstance('Agreement', AGREEMENT_ADDR, utilsProvider);
 
       const contextFactory = createInstance(
         'ContextFactory',
         process.env.REACT_APP_CONTEXT_FACTORY,
-        provider
+        utilsProvider
       );
       const numId = numbers?.map((el) => el?.value);
       await addSteps(agreementContract, AGREEMENT_ADDR, contextFactory, [
@@ -187,7 +187,7 @@ const UpdateRequest = ({
             }}
             className="value"
           >
-            {userWallet}
+            {account}
           </div>
 
           <div style={{ marginTop: '24px' }} className="text">
@@ -195,7 +195,7 @@ const UpdateRequest = ({
           </div>
           <Item name="dsl-id" validateTrigger="onBlur" rules={getRule('dsl-id', 'dsl-id', dslId)}>
             <Input
-              className="lander"
+              className="lender"
               defaultValue={dslId}
               onChange={(e) => {
                 return setDslID(e?.target?.value);
@@ -212,7 +212,7 @@ const UpdateRequest = ({
             rules={getRule('agreement', 'agreement', agreement)}
           >
             <Input
-              className="lander"
+              className="lender"
               defaultValue={agreement}
               onChange={(e) => {
                 return setAgreement(e?.target?.value);
@@ -234,7 +234,7 @@ const UpdateRequest = ({
             style={{ marginBottom: '8px' }}
           >
             <Input
-              className={'lander'}
+              className={'lender'}
               placeholder="Type record number here"
               onChange={(e) => {
                 if (numbers?.length !== 0 && e?.target?.value === '') {
@@ -304,7 +304,7 @@ const UpdateRequest = ({
                         })
                       );
                     }}
-                    className="lander"
+                    className="lender"
                     defaultValue={el?.value}
                   />
                 </Item>
@@ -360,7 +360,7 @@ const UpdateRequest = ({
                         );
                       }}
                       style={{ minHeight: '100px' }}
-                      className="lander"
+                      className="lender"
                     />
                   </Item>
                   <button
@@ -406,7 +406,7 @@ const UpdateRequest = ({
                 onChange={(e) => {
                   return setRecord(e.target.value);
                 }}
-                className="lander"
+                className="lender"
               />
             </Item>
           </div>

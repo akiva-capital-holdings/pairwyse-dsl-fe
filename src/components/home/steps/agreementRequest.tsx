@@ -1,16 +1,15 @@
 import { useEffect } from 'react';
-import Web3 from 'web3';
 import { Form, Button, Menu, Dropdown, Space, Input, Spin } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useMetaMask } from 'metamask-react';
 import { getContractABI, getContractBytecode } from 'utils/helpers';
+import { Contract } from 'ethers';
 import getRule, { validationAgreementModel } from '../../../utils/validate';
 import { selectUtils } from '../../../redux/utilsReducer';
-import { selectSession, changeAgreementAddress } from '../../../redux/sessionReducer';
+import { changeAgreementAddress } from '../../../redux/sessionReducer';
 import './index.css';
-
-// TODO: in all project `"lander" -> "lender"`
 
 const { Item } = Form;
 
@@ -25,8 +24,8 @@ const AgreementRequest = ({
   value,
   setValueAgreementRequest,
 }) => {
-  const { address: userWallet } = useSelector(selectSession);
-  const { provider } = useSelector(selectUtils) as { provider: Web3 };
+  const { account } = useMetaMask();
+  const { utilsProvider } = useSelector(selectUtils);
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
@@ -35,8 +34,7 @@ const AgreementRequest = ({
     setLoading(true);
     try {
       if (!error) {
-        // @ts-ignore
-        const agreementInstance = new provider.eth.Contract(getContractABI('Agreement'));
+        const agreementInstance = new utilsProvider.eth.Contract(getContractABI('Agreement'));
 
         let recordHash = '';
         agreementInstance
@@ -44,22 +42,17 @@ const AgreementRequest = ({
             data: getContractBytecode('Agreement'),
             arguments: [
               process.env.REACT_APP_PARSER,
-              userWallet, // msg.sender would be the simulation of multisig wallet
+              account, // msg.sender would be the simulation of multisig wallet
             ],
           })
-          .send({ from: userWallet })
+          .send({ from: account })
           .on('error', (err) => {
             console.error({ err });
           })
-          .on('transactionHash', (rdHash) => {
-            recordHash = rdHash;
-            // console.log({ recordHash });
+          .on('transactionHash', (_recordHash: string) => {
+            recordHash = _recordHash;
           })
-          // .on('receipt', (receipt) => {
-          //   // contains the new contract address
-          //   console.log({ agreementAddr: receipt.contractAddress });
-          // })
-          .then((newContractInstance) => {
+          .then((newContractInstance: Contract) => {
             setValueAgreementRequest({
               lastAgrAddr: newContractInstance.options.address,
               error: false,
@@ -121,13 +114,13 @@ const AgreementRequest = ({
         <div className="title">Agreement Request </div>
         <Form name="agreementRequestForm" autoComplete="off" onFinish={createAgreement}>
           <div className="text">Requestor</div>
-          <div className="value">{userWallet}</div>
+          <div className="value">{account}</div>
           <div style={{ marginTop: '24px' }} className="text">
             Requestor label
           </div>
-          <Item name="lander" validateTrigger="onBlur" rules={getRule('lander', 'lander', lender)}>
+          <Item name="lender" validateTrigger="onBlur" rules={getRule('lender', 'lender', lender)}>
             <Input
-              className="lander"
+              className="lender"
               placeholder="Lender"
               defaultValue={lender}
               onChange={(e) => {

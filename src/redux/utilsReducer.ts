@@ -1,30 +1,23 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import Web3 from 'web3';
+import { Utils } from '../types';
 import type { RootState } from './store';
 
-interface Utils {
-  onboarding?: any;
-  provider: any;
-}
-
 const initialState: Utils = {
-  onboarding: {},
-  provider: {},
+  utilsProvider: {},
 };
 
 export const utilsReducer = createSlice({
   name: 'utils',
   initialState,
   reducers: {
-    onboarding: (state, action: PayloadAction<any>) => {
-      state.onboarding = action.payload.meta;
-    },
-    provider: (state, action: PayloadAction<any>) => {
-      state.provider = action.payload;
+    utilsProvider: (state, action: PayloadAction<Web3>) => {
+      state.utilsProvider = action.payload;
     },
   },
 });
 
-export const { onboarding, provider } = utilsReducer.actions;
+export const { utilsProvider } = utilsReducer.actions;
 
 export const selectUtils = (state: RootState) => {
   return state.utils;
