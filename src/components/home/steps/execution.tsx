@@ -64,6 +64,7 @@ const ExecutionRequest = ({
   };
 
   const GetActiveRecordIds = async () => {
+    // comment for checking linter before commit
     try {
       const array = await agreementContract.methods.getActiveRecords().call();
       setRecordIds(array);

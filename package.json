@@ -45,8 +45,25 @@
     "eject": "react-scripts eject",
     "husky-install": "husky install",
     "lint": "npx eslint --fix",
-    "prettier": "npx prettier --write '**/*.ts' '**/*.tsx'",
+    "prettier": "npx prettier --write \"**/*.ts\" \"**/*.tsx\"",
     "prepare": "husky install"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+    "lint-staged": {
+    "**/*.ts": [
+      "eslint --fix --ext",
+      "prettier --write \"**/*.ts\"",
+      "git add"
+    ],
+    "**/*.tsx": [
+      "eslint --fix --ext",
+      "prettier --write \"**/*.tsx\"",
+      "git add"
+    ]
   },
   "eslintConfig": {
     "extends": [
