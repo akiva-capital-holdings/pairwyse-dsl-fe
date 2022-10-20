@@ -1,10 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import Web3 from 'web3';
+import { Utils } from '../types';
 import type { RootState } from './store';
-
-interface Utils {
-  utilsProvider: object;
-}
 
 const initialState: Utils = {
   utilsProvider: {},
@@ -17,7 +14,7 @@ export const utilsReducer = createSlice({
     utilsProvider: (state, action: PayloadAction<Web3>) => {
       state.utilsProvider = action.payload;
     },
-  }
+  },
 });
 
 export const { utilsProvider } = utilsReducer.actions;

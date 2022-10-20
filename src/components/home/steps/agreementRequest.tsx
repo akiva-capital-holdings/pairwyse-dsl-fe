@@ -5,12 +5,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useMetaMask } from 'metamask-react';
 import { getContractABI, getContractBytecode } from 'utils/helpers';
+import { Contract } from 'ethers';
 import getRule, { validationAgreementModel } from '../../../utils/validate';
 import { selectUtils } from '../../../redux/utilsReducer';
 import { changeAgreementAddress } from '../../../redux/sessionReducer';
 import './index.css';
-
-// TODO: in all project `"lander" -> "lender"`
 
 const { Item } = Form;
 
@@ -35,7 +34,6 @@ const AgreementRequest = ({
     setLoading(true);
     try {
       if (!error) {
-        // @ts-ignore
         const agreementInstance = new utilsProvider.eth.Contract(getContractABI('Agreement'));
 
         let recordHash = '';
@@ -51,15 +49,10 @@ const AgreementRequest = ({
           .on('error', (err) => {
             console.error({ err });
           })
-          .on('transactionHash', (rdHash) => {
-            recordHash = rdHash;
-            // console.log({ recordHash });
+          .on('transactionHash', (_recordHash: string) => {
+            recordHash = _recordHash;
           })
-          // .on('receipt', (receipt) => {
-          //   // contains the new contract address
-          //   console.log({ agreementAddr: receipt.contractAddress });
-          // })
-          .then((newContractInstance) => {
+          .then((newContractInstance: Contract) => {
             setValueAgreementRequest({
               lastAgrAddr: newContractInstance.options.address,
               error: false,
@@ -125,9 +118,9 @@ const AgreementRequest = ({
           <div style={{ marginTop: '24px' }} className="text">
             Requestor label
           </div>
-          <Item name="lander" validateTrigger="onBlur" rules={getRule('lander', 'lander', lender)}>
+          <Item name="lender" validateTrigger="onBlur" rules={getRule('lender', 'lender', lender)}>
             <Input
-              className="lander"
+              className="lender"
               placeholder="Lender"
               defaultValue={lender}
               onChange={(e) => {

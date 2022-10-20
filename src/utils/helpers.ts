@@ -1,14 +1,10 @@
 import { Contract, ethers } from 'ethers';
 import _ from 'lodash';
 import { AbiItem } from 'web3-utils';
+import { MetaMaskError } from '../types';
 import { abi as agreementABI, bytecode as agreementBytecode } from '../data/agreement.json';
 import { abi as contextFactoryABI } from '../data/contextFactory.json';
 import allNetworks from './networks.json';
-
-interface Error {
-  code: string | number;
-  message: string;
-}
 
 const contractNames = {
   Agreement: 'Agreement',
@@ -57,7 +53,7 @@ export const shortenedAddress = (address: string, size = 4) => {
   return address;
 };
 
-export const handleError = ({ code, message }: Error) => {
+export const handleError = ({ code, message }: MetaMaskError) => {
   if (code === 4001 || code === -32603) {
     // EIP-1193 userRejectedRequest error
     // If this happens, the user rejected the connection request.

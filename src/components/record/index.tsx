@@ -3,21 +3,13 @@ import { Table, Empty, notification, Layout, Menu, Input } from 'antd';
 import type { ColumnsType } from 'antd/lib/table';
 import { useMetaMask } from 'metamask-react';
 import Header from 'components/header';
+import { MockType } from '../../types';
 import { shortenedAddress } from '../../utils/helpers';
 import { ReactComponent as Copy } from '../../images/copy.svg';
 import { ReactComponent as CopyWhite } from '../../images/coppyWhite.svg';
 import './index.css';
 
 const { Search } = Input;
-
-interface MockType {
-  date: string;
-  recordID: string;
-  agreementAddress: string;
-  recordOriginator: string;
-  recordType: string;
-  recordStatus: string;
-}
 
 const onCopyClick = (e) => {
   notification.info({

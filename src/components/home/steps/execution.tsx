@@ -77,12 +77,7 @@ const ExecutionRequest = ({
       {recordIds.map((v, i) => {
         return (
           <Menu.Item key={i}>
-            <button
-              onClick={() => {
-                return setDslID(v);
-              }}
-              type="button"
-            >
+            <button onClick={() => setDslID(v)} type="button">
               {v}
             </button>
           </Menu.Item>
@@ -96,7 +91,7 @@ const ExecutionRequest = ({
     return (
       <Item name="agreementModel">
         {recordIds.length === 0 ? (
-          <div className="lander">There is no active records in the Agreement</div>
+          <div className="lender">There is no active records in the Agreement</div>
         ) : (
           <Dropdown className="dropdown" overlay={menu}>
             <Button>
@@ -117,6 +112,7 @@ const ExecutionRequest = ({
       </Item>
     );
   };
+
   function recordReview() {
     if (dslId) {
       return (
@@ -149,22 +145,24 @@ const ExecutionRequest = ({
                 <div style={{ marginTop: '24px' }} className="text">
                   Condition {id + 1}
                 </div>
-                <div className="lander">{el}</div>
+                <div className="lender">{el}</div>
               </div>
             );
           })}
           <div style={{ marginTop: '24px' }} className="text">
             Create a Record
           </div>
-          <div className="lander">{record}</div>
+          <div className="lender">{record}</div>
         </div>
       );
     }
     return false;
   }
+
   useEffect(() => {
     GetActiveRecordIds();
   }, []);
+
   useEffect(() => {
     GetRecordValues();
   }, [dslId]);
@@ -177,9 +175,7 @@ const ExecutionRequest = ({
           name="agreementRequestForm"
           form={form}
           autoComplete="off"
-          onFinish={() => {
-            return ExecutionSubmit();
-          }}
+          onFinish={() => ExecutionSubmit()}
         >
           <div className="text">Requestor</div>
           <div
@@ -202,7 +198,7 @@ const ExecutionRequest = ({
             rules={getRule('agreement', 'agreement', agreement)}
           >
             <Input
-              className="lander"
+              className="lender"
               defaultValue={agreement}
               onChange={(e) => {
                 return setAgreement(e?.target?.value);
@@ -227,7 +223,7 @@ const ExecutionRequest = ({
             }
           >
             <Input
-              className={'ant-input lander'}
+              className={'ant-input lender'}
               onChange={(e) => {
                 form.validateFields(['record-value-in-wei']).then(() => {
                   const valueFormatting = String(e?.target?.value.replace(/,/gi, '')).replace(
@@ -252,13 +248,7 @@ const ExecutionRequest = ({
             >
               Execute
             </Button>
-            <Button
-              onClick={() => {
-                return navigate('/');
-              }}
-              htmlType="button"
-              className="cancel"
-            >
+            <Button onClick={() => navigate('/')} htmlType="button" className="cancel">
               Cancel
             </Button>
           </div>

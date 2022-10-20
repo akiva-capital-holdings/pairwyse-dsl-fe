@@ -195,7 +195,7 @@ const UpdateRequest = ({
           </div>
           <Item name="dsl-id" validateTrigger="onBlur" rules={getRule('dsl-id', 'dsl-id', dslId)}>
             <Input
-              className="lander"
+              className="lender"
               defaultValue={dslId}
               onChange={(e) => {
                 return setDslID(e?.target?.value);
@@ -212,7 +212,7 @@ const UpdateRequest = ({
             rules={getRule('agreement', 'agreement', agreement)}
           >
             <Input
-              className="lander"
+              className="lender"
               defaultValue={agreement}
               onChange={(e) => {
                 return setAgreement(e?.target?.value);
@@ -234,7 +234,7 @@ const UpdateRequest = ({
             style={{ marginBottom: '8px' }}
           >
             <Input
-              className={'lander'}
+              className={'lender'}
               placeholder="Type record number here"
               onChange={(e) => {
                 if (numbers?.length !== 0 && e?.target?.value === '') {
@@ -304,7 +304,7 @@ const UpdateRequest = ({
                         })
                       );
                     }}
-                    className="lander"
+                    className="lender"
                     defaultValue={el?.value}
                   />
                 </Item>
@@ -360,7 +360,7 @@ const UpdateRequest = ({
                         );
                       }}
                       style={{ minHeight: '100px' }}
-                      className="lander"
+                      className="lender"
                     />
                   </Item>
                   <button
@@ -406,7 +406,7 @@ const UpdateRequest = ({
                 onChange={(e) => {
                   return setRecord(e.target.value);
                 }}
-                className="lander"
+                className="lender"
               />
             </Item>
           </div>

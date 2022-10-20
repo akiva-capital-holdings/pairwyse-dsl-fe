@@ -106,7 +106,7 @@ const DefinitionRequest = ({
             rules={getRule('agreement', 'agreement', agreement)}
           >
             <Input
-              className="lander"
+              className="lender"
               defaultValue={agreement}
               onChange={(e) => {
                 return setAgreement(e?.target?.value);
@@ -124,7 +124,7 @@ const DefinitionRequest = ({
             <Input
               maxLength={20}
               placeholder="Borrower"
-              className="lander"
+              className="lender"
               defaultValue={definition}
               onChange={(e) => {
                 return setDefinition(e?.target?.value);
@@ -179,7 +179,7 @@ const DefinitionRequest = ({
                               })
                             );
                           }}
-                          className="lander inputMenuType"
+                          className="lender inputMenuType"
                         />
                       </Item>
                     </div>

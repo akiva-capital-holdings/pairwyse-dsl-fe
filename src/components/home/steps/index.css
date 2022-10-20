@@ -1,7 +1,7 @@
 .agreementRequest,
 .definitionRequest,
 .updateRequest,
-.executeRequest{
+.executeRequest {
   margin-top: 60px;
 }
 .agreementRequest .title,
@@ -27,10 +27,10 @@
   color: var(--grey_color);
   margin-bottom: 8px;
 }
-.agreementRequest .lander ,
-.definitionRequest .lander,
-.updateRequest .lander,
-.executeRequest .lander{
+.agreementRequest .lender,
+.definitionRequest .lender,
+.updateRequest .lender,
+.executeRequest .lender {
   background: var(--background_color);
   border-radius: 8px;
   max-width: 680px;
@@ -45,22 +45,21 @@
   color: var(--dark_col) !important;
 }
 .agreementRequest .btns,
-.updateRequest .btns{
-    margin-top: 80px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+.updateRequest .btns {
+  margin-top: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 .definitionRequest .specificationInput,
 .updateRequest .specificationInput {
   position: relative;
-
 }
 .definitionRequest .specificationInput {
   max-width: 450px;
 }
 .definitionRequest .container {
-  background: #F7F5F9;
+  background: #f7f5f9;
   border-radius: 20px;
   width: 680px;
   height: 119px;
@@ -70,7 +69,7 @@
   margin-bottom: 20px;
 }
 .definitionRequest .btnType {
-  background: #EAE6EE;
+  background: #eae6ee;
   border-radius: 8px;
   width: 150px;
   height: 48px;
@@ -88,15 +87,15 @@
   font-weight: 500;
   font-size: 12px;
   line-height: 15px;
-  color: #ACA2B5;
+  color: #aca2b5;
   display: inline-block;
   margin-bottom: 8px;
 }
 .definitionRequest .container:last-child {
- margin-bottom: 0;
+  margin-bottom: 0;
 }
 .definitionRequest .del,
-.updateRequest  .del{
+.updateRequest .del {
   position: absolute;
   right: 16px;
   background-color: inherit;
@@ -106,8 +105,8 @@
 .definitionRequest .del {
   right: -50%;
 }
-.definitionRequest .inputMenuType{
- width: 450px !important;
+.definitionRequest .inputMenuType {
+  width: 450px !important;
 }
 .definitionRequest .add,
 .updateRequest .add {
@@ -123,39 +122,39 @@
   margin-top: 12px;
 }
 .definitionRequest .cancel,
-.updateRequest  .cancel {
+.updateRequest .cancel {
   font-family: var(--font_family_bold);
   font-style: normal;
   font-weight: 800;
   font-size: 16px;
   line-height: 20px;
   color: var(--grey_color);
-  border: none
+  border: none;
 }
 .definitionRequest .btnsContainer,
-.updateRequest  .btnsContainer,
+.updateRequest .btnsContainer,
 .executeRequest .btnsContainer {
   width: 100%;
   display: flex;
   justify-content: space-between;
   margin-top: 80px;
 }
-.value{
+.value {
   font-size: 16px;
   font-family: var(--font_family);
   font-weight: 500;
 }
-.updateRequest .requiredRecords{
+.updateRequest .requiredRecords {
   height: 48px;
   position: relative;
 }
-.updateRequest .btnRequiredRecords{
+.updateRequest .btnRequiredRecords {
   right: 0;
   position: absolute;
   top: -8%;
 }
 .updateRequest .numRecordCoontainer,
-.executeRequest .numRecordCoontainer{
+.executeRequest .numRecordCoontainer {
   display: flex;
   max-width: 680px;
   flex-wrap: wrap;
@@ -164,12 +163,12 @@
   padding-top: 14px;
 }
 .updateRequest .numRecord,
-.executeRequest .numRecord{
+.executeRequest .numRecord {
   display: flex;
   height: 35px;
   background: #120023;
   border-radius: 30px;
-  padding:  10px 9px 7px 13px;
+  padding: 10px 9px 7px 13px;
   color: #fff;
   margin-right: 8px;
   margin-bottom: 8px;
@@ -179,10 +178,10 @@
   font-weight: 700;
   font-size: 12px;
   line-height: 15px;
-  color: #FFFFFF;
+  color: #ffffff;
   margin-right: 8px;
 }
-.updateRequest .numRecord .btnNum{
+.updateRequest .numRecord .btnNum {
   border-radius: 50%;
   border: unset;
   width: 14px;
@@ -191,11 +190,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #EAE6EE;
+  background: #eae6ee;
   opacity: 0.5;
   cursor: pointer;
 }
 
 .mainButton {
-  color: #ACA2B5;
+  color: #aca2b5;
 }

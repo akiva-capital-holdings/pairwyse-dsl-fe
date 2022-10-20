@@ -1,10 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { ISession } from '../types';
 import type { RootState } from './store';
-
-interface ISession {
-  network: boolean;
-  agreementAddress: string;
-}
 
 const initialState: ISession = {
   network: false,
@@ -24,8 +20,7 @@ export const sessionReducer = createSlice({
   },
 });
 
-export const { changeNetworkAction, changeAgreementAddress } =
-  sessionReducer.actions;
+export const { changeNetworkAction, changeAgreementAddress } = sessionReducer.actions;
 
 export const selectSession = (state: RootState) => {
   return state.session;
