@@ -22,6 +22,7 @@
     "env-cmd": "^10.1.0",
     "ethers": "^5.6.8",
     "lodash": "^4.17.21",
+    "metamask-react": "^2.4.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.6",
@@ -34,6 +35,7 @@
     "uuid": "^8.3.2",
     "web-vitals": "^2.1.0",
     "web3": "^1.7.0",
+    "web3-core": "^1.8.0",
     "web3-utils": "^1.7.5"
   },
   "scripts": {
@@ -45,8 +47,25 @@
     "eject": "react-scripts eject",
     "husky-install": "husky install",
     "lint": "npx eslint --fix",
-    "prettier": "npx prettier --write '**/*.ts' '**/*.tsx'",
+    "prettier": "npx prettier --write \"**/*.ts\" \"**/*.tsx\"",
     "prepare": "husky install"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+    "lint-staged": {
+    "**/*.ts": [
+      "eslint --fix --ext",
+      "prettier --write \"**/*.ts\"",
+      "git add"
+    ],
+    "**/*.tsx": [
+      "eslint --fix --ext",
+      "prettier --write \"**/*.tsx\"",
+      "git add"
+    ]
   },
   "eslintConfig": {
     "extends": [
@@ -68,13 +87,14 @@
   },
   "devDependencies": {
     "@craco/craco": "^6.4.3",
+    "@types/lodash": "^4.14.186",
     "eslint": "^7.11.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "husky": "^8.0.0",
+    "husky": "^8.0.1",
     "lint-staged": "^13.0.1",
     "prettier": "^2.6.2",
     "ts-loader": "^9.3.0"

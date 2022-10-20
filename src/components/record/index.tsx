@@ -1,24 +1,15 @@
 import React, { useState } from 'react';
 import { Table, Empty, notification, Layout, Menu, Input } from 'antd';
 import type { ColumnsType } from 'antd/lib/table';
-import { useSelector } from 'react-redux';
+import { useMetaMask } from 'metamask-react';
 import Header from 'components/header';
+import { MockType } from '../../types';
 import { shortenedAddress } from '../../utils/helpers';
-import { selectSession } from '../../redux/sessionReducer';
 import { ReactComponent as Copy } from '../../images/copy.svg';
 import { ReactComponent as CopyWhite } from '../../images/coppyWhite.svg';
 import './index.css';
 
 const { Search } = Input;
-
-interface MockType {
-  date: string;
-  recordID: string;
-  agreementAddress: string;
-  recordOriginator: string;
-  recordType: string;
-  recordStatus: string;
-}
 
 const onCopyClick = (e) => {
   notification.info({
@@ -122,7 +113,7 @@ const mock = [
 ];
 const Record = () => {
   const [records, setRecords] = useState([mock]);
-  const { address } = useSelector(selectSession);
+  const { account } = useMetaMask();
   const [collapsed, setCollapsed] = useState(false);
 
   return (
@@ -143,11 +134,11 @@ const Record = () => {
           <div className="addressContainer">
             <div className="img" />
             <div style={{ display: 'flex', maxWidth: '150px', margin: '0 auto' }}>
-              <div className="address">{shortenedAddress(address)}</div>
+              <div className="address">{shortenedAddress(account)}</div>
               <CopyWhite
                 className="copy"
                 onClick={() => {
-                  return onCopyClick(address);
+                  return onCopyClick(account);
                 }}
               />
             </div>

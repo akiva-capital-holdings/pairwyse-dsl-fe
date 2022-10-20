@@ -8,10 +8,10 @@ import {
 } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { useMetaMask } from 'metamask-react';
 import { v4 as uuidv4 } from 'uuid';
 import { selectUtils } from 'redux/utilsReducer';
 import { createInstance, hex4Bytes } from 'utils/helpers';
-import { selectSession } from 'redux/sessionReducer';
 import getRule from '../../../utils/validate';
 import { ReactComponent as Delete } from '../../../images/delete.svg';
 
@@ -56,8 +56,8 @@ const DefinitionRequest = ({
   setLoading,
   loading,
 }: Definition) => {
-  const { address: userWallet } = useSelector(selectSession);
-  const { provider } = useSelector(selectUtils);
+  const { account } = useMetaMask();
+  const { utilsProvider } = useSelector(selectUtils);
   const [visible, setVisible] = useState(false);
   const [activeMenu, setActiveMenu] = useState(undefined);
   const navigate = useNavigate();
@@ -69,10 +69,10 @@ const DefinitionRequest = ({
       const DEFINITION = definition;
       const SPETIFICATION = specifications[0].value;
 
-      const agreementInstance = createInstance('Agreement', AGREEMENT_ADDR, provider);
+      const agreementInstance = createInstance('Agreement', AGREEMENT_ADDR, utilsProvider);
       const rd = await agreementInstance.methods
         .setStorageAddress(hex4Bytes(DEFINITION), SPETIFICATION)
-        .send({ from: userWallet });
+        .send({ from: account });
       setValueDefinitionRequest({
         value: 'definition',
         submit: true,
@@ -126,7 +126,7 @@ const DefinitionRequest = ({
       <Spin spinning={loading}>
         <Form name="agreementRequestForm" autoComplete="off" onFinish={defineVariable}>
           <div className="text">Requestor</div>
-          <div className="value">{userWallet}</div>
+          <div className="value">{account}</div>
           <div style={{ marginTop: '24px' }} className="text">
             Agreement
           </div>

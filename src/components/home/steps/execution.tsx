@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { createInstance } from 'utils/helpers';
 import { selectUtils } from 'redux/utilsReducer';
-import { selectSession } from '../../../redux/sessionReducer';
+import { useMetaMask } from 'metamask-react';
 import getRule from '../../../utils/validate';
 
 const { Item } = Form;
@@ -38,8 +38,8 @@ const ExecutionRequest = ({
   loading,
   dslId,
 }: Execition) => {
-  const { address: userWallet } = useSelector(selectSession);
-  const { provider } = useSelector(selectUtils);
+  const { account } = useMetaMask();
+  const { utilsProvider } = useSelector(selectUtils);
   const [recordIds, setRecordIds] = useState([]);
   const [conditions, setConditions] = useState([]);
   const [requiredRecirds, setRequiredRecirds] = useState([]);
@@ -47,13 +47,13 @@ const ExecutionRequest = ({
   const [record, setRecord] = useState([]);
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  const agreementContract = createInstance('Agreement', agreement, provider);
+  const agreementContract = createInstance('Agreement', agreement, utilsProvider);
   const ExecutionSubmit = async () => {
     setLoading(true);
     try {
       const executeRecord = await agreementContract.methods
         .execute(dslId)
-        .send({ from: userWallet, value: rdValue?.replace(/,/gi, '') });
+        .send({ from: account, value: rdValue?.replace(/,/gi, '') });
       setExecitionValue({
         hash: executeRecord.transactionHash,
         submit: true,
@@ -94,12 +94,7 @@ const ExecutionRequest = ({
       {recordIds.map((v, i) => {
         return (
           <Menu.Item key={i}>
-            <button
-              onClick={() => {
-                return setDslID(v);
-              }}
-              type="button"
-            >
+            <button onClick={() => setDslID(v)} type="button">
               {v}
             </button>
           </Menu.Item>
@@ -134,6 +129,7 @@ const ExecutionRequest = ({
       </Item>
     );
   };
+
   function recordReview() {
     if (dslId) {
       return (
@@ -179,9 +175,11 @@ const ExecutionRequest = ({
     }
     return false;
   }
+
   useEffect(() => {
     GetActiveRecordIds();
   }, []);
+
   useEffect(() => {
     if (dslId) { GetRecordValues() }
   }, [dslId]);
@@ -194,9 +192,7 @@ const ExecutionRequest = ({
           name="agreementRequestForm"
           form={form}
           autoComplete="off"
-          onFinish={() => {
-            return ExecutionSubmit();
-          }}
+          onFinish={() => ExecutionSubmit()}
         >
           <div className="text">Requestor</div>
           <div
@@ -208,7 +204,7 @@ const ExecutionRequest = ({
             }}
             className="value"
           >
-            {userWallet}
+            {account}
           </div>
           <div style={{ marginTop: '24px' }} className="text">
             Agreement
@@ -269,13 +265,7 @@ const ExecutionRequest = ({
             >
               Execute
             </Button>
-            <Button
-              onClick={() => {
-                return navigate('/');
-              }}
-              htmlType="button"
-              className="cancel"
-            >
+            <Button onClick={() => navigate('/')} htmlType="button" className="cancel">
               Cancel
             </Button>
           </div>

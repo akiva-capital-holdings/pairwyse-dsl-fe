@@ -1,14 +1,11 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import Header from 'components/header';
-import { connectWallet } from '../../utils/helpers';
-import { connect, selectSession } from '../../redux/sessionReducer';
+import { useMetaMask } from 'metamask-react';
 import '../home/index.css';
 import './index.css';
 
 const ConnectWallet = () => {
-  const dispatch = useDispatch();
-  const { onboarding } = useSelector(selectSession);
+    const { connect } = useMetaMask();
 
   return (
     <>
@@ -17,9 +14,7 @@ const ConnectWallet = () => {
         <div className="title">Please Connect your wallet</div>
         <button
           className="btn"
-          onClick={() => {
-            return connectWallet(onboarding, dispatch, connect);
-          }}
+          onClick={connect}
         >
           Connect Wallet
         </button>

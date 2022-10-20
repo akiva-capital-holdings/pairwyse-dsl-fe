@@ -1,11 +1,10 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useMetaMask } from 'metamask-react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { selectSession } from '../../redux/sessionReducer';
 import './index.css';
 
 const Header = ({ onClick }) => {
-  const { address } = useSelector(selectSession);
+  const { account } = useMetaMask();
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
@@ -29,7 +28,7 @@ const Header = ({ onClick }) => {
       >
         Logo
       </div>
-      {address && (
+      {account && (
         <button
           onClick={() => {
             return reset();
