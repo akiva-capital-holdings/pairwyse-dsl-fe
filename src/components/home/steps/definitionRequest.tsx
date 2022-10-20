@@ -16,6 +16,35 @@ import getRule from '../../../utils/validate';
 import { ReactComponent as Delete } from '../../../images/delete.svg';
 
 const { Item } = Form;
+
+interface Definition {
+  setAgreementDefinition:React.Dispatch<React.SetStateAction<string>>;
+  agreementDefinition:string;
+  setValueDefinitionRequest:React.Dispatch<React.SetStateAction<{
+    value: string;
+    submit: boolean;
+    hash: string;
+    error: boolean;
+    message: string;
+}>>;
+  setspecification:React.Dispatch<React.SetStateAction<{
+    title: string;
+    value: string;
+    id: number;
+    type: string;
+}[]>>;
+  specifications:{
+    title: string;
+    value: string;
+    id: number;
+    type: string;
+}[];
+  setDefinition:React.Dispatch<React.SetStateAction<string>>;
+  definition:string;
+  setLoading:React.Dispatch<React.SetStateAction<boolean>>;
+  loading:boolean;
+}
+
 const DefinitionRequest = ({
   setAgreementDefinition: setAgreement,
   agreementDefinition: agreement,
@@ -26,7 +55,7 @@ const DefinitionRequest = ({
   definition,
   setLoading,
   loading,
-}) => {
+}: Definition) => {
   const { address: userWallet } = useSelector(selectSession);
   const { provider } = useSelector(selectUtils);
   const [visible, setVisible] = useState(false);
@@ -49,6 +78,7 @@ const DefinitionRequest = ({
         submit: true,
         hash: rd?.transactionHash,
         error: false,
+        message: '',
       });
       setLoading(false);
     } catch (e) {
@@ -106,7 +136,7 @@ const DefinitionRequest = ({
             rules={getRule('agreement', 'agreement', agreement)}
           >
             <Input
-              className="lander"
+              className="lender"
               defaultValue={agreement}
               onChange={(e) => {
                 return setAgreement(e?.target?.value);
@@ -124,7 +154,7 @@ const DefinitionRequest = ({
             <Input
               maxLength={20}
               placeholder="Borrower"
-              className="lander"
+              className="lender"
               defaultValue={definition}
               onChange={(e) => {
                 return setDefinition(e?.target?.value);
@@ -179,7 +209,7 @@ const DefinitionRequest = ({
                               })
                             );
                           }}
-                          className="lander inputMenuType"
+                          className="lender inputMenuType"
                         />
                       </Item>
                     </div>

@@ -27,10 +27,10 @@
   color: var(--grey_color);
   margin-bottom: 8px;
 }
-.agreementRequest .lander ,
-.definitionRequest .lander,
-.updateRequest .lander,
-.executeRequest .lander{
+.agreementRequest .lender ,
+.definitionRequest .lender,
+.updateRequest .lender,
+.executeRequest .lender{
   background: var(--background_color);
   border-radius: 8px;
   max-width: 680px;

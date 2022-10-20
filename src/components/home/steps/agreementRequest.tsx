@@ -10,9 +10,25 @@ import { selectUtils } from '../../../redux/utilsReducer';
 import { selectSession, changeAgreementAddress } from '../../../redux/sessionReducer';
 import './index.css';
 
-// TODO: in all project `"lander" -> "lender"`
-
 const { Item } = Form;
+
+interface Agreement{
+  setLoading:React.Dispatch<React.SetStateAction<boolean>>;
+  setLender:React.Dispatch<React.SetStateAction<string>>;
+  setError:React.Dispatch<string>;
+  setValue:React.Dispatch<string>;
+  loading:boolean;
+  lender:string;
+  error:string;
+  value:string;
+  setValueAgreementRequest:React.Dispatch<React.SetStateAction<{
+    lastAgrAddr: string;
+    error: boolean;
+    hash: string;
+    message: string;
+    submit: boolean;
+}>>;
+}
 
 const AgreementRequest = ({
   setLoading,
@@ -24,7 +40,7 @@ const AgreementRequest = ({
   error,
   value,
   setValueAgreementRequest,
-}) => {
+}: Agreement) => {
   const { address: userWallet } = useSelector(selectSession);
   const { provider } = useSelector(selectUtils) as { provider: Web3 };
   const dispatch = useDispatch();
@@ -64,6 +80,7 @@ const AgreementRequest = ({
               lastAgrAddr: newContractInstance.options.address,
               error: false,
               hash: recordHash,
+              message:'',
               submit: true,
             });
             dispatch(changeAgreementAddress(newContractInstance.options.address));
@@ -72,7 +89,7 @@ const AgreementRequest = ({
       }
     } catch (e) {
       console.error(e);
-      setValueAgreementRequest({ lastAgrAddr: '', error: true, message: e?.message, submit: true });
+      setValueAgreementRequest({ lastAgrAddr: '', error: true, hash:'', message: e?.message, submit: true });
       setLoading(false);
     }
   };
@@ -125,9 +142,9 @@ const AgreementRequest = ({
           <div style={{ marginTop: '24px' }} className="text">
             Requestor label
           </div>
-          <Item name="lander" validateTrigger="onBlur" rules={getRule('lander', 'lander', lender)}>
+          <Item name="lender" validateTrigger="onBlur" rules={getRule('lender', 'lender', lender)}>
             <Input
-              className="lander"
+              className="lender"
               placeholder="Lender"
               defaultValue={lender}
               onChange={(e) => {

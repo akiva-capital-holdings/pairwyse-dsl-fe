@@ -10,6 +10,23 @@ import getRule from '../../../utils/validate';
 
 const { Item } = Form;
 
+interface Execition{
+    setExecitionValue: React.Dispatch<React.SetStateAction<{
+    hash: string;
+    submit: boolean;
+    error: boolean;
+    message: string;
+    }>>;
+    setAgreement: React.Dispatch<React.SetStateAction<string>>;
+    setRecordValue: React.Dispatch<React.SetStateAction<string>>;
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+    agreement: string;
+    setDslID: React.Dispatch<React.SetStateAction<string>>;
+    rdValue: string;
+    loading: boolean;
+    dslId: string;
+}
+
 const ExecutionRequest = ({
   setExecitionValue,
   setAgreement,
@@ -20,7 +37,7 @@ const ExecutionRequest = ({
   rdValue,
   loading,
   dslId,
-}) => {
+}: Execition) => {
   const { address: userWallet } = useSelector(selectSession);
   const { provider } = useSelector(selectUtils);
   const [recordIds, setRecordIds] = useState([]);
@@ -52,12 +69,12 @@ const ExecutionRequest = ({
 
   const GetRecordValues = async () => {
     try {
-      const { recordConditions, recordRequiredRecords, recordSignatories, recordTransaction } =
+      const { txsRequiredRecords, txsSignatories, txsConditions, txsTransaction } =
         await agreementContract.methods.getRecord(dslId).call();
-      setConditions(recordConditions);
-      setRequiredRecirds(recordRequiredRecords);
-      setSignatories(recordSignatories);
-      setRecord(recordTransaction);
+      setConditions(txsConditions);
+      setRequiredRecirds(txsRequiredRecords);
+      setSignatories(txsSignatories);
+      setRecord(txsTransaction);
     } catch (err) {
       console.error(err);
     }
@@ -96,7 +113,7 @@ const ExecutionRequest = ({
     return (
       <Item name="agreementModel">
         {recordIds.length === 0 ? (
-          <div className="lander">There is no active records in the Agreement</div>
+          <div className="lender">There is no active records in the Agreement</div>
         ) : (
           <Dropdown className="dropdown" overlay={menu}>
             <Button>
@@ -125,38 +142,38 @@ const ExecutionRequest = ({
             Required Records
           </div>
           <div className="numRecordCoontainer">
-            {requiredRecirds?.map((el) => {
+            {requiredRecirds?.map((el,elId) => {
               return (
-                <div key={el?.id} className="numRecord">
+                <div key={elId} className="numRecord">
                   <div className="textNum">{el}</div>
                 </div>
               );
             })}
           </div>
-          {signatories?.map((el, id) => {
+          {signatories?.map((el, elId) => {
             return (
-              <div key={el?.id}>
+              <div key={elId}>
                 <div style={{ marginTop: '24px' }} className="text">
-                  Signatory {id + 1}
+                  Signatory {elId + 1}
                 </div>
                 <div className="value">{el}</div>
               </div>
             );
           })}
-          {conditions?.map((el, id) => {
+          {conditions?.map((el, elId) => {
             return (
-              <div key={el?.id}>
+              <div key={elId}>
                 <div style={{ marginTop: '24px' }} className="text">
-                  Condition {id + 1}
+                  Condition {elId + 1}
                 </div>
-                <div className="lander">{el}</div>
+                <div className="lender">{el}</div>
               </div>
             );
           })}
           <div style={{ marginTop: '24px' }} className="text">
             Create a Record
           </div>
-          <div className="lander">{record}</div>
+          <div className="lender">{record}</div>
         </div>
       );
     }
@@ -166,7 +183,7 @@ const ExecutionRequest = ({
     GetActiveRecordIds();
   }, []);
   useEffect(() => {
-    GetRecordValues();
+    if (dslId) { GetRecordValues() }
   }, [dslId]);
 
   return (
@@ -202,7 +219,7 @@ const ExecutionRequest = ({
             rules={getRule('agreement', 'agreement', agreement)}
           >
             <Input
-              className="lander"
+              className="lender"
               defaultValue={agreement}
               onChange={(e) => {
                 return setAgreement(e?.target?.value);
@@ -227,7 +244,7 @@ const ExecutionRequest = ({
             }
           >
             <Input
-              className={'ant-input lander'}
+              className={'ant-input lender'}
               onChange={(e) => {
                 form.validateFields(['record-value-in-wei']).then(() => {
                   const valueFormatting = String(e?.target?.value.replace(/,/gi, '')).replace(

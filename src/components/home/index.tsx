@@ -54,7 +54,7 @@ const HomePage = () => {
   const [record, setRecord] = useState('');
   const [valueUpdateRequest, setUpdateRequest] = useState(initialUpdateRequestValue);
   const [numbers, setNumbers] = useState([]);
-  // execition // TODO: fix typo
+  // execition 
   const [agreementExecition, setAgreementExecition] = useState('');
   const [dslIdExecition, setDslIdExecition] = useState('');
   const [rdValueExecution, setRecordValueExecution] = useState('');
@@ -158,8 +158,8 @@ const HomePage = () => {
     ),
     stepFour: (
       <ExecutionRequest
-        setDslID={setDslIdExecition} // TODO: fix typo
-        dslId={dslIdExecition} // TODO: fix typo
+        setDslID={setDslIdExecition}
+        dslId={dslIdExecition} 
         setExecitionValue={setExecitionValue}
         setAgreement={setAgreementExecition}
         setRecordValue={setRecordValueExecution}

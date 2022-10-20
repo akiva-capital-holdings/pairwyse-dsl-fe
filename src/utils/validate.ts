@@ -7,7 +7,7 @@ export const validationAgreementModel = (value, setError) => {
   if (value?.length > 0) {
     setError(null);
   } else {
-    setError('This field lander is required');
+    setError('This field lender is required');
   }
 };
 
@@ -125,7 +125,7 @@ export default function getRule(label: string, name: string, v?: string, type?: 
   switch (name) {
     case 'requestorLabel':
       return [validateMinMax(0, 20), validateSpace];
-    case 'lander':
+    case 'lender':
       return [validateSpace];
     case 'agreement':
       return [validateAddressEth, validateAddress, validateSpace];

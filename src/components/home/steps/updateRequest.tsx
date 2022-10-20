@@ -13,6 +13,45 @@ import getRule from '../../../utils/validate';
 
 const { Item } = Form;
 
+interface Update{
+  setUpdateRequest:React.Dispatch<React.SetStateAction<{
+    hash: string;
+    submit: boolean;
+    error: boolean;
+    message: string;
+}>>;
+  setSignatories:React.Dispatch<React.SetStateAction<{
+    title: string;
+    value: string;
+    id: number;
+}[]>>;
+  setRecord:React.Dispatch<React.SetStateAction<string>>;
+  setConditions:React.Dispatch<React.SetStateAction<{
+    title: string;
+    value: string;
+    id: number;
+}[]>>;
+  setAgreement:React.Dispatch<React.SetStateAction<string>>;
+  record:string;
+  signatories:{
+    title: string;
+    value: string;
+    id: number;
+}[];
+  conditions:{
+    title: string;
+    value: string;
+    id: number;
+  }[];
+  setLoading:React.Dispatch<React.SetStateAction<boolean>>;
+  setNumbers:React.Dispatch<React.SetStateAction<number[]>>;
+  agreement:string;
+  setDslID:React.Dispatch<React.SetStateAction<string>>;
+  numbers: number[];
+  loading:boolean;
+  dslId:string;
+}
+
 const UpdateRequest = ({
   setUpdateRequest,
   setSignatories,
@@ -29,10 +68,10 @@ const UpdateRequest = ({
   numbers,
   loading,
   dslId,
-}) => {
+}: Update) => {
   const { address: userWallet } = useSelector(selectSession);
   const { provider } = useSelector(selectUtils);
-  const [valueRequiredRecords, setValueRequiredRecords] = useState('');
+  const [valueRequiredRecords, setValueRequiredRecords] = useState<number>();
   const [errorRequiredRecords, setErrorRequiredRecords] = useState(false);
   const [form] = Form.useForm();
 
@@ -41,7 +80,7 @@ const UpdateRequest = ({
 
   type RecordObject = {
     recordId: number;
-    requiredRecords: number[];
+    requiredRecords: (string | number)[];
     signatories: string[];
     conditions: string[];
     record: string;
@@ -130,11 +169,12 @@ const UpdateRequest = ({
         process.env.REACT_APP_CONTEXT_FACTORY,
         provider
       );
-      const numId = numbers?.map((el) => el?.value);
+      // const numId = numbers?.map((el) => el?.value);
       await addSteps(agreementContract, AGREEMENT_ADDR, contextFactory, [
         {
           recordId: DSL_ID,
-          requiredRecords: [...numId],
+          // requiredRecords: [...numId],
+          requiredRecords: [...numbers],
           signatories: [SIGNATORY],
           conditions: [CONDITION],
           record: RECORD,
@@ -153,7 +193,8 @@ const UpdateRequest = ({
     form
       .validateFields(['requiredRecords'])
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      .then((v) => setNumbers([...numbers, { value: +valueRequiredRecords, id: uuidv4() }]))
+      // .then((v) => setNumbers([...numbers, { value: +valueRequiredRecords, id: uuidv4() }]))
+      .then(() => setNumbers([...numbers, +valueRequiredRecords]))
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       .catch((err) => setErrorRequiredRecords(true));
   };
@@ -162,7 +203,7 @@ const UpdateRequest = ({
     if (numbers?.length === 0) {
       setErrorRequiredRecords(true);
     } else {
-      setValueRequiredRecords(numbers[numbers.length - 1].value);
+      setValueRequiredRecords(numbers[numbers.length - 1]);
     }
   };
   return (
@@ -195,7 +236,7 @@ const UpdateRequest = ({
           </div>
           <Item name="dsl-id" validateTrigger="onBlur" rules={getRule('dsl-id', 'dsl-id', dslId)}>
             <Input
-              className="lander"
+              className="lender"
               defaultValue={dslId}
               onChange={(e) => {
                 return setDslID(e?.target?.value);
@@ -212,7 +253,7 @@ const UpdateRequest = ({
             rules={getRule('agreement', 'agreement', agreement)}
           >
             <Input
-              className="lander"
+              className="lender"
               defaultValue={agreement}
               onChange={(e) => {
                 return setAgreement(e?.target?.value);
@@ -227,18 +268,18 @@ const UpdateRequest = ({
             validateTrigger="onChange"
             className="requiredRecords"
             rules={
-              numbers?.length === 0 && valueRequiredRecords === ''
-                ? getRule('requiredRecords', 'record-value', valueRequiredRecords)
-                : getRule('requiredRecords', 'requiredRecords', valueRequiredRecords)
+              // numbers?.length === 0 && valueRequiredRecords?.toString() === ''?
+                 getRule('requiredRecords', 'record-value', valueRequiredRecords?.toString())
+                // : getRule('requiredRecords', 'requiredRecords', valueRequiredRecords?.toString())
             }
             style={{ marginBottom: '8px' }}
           >
             <Input
-              className={'lander'}
+              className={'lender'}
               placeholder="Type record number here"
               onChange={(e) => {
                 if (numbers?.length !== 0 && e?.target?.value === '') {
-                  setValueRequiredRecords(e?.target?.value);
+                  setValueRequiredRecords(Number(e?.target?.value));
                 } else {
                   form
                     .validateFields(['requiredRecords'])
@@ -246,7 +287,7 @@ const UpdateRequest = ({
                     .then((v) => setErrorRequiredRecords(false))
                     // eslint-disable-next-line @typescript-eslint/no-unused-vars
                     .catch((err) => setErrorRequiredRecords(true));
-                  setValueRequiredRecords(e?.target?.value);
+                  setValueRequiredRecords(Number(e?.target?.value));
                 }
               }}
               value={valueRequiredRecords}
@@ -262,15 +303,15 @@ const UpdateRequest = ({
           <div
             className={errorRequiredRecords ? 'numRecordCoontainer error' : 'numRecordCoontainer'}
           >
-            {numbers?.map((el) => {
+            {numbers?.map((el,elId) => {
               return (
-                <div key={el?.id} className="numRecord">
-                  <div className="textNum">{el?.value}</div>
+                <div key={elId} className="numRecord">
+                  <div className="textNum">{el}</div>
                   <button
                     onClick={() => {
                       return setNumbers(
-                        numbers.filter((s) => {
-                          return s?.id !== el?.id;
+                        numbers.filter((s, sId) => {
+                          return sId !== elId;
                         })
                       );
                     }}
@@ -304,7 +345,7 @@ const UpdateRequest = ({
                         })
                       );
                     }}
-                    className="lander"
+                    className="lender"
                     defaultValue={el?.value}
                   />
                 </Item>
@@ -360,7 +401,7 @@ const UpdateRequest = ({
                         );
                       }}
                       style={{ minHeight: '100px' }}
-                      className="lander"
+                      className="lender"
                     />
                   </Item>
                   <button
@@ -406,7 +447,7 @@ const UpdateRequest = ({
                 onChange={(e) => {
                   return setRecord(e.target.value);
                 }}
-                className="lander"
+                className="lender"
               />
             </Item>
           </div>
