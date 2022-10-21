@@ -10,6 +10,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { ReactComponent as Delete } from '../../../images/delete.svg';
 import { ReactComponent as Cloose } from '../../../images/close.svg';
 import getRule from '../../../utils/validate';
+import { Update } from '../../../types';
 
 const { Item } = Form;
 
@@ -29,7 +30,7 @@ const UpdateRequest = ({
   numbers,
   loading,
   dslId,
-}) => {
+}: Update) => {
   const { account } = useMetaMask();
   const { utilsProvider } = useSelector(selectUtils);
   const [valueRequiredRecords, setValueRequiredRecords] = useState('');
@@ -41,7 +42,7 @@ const UpdateRequest = ({
 
   type RecordObject = {
     recordId: number;
-    requiredRecords: number[];
+    requiredRecords: (string | number)[];
     signatories: string[];
     conditions: string[];
     record: string;
@@ -130,17 +131,15 @@ const UpdateRequest = ({
         process.env.REACT_APP_CONTEXT_FACTORY,
         utilsProvider
       );
-      const numId = numbers?.map((el) => el?.value);
       await addSteps(agreementContract, AGREEMENT_ADDR, contextFactory, [
         {
           recordId: DSL_ID,
-          requiredRecords: [...numId],
+          requiredRecords: [...numbers],
           signatories: [SIGNATORY],
           conditions: [CONDITION],
           record: RECORD,
         },
       ]);
-      // console.log(rdsAddr, crddeployedLen);
     } catch (e) {
       console.error(e);
       setUpdateRequest({ hash: '', submit: true, error: true, message: e?.message });
@@ -152,17 +151,15 @@ const UpdateRequest = ({
     setErrorRequiredRecords(false);
     form
       .validateFields(['requiredRecords'])
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      .then((v) => setNumbers([...numbers, { value: +valueRequiredRecords, id: uuidv4() }]))
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      .catch((err) => setErrorRequiredRecords(true));
+      .then(() => setNumbers([...numbers, +valueRequiredRecords]))
+      .catch(() => setErrorRequiredRecords(true));
   };
 
   const validateRecordId = () => {
     if (numbers?.length === 0) {
       setErrorRequiredRecords(true);
     } else {
-      setValueRequiredRecords(numbers[numbers.length - 1].value);
+      setValueRequiredRecords(numbers[numbers.length - 1].toString());
     }
   };
   return (
@@ -226,11 +223,7 @@ const UpdateRequest = ({
             name="requiredRecords"
             validateTrigger="onChange"
             className="requiredRecords"
-            rules={
-              numbers?.length === 0 && valueRequiredRecords === ''
-                ? getRule('requiredRecords', 'record-value', valueRequiredRecords)
-                : getRule('requiredRecords', 'requiredRecords', valueRequiredRecords)
-            }
+            rules={getRule('requiredRecords', 'record-value', valueRequiredRecords?.toString())}
             style={{ marginBottom: '8px' }}
           >
             <Input
@@ -242,10 +235,8 @@ const UpdateRequest = ({
                 } else {
                   form
                     .validateFields(['requiredRecords'])
-                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                    .then((v) => setErrorRequiredRecords(false))
-                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                    .catch((err) => setErrorRequiredRecords(true));
+                    .then(() => setErrorRequiredRecords(false))
+                    .catch(() => setErrorRequiredRecords(true));
                   setValueRequiredRecords(e?.target?.value);
                 }
               }}
@@ -262,15 +253,15 @@ const UpdateRequest = ({
           <div
             className={errorRequiredRecords ? 'numRecordCoontainer error' : 'numRecordCoontainer'}
           >
-            {numbers?.map((el) => {
+            {numbers?.map((el, elId) => {
               return (
-                <div key={el?.id} className="numRecord">
-                  <div className="textNum">{el?.value}</div>
+                <div key={elId} className="numRecord">
+                  <div className="textNum">{el}</div>
                   <button
                     onClick={() => {
                       return setNumbers(
-                        numbers.filter((s) => {
-                          return s?.id !== el?.id;
+                        numbers.filter((s, sId) => {
+                          return sId !== elId;
                         })
                       );
                     }}

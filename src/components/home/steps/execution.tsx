@@ -6,12 +6,13 @@ import { useNavigate } from 'react-router-dom';
 import { createInstance } from 'utils/helpers';
 import { selectUtils } from 'redux/utilsReducer';
 import { useMetaMask } from 'metamask-react';
+import { Execution } from '../../../types';
 import getRule from '../../../utils/validate';
 
 const { Item } = Form;
 
 const ExecutionRequest = ({
-  setExecitionValue,
+  setExecutionValue,
   setAgreement,
   setRecordValue,
   setLoading,
@@ -20,7 +21,7 @@ const ExecutionRequest = ({
   rdValue,
   loading,
   dslId,
-}) => {
+}: Execution) => {
   const { account } = useMetaMask();
   const { utilsProvider } = useSelector(selectUtils);
   const [recordIds, setRecordIds] = useState([]);
@@ -37,7 +38,7 @@ const ExecutionRequest = ({
       const executeRecord = await agreementContract.methods
         .execute(dslId)
         .send({ from: account, value: rdValue?.replace(/,/gi, '') });
-      setExecitionValue({
+      setExecutionValue({
         hash: executeRecord.transactionHash,
         submit: true,
         error: false,
@@ -45,19 +46,19 @@ const ExecutionRequest = ({
       });
     } catch (err) {
       console.error(err);
-      setExecitionValue({ hash: '', submit: true, error: true, message: err?.message });
+      setExecutionValue({ hash: '', submit: true, error: true, message: err?.message });
     }
     setLoading(false);
   };
 
   const GetRecordValues = async () => {
     try {
-      const { recordConditions, recordRequiredRecords, recordSignatories, recordTransaction } =
+      const { txsRequiredRecords, txsSignatories, txsConditions, txsTransaction } =
         await agreementContract.methods.getRecord(dslId).call();
-      setConditions(recordConditions);
-      setRequiredRecirds(recordRequiredRecords);
-      setSignatories(recordSignatories);
-      setRecord(recordTransaction);
+      setConditions(txsConditions);
+      setRequiredRecirds(txsRequiredRecords);
+      setSignatories(txsSignatories);
+      setRecord(txsTransaction);
     } catch (err) {
       console.error(err);
     }
@@ -121,29 +122,29 @@ const ExecutionRequest = ({
             Required Records
           </div>
           <div className="numRecordCoontainer">
-            {requiredRecirds?.map((el) => {
+            {requiredRecirds?.map((el, elId) => {
               return (
-                <div key={el?.id} className="numRecord">
+                <div key={elId} className="numRecord">
                   <div className="textNum">{el}</div>
                 </div>
               );
             })}
           </div>
-          {signatories?.map((el, id) => {
+          {signatories?.map((el, elId) => {
             return (
-              <div key={el?.id}>
+              <div key={elId}>
                 <div style={{ marginTop: '24px' }} className="text">
-                  Signatory {id + 1}
+                  Signatory {elId + 1}
                 </div>
                 <div className="value">{el}</div>
               </div>
             );
           })}
-          {conditions?.map((el, id) => {
+          {conditions?.map((el, elId) => {
             return (
-              <div key={el?.id}>
+              <div key={elId}>
                 <div style={{ marginTop: '24px' }} className="text">
-                  Condition {id + 1}
+                  Condition {elId + 1}
                 </div>
                 <div className="lender">{el}</div>
               </div>
@@ -164,7 +165,9 @@ const ExecutionRequest = ({
   }, []);
 
   useEffect(() => {
-    GetRecordValues();
+    if (dslId) {
+      GetRecordValues();
+    }
   }, [dslId]);
 
   return (
@@ -234,7 +237,6 @@ const ExecutionRequest = ({
                     'record-value-in-wei': valueFormatting,
                   });
                 });
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 setRecordValue(e?.target?.value.replace(/[\s.,%]/g, ''));
               }}
             />

@@ -21,7 +21,7 @@ export const initialUpdateRequestValue = {
   message: '',
 };
 
-export const initialExecitionValue = {
+export const initialExecutionValue = {
   hash: '',
   submit: false,
   error: false,
@@ -49,7 +49,7 @@ export default {
   initialUpdateRequestValue,
   titleValueUpdateRequest,
   initialAgreementValue,
-  initialExecitionValue,
+  initialExecutionValue,
   titleValueDefinition,
   titleValueAgrement,
   titleValueExecute,

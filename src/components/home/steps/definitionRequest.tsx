@@ -14,8 +14,10 @@ import { selectUtils } from 'redux/utilsReducer';
 import { createInstance, hex4Bytes } from 'utils/helpers';
 import getRule from '../../../utils/validate';
 import { ReactComponent as Delete } from '../../../images/delete.svg';
+import { Definition } from '../../../types';
 
 const { Item } = Form;
+
 const DefinitionRequest = ({
   setAgreementDefinition: setAgreement,
   agreementDefinition: agreement,
@@ -26,7 +28,7 @@ const DefinitionRequest = ({
   definition,
   setLoading,
   loading,
-}) => {
+}: Definition) => {
   const { account } = useMetaMask();
   const { utilsProvider } = useSelector(selectUtils);
   const [visible, setVisible] = useState(false);
@@ -49,6 +51,7 @@ const DefinitionRequest = ({
         submit: true,
         hash: rd?.transactionHash,
         error: false,
+        message: '',
       });
       setLoading(false);
     } catch (e) {

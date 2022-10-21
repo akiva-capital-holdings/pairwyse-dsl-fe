@@ -9,6 +9,7 @@ import { Contract } from 'ethers';
 import getRule, { validationAgreementModel } from '../../../utils/validate';
 import { selectUtils } from '../../../redux/utilsReducer';
 import { changeAgreementAddress } from '../../../redux/sessionReducer';
+import { Agreement } from '../../../types';
 import './index.css';
 
 const { Item } = Form;
@@ -23,11 +24,10 @@ const AgreementRequest = ({
   error,
   value,
   setValueAgreementRequest,
-}) => {
+}: Agreement) => {
   const { account } = useMetaMask();
   const { utilsProvider } = useSelector(selectUtils);
   const dispatch = useDispatch();
-
   const navigate = useNavigate();
 
   const createAgreement = async () => {
@@ -57,6 +57,7 @@ const AgreementRequest = ({
               lastAgrAddr: newContractInstance.options.address,
               error: false,
               hash: recordHash,
+              message: '',
               submit: true,
             });
             dispatch(changeAgreementAddress(newContractInstance.options.address));
@@ -65,7 +66,13 @@ const AgreementRequest = ({
       }
     } catch (e) {
       console.error(e);
-      setValueAgreementRequest({ lastAgrAddr: '', error: true, message: e?.message, submit: true });
+      setValueAgreementRequest({
+        lastAgrAddr: '',
+        error: true,
+        hash: '',
+        message: e?.message,
+        submit: true,
+      });
       setLoading(false);
     }
   };
