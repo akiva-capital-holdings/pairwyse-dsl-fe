@@ -20,3 +20,125 @@ export interface ISession {
 export interface Utils {
   utilsProvider: object;
 }
+
+export interface Agreement {
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  setLender: React.Dispatch<React.SetStateAction<string>>;
+  setError: React.Dispatch<string>;
+  setValue: React.Dispatch<string>;
+  loading: boolean;
+  lender: string;
+  error: string;
+  value: string;
+  setValueAgreementRequest: React.Dispatch<
+    React.SetStateAction<{
+      lastAgrAddr: string;
+      error: boolean;
+      hash: string;
+      message: string;
+      submit: boolean;
+    }>
+  >;
+}
+
+export interface Definition {
+  setAgreementDefinition: React.Dispatch<React.SetStateAction<string>>;
+  agreementDefinition: string;
+  setValueDefinitionRequest: React.Dispatch<
+    React.SetStateAction<{
+      value: string;
+      submit: boolean;
+      hash: string;
+      error: boolean;
+      message: string;
+    }>
+  >;
+  setspecification: React.Dispatch<
+    React.SetStateAction<
+      {
+        title: string;
+        value: string;
+        id: number;
+        type: string;
+      }[]
+    >
+  >;
+  specifications: {
+    title: string;
+    value: string;
+    id: number;
+    type: string;
+  }[];
+  setDefinition: React.Dispatch<React.SetStateAction<string>>;
+  definition: string;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  loading: boolean;
+}
+
+export interface Execution {
+  setExecutionValue: React.Dispatch<
+    React.SetStateAction<{
+      hash: string;
+      submit: boolean;
+      error: boolean;
+      message: string;
+    }>
+  >;
+  setAgreement: React.Dispatch<React.SetStateAction<string>>;
+  setRecordValue: React.Dispatch<React.SetStateAction<string>>;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  agreement: string;
+  setDslID: React.Dispatch<React.SetStateAction<string>>;
+  rdValue: string;
+  loading: boolean;
+  dslId: string;
+}
+
+export interface Update {
+  setUpdateRequest: React.Dispatch<
+    React.SetStateAction<{
+      hash: string;
+      submit: boolean;
+      error: boolean;
+      message: string;
+    }>
+  >;
+  setSignatories: React.Dispatch<
+    React.SetStateAction<
+      {
+        title: string;
+        value: string;
+        id: number;
+      }[]
+    >
+  >;
+  setRecord: React.Dispatch<React.SetStateAction<string>>;
+  setConditions: React.Dispatch<
+    React.SetStateAction<
+      {
+        title: string;
+        value: string;
+        id: number;
+      }[]
+    >
+  >;
+  setAgreement: React.Dispatch<React.SetStateAction<string>>;
+  record: string;
+  signatories: {
+    title: string;
+    value: string;
+    id: number;
+  }[];
+  conditions: {
+    title: string;
+    value: string;
+    id: number;
+  }[];
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  setNumbers: React.Dispatch<React.SetStateAction<number[]>>;
+  agreement: string;
+  setDslID: React.Dispatch<React.SetStateAction<string>>;
+  numbers: number[];
+  loading: boolean;
+  dslId: string;
+}

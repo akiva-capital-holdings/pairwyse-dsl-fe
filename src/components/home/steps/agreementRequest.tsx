@@ -9,29 +9,10 @@ import { Contract } from 'ethers';
 import getRule, { validationAgreementModel } from '../../../utils/validate';
 import { selectUtils } from '../../../redux/utilsReducer';
 import { changeAgreementAddress } from '../../../redux/sessionReducer';
+import { Agreement } from '../../../types';
 import './index.css';
 
 const { Item } = Form;
-
-interface Agreement {
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  setLender: React.Dispatch<React.SetStateAction<string>>;
-  setError: React.Dispatch<string>;
-  setValue: React.Dispatch<string>;
-  loading: boolean;
-  lender: string;
-  error: string;
-  value: string;
-  setValueAgreementRequest: React.Dispatch<
-    React.SetStateAction<{
-      lastAgrAddr: string;
-      error: boolean;
-      hash: string;
-      message: string;
-      submit: boolean;
-    }>
-  >;
-}
 
 const AgreementRequest = ({
   setLoading,

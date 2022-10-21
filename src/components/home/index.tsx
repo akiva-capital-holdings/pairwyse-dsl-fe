@@ -6,7 +6,7 @@ import {
   initialDefinitionRequestValue,
   initialUpdateRequestValue,
   titleValueUpdateRequest,
-  initialExecitionValue,
+  initialExecutionValue,
   initialAgreementValue,
   titleValueDefinition,
   titleValueAgrement,
@@ -54,11 +54,11 @@ const HomePage = () => {
   const [record, setRecord] = useState('');
   const [valueUpdateRequest, setUpdateRequest] = useState(initialUpdateRequestValue);
   const [numbers, setNumbers] = useState([]);
-  // execition
-  const [agreementExecition, setAgreementExecition] = useState('');
-  const [dslIdExecition, setDslIdExecition] = useState('');
+  // Execution
+  const [agreementExecution, setAgreementExecution] = useState('');
+  const [dslIdExecution, setDslIdExecution] = useState('');
   const [rdValueExecution, setRecordValueExecution] = useState('');
-  const [execitionValue, setExecitionValue] = useState(initialExecitionValue);
+  const [executionValue, setExecutionValue] = useState(initialExecutionValue);
 
   useEffect(() => {
     setValueAgreementRequest({
@@ -73,15 +73,15 @@ const HomePage = () => {
   useEffect(() => {
     setAgreementDefinition(valueAgreementRequest.lastAgrAddr);
     setAgreement(valueAgreementRequest.lastAgrAddr);
-    setAgreementExecition(valueAgreementRequest.lastAgrAddr);
+    setAgreementExecution(valueAgreementRequest.lastAgrAddr);
   }, [valueAgreementRequest]);
 
   const reset = () => {
     setspecification(mockDefinitions);
     setSignatories(mockSignatories);
     setAgreementDefinition('');
-    setAgreementExecition('');
-    setDslIdExecition('');
+    setAgreementExecution('');
+    setDslIdExecution('');
     setValue(undefined);
     setConditions(mock);
     setRecord('');
@@ -158,12 +158,12 @@ const HomePage = () => {
     ),
     stepFour: (
       <ExecutionRequest
-        setDslID={setDslIdExecition}
-        dslId={dslIdExecition}
-        setExecitionValue={setExecitionValue}
-        setAgreement={setAgreementExecition}
+        setDslID={setDslIdExecution}
+        dslId={dslIdExecution}
+        setExecutionValue={setExecutionValue}
+        setAgreement={setAgreementExecution}
         setRecordValue={setRecordValueExecution}
-        agreement={agreementExecition}
+        agreement={agreementExecution}
         rdValue={rdValueExecution}
         setLoading={setLoading}
         loading={loading}
@@ -324,29 +324,29 @@ const HomePage = () => {
     stepFour: (
       <div
         className={`recordContainer  ${
-          execitionValue?.error && !execitionValue?.hash ? 'error' : ''
+          executionValue?.error && !executionValue?.hash ? 'error' : ''
         }`}
       >
         <div className="titleContainer">
           <div className="title">Record</div>
           <div className="titleSeccess">
-            {execitionValue?.submit &&
-              iconValue(execitionValue?.error && !!execitionValue?.message)}
+            {executionValue?.submit &&
+              iconValue(executionValue?.error && !!executionValue?.message)}
           </div>
         </div>
-        <div className={`contentCOntainer  ${execitionValue?.error ? 'error' : ''}`}>
+        <div className={`contentCOntainer  ${executionValue?.error ? 'error' : ''}`}>
           <div className="content">
             <div className="title">
-              {execitionValue?.error && execitionValue?.message
+              {executionValue?.error && executionValue?.message
                 ? 'Warning! Error encountered during contract execution'
-                : titleValueExecute(!!execitionValue?.hash)}
+                : titleValueExecute(!!executionValue?.hash)}
             </div>
-            {!!execitionValue?.hash && (
+            {!!executionValue?.hash && (
               <div className="valueContainer">
-                <div className="value">{shortenedAddress(execitionValue?.hash, 9)}</div>
+                <div className="value">{shortenedAddress(executionValue?.hash, 9)}</div>
                 <Copy
                   style={{ cursor: 'pointer' }}
-                  onClick={() => onCopyClick(execitionValue?.hash)}
+                  onClick={() => onCopyClick(executionValue?.hash)}
                 />
               </div>
             )}

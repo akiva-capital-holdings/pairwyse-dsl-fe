@@ -6,31 +6,13 @@ import { useNavigate } from 'react-router-dom';
 import { createInstance } from 'utils/helpers';
 import { selectUtils } from 'redux/utilsReducer';
 import { useMetaMask } from 'metamask-react';
+import { Execution } from '../../../types';
 import getRule from '../../../utils/validate';
 
 const { Item } = Form;
 
-interface Execition {
-  setExecitionValue: React.Dispatch<
-    React.SetStateAction<{
-      hash: string;
-      submit: boolean;
-      error: boolean;
-      message: string;
-    }>
-  >;
-  setAgreement: React.Dispatch<React.SetStateAction<string>>;
-  setRecordValue: React.Dispatch<React.SetStateAction<string>>;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  agreement: string;
-  setDslID: React.Dispatch<React.SetStateAction<string>>;
-  rdValue: string;
-  loading: boolean;
-  dslId: string;
-}
-
 const ExecutionRequest = ({
-  setExecitionValue,
+  setExecutionValue,
   setAgreement,
   setRecordValue,
   setLoading,
@@ -39,7 +21,7 @@ const ExecutionRequest = ({
   rdValue,
   loading,
   dslId,
-}: Execition) => {
+}: Execution) => {
   const { account } = useMetaMask();
   const { utilsProvider } = useSelector(selectUtils);
   const [recordIds, setRecordIds] = useState([]);
@@ -56,7 +38,7 @@ const ExecutionRequest = ({
       const executeRecord = await agreementContract.methods
         .execute(dslId)
         .send({ from: account, value: rdValue?.replace(/,/gi, '') });
-      setExecitionValue({
+      setExecutionValue({
         hash: executeRecord.transactionHash,
         submit: true,
         error: false,
@@ -64,7 +46,7 @@ const ExecutionRequest = ({
       });
     } catch (err) {
       console.error(err);
-      setExecitionValue({ hash: '', submit: true, error: true, message: err?.message });
+      setExecutionValue({ hash: '', submit: true, error: true, message: err?.message });
     }
     setLoading(false);
   };

@@ -10,57 +10,9 @@ import { v4 as uuidv4 } from 'uuid';
 import { ReactComponent as Delete } from '../../../images/delete.svg';
 import { ReactComponent as Cloose } from '../../../images/close.svg';
 import getRule from '../../../utils/validate';
+import { Update } from '../../../types';
 
 const { Item } = Form;
-
-interface Update {
-  setUpdateRequest: React.Dispatch<
-    React.SetStateAction<{
-      hash: string;
-      submit: boolean;
-      error: boolean;
-      message: string;
-    }>
-  >;
-  setSignatories: React.Dispatch<
-    React.SetStateAction<
-      {
-        title: string;
-        value: string;
-        id: number;
-      }[]
-    >
-  >;
-  setRecord: React.Dispatch<React.SetStateAction<string>>;
-  setConditions: React.Dispatch<
-    React.SetStateAction<
-      {
-        title: string;
-        value: string;
-        id: number;
-      }[]
-    >
-  >;
-  setAgreement: React.Dispatch<React.SetStateAction<string>>;
-  record: string;
-  signatories: {
-    title: string;
-    value: string;
-    id: number;
-  }[];
-  conditions: {
-    title: string;
-    value: string;
-    id: number;
-  }[];
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  setNumbers: React.Dispatch<React.SetStateAction<number[]>>;
-  agreement: string;
-  setDslID: React.Dispatch<React.SetStateAction<string>>;
-  numbers: number[];
-  loading: boolean;
-  dslId: string;
-}
 
 const UpdateRequest = ({
   setUpdateRequest,
@@ -202,11 +154,8 @@ const UpdateRequest = ({
     setErrorRequiredRecords(false);
     form
       .validateFields(['requiredRecords'])
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      // .then((v) => setNumbers([...numbers, { value: +valueRequiredRecords, id: uuidv4() }]))
       .then(() => setNumbers([...numbers, +valueRequiredRecords]))
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      .catch((err) => setErrorRequiredRecords(true));
+      .catch(() => setErrorRequiredRecords(true));
   };
 
   const validateRecordId = () => {
@@ -277,11 +226,7 @@ const UpdateRequest = ({
             name="requiredRecords"
             validateTrigger="onChange"
             className="requiredRecords"
-            rules={
-              // numbers?.length === 0 && valueRequiredRecords?.toString() === ''?
-              getRule('requiredRecords', 'record-value', valueRequiredRecords?.toString())
-              // : getRule('requiredRecords', 'requiredRecords', valueRequiredRecords?.toString())
-            }
+            rules={getRule('requiredRecords', 'record-value', valueRequiredRecords?.toString())}
             style={{ marginBottom: '8px' }}
           >
             <Input
@@ -293,10 +238,8 @@ const UpdateRequest = ({
                 } else {
                   form
                     .validateFields(['requiredRecords'])
-                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                    .then((v) => setErrorRequiredRecords(false))
-                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                    .catch((err) => setErrorRequiredRecords(true));
+                    .then(() => setErrorRequiredRecords(false))
+                    .catch(() => setErrorRequiredRecords(true));
                   setValueRequiredRecords(e?.target?.value);
                 }
               }}
