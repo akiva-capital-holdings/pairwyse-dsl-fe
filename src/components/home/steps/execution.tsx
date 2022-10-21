@@ -237,7 +237,6 @@ const ExecutionRequest = ({
                     'record-value-in-wei': valueFormatting,
                   });
                 });
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 setRecordValue(e?.target?.value.replace(/[\s.,%]/g, ''));
               }}
             />

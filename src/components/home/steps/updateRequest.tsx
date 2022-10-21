@@ -131,18 +131,15 @@ const UpdateRequest = ({
         process.env.REACT_APP_CONTEXT_FACTORY,
         utilsProvider
       );
-      // const numId = numbers?.map((el) => el?.value);
       await addSteps(agreementContract, AGREEMENT_ADDR, contextFactory, [
         {
           recordId: DSL_ID,
-          // requiredRecords: [...numId],
           requiredRecords: [...numbers],
           signatories: [SIGNATORY],
           conditions: [CONDITION],
           record: RECORD,
         },
       ]);
-      // console.log(rdsAddr, crddeployedLen);
     } catch (e) {
       console.error(e);
       setUpdateRequest({ hash: '', submit: true, error: true, message: e?.message });
