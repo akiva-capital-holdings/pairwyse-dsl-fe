@@ -23,24 +23,35 @@ export const NETWORK_OPTIONS = {
     blockExplorerUrls: ['https://rinkeby.etherscan.io'],
   },
   local: {
-    chainId: `0x${Number(539)}`,
-    chainName: 'http://127.0.0.1:7545',
+    chainId: `0x${Number(51337).toString(16)}`,
+    chainName: 'http://127.0.0.1:8545',
     nativeCurrency: {
       name: 'custom',
       symbol: 'ETH',
       decimals: 18,
     },
-    rpcUrls: ['http://127.0.0.1:7545'],
+    rpcUrls: ['http://127.0.0.1:8545'],
   },
   dev: {
-    chainId: '0x7a69',
-    chainName: 'dev',
+    chainId: `0x${Number(1337).toString(16)}`,
+    chainName: 'https://192.168.221.1:8545',
     nativeCurrency: {
-      name: 'dev',
+      name: 'custom',
       symbol: 'ETH',
       decimals: 18,
     },
-    rpcUrls: ['http://192.168.221.1:8545'],
+    rpcUrls: ['https://192.168.221.1:8545'],
+  },
+  goerli: {
+    chainId: `0x${Number(5).toString(16)}`,
+    chainName: 'Ethereum Testnet Goerli',
+    nativeCurrency: {
+      name: 'Goerli Ether',
+      symbol: 'GoerliETH',
+      decimals: 18,
+    },
+    rpcUrls: ['https://goerli.infura.io/v3/'],
+    blockExplorerUrls: ['https://goerli.etherscan.io'],
   },
 };
 

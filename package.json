@@ -19,6 +19,7 @@
     "@typescript-eslint/parser": "^5.25.0",
     "antd": "^4.20.6",
     "craco-alias": "^3.0.1",
+    "cross-env": "^7.0.3",
     "env-cmd": "^10.1.0",
     "ethers": "^5.6.8",
     "lodash": "^4.17.21",
@@ -40,7 +41,10 @@
   },
   "scripts": {
     "start": "craco start",
-    "start:locale": "env-cmd -f .env.locale craco start",
+    "start:local": "env-cmd -f .env cross-env REACT_APP_NETWORK='local' craco start",
+    "start:stage": "env-cmd -f .env cross-env REACT_APP_NETWORK='goerli' craco start",
+    "start:production": "env-cmd -f .env cross-env REACT_APP_NETWORK='mainnet' craco start",
+    "start:dev": "env-cmd -f .env cross-env REACT_APP_NETWORK='dev' craco start",
     "build": "craco build",
     "build:dev": "env-cmd -f .env.development craco  build",
     "test": "react-scripts test",
@@ -55,7 +59,7 @@
       "pre-commit": "lint-staged"
     }
   },
-    "lint-staged": {
+  "lint-staged": {
     "**/*.ts": [
       "eslint --fix --ext",
       "prettier --write \"**/*.ts\"",
