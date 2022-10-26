@@ -42,6 +42,17 @@ export const NETWORK_OPTIONS = {
     },
     rpcUrls: ['https://192.168.221.1:8545'],
   },
+  goerli: {
+    chainId: `0x${Number(5).toString(16)}`,
+    chainName: 'Ethereum Testnet Goerli',
+    nativeCurrency: {
+      name: 'Goerli Ether',
+      symbol: 'GoerliETH',
+      decimals: 18,
+    },
+    rpcUrls: ['https://goerli.infura.io/v3/'],
+    blockExplorerUrls: ['https://goerli.etherscan.io'],
+  },
 };
 
 export default { NETWORK_OPTIONS };

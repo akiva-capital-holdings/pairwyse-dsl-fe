@@ -42,7 +42,7 @@
   "scripts": {
     "start": "craco start",
     "start:local": "env-cmd -f .env cross-env REACT_APP_NETWORK='local' craco start",
-    "start:stage": "env-cmd -f .env cross-env REACT_APP_NETWORK='rinkeby' craco start",
+    "start:stage": "env-cmd -f .env cross-env REACT_APP_NETWORK='goerli' craco start",
     "start:production": "env-cmd -f .env cross-env REACT_APP_NETWORK='mainnet' craco start",
     "start:dev": "env-cmd -f .env cross-env REACT_APP_NETWORK='dev' craco start",
     "build": "craco build",

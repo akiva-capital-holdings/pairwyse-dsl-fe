@@ -18,8 +18,6 @@ function App() {
   const { utilsProvider: providerStore } = useSelector(selectUtils);
   const { status, account, chainId } = useMetaMask();
   const dispatch = useDispatch();
-  const num = 51337;
-  console.log(num.toString(16));
 
   const setOnboardingRef = async () => {
     if (!providerStore || Object.keys(providerStore).length === 0) {
