@@ -64,8 +64,7 @@ export const handleError = ({ code, message }: MetaMaskError) => {
 export const getNetworksList = () => {
   let networksList = {};
   allNetworks.forEach((item) => {
-    networksList = { ...networksList, [item.chainId]: item.name };
+    networksList = { ...networksList, [item.networkId]: item.name };
   });
-
   return networksList;
 };

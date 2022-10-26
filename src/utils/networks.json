@@ -7339,9 +7339,19 @@
     "title": "Ethereum Dev custom",
     "chain": "ETH",
     "shortName": "dev",
-    "chainId": 31337,
+    "chainId": "7a69",
     "networkId": 31337,
     "rpc": ["http://192.168.221.1:8545"],
+    "faucets": []
+  },
+  {
+    "name": "local",
+    "title": "http://127.0.0.1:8545",
+    "chain": "ETH",
+    "shortName": "loc",
+    "chainId": "c889",
+    "networkId": 51337,
+    "rpc": ["http://127.0.0.1:8545"],
     "faucets": []
   }
 ]

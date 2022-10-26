@@ -23,7 +23,7 @@
         {
           "indexed": false,
           "internalType": "uint256",
-          "name": "txId",
+          "name": "recordId",
           "type": "uint256"
         },
         {

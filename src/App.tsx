@@ -9,6 +9,7 @@ import Footer from './components/footer';
 import { initRoutes } from './router';
 import { selectSession, changeNetworkAction } from './redux/sessionReducer';
 import { utilsProvider, selectUtils } from './redux/utilsReducer';
+import { NETWORK_OPTIONS } from './utils/constants';
 import './styles/antd.css';
 import 'antd/dist/antd.css';
 
@@ -17,6 +18,8 @@ function App() {
   const { utilsProvider: providerStore } = useSelector(selectUtils);
   const { status, account, chainId } = useMetaMask();
   const dispatch = useDispatch();
+  const num = 51337;
+  console.log(num.toString(16));
 
   const setOnboardingRef = async () => {
     if (!providerStore || Object.keys(providerStore).length === 0) {
@@ -27,18 +30,11 @@ function App() {
   };
 
   const checkNetwork = async () => {
-    const networks = {
-      mainnet: 1,
-      rinkeby: 4,
-      local: 539,
-      dev: '7a69',
-    };
-    const currentChainId = chainId?.split('x')[1];
-    if (networks[process.env.REACT_APP_NETWORK] !== Number(currentChainId)) {
+    if (NETWORK_OPTIONS[process.env.REACT_APP_NETWORK].chainId !== chainId) {
       dispatch(changeNetworkAction(false));
-      return;
+    } else {
+      dispatch(changeNetworkAction(true));
     }
-    dispatch(changeNetworkAction(true));
   };
 
   useEffect(() => {
@@ -50,13 +46,13 @@ function App() {
 
   useEffect(() => {
     checkNetwork();
-  }, [network]);
+  }, [chainId]);
 
   const redirectF = () => {
-    if (!network && !account) {
+    if (network && account) {
       return '/';
     }
-    if (!network && account && process.env.REACT_APP_NETWORK === 'dev') {
+    if (!network) {
       return '/change-network';
     }
     return '/';

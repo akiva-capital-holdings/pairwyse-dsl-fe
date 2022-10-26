@@ -5,7 +5,7 @@ import changeNetwork from './changeNetwork';
 import privateRoutes from './privateRoutes';
 
 export default function initRoutes(addess, network) {
-  if (addess && !network && process.env.REACT_APP_NETWORK === 'dev') {
+  if (addess && !network) {
     return [...changeNetwork].map(({ path, component: Component }) => (
       <Route key={path} path={path} element={<Component />} />
     ));

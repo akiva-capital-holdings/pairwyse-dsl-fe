@@ -163,7 +163,7 @@ const Record = () => {
             <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
               {records?.length ? (
                 <div className="userList">
-                  <Table dataSource={mock} columns={columns} rowKey="id" />
+                  <Table dataSource={mock} columns={columns} rowKey={(record, id) => id} />
                 </div>
               ) : (
                 <Empty />
