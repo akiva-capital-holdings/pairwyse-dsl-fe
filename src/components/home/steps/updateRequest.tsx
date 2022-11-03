@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useMetaMask } from 'metamask-react';
 import { createInstance, hex4Bytes } from 'utils/helpers';
 import { selectUtils } from 'redux/utilsReducer';
-import { Contract } from 'ethers';
+import { BigNumber, Contract } from 'ethers';
 import { v4 as uuidv4 } from 'uuid';
 import { ReactComponent as Delete } from '../../../images/delete.svg';
 import { ReactComponent as Cloose } from '../../../images/close.svg';
@@ -115,64 +115,52 @@ const UpdateRequest = ({
     }
   };
 
-  const fromRecordToArray = (expr: string) => {
-    const recordArray = expr
+  const splitDSLString = (expr: string) =>
+    expr
       .replaceAll('(', '@(@')
       .replaceAll(')', '@)@')
       .split(/[@ \n]/g)
       .filter((x: string) => !!x);
-    return recordArray;
-  };
 
-  const transferFromApprove = async () => {
-    const transferFromIndex = fromRecordToArray(record).indexOf('transferFrom');
-    // const transaction = ['transferFrom', 'DAI', 'ALICE', 'BOB', '10']
-    // const transferFromIndex = transaction.indexOf('transferFrom');
-    if (transferFromIndex !== -1) {
-      // const token = transaction[transferFromIndex + 1];
-      // const sender = transaction[transferFromIndex + 2];
-      // const recipient = transaction[transferFromIndex + 3];
-      // const price = transaction[transferFromIndex + 4];
-      const token = fromRecordToArray(record)[transferFromIndex + 1];
-      const sender = fromRecordToArray(record)[transferFromIndex + 2];
-      const recipient = fromRecordToArray(record)[transferFromIndex + 3];
-      const price = fromRecordToArray(record)[transferFromIndex + 4];
-      const agreementContract = createInstance('Agreement', agreement, utilsProvider);
+  const transferFromApprove = async (agreementContract: Contract) => {
+    const inputCode = splitDSLString(record);
+    const transferFromIndex = inputCode.indexOf('transferFrom');
+    const isTransferFromPresentInInput = transferFromIndex !== -1;
+
+    if (isTransferFromPresentInInput) {
+      // Parse DSL input code and get the necessary variables
+      const token = inputCode[transferFromIndex + 1];
+      const from = inputCode[transferFromIndex + 2];
+      const to = inputCode[transferFromIndex + 3];
+      const amount = inputCode[transferFromIndex + 4];
+
       const tokenAddress = await agreementContract.methods
         .getStorageAddress(hex4Bytes(token))
         .call();
-      const senderAddress = await agreementContract.methods
-        .getStorageAddress(hex4Bytes(sender))
-        .call();
-      const recipientAddress = await agreementContract.methods
-        .getStorageAddress(hex4Bytes(recipient))
-        .call();
-      const tokenContract = createInstance('Token', tokenAddress, utilsProvider);
 
-      // console.log(`transferfrom ${token} ${sender} ${recipient} ${price}`);
-      console.log(tokenAddress);
-      console.log(senderAddress);
-      console.log(recipientAddress);
-      console.log('erc20', tokenContract);
-      const senderWallet = await tokenContract.methods.balanceOf(senderAddress);
-      const recipientWallet = await tokenContract.methods.balanceOf(recipientAddress);
-      const tokenWallet = await tokenContract.methods.balanceOf(tokenAddress);
-      console.log('wallet before', senderWallet);
-      console.log('wallet before', recipientWallet);
-      console.log('wallet before', await tokenWallet.call());
-      await tokenContract.methods.approve(recipientAddress, price);
-      await tokenContract.methods.transferFrom(senderAddress, recipientAddress, price);
-      const senderWallet2 = await tokenContract.methods.balanceOf(senderAddress);
-      const recipientWallet2 = await tokenContract.methods.balanceOf(recipientAddress);
-      const tokenWallet2 = await tokenContract.methods.balanceOf(tokenAddress);
-      console.log('wallet after', senderWallet2);
-      console.log('wallet after', recipientWallet2);
-      console.log('wallet after', tokenWallet2);
+      // Get other necessary variables
+      const fromAddress = await agreementContract.methods.getStorageAddress(hex4Bytes(from)).call();
+      const toAddress = await agreementContract.methods.getStorageAddress(hex4Bytes(to)).call();
+      const tokenContract = createInstance('Token', tokenAddress, utilsProvider);
+      const tokenDecimals = (await tokenContract.methods.decimals().call()) as string;
+      const amountWithDecimals = BigNumber.from(amount).pow(tokenDecimals);
+
+      console.log({
+        bobsAllowanceBefore: await tokenContract.methods.allowance(fromAddress, toAddress).call(),
+      });
+
+      // Make an approvement of ERC20 tokens
+      await tokenContract.methods
+        .approve(toAddress, amountWithDecimals)
+        .send({ from: fromAddress });
+
+      console.log({
+        bobsAllowanceAfter: await tokenContract.methods.allowance(fromAddress, toAddress).call(),
+      });
     }
   };
 
   const updateAgreement = async () => {
-    transferFromApprove();
     try {
       // Input data
       const DSL_ID = parseInt(dslId, 10);
@@ -188,6 +176,10 @@ const UpdateRequest = ({
         process.env.REACT_APP_CONTEXT_FACTORY,
         utilsProvider
       );
+
+      // Call additional ERC20.approve() if the conditions or the transaction contrains a `trasnferFrom` DSL opcode
+      await transferFromApprove(agreementContract);
+
       await addSteps(agreementContract, AGREEMENT_ADDR, contextFactory, [
         {
           recordId: DSL_ID,

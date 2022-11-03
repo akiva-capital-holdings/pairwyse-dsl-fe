@@ -44,8 +44,7 @@ export const getContractBytecode = (name: ContractName): string => {
 
 export const createInstance = (name: ContractName, address: string, provider): Contract => {
   const abi = getContractABI(name);
-  const contract = new provider.eth.Contract(abi, address);
-  return contract;
+  return new provider.eth.Contract(abi, address);
 };
 
 export const shortenedAddress = (address: string, size = 4) => {
