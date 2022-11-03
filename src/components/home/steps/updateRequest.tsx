@@ -131,7 +131,6 @@ const UpdateRequest = ({
       // Parse DSL input code and get the necessary variables
       const token = inputCode[transferFromIndex + 1];
       const from = inputCode[transferFromIndex + 2];
-      const to = inputCode[transferFromIndex + 3];
       const amount = inputCode[transferFromIndex + 4];
 
       const tokenAddress = await agreementContract.methods
@@ -140,22 +139,25 @@ const UpdateRequest = ({
 
       // Get other necessary variables
       const fromAddress = await agreementContract.methods.getStorageAddress(hex4Bytes(from)).call();
-      const toAddress = await agreementContract.methods.getStorageAddress(hex4Bytes(to)).call();
       const tokenContract = createInstance('Token', tokenAddress, utilsProvider);
       const tokenDecimals = (await tokenContract.methods.decimals().call()) as string;
       const amountWithDecimals = BigNumber.from(amount).pow(tokenDecimals);
 
       console.log({
-        bobsAllowanceBefore: await tokenContract.methods.allowance(fromAddress, toAddress).call(),
+        bobsAllowanceBefore: await tokenContract.methods
+          .allowance(fromAddress, agreementContract.address)
+          .call(),
       });
 
-      // Make an approvement of ERC20 tokens
+      // Approve the Agreement to spend ERC20 tokens
       await tokenContract.methods
-        .approve(toAddress, amountWithDecimals)
+        .approve(agreementContract.address, amountWithDecimals)
         .send({ from: fromAddress });
 
       console.log({
-        bobsAllowanceAfter: await tokenContract.methods.allowance(fromAddress, toAddress).call(),
+        bobsAllowanceAfter: await tokenContract.methods
+          .allowance(fromAddress, agreementContract.address)
+          .call(),
       });
     }
   };
