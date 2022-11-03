@@ -3,7 +3,7 @@ import { Button, Form, Input, Spin } from 'antd';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useMetaMask } from 'metamask-react';
-import { createInstance } from 'utils/helpers';
+import { createInstance, hex4Bytes } from 'utils/helpers';
 import { selectUtils } from 'redux/utilsReducer';
 import { Contract } from 'ethers';
 import { v4 as uuidv4 } from 'uuid';
@@ -115,7 +115,64 @@ const UpdateRequest = ({
     }
   };
 
+  const fromRecordToArray = (expr: string) => {
+    const recordArray = expr
+      .replaceAll('(', '@(@')
+      .replaceAll(')', '@)@')
+      .split(/[@ \n]/g)
+      .filter((x: string) => !!x);
+    return recordArray;
+  };
+
+  const transferFromApprove = async () => {
+    const transferFromIndex = fromRecordToArray(record).indexOf('transferFrom');
+    // const transaction = ['transferFrom', 'DAI', 'ALICE', 'BOB', '10']
+    // const transferFromIndex = transaction.indexOf('transferFrom');
+    if (transferFromIndex !== -1) {
+      // const token = transaction[transferFromIndex + 1];
+      // const sender = transaction[transferFromIndex + 2];
+      // const recipient = transaction[transferFromIndex + 3];
+      // const price = transaction[transferFromIndex + 4];
+      const token = fromRecordToArray(record)[transferFromIndex + 1];
+      const sender = fromRecordToArray(record)[transferFromIndex + 2];
+      const recipient = fromRecordToArray(record)[transferFromIndex + 3];
+      const price = fromRecordToArray(record)[transferFromIndex + 4];
+      const agreementContract = createInstance('Agreement', agreement, utilsProvider);
+      const tokenAddress = await agreementContract.methods
+        .getStorageAddress(hex4Bytes(token))
+        .call();
+      const senderAddress = await agreementContract.methods
+        .getStorageAddress(hex4Bytes(sender))
+        .call();
+      const recipientAddress = await agreementContract.methods
+        .getStorageAddress(hex4Bytes(recipient))
+        .call();
+      const tokenContract = createInstance('Token', tokenAddress, utilsProvider);
+
+      // console.log(`transferfrom ${token} ${sender} ${recipient} ${price}`);
+      console.log(tokenAddress);
+      console.log(senderAddress);
+      console.log(recipientAddress);
+      console.log('erc20', tokenContract);
+      const senderWallet = await tokenContract.methods.balanceOf(senderAddress);
+      const recipientWallet = await tokenContract.methods.balanceOf(recipientAddress);
+      const tokenWallet = await tokenContract.methods.balanceOf(tokenAddress);
+      console.log('wallet before', senderWallet);
+      console.log('wallet before', recipientWallet);
+      console.log('wallet before', await tokenWallet.call());
+      await tokenContract.methods.approve(recipientAddress, price);
+      await tokenContract.methods.transferFrom(senderAddress, recipientAddress, price);
+      const senderWallet2 = await tokenContract.methods.balanceOf(senderAddress);
+      const recipientWallet2 = await tokenContract.methods.balanceOf(recipientAddress);
+      const tokenWallet2 = await tokenContract.methods.balanceOf(tokenAddress);
+      console.log('wallet after', senderWallet2);
+      console.log('wallet after', recipientWallet2);
+      console.log('wallet after', tokenWallet2);
+    }
+  };
+
   const updateAgreement = async () => {
+    transferFromApprove();
     try {
       // Input data
       const DSL_ID = parseInt(dslId, 10);

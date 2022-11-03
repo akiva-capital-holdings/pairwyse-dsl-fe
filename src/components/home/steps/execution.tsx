@@ -53,12 +53,13 @@ const ExecutionRequest = ({
 
   const GetRecordValues = async () => {
     try {
-      const { txsRequiredRecords, txsSignatories, txsConditions, txsTransaction } =
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      const { _requiredRecords, _signatories, _conditions, _transaction } =
         await agreementContract.methods.getRecord(dslId).call();
-      setConditions(txsConditions);
-      setRequiredRecirds(txsRequiredRecords);
-      setSignatories(txsSignatories);
-      setRecord(txsTransaction);
+      setConditions(_conditions);
+      setRequiredRecirds(_requiredRecords);
+      setSignatories(_signatories);
+      setRecord(_transaction);
     } catch (err) {
       console.error(err);
     }

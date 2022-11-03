@@ -4,11 +4,13 @@ import { AbiItem } from 'web3-utils';
 import { MetaMaskError } from '../types';
 import { abi as agreementABI, bytecode as agreementBytecode } from '../data/agreement.json';
 import { abi as contextFactoryABI } from '../data/contextFactory.json';
+import { abi as tokenABI } from '../data/token.json';
 import allNetworks from './networks.json';
 
 const contractNames = {
   Agreement: 'Agreement',
   ContextFactory: 'ContextFactory',
+  Token: 'Token',
 };
 type ContractName = keyof typeof contractNames;
 
@@ -28,6 +30,8 @@ export const getContractABI = (name: ContractName): AbiItem[] => {
       return agreementABI as AbiItem[];
     case contractNames.ContextFactory:
       return contextFactoryABI as AbiItem[];
+    case contractNames.Token:
+      return tokenABI as AbiItem[];
     default:
       return [];
   }
@@ -40,7 +44,8 @@ export const getContractBytecode = (name: ContractName): string => {
 
 export const createInstance = (name: ContractName, address: string, provider): Contract => {
   const abi = getContractABI(name);
-  return new provider.eth.Contract(abi, address);
+  const contract = new provider.eth.Contract(abi, address);
+  return contract;
 };
 
 export const shortenedAddress = (address: string, size = 4) => {
