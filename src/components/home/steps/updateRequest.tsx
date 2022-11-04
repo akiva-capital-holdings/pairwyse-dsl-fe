@@ -115,6 +115,7 @@ const UpdateRequest = ({
     }
   };
 
+  // Convert string of record to array of string
   const splitDSLString = (expr: string) =>
     expr
       .replaceAll('(', '@(@')
@@ -122,6 +123,7 @@ const UpdateRequest = ({
       .split(/[@ \n]/g)
       .filter((x: string) => !!x);
 
+  // If the record exists 'transferFrom' then auto-approve is activated
   const transferFromApprove = async (agreementContract: Contract) => {
     const inputCode = splitDSLString(record);
     const transferFromIndex = inputCode.indexOf('transferFrom');
@@ -143,22 +145,10 @@ const UpdateRequest = ({
       const tokenDecimals = (await tokenContract.methods.decimals().call()) as string;
       const amountWithDecimals = BigNumber.from(amount).pow(tokenDecimals);
 
-      console.log({
-        bobsAllowanceBefore: await tokenContract.methods
-          .allowance(fromAddress, agreementContract.address)
-          .call(),
-      });
-
       // Approve the Agreement to spend ERC20 tokens
       await tokenContract.methods
         .approve(agreementContract.address, amountWithDecimals)
         .send({ from: fromAddress });
-
-      console.log({
-        bobsAllowanceAfter: await tokenContract.methods
-          .allowance(fromAddress, agreementContract.address)
-          .call(),
-      });
     }
   };
 
