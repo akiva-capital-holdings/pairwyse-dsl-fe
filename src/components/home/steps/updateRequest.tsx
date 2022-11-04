@@ -3,9 +3,9 @@ import { Button, Form, Input, Spin } from 'antd';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useMetaMask } from 'metamask-react';
-import { createInstance } from 'utils/helpers';
+import { createInstance, hex4Bytes } from 'utils/helpers';
 import { selectUtils } from 'redux/utilsReducer';
-import { Contract } from 'ethers';
+import { BigNumber, Contract } from 'ethers';
 import { v4 as uuidv4 } from 'uuid';
 import { ReactComponent as Delete } from '../../../images/delete.svg';
 import { ReactComponent as Cloose } from '../../../images/close.svg';
@@ -115,6 +115,43 @@ const UpdateRequest = ({
     }
   };
 
+  // Convert string of record to array of string
+  const splitDSLString = (expr: string) =>
+    expr
+      .replaceAll('(', '@(@')
+      .replaceAll(')', '@)@')
+      .split(/[@ \n]/g)
+      .filter((x: string) => !!x);
+
+  // If the record exists 'transferFrom' then auto-approve is activated
+  const transferFromApprove = async (agreementContract: Contract) => {
+    const inputCode = splitDSLString(record);
+    const transferFromIndex = inputCode.indexOf('transferFrom');
+    const isTransferFromPresentInInput = transferFromIndex !== -1;
+
+    if (isTransferFromPresentInInput) {
+      // Parse DSL input code and get the necessary variables
+      const token = inputCode[transferFromIndex + 1];
+      const from = inputCode[transferFromIndex + 2];
+      const amount = inputCode[transferFromIndex + 4];
+
+      const tokenAddress = await agreementContract.methods
+        .getStorageAddress(hex4Bytes(token))
+        .call();
+
+      // Get other necessary variables
+      const fromAddress = await agreementContract.methods.getStorageAddress(hex4Bytes(from)).call();
+      const tokenContract = createInstance('Token', tokenAddress, utilsProvider);
+      const tokenDecimals = (await tokenContract.methods.decimals().call()) as string;
+      const amountWithDecimals = BigNumber.from(amount).pow(tokenDecimals);
+
+      // Approve the Agreement to spend ERC20 tokens
+      await tokenContract.methods
+        .approve(agreementContract.address, amountWithDecimals)
+        .send({ from: fromAddress });
+    }
+  };
+
   const updateAgreement = async () => {
     try {
       // Input data
@@ -131,6 +168,10 @@ const UpdateRequest = ({
         process.env.REACT_APP_CONTEXT_FACTORY,
         utilsProvider
       );
+
+      // Call additional ERC20.approve() if the conditions or the transaction contrains a `trasnferFrom` DSL opcode
+      await transferFromApprove(agreementContract);
+
       await addSteps(agreementContract, AGREEMENT_ADDR, contextFactory, [
         {
           recordId: DSL_ID,
