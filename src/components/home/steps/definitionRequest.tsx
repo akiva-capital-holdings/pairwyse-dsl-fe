@@ -36,20 +36,24 @@ const DefinitionRequest = ({
   const navigate = useNavigate();
 
   const defineVariable = async () => {
+    console.log('defineVariable');
     setLoading(true);
     try {
       const AGREEMENT_ADDR = agreement;
       const DEFINITION = definition;
-      const SPETIFICATION = specifications[0].value;
+      const SPECIFICATION = specifications[0].value;
 
       const agreementInstance = createInstance('Agreement', AGREEMENT_ADDR, utilsProvider);
-      const rd = await agreementInstance.methods
-        .setStorageAddress(hex4Bytes(DEFINITION), SPETIFICATION)
+      console.log('agreement instance created');
+      console.log({ DEFINITION, SPECIFICATION });
+      const tx = await agreementInstance.methods
+        .setStorageAddress(hex4Bytes(DEFINITION), SPECIFICATION)
         .send({ from: account });
+      console.log({ tx });
       setValueDefinitionRequest({
         value: 'definition',
         submit: true,
-        hash: rd?.transactionHash,
+        hash: tx?.transactionHash,
         error: false,
         message: '',
       });

@@ -125,9 +125,11 @@ const UpdateRequest = ({
 
   // If the record exists 'transferFrom' then auto-approve is activated
   const transferFromApprove = async (agreementContract: Contract) => {
+    console.log('transferFrom Approve');
     const inputCode = splitDSLString(record);
     const transferFromIndex = inputCode.indexOf('transferFrom');
     const isTransferFromPresentInInput = transferFromIndex !== -1;
+    console.log({ isTransferFromPresentInInput });
 
     if (isTransferFromPresentInInput) {
       // Parse DSL input code and get the necessary variables
@@ -136,27 +138,35 @@ const UpdateRequest = ({
       const amount = inputCode[transferFromIndex + 4];
 
       const fromAddress = await agreementContract.methods.getStorageAddress(hex4Bytes(from)).call();
+      console.log({ fromAddress });
+      console.log({ account });
+      console.log({ areEqual: fromAddress.toLowerCase() === account.toLowerCase() });
 
-      if (fromAddress.toLowerCase() === account.toLowerCase()) {
-        const tokenAddress = await agreementContract.methods
-          .getStorageAddress(hex4Bytes(token))
-          .call();
+      // TODO: enable this `if` branch
+      // if (fromAddress.toLowerCase() === account.toLowerCase()) {
+      const tokenAddress = await agreementContract.methods
+        .getStorageAddress(hex4Bytes(token))
+        .call();
+      console.log({ tokenAddress });
 
-        const tokenContract = createInstance('Token', tokenAddress, utilsProvider);
-        const tokenDecimals = (await tokenContract.methods.decimals().call()) as string;
-        const amountWithDecimals = BigNumber.from(amount).pow(tokenDecimals);
-        const isAllowance = (await tokenContract.methods.allowance().call()) as boolean;
-        if (isAllowance) {
-          // Approve the Agreement to spend ERC20 tokens
-          await tokenContract.methods
-            .approve(agreementContract.address, amountWithDecimals)
-            .send({ from: fromAddress });
-        }
+      const tokenContract = createInstance('Token', tokenAddress, utilsProvider);
+      const tokenDecimals = (await tokenContract.methods.decimals().call()) as string;
+      console.log({ tokenDecimals });
+      console.log({ tokenName: await tokenContract.methods.name().call() });
+      const amountWithDecimals = BigNumber.from(amount).pow(tokenDecimals);
+      const isAllowance = (await tokenContract.methods.allowance().call()) as boolean;
+      if (isAllowance) {
+        // Approve the Agreement to spend ERC20 tokens
+        await tokenContract.methods
+          .approve(agreementContract.address, amountWithDecimals)
+          .send({ from: fromAddress });
       }
+      // }
     }
   };
 
   const updateAgreement = async () => {
+    console.log('updateAgreement');
     try {
       // Input data
       const DSL_ID = parseInt(dslId, 10);
@@ -166,6 +176,7 @@ const UpdateRequest = ({
       const RECORD = record;
 
       const agreementContract = createInstance('Agreement', AGREEMENT_ADDR, utilsProvider);
+      console.log('agreement instance');
 
       const contextFactory = createInstance(
         'ContextFactory',
@@ -173,7 +184,7 @@ const UpdateRequest = ({
         utilsProvider
       );
 
-      // Call additional ERC20.approve() if the conditions or the transaction contrains a `trasnferFrom` DSL opcode
+      // Call ERC20.approve() if the conditions or the transaction contains a `trasnferFrom` DSL opcode
       await transferFromApprove(agreementContract);
 
       await addSteps(agreementContract, AGREEMENT_ADDR, contextFactory, [
