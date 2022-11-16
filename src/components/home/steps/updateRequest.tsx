@@ -128,7 +128,6 @@ const UpdateRequest = ({
     const inputCode = splitDSLString(conditionOrRecord);
     const transferFromIndex = inputCode.indexOf('transferFrom');
     const isTransferFromPresentInInput = transferFromIndex !== -1;
-    console.log({ transferRun: isTransferFromPresentInInput });
 
     if (isTransferFromPresentInInput) {
       // Parse DSL input code and get the necessary variables
