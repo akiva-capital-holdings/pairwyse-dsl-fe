@@ -3,7 +3,7 @@ import { DownOutlined } from '@ant-design/icons';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { createInstance } from 'utils/helpers';
+import { createInstance, hex4Bytes } from 'utils/helpers';
 import { selectUtils } from 'redux/utilsReducer';
 import { useMetaMask } from 'metamask-react';
 import { Execution } from '../../../types';
@@ -28,11 +28,60 @@ const ExecutionRequest = ({
   const [conditions, setConditions] = useState([]);
   const [requiredRecirds, setRequiredRecirds] = useState([]);
   const [signatories, setSignatories] = useState([]);
-  const [record, setRecord] = useState([]);
+  const [record, setRecord] = useState('');
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const agreementContract = createInstance('Agreement', agreement, utilsProvider);
+
+  // Convert string of record to array of string
+  const splitDSLString = (expr: string) =>
+    expr
+      .replaceAll('(', '@(@')
+      .replaceAll(')', '@)@')
+      .split(/[@ \n]/g)
+      .filter((x: string) => !!x);
+
+  // If the record exists 'transferFrom' then auto-approve is activated
+  const transferFromApprove = async (conditionOrRecord: string) => {
+    const inputCode = splitDSLString(conditionOrRecord);
+    const transferFromIndex = inputCode.indexOf('transferFrom');
+    const isTransferFromPresentInInput = transferFromIndex !== -1;
+
+    if (isTransferFromPresentInInput) {
+      // Parse DSL input code and get the necessary variables
+      const token = inputCode[transferFromIndex + 1];
+      const from = inputCode[transferFromIndex + 2];
+      const to = inputCode[transferFromIndex + 3];
+      const amount = inputCode[transferFromIndex + 4];
+      const fromAddress = await agreementContract.methods.getStorageAddress(hex4Bytes(from)).call();
+      const toAddress = await agreementContract.methods.getStorageAddress(hex4Bytes(to)).call();
+      const tokenAddress = await agreementContract.methods
+        .getStorageAddress(hex4Bytes(token))
+        .call();
+      const tokenContract = createInstance('Token', tokenAddress, utilsProvider);
+      const isAllowance = await tokenContract.methods.allowance(fromAddress, toAddress).call();
+      if (fromAddress.toLowerCase() === account.toLowerCase()) {
+        if (isAllowance < amount) {
+          // Approve the Agreement to spend ERC20 tokens
+          await tokenContract.methods.approve(toAddress, amount).send({ from: fromAddress });
+        }
+      } else {
+        setExecutionValue({
+          hash: '',
+          submit: true,
+          error: true,
+          message: `The transaction may fail due to insufficient token allowance from ${from} to ${to}.
+           Target allowance is ${amount}, while the current allowance is ${isAllowance}`,
+        });
+      }
+    }
+  };
+
   const ExecutionSubmit = async () => {
+    conditions.forEach(async (value) => {
+      await transferFromApprove(value);
+    });
+    await transferFromApprove(record);
     setLoading(true);
     try {
       const executeRecord = await agreementContract.methods
