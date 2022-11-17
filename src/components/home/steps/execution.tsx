@@ -28,10 +28,24 @@ const ExecutionRequest = ({
   const [conditions, setConditions] = useState([]);
   const [requiredRecirds, setRequiredRecirds] = useState([]);
   const [signatories, setSignatories] = useState([]);
+  const [transferFromError, setTransferFromError] = useState(false);
   const [record, setRecord] = useState('');
+  const [transactionValue, setTransactionValue] = useState<TransactionValues>();
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const agreementContract = createInstance('Agreement', agreement, utilsProvider);
+
+  type TransactionValues = {
+    fromName: string;
+    fromAddress: string;
+    tokenName: string;
+    tokenAddress: string;
+    toName: string;
+    toAddress: string;
+    amount: string;
+    isAllowance: string;
+    error: boolean;
+  };
 
   // Convert string of record to array of string
   const splitDSLString = (expr: string) =>
@@ -46,42 +60,71 @@ const ExecutionRequest = ({
     const inputCode = splitDSLString(conditionOrRecord);
     const transferFromIndex = inputCode.indexOf('transferFrom');
     const isTransferFromPresentInInput = transferFromIndex !== -1;
+    let token: string;
+    let tokenAddress: string;
+    let from: string;
+    let fromAddress: string;
+    let to: string;
+    let toAddress: string;
+    let amount: string;
+    let isAllowance: string;
 
     if (isTransferFromPresentInInput) {
       // Parse DSL input code and get the necessary variables
-      const token = inputCode[transferFromIndex + 1];
-      const from = inputCode[transferFromIndex + 2];
-      const to = inputCode[transferFromIndex + 3];
-      const amount = inputCode[transferFromIndex + 4];
-      const fromAddress = await agreementContract.methods.getStorageAddress(hex4Bytes(from)).call();
-      const toAddress = await agreementContract.methods.getStorageAddress(hex4Bytes(to)).call();
-      const tokenAddress = await agreementContract.methods
-        .getStorageAddress(hex4Bytes(token))
-        .call();
+      token = inputCode[transferFromIndex + 1];
+      from = inputCode[transferFromIndex + 2];
+      to = inputCode[transferFromIndex + 3];
+      amount = inputCode[transferFromIndex + 4];
+      fromAddress = await agreementContract.methods.getStorageAddress(hex4Bytes(from)).call();
+      toAddress = await agreementContract.methods.getStorageAddress(hex4Bytes(to)).call();
+      tokenAddress = await agreementContract.methods.getStorageAddress(hex4Bytes(token)).call();
       const tokenContract = createInstance('Token', tokenAddress, utilsProvider);
-      const isAllowance = await tokenContract.methods.allowance(fromAddress, toAddress).call();
+      isAllowance = await tokenContract.methods.allowance(account, toAddress).call();
       if (fromAddress.toLowerCase() === account.toLowerCase()) {
         if (isAllowance < amount) {
           // Approve the Agreement to spend ERC20 tokens
           await tokenContract.methods.approve(toAddress, amount).send({ from: fromAddress });
         }
-      } else {
-        setExecutionValue({
-          hash: '',
-          submit: true,
+      } else if (isAllowance < amount) {
+        setTransferFromError(true);
+        setTransactionValue({
+          fromName: from,
+          fromAddress,
+          tokenName: token,
+          tokenAddress,
+          toName: to,
+          toAddress,
+          amount,
+          isAllowance,
           error: true,
-          message: `The transaction may fail due to insufficient token allowance from ${from} to ${to}.
-           Target allowance is ${amount}, while the current allowance is ${isAllowance}`,
         });
+        return {
+          fromName: from,
+          fromAddress,
+          tokenName: token,
+          tokenAddress,
+          toName: to,
+          toAddress,
+          amount,
+          isAllowance,
+          error: true,
+        };
       }
     }
+    return {
+      fromName: from,
+      fromAddress,
+      tokenName: token,
+      tokenAddress,
+      toName: to,
+      toAddress,
+      amount,
+      isAllowance,
+      error: false,
+    };
   };
 
   const ExecutionSubmit = async () => {
-    conditions.forEach(async (value) => {
-      await transferFromApprove(value);
-    });
-    await transferFromApprove(record);
     setLoading(true);
     try {
       const executeRecord = await agreementContract.methods
@@ -98,6 +141,60 @@ const ExecutionRequest = ({
       setExecutionValue({ hash: '', submit: true, error: true, message: err?.message });
     }
     setLoading(false);
+  };
+
+  function warningWindow() {
+    return (
+      <div
+        className={transferFromError ? 'transactionWarningBack active' : 'transactionWarningBack'}
+        onClick={() => {
+          setTransferFromError(false);
+        }}
+      >
+        <div className="transactionWarningContainer">
+          The transaction may fail due to insufficient token allowance from{' '}
+          {transactionValue?.fromName} to {transactionValue?.toName}. Target allowance is{' '}
+          {transactionValue?.amount}, while the current allowance is {transactionValue?.isAllowance}
+          <div className="btnsContainer">
+            <Button
+              onClick={() => {
+                ExecutionSubmit();
+                setTransferFromError(false);
+              }}
+              style={{ height: '48px' }}
+              htmlType="button"
+              className="btn"
+            >
+              Proceed anyway
+            </Button>
+            <Button
+              onClick={() => {
+                setTransferFromError(false);
+              }}
+              htmlType="button"
+              className="cancel"
+            >
+              Cancel
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const preExecute = async () => {
+    let transferFromErrors = false;
+    conditions.forEach(async (value) => {
+      if ((await transferFromApprove(value)).error) {
+        transferFromErrors = (await transferFromApprove(value)).error;
+      }
+    });
+    if ((await transferFromApprove(record)).error) {
+      transferFromErrors = (await transferFromApprove(record)).error;
+    }
+    if (transferFromErrors) {
+      ExecutionSubmit();
+    }
   };
 
   const GetRecordValues = async () => {
@@ -228,7 +325,7 @@ const ExecutionRequest = ({
           name="agreementRequestForm"
           form={form}
           autoComplete="off"
-          onFinish={() => ExecutionSubmit()}
+          onFinish={() => preExecute()}
         >
           <div className="text">Requestor</div>
           <div
@@ -276,7 +373,7 @@ const ExecutionRequest = ({
             }
           >
             <Input
-              className={'ant-input lender'}
+              className="lender"
               onChange={(e) => {
                 form.validateFields(['record-value-in-wei']).then(() => {
                   const valueFormatting = String(e?.target?.value.replace(/,/gi, '')).replace(
@@ -306,6 +403,7 @@ const ExecutionRequest = ({
           </div>
         </Form>
       </Spin>
+      {warningWindow()}
     </div>
   );
 };
