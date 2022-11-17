@@ -86,7 +86,6 @@ const ExecutionRequest = ({
           await tokenContract.methods.approve(toAddress, amount).send({ from: fromAddress });
         }
       } else if (isAllowance < amount) {
-        setTransferFromError(true);
         setTransactionValue({
           fromName: from,
           fromAddress,
@@ -187,13 +186,16 @@ const ExecutionRequest = ({
     conditions.forEach(async (value) => {
       if ((await transferFromApprove(value)).error) {
         transferFromErrors = (await transferFromApprove(value)).error;
+        setTransferFromError(true);
       }
     });
     if ((await transferFromApprove(record)).error) {
       transferFromErrors = (await transferFromApprove(record)).error;
+      setTransferFromError(true);
     }
-    if (transferFromErrors) {
+    if (!transferFromErrors) {
       ExecutionSubmit();
+      setTransferFromError(false);
     }
   };
 
