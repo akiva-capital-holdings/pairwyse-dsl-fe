@@ -3,10 +3,10 @@ import { DownOutlined } from '@ant-design/icons';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { createInstance, hex4Bytes } from 'utils/helpers';
+import { createInstance, hex4Bytes, splitDSLString } from 'utils/helpers';
 import { selectUtils } from 'redux/utilsReducer';
 import { useMetaMask } from 'metamask-react';
-import { Execution } from '../../../types';
+import { Execution, TransactionValues } from '../../../types';
 import getRule from '../../../utils/validate';
 
 const { Item } = Form;
@@ -34,26 +34,6 @@ const ExecutionRequest = ({
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const agreementContract = createInstance('Agreement', agreement, utilsProvider);
-
-  type TransactionValues = {
-    fromName: string;
-    fromAddress: string;
-    tokenName: string;
-    tokenAddress: string;
-    toName: string;
-    toAddress: string;
-    amount: string;
-    isAllowance: string;
-    error: boolean;
-  };
-
-  // Convert string of record to array of string
-  const splitDSLString = (expr: string) =>
-    expr
-      .replaceAll('(', '@(@')
-      .replaceAll(')', '@)@')
-      .split(/[@ \n]/g)
-      .filter((x: string) => !!x);
 
   // If the record exists 'transferFrom' then auto-approve is activated
   const transferFromApprove = async (conditionOrRecord: string) => {
@@ -142,6 +122,7 @@ const ExecutionRequest = ({
     setLoading(false);
   };
 
+  // A function that calls a modal window in the case when there are not enough tokens to execute the command
   function warningWindow() {
     return (
       <div
@@ -151,8 +132,8 @@ const ExecutionRequest = ({
         }}
       >
         <div className="transactionWarningContainer">
-          The transaction may fail due to insufficient token allowance from{' '}
-          {transactionValue?.fromName} to {transactionValue?.toName}. Target allowance is{' '}
+          The transaction may fail due to insufficient token allowance from
+          {transactionValue?.fromName} to {transactionValue?.toName}. Target allowance is
           {transactionValue?.amount}, while the current allowance is {transactionValue?.isAllowance}
           <div className="btnsContainer">
             <Button
@@ -181,6 +162,9 @@ const ExecutionRequest = ({
     );
   }
 
+  // Сhecking for the presence of the "TransferFrom" in the condition or transaction.
+  // if "TransferFrom" present => Execute the autoApprove "TransferFrom" command and transaction
+  // if "TransferFrom" upsent => Execute only transaction
   const preExecute = async () => {
     let transferFromErrors = false;
     conditions.forEach(async (value) => {

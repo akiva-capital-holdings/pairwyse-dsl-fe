@@ -3,7 +3,7 @@ import { Button, Form, Input, Spin } from 'antd';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useMetaMask } from 'metamask-react';
-import { createInstance, hex4Bytes } from 'utils/helpers';
+import { createInstance, hex4Bytes, splitDSLString } from 'utils/helpers';
 import { selectUtils } from 'redux/utilsReducer';
 import { Contract } from 'ethers';
 import { v4 as uuidv4 } from 'uuid';
@@ -115,13 +115,17 @@ const UpdateRequest = ({
     }
   };
 
-  // Convert string of record to array of string
-  const splitDSLString = (expr: string) =>
-    expr
-      .replaceAll('(', '@(@')
-      .replaceAll(')', '@)@')
-      .split(/[@ \n]/g)
-      .filter((x: string) => !!x);
+  // string decimal number with e symbol (1e18) to string of numbers (in wei)
+  function getWei(amount) {
+    let normalAmount: string;
+    try {
+      normalAmount = Number(amount).toString();
+    } catch (e) {
+      console.error({ e });
+      setErrorRequiredRecords(true);
+    }
+    return normalAmount;
+  }
 
   // If the record exists 'transferFrom' then auto-approve is activated
   const transferFromApprove = async (agreementContract: Contract, conditionOrRecord: string) => {
@@ -134,7 +138,7 @@ const UpdateRequest = ({
       const token = inputCode[transferFromIndex + 1];
       const from = inputCode[transferFromIndex + 2];
       const to = inputCode[transferFromIndex + 3];
-      const amount = inputCode[transferFromIndex + 4];
+      const amount = getWei(inputCode[transferFromIndex + 4]);
 
       const fromAddress = await agreementContract.methods.getStorageAddress(hex4Bytes(from)).call();
 
@@ -159,8 +163,8 @@ const UpdateRequest = ({
       // Input data
       const DSL_ID = parseInt(dslId, 10);
       const AGREEMENT_ADDR = agreement;
-      const SIGNATORY = signatories.map((obj) => obj.value);
-      const CONDITION = conditions.map((obj) => obj.value);
+      const SIGNATORIES = signatories.map((obj) => obj.value);
+      const CONDITIONS = conditions.map((obj) => obj.value);
       const RECORD = record;
       const agreementContract = createInstance('Agreement', AGREEMENT_ADDR, utilsProvider);
       const contextFactory = createInstance(
@@ -170,7 +174,7 @@ const UpdateRequest = ({
       );
 
       // Call ERC20.approve() if the conditions or the transaction contains a `trasnferFrom` DSL opcode
-      CONDITION.forEach(async (value) => {
+      CONDITIONS.forEach(async (value) => {
         await transferFromApprove(agreementContract, value);
       });
       await transferFromApprove(agreementContract, record);
@@ -178,8 +182,8 @@ const UpdateRequest = ({
         {
           recordId: DSL_ID,
           requiredRecords: [...numbers],
-          signatories: [...SIGNATORY],
-          conditions: [...CONDITION],
+          signatories: [...SIGNATORIES],
+          conditions: [...CONDITIONS],
           record: RECORD,
         },
       ]);

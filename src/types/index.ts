@@ -41,6 +41,18 @@ export interface Agreement {
   >;
 }
 
+export interface TransactionValues {
+  fromName: string;
+  fromAddress: string;
+  tokenName: string;
+  tokenAddress: string;
+  toName: string;
+  toAddress: string;
+  amount: string;
+  isAllowance: string;
+  error: boolean;
+}
+
 export interface Definition {
   setAgreementDefinition: React.Dispatch<React.SetStateAction<string>>;
   agreementDefinition: string;

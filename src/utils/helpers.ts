@@ -14,6 +14,14 @@ const contractNames = {
 };
 type ContractName = keyof typeof contractNames;
 
+// Convert string of record to array of string
+export const splitDSLString = (expr: string) =>
+  expr
+    .replaceAll('(', '@(@')
+    .replaceAll(')', '@)@')
+    .split(/[@ \n]/g)
+    .filter((x: string) => !!x);
+
 export const hex4Bytes = (str: string) => {
   return ethers.utils
     .keccak256(ethers.utils.toUtf8Bytes(str))
