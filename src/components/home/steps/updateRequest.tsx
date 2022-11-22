@@ -3,7 +3,7 @@ import { Button, Form, Input, Spin } from 'antd';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useMetaMask } from 'metamask-react';
-import { createInstance, hex4Bytes, splitDSLString } from 'utils/helpers';
+import { createInstance, hex4Bytes, splitDSLString, getWei } from 'utils/helpers';
 import { selectUtils } from 'redux/utilsReducer';
 import { Contract } from 'ethers';
 import { v4 as uuidv4 } from 'uuid';
@@ -115,18 +115,6 @@ const UpdateRequest = ({
     }
   };
 
-  // string decimal number with e symbol (1e18) to string of numbers (in wei)
-  function getWei(amount) {
-    let normalAmount: string;
-    try {
-      normalAmount = Number(amount).toString();
-    } catch (e) {
-      console.error({ e });
-      setErrorRequiredRecords(true);
-    }
-    return normalAmount;
-  }
-
   // If the record exists 'transferFrom' then auto-approve is activated
   const transferFromApprove = async (agreementContract: Contract, conditionOrRecord: string) => {
     const inputCode = splitDSLString(conditionOrRecord);
@@ -138,7 +126,7 @@ const UpdateRequest = ({
       const token = inputCode[transferFromIndex + 1];
       const from = inputCode[transferFromIndex + 2];
       const to = inputCode[transferFromIndex + 3];
-      const amount = getWei(inputCode[transferFromIndex + 4]);
+      const amount = getWei(inputCode[transferFromIndex + 4], setErrorRequiredRecords);
 
       const fromAddress = await agreementContract.methods.getStorageAddress(hex4Bytes(from)).call();
 
