@@ -3,7 +3,7 @@ import { DownOutlined } from '@ant-design/icons';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { createInstance, hex4Bytes, splitDSLString } from 'utils/helpers';
+import { createInstance, hex4Bytes, splitDSLString, getWei } from 'utils/helpers';
 import { selectUtils } from 'redux/utilsReducer';
 import { useMetaMask } from 'metamask-react';
 import { Execution, TransactionValues } from '../../../types';
@@ -16,7 +16,7 @@ const ExecutionRequest = ({
   setAgreement,
   setRecordValue,
   setLoading,
-  agreement,
+  agreementExecution,
   setDslID,
   rdValue,
   loading,
@@ -33,7 +33,7 @@ const ExecutionRequest = ({
   const [transactionValue, setTransactionValue] = useState<TransactionValues>();
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  const agreementContract = createInstance('Agreement', agreement, utilsProvider);
+  const agreementContract = createInstance('Agreement', agreementExecution, utilsProvider);
 
   // If the record exists 'transferFrom' then auto-approve is activated
   const transferFromApprove = async (conditionOrRecord: string) => {
@@ -44,8 +44,8 @@ const ExecutionRequest = ({
     let tokenAddress: string;
     let from: string;
     let fromAddress: string;
-    let to: string;
-    let toAddress: string;
+    let agreement: string;
+    let toAgreementAddress: string;
     let amount: string;
     let isAllowance: string;
 
@@ -53,17 +53,21 @@ const ExecutionRequest = ({
       // Parse DSL input code and get the necessary variables
       token = inputCode[transferFromIndex + 1];
       from = inputCode[transferFromIndex + 2];
-      to = inputCode[transferFromIndex + 3];
-      amount = inputCode[transferFromIndex + 4];
+      agreement = inputCode[transferFromIndex + 3];
+      amount = getWei(inputCode[transferFromIndex + 4], setTransferFromError);
       fromAddress = await agreementContract.methods.getStorageAddress(hex4Bytes(from)).call();
-      toAddress = await agreementContract.methods.getStorageAddress(hex4Bytes(to)).call();
+      toAgreementAddress = await agreementContract.methods
+        .getStorageAddress(hex4Bytes(agreement))
+        .call();
       tokenAddress = await agreementContract.methods.getStorageAddress(hex4Bytes(token)).call();
       const tokenContract = createInstance('Token', tokenAddress, utilsProvider);
-      isAllowance = await tokenContract.methods.allowance(account, toAddress).call();
+      isAllowance = await tokenContract.methods.allowance(account, toAgreementAddress).call();
       if (fromAddress.toLowerCase() === account.toLowerCase()) {
         if (isAllowance < amount) {
           // Approve the Agreement to spend ERC20 tokens
-          await tokenContract.methods.approve(toAddress, amount).send({ from: fromAddress });
+          await tokenContract.methods
+            .approve(toAgreementAddress, amount)
+            .send({ from: fromAddress });
         }
       } else if (isAllowance < amount) {
         setTransactionValue({
@@ -71,8 +75,8 @@ const ExecutionRequest = ({
           fromAddress,
           tokenName: token,
           tokenAddress,
-          toName: to,
-          toAddress,
+          toName: agreement,
+          toAgreementAddress,
           amount,
           isAllowance,
           error: true,
@@ -82,8 +86,8 @@ const ExecutionRequest = ({
           fromAddress,
           tokenName: token,
           tokenAddress,
-          toName: to,
-          toAddress,
+          toName: agreement,
+          toAgreementAddress,
           amount,
           isAllowance,
           error: true,
@@ -95,8 +99,8 @@ const ExecutionRequest = ({
       fromAddress,
       tokenName: token,
       tokenAddress,
-      toName: to,
-      toAddress,
+      toName: agreement,
+      toAgreementAddress,
       amount,
       isAllowance,
       error: false,
@@ -124,6 +128,9 @@ const ExecutionRequest = ({
 
   // A function that calls a modal window in the case when there are not enough tokens to execute the command
   function warningWindow() {
+    const errorText: string = `The transaction may fail due to insufficient token allowance from
+          ${transactionValue?.fromName} to ${transactionValue?.toName}. Target allowance is
+          ${transactionValue?.amount}, while the current allowance is ${transactionValue?.isAllowance}`;
     return (
       <div
         className={transferFromError ? 'transactionWarningBack active' : 'transactionWarningBack'}
@@ -132,9 +139,7 @@ const ExecutionRequest = ({
         }}
       >
         <div className="transactionWarningContainer">
-          The transaction may fail due to insufficient token allowance from
-          {transactionValue?.fromName} to {transactionValue?.toName}. Target allowance is
-          {transactionValue?.amount}, while the current allowance is {transactionValue?.isAllowance}
+          {errorText}
           <div className="btnsContainer">
             <Button
               onClick={() => {
@@ -331,11 +336,11 @@ const ExecutionRequest = ({
           <Item
             name="agreement"
             validateTrigger="onBlur"
-            rules={getRule('agreement', 'agreement', agreement)}
+            rules={getRule('agreement', 'agreement', agreementExecution)}
           >
             <Input
               className="lender"
-              defaultValue={agreement}
+              defaultValue={agreementExecution}
               onChange={(e) => {
                 return setAgreement(e?.target?.value);
               }}

@@ -163,7 +163,7 @@ const HomePage = () => {
         setExecutionValue={setExecutionValue}
         setAgreement={setAgreementExecution}
         setRecordValue={setRecordValueExecution}
-        agreement={agreementExecution}
+        agreementExecution={agreementExecution}
         rdValue={rdValueExecution}
         setLoading={setLoading}
         loading={loading}

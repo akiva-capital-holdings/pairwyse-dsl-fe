@@ -47,7 +47,7 @@ export interface TransactionValues {
   tokenName: string;
   tokenAddress: string;
   toName: string;
-  toAddress: string;
+  toAgreementAddress: string;
   amount: string;
   isAllowance: string;
   error: boolean;
@@ -99,7 +99,7 @@ export interface Execution {
   setAgreement: React.Dispatch<React.SetStateAction<string>>;
   setRecordValue: React.Dispatch<React.SetStateAction<string>>;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  agreement: string;
+  agreementExecution: string;
   setDslID: React.Dispatch<React.SetStateAction<string>>;
   rdValue: string;
   loading: boolean;
