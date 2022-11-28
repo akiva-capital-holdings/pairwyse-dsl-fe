@@ -92,3 +92,14 @@ export const getNetworksList = () => {
   });
   return networksList;
 };
+
+/**
+ * @dev Get ERC20 token symbol and decimals
+ * @param token ERC20 token instance
+ * @return Object that contains token symbol and token decimals
+ */
+export const getTokenDetails = async (token: Contract) => {
+  const tokenSymbol = await token.methods.symbol().call();
+  const tokenDecimals = await token.methods.decimals().call();
+  return { tokenSymbol, tokenDecimals };
+};

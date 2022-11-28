@@ -3,9 +3,10 @@ import { DownOutlined } from '@ant-design/icons';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { createInstance, hex4Bytes, splitDSLString, getWei } from 'utils/helpers';
+import { createInstance, hex4Bytes, splitDSLString, getWei, getTokenDetails } from 'utils/helpers';
 import { selectUtils } from 'redux/utilsReducer';
 import { useMetaMask } from 'metamask-react';
+import { ethers } from 'ethers';
 import { Execution, TransactionValues } from '../../../types';
 import getRule from '../../../utils/validate';
 
@@ -40,70 +41,76 @@ const ExecutionRequest = ({
     const inputCode = splitDSLString(conditionOrRecord);
     const transferFromIndex = inputCode.indexOf('transferFrom');
     const isTransferFromPresentInInput = transferFromIndex !== -1;
-    let token: string;
+    let tokenName: string;
+    let tokenSymbol: string;
+    let tokenDecimals: string;
     let tokenAddress: string;
-    let from: string;
+    let fromName: string;
     let fromAddress: string;
-    let agreement: string;
-    let toAgreementAddress: string;
-    let amount: string;
-    let isAllowance: string;
+    let toName: string;
+    let toAddress: string;
+    let targetAllowance: string;
+    let currentAllowance: string;
+    let isError: boolean;
+    let targetAllowanceNoDecimals: string;
+    let currentAllowanceNoDecimals: string;
 
     if (isTransferFromPresentInInput) {
       // Parse DSL input code and get the necessary variables
-      token = inputCode[transferFromIndex + 1];
-      from = inputCode[transferFromIndex + 2];
-      agreement = inputCode[transferFromIndex + 3];
-      amount = getWei(inputCode[transferFromIndex + 4], setTransferFromError);
-      fromAddress = await agreementContract.methods.getStorageAddress(hex4Bytes(from)).call();
-      toAgreementAddress = await agreementContract.methods
-        .getStorageAddress(hex4Bytes(agreement))
-        .call();
-      tokenAddress = await agreementContract.methods.getStorageAddress(hex4Bytes(token)).call();
+      tokenName = inputCode[transferFromIndex + 1];
+      fromName = inputCode[transferFromIndex + 2];
+      toName = inputCode[transferFromIndex + 3];
+      targetAllowance = getWei(inputCode[transferFromIndex + 4], setTransferFromError);
+
+      console.log(agreementContract._address);
+
+      fromAddress = await agreementContract.methods.getStorageAddress(hex4Bytes(fromName)).call();
+      toAddress = await agreementContract.methods.getStorageAddress(hex4Bytes(toName)).call();
+      tokenAddress = await agreementContract.methods.getStorageAddress(hex4Bytes(tokenName)).call();
+
       const tokenContract = createInstance('Token', tokenAddress, utilsProvider);
-      isAllowance = await tokenContract.methods.allowance(account, toAgreementAddress).call();
+      ({ tokenSymbol, tokenDecimals } = await getTokenDetails(tokenContract));
+      currentAllowance = await tokenContract.methods
+        .allowance(fromAddress, agreementContract._address)
+        .call();
+
+      targetAllowanceNoDecimals = ethers.utils.formatUnits(targetAllowance, tokenDecimals);
+      currentAllowanceNoDecimals = ethers.utils.formatUnits(currentAllowance, tokenDecimals);
+
       if (fromAddress.toLowerCase() === account.toLowerCase()) {
-        if (isAllowance < amount) {
+        if (currentAllowance < targetAllowance) {
           // Approve the Agreement to spend ERC20 tokens
           await tokenContract.methods
-            .approve(toAgreementAddress, amount)
+            .approve(agreementContract._address, targetAllowance)
             .send({ from: fromAddress });
         }
-      } else if (isAllowance < amount) {
+      } else if (currentAllowance < targetAllowance) {
+        isError = true;
         setTransactionValue({
-          fromName: from,
+          fromName,
           fromAddress,
-          tokenName: token,
+          tokenName,
+          tokenSymbol,
           tokenAddress,
-          toName: agreement,
-          toAgreementAddress,
-          amount,
-          isAllowance,
-          error: true,
+          toName,
+          toAddress,
+          targetAllowance: targetAllowanceNoDecimals,
+          currentAllowance: currentAllowanceNoDecimals,
+          error: isError,
         });
-        return {
-          fromName: from,
-          fromAddress,
-          tokenName: token,
-          tokenAddress,
-          toName: agreement,
-          toAgreementAddress,
-          amount,
-          isAllowance,
-          error: true,
-        };
       }
     }
     return {
-      fromName: from,
+      fromName,
       fromAddress,
-      tokenName: token,
+      tokenName,
+      tokenSymbol,
       tokenAddress,
-      toName: agreement,
-      toAgreementAddress,
-      amount,
-      isAllowance,
-      error: false,
+      toName,
+      toAddress,
+      targetAllowance: targetAllowanceNoDecimals,
+      currentAllowance: currentAllowanceNoDecimals,
+      error: isError,
     };
   };
 
@@ -129,8 +136,9 @@ const ExecutionRequest = ({
   // A function that calls a modal window in the case when there are not enough tokens to execute the command
   function warningWindow() {
     const errorText: string = `The transaction may fail due to insufficient token allowance from
-          ${transactionValue?.fromName} to ${transactionValue?.toName}. Target allowance is
-          ${transactionValue?.amount}, while the current allowance is ${transactionValue?.isAllowance}`;
+          ${transactionValue?.fromName} to AGREEMENT. Target allowance is
+          ${transactionValue?.targetAllowance} ${transactionValue?.tokenSymbol}, \
+while the current allowance is ${transactionValue?.currentAllowance} ${transactionValue?.tokenSymbol}`;
     return (
       <div
         className={transferFromError ? 'transactionWarningBack active' : 'transactionWarningBack'}

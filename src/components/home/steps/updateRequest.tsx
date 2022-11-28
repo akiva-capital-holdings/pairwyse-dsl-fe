@@ -125,7 +125,6 @@ const UpdateRequest = ({
       // Parse DSL input code and get the necessary variables
       const token = inputCode[transferFromIndex + 1];
       const from = inputCode[transferFromIndex + 2];
-      const to = inputCode[transferFromIndex + 3];
       const amount = getWei(inputCode[transferFromIndex + 4], setErrorRequiredRecords);
 
       const fromAddress = await agreementContract.methods.getStorageAddress(hex4Bytes(from)).call();
@@ -134,13 +133,16 @@ const UpdateRequest = ({
         const tokenAddress = await agreementContract.methods
           .getStorageAddress(hex4Bytes(token))
           .call();
-        const toAddress = await agreementContract.methods.getStorageAddress(hex4Bytes(to)).call();
         const tokenContract = createInstance('Token', tokenAddress, utilsProvider);
-        const isAllowance = await tokenContract.methods.allowance(fromAddress, toAddress).call();
+        const currentAllowance = await tokenContract.methods
+          .allowance(fromAddress, agreementContract._address)
+          .call();
 
-        if (isAllowance < amount) {
+        if (currentAllowance < amount) {
           // Approve the Agreement to spend ERC20 tokens
-          await tokenContract.methods.approve(toAddress, amount).send({ from: fromAddress });
+          await tokenContract.methods
+            .approve(agreementContract._address, amount)
+            .send({ from: fromAddress });
         }
       }
     }

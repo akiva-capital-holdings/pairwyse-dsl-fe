@@ -45,11 +45,12 @@ export interface TransactionValues {
   fromName: string;
   fromAddress: string;
   tokenName: string;
+  tokenSymbol: string;
   tokenAddress: string;
   toName: string;
-  toAgreementAddress: string;
-  amount: string;
-  isAllowance: string;
+  toAddress: string;
+  targetAllowance: string;
+  currentAllowance: string;
   error: boolean;
 }
 
