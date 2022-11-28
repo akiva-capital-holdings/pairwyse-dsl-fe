@@ -3,9 +3,9 @@ import { Button, Form, Input, Spin } from 'antd';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useMetaMask } from 'metamask-react';
-import { createInstance, hex4Bytes } from 'utils/helpers';
+import { createInstance, hex4Bytes, splitDSLString, getWei } from 'utils/helpers';
 import { selectUtils } from 'redux/utilsReducer';
-import { BigNumber, Contract } from 'ethers';
+import { Contract } from 'ethers';
 import { v4 as uuidv4 } from 'uuid';
 import { ReactComponent as Delete } from '../../../images/delete.svg';
 import { ReactComponent as Cloose } from '../../../images/close.svg';
@@ -115,17 +115,9 @@ const UpdateRequest = ({
     }
   };
 
-  // Convert string of record to array of string
-  const splitDSLString = (expr: string) =>
-    expr
-      .replaceAll('(', '@(@')
-      .replaceAll(')', '@)@')
-      .split(/[@ \n]/g)
-      .filter((x: string) => !!x);
-
   // If the record exists 'transferFrom' then auto-approve is activated
-  const transferFromApprove = async (agreementContract: Contract) => {
-    const inputCode = splitDSLString(record);
+  const transferFromApprove = async (agreementContract: Contract, conditionOrRecord: string) => {
+    const inputCode = splitDSLString(conditionOrRecord);
     const transferFromIndex = inputCode.indexOf('transferFrom');
     const isTransferFromPresentInInput = transferFromIndex !== -1;
 
@@ -133,22 +125,26 @@ const UpdateRequest = ({
       // Parse DSL input code and get the necessary variables
       const token = inputCode[transferFromIndex + 1];
       const from = inputCode[transferFromIndex + 2];
-      const amount = inputCode[transferFromIndex + 4];
+      const amount = getWei(inputCode[transferFromIndex + 4], setErrorRequiredRecords);
 
-      const tokenAddress = await agreementContract.methods
-        .getStorageAddress(hex4Bytes(token))
-        .call();
-
-      // Get other necessary variables
       const fromAddress = await agreementContract.methods.getStorageAddress(hex4Bytes(from)).call();
-      const tokenContract = createInstance('Token', tokenAddress, utilsProvider);
-      const tokenDecimals = (await tokenContract.methods.decimals().call()) as string;
-      const amountWithDecimals = BigNumber.from(amount).pow(tokenDecimals);
 
-      // Approve the Agreement to spend ERC20 tokens
-      await tokenContract.methods
-        .approve(agreementContract.address, amountWithDecimals)
-        .send({ from: fromAddress });
+      if (fromAddress.toLowerCase() === account.toLowerCase()) {
+        const tokenAddress = await agreementContract.methods
+          .getStorageAddress(hex4Bytes(token))
+          .call();
+        const tokenContract = createInstance('Token', tokenAddress, utilsProvider);
+        const currentAllowance = await tokenContract.methods
+          .allowance(fromAddress, agreementContract._address)
+          .call();
+
+        if (currentAllowance < amount) {
+          // Approve the Agreement to spend ERC20 tokens
+          await tokenContract.methods
+            .approve(agreementContract._address, amount)
+            .send({ from: fromAddress });
+        }
+      }
     }
   };
 
@@ -157,27 +153,27 @@ const UpdateRequest = ({
       // Input data
       const DSL_ID = parseInt(dslId, 10);
       const AGREEMENT_ADDR = agreement;
-      const SIGNATORY = signatories[0].value;
-      const CONDITION = conditions[0].value;
+      const SIGNATORIES = signatories.map((obj) => obj.value);
+      const CONDITIONS = conditions.map((obj) => obj.value);
       const RECORD = record;
-
       const agreementContract = createInstance('Agreement', AGREEMENT_ADDR, utilsProvider);
-
       const contextFactory = createInstance(
         'ContextFactory',
         process.env.REACT_APP_CONTEXT_FACTORY,
         utilsProvider
       );
 
-      // Call additional ERC20.approve() if the conditions or the transaction contrains a `trasnferFrom` DSL opcode
-      await transferFromApprove(agreementContract);
-
+      // Call ERC20.approve() if the conditions or the transaction contains a `trasnferFrom` DSL opcode
+      CONDITIONS.forEach(async (value) => {
+        await transferFromApprove(agreementContract, value);
+      });
+      await transferFromApprove(agreementContract, record);
       await addSteps(agreementContract, AGREEMENT_ADDR, contextFactory, [
         {
           recordId: DSL_ID,
           requiredRecords: [...numbers],
-          signatories: [SIGNATORY],
-          conditions: [CONDITION],
+          signatories: [...SIGNATORIES],
+          conditions: [...CONDITIONS],
           record: RECORD,
         },
       ]);

@@ -198,3 +198,33 @@
 .mainButton {
   color: #aca2b5;
 }
+.transactionWarningBack {
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(0, 0, 0, 0.4);
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: scale(0);
+}
+
+.transactionWarningBack.active {
+  transform: scale(1)
+}
+.transactionWarningContainer{
+    width: 400px;
+    min-height: 200px;
+    background: #F7F5F9;
+    border-radius: 20px;
+    margin-top: 32px;
+    padding: 32px 28px 28px 28px;
+    color: #E61F1F;
+    font-family: var(--font_weight_bolder);
+    font-style: normal;
+    font-weight: 800;
+    font-size: 16px;
+    line-height: 20px;
+}

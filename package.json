@@ -46,7 +46,7 @@
     "start:production": "env-cmd -f .env cross-env REACT_APP_NETWORK='mainnet' craco start",
     "start:dev": "env-cmd -f .env cross-env REACT_APP_NETWORK='dev' craco start",
     "build": "craco build",
-    "build:dev": "env-cmd -f .env.development craco  build",
+    "build:dev": "env-cmd -f .env craco  build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "husky-install": "husky install",

@@ -14,6 +14,14 @@ const contractNames = {
 };
 type ContractName = keyof typeof contractNames;
 
+// Convert string of record to array of string
+export const splitDSLString = (expr: string) =>
+  expr
+    .replaceAll('(', '@(@')
+    .replaceAll(')', '@)@')
+    .split(/[@ \n]/g)
+    .filter((x: string) => !!x);
+
 export const hex4Bytes = (str: string) => {
   return ethers.utils
     .keccak256(ethers.utils.toUtf8Bytes(str))
@@ -22,6 +30,18 @@ export const hex4Bytes = (str: string) => {
       return i < 10 ? x : '0';
     })
     .join('');
+};
+
+// string decimal number with e symbol (1e18) to string of numbers (in wei)
+export const getWei = (amount: string, setErrorRequiredRecords) => {
+  let normalAmount: string;
+  try {
+    normalAmount = Number(amount).toLocaleString('fullwide', { useGrouping: false });
+  } catch (e) {
+    console.error({ e });
+    setErrorRequiredRecords(true);
+  }
+  return normalAmount;
 };
 
 export const getContractABI = (name: ContractName): AbiItem[] => {
@@ -71,4 +91,15 @@ export const getNetworksList = () => {
     networksList = { ...networksList, [item.networkId]: item.name };
   });
   return networksList;
+};
+
+/**
+ * @dev Get ERC20 token symbol and decimals
+ * @param token ERC20 token instance
+ * @return Object that contains token symbol and token decimals
+ */
+export const getTokenDetails = async (token: Contract) => {
+  const tokenSymbol = await token.methods.symbol().call();
+  const tokenDecimals = await token.methods.decimals().call();
+  return { tokenSymbol, tokenDecimals };
 };

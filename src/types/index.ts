@@ -41,6 +41,19 @@ export interface Agreement {
   >;
 }
 
+export interface TransactionValues {
+  fromName: string;
+  fromAddress: string;
+  tokenName: string;
+  tokenSymbol: string;
+  tokenAddress: string;
+  toName: string;
+  toAddress: string;
+  targetAllowance: string;
+  currentAllowance: string;
+  error: boolean;
+}
+
 export interface Definition {
   setAgreementDefinition: React.Dispatch<React.SetStateAction<string>>;
   agreementDefinition: string;
@@ -87,7 +100,7 @@ export interface Execution {
   setAgreement: React.Dispatch<React.SetStateAction<string>>;
   setRecordValue: React.Dispatch<React.SetStateAction<string>>;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  agreement: string;
+  agreementExecution: string;
   setDslID: React.Dispatch<React.SetStateAction<string>>;
   rdValue: string;
   loading: boolean;
