@@ -39,6 +39,14 @@ export interface Agreement {
       submit: boolean;
     }>
   >;
+  setTokenInfo: React.Dispatch<
+    React.SetStateAction<{
+      name: string;
+      symbol: string;
+      supply: string;
+      address: string;
+    }>
+  >;
 }
 
 export interface TransactionValues {

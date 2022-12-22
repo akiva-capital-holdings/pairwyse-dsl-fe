@@ -11,6 +11,7 @@ import {
   titleValueDefinition,
   titleValueAgrement,
   titleValueExecute,
+  initialTokenInfo,
 } from './initialValue';
 import { selectSession } from '../../redux/sessionReducer';
 import { ReactComponent as Copy } from '../../images/copy.svg';
@@ -38,6 +39,7 @@ const HomePage = () => {
   const [value, setValue] = useState(undefined);
   const [lender, setLender] = useState('');
   const [error, setError] = useState(undefined);
+  const [tokenInfo, setTokenInfo] = useState(initialTokenInfo);
   const [valueAgreementRequest, setValueAgreementRequest] = useState(initialAgreementValue);
   // definition request
   const [definition, setDefinition] = useState('');
@@ -75,6 +77,9 @@ const HomePage = () => {
     setAgreement(valueAgreementRequest.lastAgrAddr);
     setAgreementExecution(valueAgreementRequest.lastAgrAddr);
   }, [valueAgreementRequest]);
+  useEffect(() => {
+    console.log(tokenInfo);
+  }, [tokenInfo]);
 
   const reset = () => {
     setspecification(mockDefinitions);
@@ -122,6 +127,7 @@ const HomePage = () => {
         lender={lender}
         error={error}
         value={value}
+        setTokenInfo={setTokenInfo}
       />
     ),
     stepTwo: (

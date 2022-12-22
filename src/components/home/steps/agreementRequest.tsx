@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Form, Button, Menu, Dropdown, Space, Input, Spin } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux';
@@ -24,60 +24,105 @@ const AgreementRequest = ({
   error,
   value,
   setValueAgreementRequest,
+  setTokenInfo,
 }: Agreement) => {
   const { account } = useMetaMask();
   const { utilsProvider } = useSelector(selectUtils);
+  const [agreementCreator, setAgreementCreator] = useState<boolean>(false);
+  const [governanceCreator, setGovernanceCreator] = useState<boolean>(false);
+  const [tokenCreator, setTokenCreator] = useState<boolean>(false);
+  const [creatorValue, setCreatorValue] = useState<string>();
+  const [tokenName, setTokenName] = useState<string>();
+  const [tokenSymbol, setTokenSymbol] = useState<string>();
+  const [tokenSupply, setTokenSupply] = useState<string>();
+  const [form] = Form.useForm();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const createAgreement = async () => {
     setLoading(true);
-    try {
-      if (!error) {
-        const agreementInstance = new utilsProvider.eth.Contract(getContractABI('Agreement'));
-
-        let recordHash = '';
-        agreementInstance
-          .deploy({
-            data: getContractBytecode('Agreement'),
-            arguments: [
-              process.env.REACT_APP_PARSER,
-              account, // msg.sender would be the simulation of multisig wallet
-            ],
-          })
-          .send({ from: account })
-          .on('error', (err) => {
-            console.error({ err });
-          })
-          .on('transactionHash', (_recordHash: string) => {
-            recordHash = _recordHash;
-          })
-          .then((newContractInstance: Contract) => {
-            setValueAgreementRequest({
-              lastAgrAddr: newContractInstance.options.address,
-              error: false,
-              hash: recordHash,
-              message: '',
-              submit: true,
+    if (agreementCreator || governanceCreator) {
+      try {
+        if (!error) {
+          const agreementInstance = new utilsProvider.eth.Contract(getContractABI('Agreement'));
+          let recordHash = '';
+          agreementInstance
+            .deploy({
+              data: getContractBytecode('Agreement'),
+              arguments: [
+                process.env.REACT_APP_PARSER,
+                account, // msg.sender would be the simulation of multisig wallet
+              ],
+            })
+            .send({ from: account })
+            .on('error', (err) => {
+              console.error({ err });
+            })
+            .on('transactionHash', (_recordHash: string) => {
+              recordHash = _recordHash;
+            })
+            .then((newContractInstance: Contract) => {
+              setValueAgreementRequest({
+                lastAgrAddr: newContractInstance.options.address,
+                error: false,
+                hash: recordHash,
+                message: '',
+                submit: true,
+              });
+              dispatch(changeAgreementAddress(newContractInstance.options.address));
+              setLoading(false);
             });
-            dispatch(changeAgreementAddress(newContractInstance.options.address));
-            setLoading(false);
-          });
+        }
+      } catch (e) {
+        console.error(e);
+        setValueAgreementRequest({
+          lastAgrAddr: '',
+          error: true,
+          hash: '',
+          message: e?.message,
+          submit: true,
+        });
+        setLoading(false);
       }
-    } catch (e) {
-      console.error(e);
-      setValueAgreementRequest({
-        lastAgrAddr: '',
-        error: true,
-        hash: '',
-        message: e?.message,
-        submit: true,
-      });
-      setLoading(false);
+    }
+    if (tokenCreator) {
+      try {
+        if (!error) {
+          const tokenInstance = new utilsProvider.eth.Contract(getContractABI('Token'));
+          tokenInstance
+            .deploy({
+              data: getContractBytecode('Token'),
+              arguments: [tokenName, tokenSymbol, tokenSupply],
+            })
+            .send({ from: account })
+            .on('error', (err) => {
+              console.error({ err });
+            })
+            .then((newTokenInstance: Contract) => {
+              setTokenInfo({
+                name: tokenName,
+                symbol: tokenSymbol,
+                supply: tokenSupply,
+                address: newTokenInstance.options.address,
+              });
+              setLoading(false);
+            });
+        }
+      } catch (e) {
+        console.error(e);
+        setTokenInfo({
+          name: '',
+          symbol: '',
+          supply: '',
+          address: '',
+        });
+        setLoading(false);
+      }
     }
   };
 
-  const menu = (
+  // agreement creator
+  const agreementMenu = (
     <Menu className="menu">
       <Menu.Item key="0">
         <button
@@ -93,10 +138,10 @@ const AgreementRequest = ({
     </Menu>
   );
 
-  const dropDown = () => {
+  const agreementDropDown = () => {
     return (
       <Item name="agreementModel">
-        <Dropdown className="dropdown" overlay={menu}>
+        <Dropdown className="dropdown" overlay={agreementMenu}>
           <Button className={error && 'ant-input-status-error'}>
             <Space>
               {value}
@@ -108,43 +153,183 @@ const AgreementRequest = ({
       </Item>
     );
   };
+
+  const agreementFeilds = () => {
+    return (
+      <div>
+        <div style={{ marginTop: '24px' }} className="text">
+          Requestor label
+        </div>
+        <Item validateTrigger="onBlur" rules={getRule('lender', 'lender', lender)}>
+          <Input
+            className="lender"
+            placeholder="Lender"
+            defaultValue={lender}
+            onChange={(e) => {
+              return setLender(e?.target?.value);
+            }}
+          />
+        </Item>
+        <div style={{ marginTop: '24px' }} className="text">
+          Agreement model{' '}
+        </div>
+        {agreementDropDown()}
+        <div style={{ marginTop: '24px' }} className="text">
+          Agreement template
+        </div>
+        <div className="value">
+          {value === ' ' ? '' : '0x0000000000000000000000000000000000000000'}
+        </div>
+      </div>
+    );
+  };
+
+  // Token creator
+  const tokenFields = () => {
+    return (
+      <div>
+        <div style={{ marginTop: '24px' }} className="text">
+          Token name
+        </div>
+        <Item validateTrigger="onBlur" rules={getRule('lender', 'lender', tokenName)}>
+          <Input
+            className="lender"
+            placeholder="Enter name of Token"
+            defaultValue={tokenName}
+            onChange={(e) => {
+              return setTokenName(e?.target?.value);
+            }}
+          />
+        </Item>
+        <div style={{ marginTop: '24px' }} className="text">
+          Token symbol
+        </div>
+        <Item validateTrigger="onBlur" rules={getRule('lender', 'lender', tokenSymbol)}>
+          <Input
+            className="lender"
+            placeholder="Enter symbol of Token"
+            defaultValue={tokenSymbol}
+            onChange={(e) => {
+              return setTokenSymbol(e?.target?.value);
+            }}
+          />
+        </Item>
+        <div style={{ marginTop: '24px' }} className="text">
+          Token supply
+        </div>
+        <Item
+          name="value-in-wei"
+          validateTrigger="onChange"
+          rules={
+            tokenSupply?.length === 0
+              ? getRule('value-in-wei', 'value', tokenSupply)
+              : getRule('value-in-wei', 'value-in-wei', tokenSupply)
+          }
+        >
+          <Input
+            className="lender"
+            onChange={(e) => {
+              form.validateFields(['value-in-wei']).then(() => {
+                const valueFormatting = String(e?.target?.value.replace(/,/gi, '')).replace(
+                  /(.)(?=(\d{3})+$)/g,
+                  '$1,'
+                );
+                form.setFieldsValue({
+                  'value-in-wei': valueFormatting,
+                });
+              });
+              setTokenSupply(e?.target?.value.replace(/[\s.,%]/g, ''));
+            }}
+          />
+        </Item>
+      </div>
+    );
+  };
+
+  // choosing contract dropdown
+  const creationModelMenu = (
+    <Menu className="menu">
+      <Menu.Item key="0">
+        <button
+          onClick={() => {
+            setCreatorValue('Agreement');
+            setAgreementCreator(true);
+            setGovernanceCreator(false);
+            setTokenCreator(false);
+          }}
+          type="button"
+        >
+          Agreement
+        </button>
+        <button
+          onClick={() => {
+            setCreatorValue('Governnace');
+            setAgreementCreator(false);
+            setGovernanceCreator(true);
+            setTokenCreator(false);
+          }}
+          type="button"
+        >
+          Governnace
+        </button>
+        <button
+          onClick={() => {
+            setCreatorValue('Token');
+            setAgreementCreator(false);
+            setGovernanceCreator(false);
+            setTokenCreator(true);
+          }}
+          type="button"
+        >
+          Token
+        </button>
+      </Menu.Item>
+      <Menu.Divider />
+    </Menu>
+  );
+
+  const creationDropDown = () => {
+    return (
+      <Item name="creationDropDown">
+        <Dropdown className="dropdown" overlay={creationModelMenu}>
+          <Button className={error && 'ant-input-status-error'}>
+            <Space>
+              {creatorValue}
+              <DownOutlined className="iconDropDown" />
+            </Space>
+          </Button>
+        </Dropdown>
+        <span className="ant-form-item-explain-error">{error}</span>
+      </Item>
+    );
+  };
+
+  const choosingFeilds = () => {
+    if (agreementCreator || governanceCreator) {
+      return agreementFeilds();
+    }
+    if (tokenCreator) {
+      return tokenFields();
+    }
+    return <></>;
+  };
+
   useEffect(() => {
     if (error) {
       validationAgreementModel(value, setError);
     }
-    dropDown();
+    agreementDropDown();
   }, [value]);
 
   return (
     <div className="agreementRequest">
+      <div className="title">Agreement Request </div>
       <Spin spinning={loading}>
-        <div className="title">Agreement Request </div>
-        <Form name="agreementRequestForm" autoComplete="off" onFinish={createAgreement}>
+        <Form name="agreementRequestForm" form={form} autoComplete="off" onFinish={createAgreement}>
           <div className="text">Requestor</div>
           <div className="value">{account}</div>
-          <div style={{ marginTop: '24px' }} className="text">
-            Requestor label
-          </div>
-          <Item name="lender" validateTrigger="onBlur" rules={getRule('lender', 'lender', lender)}>
-            <Input
-              className="lender"
-              placeholder="Lender"
-              defaultValue={lender}
-              onChange={(e) => {
-                return setLender(e?.target?.value);
-              }}
-            />
-          </Item>
-          <div style={{ marginTop: '24px' }} className="text">
-            Agreement model{' '}
-          </div>
-          {dropDown()}
-          <div style={{ marginTop: '24px' }} className="text">
-            Agreement template
-          </div>
-          <div className="value">
-            {value === ' ' ? '' : '0x0000000000000000000000000000000000000000'}
-          </div>
+          {creationDropDown()}
+          {choosingFeilds()}
           <div className="btns">
             <div style={{ display: 'flex' }}>
               <Button
@@ -153,7 +338,10 @@ const AgreementRequest = ({
                 htmlType="submit"
                 className="btn"
                 onClick={() => {
-                  return validationAgreementModel(value, setError);
+                  if (agreementCreator || governanceCreator) {
+                    return validationAgreementModel(value, setError);
+                  }
+                  return validationAgreementModel(creatorValue, setError);
                 }}
               >
                 Create Agreement

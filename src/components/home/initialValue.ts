@@ -28,6 +28,13 @@ export const initialExecutionValue = {
   message: '',
 };
 
+export const initialTokenInfo = {
+  name: '',
+  symbol: '',
+  supply: '',
+  address: '',
+};
+
 export const titleValueAgrement = (v) => {
   return v ? 'Created Agreement Address' : 'No records yet';
 };

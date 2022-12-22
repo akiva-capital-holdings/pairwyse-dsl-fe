@@ -11,7 +11,7 @@ import { useSelector } from 'react-redux';
 import { useMetaMask } from 'metamask-react';
 import { v4 as uuidv4 } from 'uuid';
 import { selectUtils } from 'redux/utilsReducer';
-import { createInstance, hex4Bytes } from 'utils/helpers';
+import { createInstance } from 'utils/helpers';
 import { TransactionReceipt } from 'web3-core';
 import getRule from '../../../utils/validate';
 import { ReactComponent as Delete } from '../../../images/delete.svg';
@@ -49,12 +49,12 @@ const DefinitionRequest = ({
       if (type === 'text') {
         // set address
         tx = await agreementInstance.methods
-          .setStorageAddress(hex4Bytes(DEFINITION), SPECIFICATION)
+          .setStorageAddress(DEFINITION, SPECIFICATION)
           .send({ from: account });
       } else if (type === 'number') {
         // set uint256
         tx = await agreementInstance.methods
-          .setStorageUint256(hex4Bytes(DEFINITION), SPECIFICATION)
+          .setStorageUint256(DEFINITION, SPECIFICATION)
           .send({ from: account });
       }
 
