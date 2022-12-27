@@ -41,6 +41,9 @@ const HomePage = () => {
   const [error, setError] = useState(undefined);
   const [tokenInfo, setTokenInfo] = useState(initialTokenInfo);
   const [valueAgreementRequest, setValueAgreementRequest] = useState(initialAgreementValue);
+  const [agreementCreator, setAgreementCreator] = useState<boolean>(false);
+  const [governanceCreator, setGovernanceCreator] = useState<boolean>(false);
+  const [tokenCreator, setTokenCreator] = useState<boolean>(false);
   // definition request
   const [definition, setDefinition] = useState('');
   const [specifications, setspecification] = useState(mockDefinitions);
@@ -128,6 +131,12 @@ const HomePage = () => {
         error={error}
         value={value}
         setTokenInfo={setTokenInfo}
+        agreementCreator={agreementCreator}
+        setAgreementCreator={setAgreementCreator}
+        governanceCreator={governanceCreator}
+        setGovernanceCreator={setGovernanceCreator}
+        tokenCreator={tokenCreator}
+        setTokenCreator={setTokenCreator}
       />
     ),
     stepTwo: (
@@ -200,6 +209,68 @@ const HomePage = () => {
       </div>
     );
   };
+
+  // const recordContainer = (recordError, recordAddress, recprdMessage) => {
+  //   return (
+  //      <div
+  //         className={`recordContainer  ${
+  //           recordError && !recordAddress ? 'error' : ''
+  //         }`}
+  //       >
+  //       <div className="titleContainer">
+  //           <div className="title">Record</div>
+  //           {valueAgreementRequest?.submit &&
+  //             iconValue(recordError && !!recprdMessage)}
+  //       </div>
+  //       <div className={`contentCOntainer ${recordError && 'error'}`}>
+  //         <div className="content">
+  //           <div className="title">
+  //             {valueAgreementRequest?.error && valueAgreementRequest?.message
+  //               ? 'Warning! Error encountered during contract execution'
+  //               : titleValueAgrement(!!valueAgreementRequest?.lastAgrAddr)}
+  //           </div>
+  //           {valueAgreementRequest?.lastAgrAddr && (
+  //             <div className="valueContainer">
+  //               <div className="value">
+  //                 {shortenedAddress(valueAgreementRequest?.lastAgrAddr, 9)}
+  //               </div>
+  //               <Copy
+  //                 style={{ cursor: 'pointer' }}
+  //                 onClick={() => onCopyClick(valueAgreementRequest?.lastAgrAddr)}
+  //               />
+  //             </div>
+  //           )}
+  //         </div>
+  //         {valueAgreementRequest?.hash && (
+  //           <div style={{ marginTop: '12px' }} className="content">
+  //             <div className="title">
+  //               Agreement Request <br />
+  //               Record ID
+  //             </div>
+  //             <div className="valueContainer">
+  //               <div className="value">{shortenedAddress(recordAddress, 9)}</div>
+  //               <Copy
+  //                 style={{ cursor: 'pointer' }}
+  //                 onClick={() => onCopyClick(recordAddress)}
+  //               />
+  //             </div>
+  //           </div>
+  //         )}
+  //       </div>
+  //     </div>
+  //   )
+
+  // }
+
+  // const recordCheck = () => {
+  //   if (tokenCreator) {
+  //     console.log('tokencreator')
+  //     recordContainer(tokenInfo.error, tokenInfo.address, tokenInfo.message)
+  //   } if (agreementCreator) {
+  //     console.log('agreementCreator')
+  //     recordContainer(valueAgreementRequest.error, valueAgreementRequest.lastAgrAddr, valueAgreementRequest.message)
+  //   }
+  // }
 
   const contentCOnteiner = {
     stepOne: (

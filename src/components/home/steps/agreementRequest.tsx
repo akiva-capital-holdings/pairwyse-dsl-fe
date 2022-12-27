@@ -25,12 +25,15 @@ const AgreementRequest = ({
   value,
   setValueAgreementRequest,
   setTokenInfo,
+  agreementCreator,
+  setAgreementCreator,
+  governanceCreator,
+  setGovernanceCreator,
+  tokenCreator,
+  setTokenCreator,
 }: Agreement) => {
   const { account } = useMetaMask();
   const { utilsProvider } = useSelector(selectUtils);
-  const [agreementCreator, setAgreementCreator] = useState<boolean>(false);
-  const [governanceCreator, setGovernanceCreator] = useState<boolean>(false);
-  const [tokenCreator, setTokenCreator] = useState<boolean>(false);
   const [creatorValue, setCreatorValue] = useState<string>();
   const [tokenName, setTokenName] = useState<string>();
   const [tokenSymbol, setTokenSymbol] = useState<string>();
@@ -104,6 +107,9 @@ const AgreementRequest = ({
                 symbol: tokenSymbol,
                 supply: tokenSupply,
                 address: newTokenInstance.options.address,
+                error: false,
+                message: '',
+                submit: true,
               });
               setLoading(false);
             });
@@ -115,6 +121,9 @@ const AgreementRequest = ({
           symbol: '',
           supply: '',
           address: '',
+          error: true,
+          message: e?.message,
+          submit: true,
         });
         setLoading(false);
       }

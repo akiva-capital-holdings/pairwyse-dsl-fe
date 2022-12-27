@@ -45,8 +45,17 @@ export interface Agreement {
       symbol: string;
       supply: string;
       address: string;
+      error: boolean;
+      message: string;
+      submit: boolean;
     }>
   >;
+  agreementCreator: boolean;
+  setAgreementCreator: React.Dispatch<React.SetStateAction<boolean>>;
+  governanceCreator: boolean;
+  setGovernanceCreator: React.Dispatch<React.SetStateAction<boolean>>;
+  tokenCreator: boolean;
+  setTokenCreator: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface TransactionValues {
