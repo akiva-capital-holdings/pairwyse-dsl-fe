@@ -210,117 +210,52 @@ const HomePage = () => {
     );
   };
 
-  // const recordContainer = (recordError, recordAddress, recprdMessage) => {
-  //   return (
-  //      <div
-  //         className={`recordContainer  ${
-  //           recordError && !recordAddress ? 'error' : ''
-  //         }`}
-  //       >
-  //       <div className="titleContainer">
-  //           <div className="title">Record</div>
-  //           {valueAgreementRequest?.submit &&
-  //             iconValue(recordError && !!recprdMessage)}
-  //       </div>
-  //       <div className={`contentCOntainer ${recordError && 'error'}`}>
-  //         <div className="content">
-  //           <div className="title">
-  //             {valueAgreementRequest?.error && valueAgreementRequest?.message
-  //               ? 'Warning! Error encountered during contract execution'
-  //               : titleValueAgrement(!!valueAgreementRequest?.lastAgrAddr)}
-  //           </div>
-  //           {valueAgreementRequest?.lastAgrAddr && (
-  //             <div className="valueContainer">
-  //               <div className="value">
-  //                 {shortenedAddress(valueAgreementRequest?.lastAgrAddr, 9)}
-  //               </div>
-  //               <Copy
-  //                 style={{ cursor: 'pointer' }}
-  //                 onClick={() => onCopyClick(valueAgreementRequest?.lastAgrAddr)}
-  //               />
-  //             </div>
-  //           )}
-  //         </div>
-  //         {valueAgreementRequest?.hash && (
-  //           <div style={{ marginTop: '12px' }} className="content">
-  //             <div className="title">
-  //               Agreement Request <br />
-  //               Record ID
-  //             </div>
-  //             <div className="valueContainer">
-  //               <div className="value">{shortenedAddress(recordAddress, 9)}</div>
-  //               <Copy
-  //                 style={{ cursor: 'pointer' }}
-  //                 onClick={() => onCopyClick(recordAddress)}
-  //               />
-  //             </div>
-  //           </div>
-  //         )}
-  //       </div>
-  //     </div>
-  //   )
-
-  // }
-
-  // const recordCheck = () => {
-  //   if (tokenCreator) {
-  //     console.log('tokencreator')
-  //     recordContainer(tokenInfo.error, tokenInfo.address, tokenInfo.message)
-  //   } if (agreementCreator) {
-  //     console.log('agreementCreator')
-  //     recordContainer(valueAgreementRequest.error, valueAgreementRequest.lastAgrAddr, valueAgreementRequest.message)
-  //   }
-  // }
-
-  const contentCOnteiner = {
-    stepOne: (
-      <div
-        className={`recordContainer  ${
-          valueAgreementRequest?.error && !valueAgreementRequest?.lastAgrAddr ? 'error' : ''
-        }`}
-      >
+  const recordContainer = (recordError, recordAddress, recprdMessage, isSubmit) => {
+    return (
+      <div className={`recordContainer  ${recordError && !recordAddress ? 'error' : ''}`}>
         <div className="titleContainer">
           <div className="title">Record</div>
-          {valueAgreementRequest?.submit &&
-            iconValue(valueAgreementRequest?.error && !!valueAgreementRequest?.message)}
+          {isSubmit && iconValue(recordError && !!recprdMessage)}
         </div>
-        <div className={`contentCOntainer ${valueAgreementRequest?.error && 'error'}`}>
+        <div className={`contentCOntainer ${recordError && 'error'}`}>
           <div className="content">
             <div className="title">
-              {valueAgreementRequest?.error && valueAgreementRequest?.message
+              {recordError && recprdMessage
                 ? 'Warning! Error encountered during contract execution'
-                : titleValueAgrement(!!valueAgreementRequest?.lastAgrAddr)}
+                : titleValueAgrement(!!recordAddress)}
             </div>
-            {valueAgreementRequest?.lastAgrAddr && (
+            {recordAddress && (
               <div className="valueContainer">
-                <div className="value">
-                  {shortenedAddress(valueAgreementRequest?.lastAgrAddr, 9)}
-                </div>
-                <Copy
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => onCopyClick(valueAgreementRequest?.lastAgrAddr)}
-                />
+                <div className="value">{shortenedAddress(recordAddress, 9)}</div>
+                <Copy style={{ cursor: 'pointer' }} onClick={() => onCopyClick(recordAddress)} />
               </div>
             )}
           </div>
-          {valueAgreementRequest?.hash && (
-            <div style={{ marginTop: '12px' }} className="content">
-              <div className="title">
-                Agreement Request <br />
-                Record ID
-              </div>
-              <div className="valueContainer">
-                <div className="value">{shortenedAddress(valueAgreementRequest?.hash, 9)}</div>
-                <Copy
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => onCopyClick(valueAgreementRequest?.hash)}
-                />
-              </div>
-            </div>
-          )}
         </div>
       </div>
-    ),
+    );
+  };
+
+  const recordCheck = () => {
+    if (tokenCreator) {
+      // if open tokenCreator show tokenContainer
+      return recordContainer(
+        tokenInfo.error,
+        tokenInfo.address,
+        tokenInfo.message,
+        tokenInfo.submit
+      );
+    } // else show agreementContainer
+    return recordContainer(
+      valueAgreementRequest.error,
+      valueAgreementRequest.lastAgrAddr,
+      valueAgreementRequest.message,
+      valueAgreementRequest.submit
+    );
+  };
+
+  const contentCOnteiner = {
+    stepOne: recordCheck(),
     stepTwo: (
       <div
         className={`recordContainer  ${

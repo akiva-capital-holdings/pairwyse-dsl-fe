@@ -35,7 +35,7 @@ export const initialTokenInfo = {
   address: '',
   error: false,
   message: '',
-  submit: true,
+  submit: false,
 };
 
 export const titleValueAgrement = (v) => {

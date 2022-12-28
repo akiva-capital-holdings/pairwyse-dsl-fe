@@ -43,8 +43,8 @@ const AgreementRequest = ({
   const navigate = useNavigate();
 
   const createAgreement = async () => {
-    setLoading(true);
     if (agreementCreator || governanceCreator) {
+      setLoading(true);
       try {
         if (!error) {
           const agreementInstance = new utilsProvider.eth.Contract(getContractABI('Agreement'));
@@ -89,6 +89,7 @@ const AgreementRequest = ({
       }
     }
     if (tokenCreator) {
+      setLoading(true);
       try {
         if (!error) {
           const tokenInstance = new utilsProvider.eth.Contract(getContractABI('Token'));
@@ -149,7 +150,7 @@ const AgreementRequest = ({
 
   const agreementDropDown = () => {
     return (
-      <Item name="agreementModel">
+      <Item>
         <Dropdown className="dropdown" overlay={agreementMenu}>
           <Button className={error && 'ant-input-status-error'}>
             <Space>
@@ -169,7 +170,7 @@ const AgreementRequest = ({
         <div style={{ marginTop: '24px' }} className="text">
           Requestor label
         </div>
-        <Item validateTrigger="onBlur" rules={getRule('lender', 'lender', lender)}>
+        <Item name="label" validateTrigger="onBlur" rules={getRule('label', 'label', lender)}>
           <Input
             className="lender"
             placeholder="Lender"
@@ -200,7 +201,11 @@ const AgreementRequest = ({
         <div style={{ marginTop: '24px' }} className="text">
           Token name
         </div>
-        <Item validateTrigger="onBlur" rules={getRule('lender', 'lender', tokenName)}>
+        <Item
+          name="tokenName"
+          validateTrigger="onBlur"
+          rules={getRule('tokenName', 'lender', tokenName)}
+        >
           <Input
             className="lender"
             placeholder="Enter name of Token"
@@ -213,7 +218,11 @@ const AgreementRequest = ({
         <div style={{ marginTop: '24px' }} className="text">
           Token symbol
         </div>
-        <Item validateTrigger="onBlur" rules={getRule('lender', 'lender', tokenSymbol)}>
+        <Item
+          name="tokenSymbol"
+          validateTrigger="onBlur"
+          rules={getRule('tokenSymbol', 'lender', tokenSymbol)}
+        >
           <Input
             className="lender"
             placeholder="Enter symbol of Token"
