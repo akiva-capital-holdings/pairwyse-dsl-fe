@@ -6,6 +6,13 @@ export const initialAgreementValue = {
   submit: false,
 };
 
+export const initialGovernanceValue = {
+  governanceAddr: '',
+  error: false,
+  message: '',
+  submit: false,
+};
+
 export const initialDefinitionRequestValue = {
   value: '',
   submit: false,

@@ -24,6 +24,8 @@ const AgreementRequest = ({
   error,
   value,
   setValueAgreementRequest,
+  // governanceAgreement,
+  // setGovernanceAgreement,
   setTokenInfo,
   agreementCreator,
   setAgreementCreator,
@@ -31,6 +33,7 @@ const AgreementRequest = ({
   setGovernanceCreator,
   tokenCreator,
   setTokenCreator,
+  setValueGovernanceRequest,
 }: Agreement) => {
   const { account } = useMetaMask();
   const { utilsProvider } = useSelector(selectUtils);
@@ -43,7 +46,7 @@ const AgreementRequest = ({
   const navigate = useNavigate();
 
   const createAgreement = async () => {
-    if (agreementCreator || governanceCreator) {
+    if (agreementCreator) {
       setLoading(true);
       try {
         if (!error) {
@@ -129,6 +132,85 @@ const AgreementRequest = ({
         setLoading(false);
       }
     }
+    if (governanceCreator) {
+      setLoading(true);
+      try {
+        if (!error) {
+          const Context = new utilsProvider.eth.Contract(getContractABI('Context'));
+          const contextsAddresses = [];
+          await Context.deploy({ data: getContractBytecode('Context') })
+            .send({ from: account })
+            .then((newTokenInstance: Contract) => {
+              contextsAddresses.push(newTokenInstance.options.address);
+            });
+          await Context.deploy({ data: getContractBytecode('Context') })
+            .send({ from: account })
+            .then((newTokenInstance: Contract) => {
+              contextsAddresses.push(newTokenInstance.options.address);
+            });
+          await Context.deploy({ data: getContractBytecode('Context') })
+            .send({ from: account })
+            .then((newTokenInstance: Contract) => {
+              contextsAddresses.push(newTokenInstance.options.address);
+            });
+          await Context.deploy({ data: getContractBytecode('Context') })
+            .send({ from: account })
+            .then((newTokenInstance: Contract) => {
+              contextsAddresses.push(newTokenInstance.options.address);
+            });
+          await Context.deploy({ data: getContractBytecode('Context') })
+            .send({ from: account })
+            .then((newTokenInstance: Contract) => {
+              contextsAddresses.push(newTokenInstance.options.address);
+            });
+          await Context.deploy({ data: getContractBytecode('Context') })
+            .send({ from: account })
+            .then((newTokenInstance: Contract) => {
+              contextsAddresses.push(newTokenInstance.options.address);
+            });
+          await Context.deploy({ data: getContractBytecode('Context') })
+            .send({ from: account })
+            .then((newTokenInstance: Contract) => {
+              contextsAddresses.push(newTokenInstance.options.address);
+            });
+          await Context.deploy({ data: getContractBytecode('Context') })
+            .send({ from: account })
+            .then((newTokenInstance: Contract) => {
+              contextsAddresses.push(newTokenInstance.options.address);
+            });
+          console.log(await contextsAddresses);
+
+          const governanceInstance = new utilsProvider.eth.Contract(getContractABI('Governance'));
+          governanceInstance
+            .deploy({
+              data: getContractBytecode('Governance'),
+              arguments: [process.env.REACT_APP_PARSER, account, contextsAddresses],
+            })
+            .send({ from: account })
+            .on('error', (err) => {
+              console.error({ err });
+            })
+            .then((newGovernanceInstance: Contract) => {
+              setValueGovernanceRequest({
+                governanceAddr: newGovernanceInstance.options.address,
+                error: true,
+                message: '',
+                submit: true,
+              });
+              setLoading(false);
+            });
+        }
+      } catch (e) {
+        console.error(e);
+        setValueGovernanceRequest({
+          governanceAddr: '',
+          error: true,
+          message: e?.message,
+          submit: true,
+        });
+        setLoading(false);
+      }
+    }
   };
 
   // agreement creator
@@ -190,6 +272,29 @@ const AgreementRequest = ({
         <div className="value">
           {value === ' ' ? '' : '0x0000000000000000000000000000000000000000'}
         </div>
+      </div>
+    );
+  };
+
+  const governantFeilds = () => {
+    return (
+      <div>
+        {/* <div style={{ marginTop: '24px' }} className="text">
+            Agreement
+          </div>
+          <Item
+            name="agreement"
+            validateTrigger="onBlur"
+            rules={getRule('agreement', 'agreement', governanceAgreement)}
+          >
+            <Input
+              className="lender"
+              defaultValue={ governanceAgreement }
+              onChange={(e) => {
+                return setGovernanceAgreement(e?.target?.value);
+              }}
+            />
+          </Item> */}
       </div>
     );
   };
@@ -323,11 +428,14 @@ const AgreementRequest = ({
   };
 
   const choosingFeilds = () => {
-    if (agreementCreator || governanceCreator) {
+    if (agreementCreator) {
       return agreementFeilds();
     }
     if (tokenCreator) {
       return tokenFields();
+    }
+    if (governanceCreator) {
+      return governantFeilds();
     }
     return <></>;
   };
@@ -336,7 +444,7 @@ const AgreementRequest = ({
     if (error) {
       validationAgreementModel(value, setError);
     }
-    agreementDropDown();
+    // agreementDropDown();
   }, [value]);
 
   return (
@@ -356,9 +464,9 @@ const AgreementRequest = ({
                 htmlType="submit"
                 className="btn"
                 onClick={() => {
-                  if (agreementCreator || governanceCreator) {
-                    return validationAgreementModel(value, setError);
-                  }
+                  // if (agreementCreator || governanceCreator) {
+                  //   return validationAgreementModel(value, setError);
+                  // }
                   return validationAgreementModel(creatorValue, setError);
                 }}
               >

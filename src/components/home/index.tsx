@@ -12,6 +12,7 @@ import {
   titleValueAgrement,
   titleValueExecute,
   initialTokenInfo,
+  initialGovernanceValue,
 } from './initialValue';
 import { selectSession } from '../../redux/sessionReducer';
 import { ReactComponent as Copy } from '../../images/copy.svg';
@@ -40,6 +41,8 @@ const HomePage = () => {
   const [lender, setLender] = useState('');
   const [error, setError] = useState(undefined);
   const [tokenInfo, setTokenInfo] = useState(initialTokenInfo);
+  const [governanceAgreement, setGovernanceAgreement] = useState('');
+  const [valueGovernanceRequest, setValueGovernanceRequest] = useState(initialGovernanceValue);
   const [valueAgreementRequest, setValueAgreementRequest] = useState(initialAgreementValue);
   const [agreementCreator, setAgreementCreator] = useState<boolean>(false);
   const [governanceCreator, setGovernanceCreator] = useState<boolean>(false);
@@ -79,6 +82,7 @@ const HomePage = () => {
     setAgreementDefinition(valueAgreementRequest.lastAgrAddr);
     setAgreement(valueAgreementRequest.lastAgrAddr);
     setAgreementExecution(valueAgreementRequest.lastAgrAddr);
+    setGovernanceAgreement(valueAgreementRequest.lastAgrAddr);
   }, [valueAgreementRequest]);
   useEffect(() => {
     console.log(tokenInfo);
@@ -89,6 +93,7 @@ const HomePage = () => {
     setSignatories(mockSignatories);
     setAgreementDefinition('');
     setAgreementExecution('');
+    setGovernanceAgreement('');
     setDslIdExecution('');
     setValue(undefined);
     setConditions(mock);
@@ -122,6 +127,9 @@ const HomePage = () => {
     stepOne: (
       <AgreementRequest
         setValueAgreementRequest={setValueAgreementRequest}
+        setValueGovernanceRequest={setValueGovernanceRequest}
+        governanceAgreement={governanceAgreement}
+        setGovernanceAgreement={setGovernanceAgreement}
         setLoading={setLoading}
         setLender={setLender}
         setError={setError}
@@ -237,15 +245,25 @@ const HomePage = () => {
   };
 
   const recordCheck = () => {
+    // if opem governanceCreator show governanceContainer
+    if (governanceCreator) {
+      return recordContainer(
+        valueGovernanceRequest.error,
+        valueGovernanceRequest.governanceAddr,
+        valueGovernanceRequest.message,
+        valueGovernanceRequest.submit
+      );
+    }
+    // if open tokenCreator show tokenContainer
     if (tokenCreator) {
-      // if open tokenCreator show tokenContainer
       return recordContainer(
         tokenInfo.error,
         tokenInfo.address,
         tokenInfo.message,
         tokenInfo.submit
       );
-    } // else show agreementContainer
+    }
+    // if open agreementCreator show agreementContainer
     return recordContainer(
       valueAgreementRequest.error,
       valueAgreementRequest.lastAgrAddr,

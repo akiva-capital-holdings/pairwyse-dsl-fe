@@ -39,6 +39,15 @@ export interface Agreement {
       submit: boolean;
     }>
   >;
+  setValueGovernanceRequest: React.Dispatch<
+    React.SetStateAction<{
+      governanceAddr: string;
+      error: boolean;
+      message: string;
+      submit: boolean;
+    }>
+  >;
+  governanceAgreement: string;
   setTokenInfo: React.Dispatch<
     React.SetStateAction<{
       name: string;
@@ -56,6 +65,7 @@ export interface Agreement {
   setGovernanceCreator: React.Dispatch<React.SetStateAction<boolean>>;
   tokenCreator: boolean;
   setTokenCreator: React.Dispatch<React.SetStateAction<boolean>>;
+  setGovernanceAgreement: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export interface TransactionValues {
