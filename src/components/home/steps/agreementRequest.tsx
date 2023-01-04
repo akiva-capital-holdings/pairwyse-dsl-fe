@@ -24,8 +24,6 @@ const AgreementRequest = ({
   error,
   value,
   setValueAgreementRequest,
-  // governanceAgreement,
-  // setGovernanceAgreement,
   setTokenInfo,
   agreementCreator,
   setAgreementCreator,
@@ -138,48 +136,13 @@ const AgreementRequest = ({
         if (!error) {
           const Context = new utilsProvider.eth.Contract(getContractABI('Context'));
           const contextsAddresses = [];
-          await Context.deploy({ data: getContractBytecode('Context') })
-            .send({ from: account })
-            .then((newTokenInstance: Contract) => {
-              contextsAddresses.push(newTokenInstance.options.address);
-            });
-          await Context.deploy({ data: getContractBytecode('Context') })
-            .send({ from: account })
-            .then((newTokenInstance: Contract) => {
-              contextsAddresses.push(newTokenInstance.options.address);
-            });
-          await Context.deploy({ data: getContractBytecode('Context') })
-            .send({ from: account })
-            .then((newTokenInstance: Contract) => {
-              contextsAddresses.push(newTokenInstance.options.address);
-            });
-          await Context.deploy({ data: getContractBytecode('Context') })
-            .send({ from: account })
-            .then((newTokenInstance: Contract) => {
-              contextsAddresses.push(newTokenInstance.options.address);
-            });
-          await Context.deploy({ data: getContractBytecode('Context') })
-            .send({ from: account })
-            .then((newTokenInstance: Contract) => {
-              contextsAddresses.push(newTokenInstance.options.address);
-            });
-          await Context.deploy({ data: getContractBytecode('Context') })
-            .send({ from: account })
-            .then((newTokenInstance: Contract) => {
-              contextsAddresses.push(newTokenInstance.options.address);
-            });
-          await Context.deploy({ data: getContractBytecode('Context') })
-            .send({ from: account })
-            .then((newTokenInstance: Contract) => {
-              contextsAddresses.push(newTokenInstance.options.address);
-            });
-          await Context.deploy({ data: getContractBytecode('Context') })
-            .send({ from: account })
-            .then((newTokenInstance: Contract) => {
-              contextsAddresses.push(newTokenInstance.options.address);
-            });
-          console.log(await contextsAddresses);
-
+          for (let i = 0; i <= 8; i++) {
+            await Context.deploy({ data: getContractBytecode('Context') })
+              .send({ from: account })
+              .then((newTokenInstance: Contract) => {
+                contextsAddresses.push(newTokenInstance.options.address);
+              });
+          }
           const governanceInstance = new utilsProvider.eth.Contract(getContractABI('Governance'));
           governanceInstance
             .deploy({
@@ -277,26 +240,7 @@ const AgreementRequest = ({
   };
 
   const governantFeilds = () => {
-    return (
-      <div>
-        {/* <div style={{ marginTop: '24px' }} className="text">
-            Agreement
-          </div>
-          <Item
-            name="agreement"
-            validateTrigger="onBlur"
-            rules={getRule('agreement', 'agreement', governanceAgreement)}
-          >
-            <Input
-              className="lender"
-              defaultValue={ governanceAgreement }
-              onChange={(e) => {
-                return setGovernanceAgreement(e?.target?.value);
-              }}
-            />
-          </Item> */}
-      </div>
-    );
+    return <div></div>;
   };
 
   // Token creator
@@ -444,7 +388,6 @@ const AgreementRequest = ({
     if (error) {
       validationAgreementModel(value, setError);
     }
-    // agreementDropDown();
   }, [value]);
 
   return (
@@ -464,9 +407,6 @@ const AgreementRequest = ({
                 htmlType="submit"
                 className="btn"
                 onClick={() => {
-                  // if (agreementCreator || governanceCreator) {
-                  //   return validationAgreementModel(value, setError);
-                  // }
                   return validationAgreementModel(creatorValue, setError);
                 }}
               >

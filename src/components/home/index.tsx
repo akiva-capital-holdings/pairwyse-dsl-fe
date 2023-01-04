@@ -218,7 +218,7 @@ const HomePage = () => {
     );
   };
 
-  const recordContainer = (recordError, recordAddress, recprdMessage, isSubmit) => {
+  const recordContainer = (recordError, recordAddress, recprdMessage, isSubmit, createdName) => {
     return (
       <div className={`recordContainer  ${recordError && !recordAddress ? 'error' : ''}`}>
         <div className="titleContainer">
@@ -230,7 +230,7 @@ const HomePage = () => {
             <div className="title">
               {recordError && recprdMessage
                 ? 'Warning! Error encountered during contract execution'
-                : titleValueAgrement(!!recordAddress)}
+                : titleValueAgrement(!!recordAddress, createdName)}
             </div>
             {recordAddress && (
               <div className="valueContainer">
@@ -251,7 +251,8 @@ const HomePage = () => {
         valueGovernanceRequest.error,
         valueGovernanceRequest.governanceAddr,
         valueGovernanceRequest.message,
-        valueGovernanceRequest.submit
+        valueGovernanceRequest.submit,
+        'Governance'
       );
     }
     // if open tokenCreator show tokenContainer
@@ -260,7 +261,8 @@ const HomePage = () => {
         tokenInfo.error,
         tokenInfo.address,
         tokenInfo.message,
-        tokenInfo.submit
+        tokenInfo.submit,
+        'Token'
       );
     }
     // if open agreementCreator show agreementContainer
@@ -268,7 +270,8 @@ const HomePage = () => {
       valueAgreementRequest.error,
       valueAgreementRequest.lastAgrAddr,
       valueAgreementRequest.message,
-      valueAgreementRequest.submit
+      valueAgreementRequest.submit,
+      'Agreement'
     );
   };
 

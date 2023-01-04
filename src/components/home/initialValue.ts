@@ -45,8 +45,8 @@ export const initialTokenInfo = {
   submit: false,
 };
 
-export const titleValueAgrement = (v) => {
-  return v ? 'Created Agreement Address' : 'No records yet';
+export const titleValueAgrement = (v, createdName) => {
+  return v ? `Created ${createdName} Address` : 'No records yet';
 };
 
 export const titleValueDefinition = (v) => {

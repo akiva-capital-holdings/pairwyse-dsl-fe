@@ -66,19 +66,18 @@ export const getContractABI = (name: ContractName): AbiItem[] => {
 };
 
 export const getContractBytecode = (name: ContractName): string => {
-  if (name === contractNames.Agreement) {
-    return agreementBytecode;
+  switch (name) {
+    case contractNames.Agreement:
+      return agreementBytecode;
+    case contractNames.Token:
+      return tokenBytecode;
+    case contractNames.Governance:
+      return governanceBytecode;
+    case contractNames.Context:
+      return contextBytecode;
+    default:
+      return '';
   }
-  if (name === contractNames.Token) {
-    return tokenBytecode;
-  }
-  if (name === contractNames.Governance) {
-    return governanceBytecode;
-  }
-  if (name === contractNames.Context) {
-    return contextBytecode;
-  }
-  return '';
 };
 
 export const createInstance = (name: ContractName, address: string, provider): Contract => {
