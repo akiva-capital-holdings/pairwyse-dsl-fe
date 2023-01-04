@@ -93,10 +93,13 @@ const AgreementRequest = ({
       try {
         if (!error) {
           const tokenInstance = new utilsProvider.eth.Contract(getContractABI('Token'));
+          const tokenSypplyInWei = (Number(tokenSupply) * Number(1e18)).toLocaleString('fullwide', {
+            useGrouping: false,
+          });
           tokenInstance
             .deploy({
               data: getContractBytecode('Token'),
-              arguments: [tokenName, tokenSymbol, tokenSupply],
+              arguments: [tokenName, tokenSymbol, tokenSypplyInWei],
             })
             .send({ from: account })
             .on('error', (err) => {
@@ -106,7 +109,7 @@ const AgreementRequest = ({
               setTokenInfo({
                 name: tokenName,
                 symbol: tokenSymbol,
-                supply: tokenSupply,
+                supply: tokenSypplyInWei,
                 address: newTokenInstance.options.address,
                 error: false,
                 message: '',
@@ -240,8 +243,8 @@ const AgreementRequest = ({
           validateTrigger="onChange"
           rules={
             tokenSupply?.length === 0
-              ? getRule('value-in-wei', 'value', tokenSupply)
-              : getRule('value-in-wei', 'value-in-wei', tokenSupply)
+              ? getRule('value-in-wei', 'record-value', tokenSupply)
+              : getRule('value-in-wei', 'record-value-in-wei', tokenSupply)
           }
         >
           <Input
@@ -345,7 +348,9 @@ const AgreementRequest = ({
       <Spin spinning={loading}>
         <Form name="agreementRequestForm" form={form} autoComplete="off" onFinish={createAgreement}>
           <div className="text">Requestor</div>
-          <div className="value">{account}</div>
+          <div style={{ marginBottom: '24px' }} className="value">
+            {account}
+          </div>
           {creationDropDown()}
           {choosingFeilds()}
           <div className="btns">
