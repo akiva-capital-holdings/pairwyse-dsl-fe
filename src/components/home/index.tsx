@@ -11,6 +11,7 @@ import {
   titleValueDefinition,
   titleValueAgrement,
   titleValueExecute,
+  initialTokenInfo,
 } from './initialValue';
 import { selectSession } from '../../redux/sessionReducer';
 import { ReactComponent as Copy } from '../../images/copy.svg';
@@ -38,7 +39,11 @@ const HomePage = () => {
   const [value, setValue] = useState(undefined);
   const [lender, setLender] = useState('');
   const [error, setError] = useState(undefined);
+  const [tokenInfo, setTokenInfo] = useState(initialTokenInfo);
   const [valueAgreementRequest, setValueAgreementRequest] = useState(initialAgreementValue);
+  const [agreementCreator, setAgreementCreator] = useState<boolean>(false);
+  const [governanceCreator, setGovernanceCreator] = useState<boolean>(false);
+  const [tokenCreator, setTokenCreator] = useState<boolean>(false);
   // definition request
   const [definition, setDefinition] = useState('');
   const [specifications, setspecification] = useState(mockDefinitions);
@@ -75,6 +80,9 @@ const HomePage = () => {
     setAgreement(valueAgreementRequest.lastAgrAddr);
     setAgreementExecution(valueAgreementRequest.lastAgrAddr);
   }, [valueAgreementRequest]);
+  useEffect(() => {
+    console.log(tokenInfo);
+  }, [tokenInfo]);
 
   const reset = () => {
     setspecification(mockDefinitions);
@@ -122,6 +130,13 @@ const HomePage = () => {
         lender={lender}
         error={error}
         value={value}
+        setTokenInfo={setTokenInfo}
+        agreementCreator={agreementCreator}
+        setAgreementCreator={setAgreementCreator}
+        governanceCreator={governanceCreator}
+        setGovernanceCreator={setGovernanceCreator}
+        tokenCreator={tokenCreator}
+        setTokenCreator={setTokenCreator}
       />
     ),
     stepTwo: (
@@ -195,55 +210,64 @@ const HomePage = () => {
     );
   };
 
-  const contentCOnteiner = {
-    stepOne: (
-      <div
-        className={`recordContainer  ${
-          valueAgreementRequest?.error && !valueAgreementRequest?.lastAgrAddr ? 'error' : ''
-        }`}
-      >
+  const recordContainer = (recordError, recordAddress, recprdMessage, isSubmit, createdName) => {
+    return (
+      <div className={`recordContainer  ${recordError && !recordAddress ? 'error' : ''}`}>
         <div className="titleContainer">
           <div className="title">Record</div>
-          {valueAgreementRequest?.submit &&
-            iconValue(valueAgreementRequest?.error && !!valueAgreementRequest?.message)}
+          {isSubmit && iconValue(recordError && !!recprdMessage)}
         </div>
-        <div className={`contentCOntainer ${valueAgreementRequest?.error && 'error'}`}>
+        <div className={`contentCOntainer ${recordError && 'error'}`}>
           <div className="content">
             <div className="title">
-              {valueAgreementRequest?.error && valueAgreementRequest?.message
+              {recordError && recprdMessage
                 ? 'Warning! Error encountered during contract execution'
-                : titleValueAgrement(!!valueAgreementRequest?.lastAgrAddr)}
+                : titleValueAgrement(!!recordAddress, createdName)}
             </div>
-            {valueAgreementRequest?.lastAgrAddr && (
+            {recordAddress && (
               <div className="valueContainer">
-                <div className="value">
-                  {shortenedAddress(valueAgreementRequest?.lastAgrAddr, 9)}
-                </div>
-                <Copy
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => onCopyClick(valueAgreementRequest?.lastAgrAddr)}
-                />
+                <div className="value">{shortenedAddress(recordAddress, 9)}</div>
+                <Copy style={{ cursor: 'pointer' }} onClick={() => onCopyClick(recordAddress)} />
               </div>
             )}
           </div>
-          {valueAgreementRequest?.hash && (
-            <div style={{ marginTop: '12px' }} className="content">
-              <div className="title">
-                Agreement Request <br />
-                Record ID
-              </div>
-              <div className="valueContainer">
-                <div className="value">{shortenedAddress(valueAgreementRequest?.hash, 9)}</div>
-                <Copy
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => onCopyClick(valueAgreementRequest?.hash)}
-                />
-              </div>
-            </div>
-          )}
         </div>
       </div>
-    ),
+    );
+  };
+
+  const recordCheck = () => {
+    // if open GovernanceCreator show governanceContainer
+    if (governanceCreator) {
+      return recordContainer(
+        valueAgreementRequest.error,
+        valueAgreementRequest.lastAgrAddr,
+        valueAgreementRequest.message,
+        valueAgreementRequest.submit,
+        'Governance'
+      );
+    }
+    if (tokenCreator) {
+      // if open tokenCreator show tokenContainer
+      return recordContainer(
+        tokenInfo.error,
+        tokenInfo.address,
+        tokenInfo.message,
+        tokenInfo.submit,
+        'Token'
+      );
+    } // else show agreementContainer
+    return recordContainer(
+      valueAgreementRequest.error,
+      valueAgreementRequest.lastAgrAddr,
+      valueAgreementRequest.message,
+      valueAgreementRequest.submit,
+      'Agreement'
+    );
+  };
+
+  const contentCOnteiner = {
+    stepOne: recordCheck(),
     stepTwo: (
       <div
         className={`recordContainer  ${

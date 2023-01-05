@@ -28,8 +28,18 @@ export const initialExecutionValue = {
   message: '',
 };
 
-export const titleValueAgrement = (v) => {
-  return v ? 'Created Agreement Address' : 'No records yet';
+export const initialTokenInfo = {
+  name: '',
+  symbol: '',
+  supply: '',
+  address: '',
+  error: false,
+  message: '',
+  submit: false,
+};
+
+export const titleValueAgrement = (v, createdName) => {
+  return v ? `Created ${createdName} Address` : 'No records yet';
 };
 
 export const titleValueDefinition = (v) => {

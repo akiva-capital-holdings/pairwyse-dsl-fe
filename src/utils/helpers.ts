@@ -4,7 +4,7 @@ import { AbiItem } from 'web3-utils';
 import { MetaMaskError } from '../types';
 import { abi as agreementABI, bytecode as agreementBytecode } from '../data/agreement.json';
 import { abi as contextFactoryABI } from '../data/contextFactory.json';
-import { abi as tokenABI } from '../data/token.json';
+import { abi as tokenABI, bytecode as tokenBytecode } from '../data/token.json';
 import allNetworks from './networks.json';
 
 const contractNames = {
@@ -58,7 +58,12 @@ export const getContractABI = (name: ContractName): AbiItem[] => {
 };
 
 export const getContractBytecode = (name: ContractName): string => {
-  if (name === contractNames.Agreement) return agreementBytecode;
+  if (name === contractNames.Agreement) {
+    return agreementBytecode;
+  }
+  if (name === contractNames.Token) {
+    return tokenBytecode;
+  }
   return '';
 };
 
