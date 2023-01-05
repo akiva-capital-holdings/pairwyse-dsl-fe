@@ -245,7 +245,7 @@ const HomePage = () => {
   };
 
   const recordCheck = () => {
-    // if opem governanceCreator show governanceContainer
+    // if open governanceCreator show governanceContainer
     if (governanceCreator) {
       return recordContainer(
         valueGovernanceRequest.error,
