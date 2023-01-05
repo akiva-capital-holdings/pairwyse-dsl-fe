@@ -218,17 +218,17 @@ const HomePage = () => {
     );
   };
 
-  const recordContainer = (recordError, recordAddress, recprdMessage, isSubmit, createdName) => {
+  const recordContainer = (recordError, recordAddress, recordMessage, isSubmit, createdName) => {
     return (
       <div className={`recordContainer  ${recordError && !recordAddress ? 'error' : ''}`}>
         <div className="titleContainer">
           <div className="title">Record</div>
-          {isSubmit && iconValue(recordError && !!recprdMessage)}
+          {isSubmit && iconValue(recordError && !!recordMessage)}
         </div>
         <div className={`contentCOntainer ${recordError && 'error'}`}>
           <div className="content">
             <div className="title">
-              {recordError && recprdMessage
+              {recordError && recordMessage
                 ? 'Warning! Error encountered during contract execution'
                 : titleValueAgrement(!!recordAddress, createdName)}
             </div>
