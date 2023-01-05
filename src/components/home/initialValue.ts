@@ -46,19 +46,19 @@ export const initialTokenInfo = {
 };
 
 export const titleValueAgrement = (v, createdName) => {
-  return v ? `Created ${createdName} Address` : 'No records yet';
+  return v ? `Created ${createdName} Address` : 'No transactions yet';
 };
 
 export const titleValueDefinition = (v) => {
-  return v ? 'Definition Record ID' : 'No records yet';
+  return v ? 'Definition Record ID' : 'No transactions yet';
 };
 
 export const titleValueUpdateRequest = (v) => {
-  return v ? 'Update Request Record ID' : 'No records yet';
+  return v ? 'Update Request Record ID' : 'No transactions yet';
 };
 
 export const titleValueExecute = (v) => {
-  return v ? 'Execution Record ID' : 'No records yet';
+  return v ? 'Execution Record ID' : 'No transactions yet';
 };
 
 export default {
