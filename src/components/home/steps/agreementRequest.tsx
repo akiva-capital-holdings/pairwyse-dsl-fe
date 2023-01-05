@@ -31,6 +31,7 @@ const AgreementRequest = ({
   setGovernanceCreator,
   tokenCreator,
   setTokenCreator,
+  setValueGovernanceRequest,
 }: Agreement) => {
   const { account } = useMetaMask();
   const { utilsProvider } = useSelector(selectUtils);
@@ -43,7 +44,7 @@ const AgreementRequest = ({
   const navigate = useNavigate();
 
   const createAgreement = async () => {
-    if (agreementCreator || governanceCreator) {
+    if (agreementCreator) {
       setLoading(true);
       try {
         if (!error) {
@@ -132,6 +133,50 @@ const AgreementRequest = ({
         setLoading(false);
       }
     }
+    if (governanceCreator) {
+      setLoading(true);
+      try {
+        if (!error) {
+          const Context = new utilsProvider.eth.Contract(getContractABI('Context'));
+          const contextsAddresses = [];
+          for (let i = 0; i <= 8; i++) {
+            await Context.deploy({ data: getContractBytecode('Context') })
+              .send({ from: account })
+              .then((newTokenInstance: Contract) => {
+                contextsAddresses.push(newTokenInstance.options.address);
+              });
+          }
+          const governanceInstance = new utilsProvider.eth.Contract(getContractABI('Governance'));
+          governanceInstance
+            .deploy({
+              data: getContractBytecode('Governance'),
+              arguments: [process.env.REACT_APP_PARSER, account, contextsAddresses],
+            })
+            .send({ from: account })
+            .on('error', (err) => {
+              console.error({ err });
+            })
+            .then((newGovernanceInstance: Contract) => {
+              setValueGovernanceRequest({
+                governanceAddr: newGovernanceInstance.options.address,
+                error: true,
+                message: '',
+                submit: true,
+              });
+              setLoading(false);
+            });
+        }
+      } catch (e) {
+        console.error(e);
+        setValueGovernanceRequest({
+          governanceAddr: '',
+          error: true,
+          message: e?.message,
+          submit: true,
+        });
+        setLoading(false);
+      }
+    }
   };
 
   // agreement creator
@@ -195,6 +240,10 @@ const AgreementRequest = ({
         </div>
       </div>
     );
+  };
+
+  const governantFeilds = () => {
+    return <div></div>;
   };
 
   // Token creator
@@ -326,11 +375,14 @@ const AgreementRequest = ({
   };
 
   const choosingFeilds = () => {
-    if (agreementCreator || governanceCreator) {
+    if (agreementCreator) {
       return agreementFeilds();
     }
     if (tokenCreator) {
       return tokenFields();
+    }
+    if (governanceCreator) {
+      return governantFeilds();
     }
     return <></>;
   };
@@ -339,7 +391,6 @@ const AgreementRequest = ({
     if (error) {
       validationAgreementModel(value, setError);
     }
-    agreementDropDown();
   }, [value]);
 
   return (
@@ -361,9 +412,6 @@ const AgreementRequest = ({
                 htmlType="submit"
                 className="btn"
                 onClick={() => {
-                  if (agreementCreator || governanceCreator) {
-                    return validationAgreementModel(value, setError);
-                  }
                   return validationAgreementModel(creatorValue, setError);
                 }}
               >

@@ -12,6 +12,7 @@ import {
   titleValueAgrement,
   titleValueExecute,
   initialTokenInfo,
+  initialGovernanceValue,
 } from './initialValue';
 import { selectSession } from '../../redux/sessionReducer';
 import { ReactComponent as Copy } from '../../images/copy.svg';
@@ -40,6 +41,8 @@ const HomePage = () => {
   const [lender, setLender] = useState('');
   const [error, setError] = useState(undefined);
   const [tokenInfo, setTokenInfo] = useState(initialTokenInfo);
+  const [governanceAgreement, setGovernanceAgreement] = useState('');
+  const [valueGovernanceRequest, setValueGovernanceRequest] = useState(initialGovernanceValue);
   const [valueAgreementRequest, setValueAgreementRequest] = useState(initialAgreementValue);
   const [agreementCreator, setAgreementCreator] = useState<boolean>(false);
   const [governanceCreator, setGovernanceCreator] = useState<boolean>(false);
@@ -79,6 +82,7 @@ const HomePage = () => {
     setAgreementDefinition(valueAgreementRequest.lastAgrAddr);
     setAgreement(valueAgreementRequest.lastAgrAddr);
     setAgreementExecution(valueAgreementRequest.lastAgrAddr);
+    setGovernanceAgreement(valueAgreementRequest.lastAgrAddr);
   }, [valueAgreementRequest]);
   useEffect(() => {
     console.log(tokenInfo);
@@ -89,6 +93,7 @@ const HomePage = () => {
     setSignatories(mockSignatories);
     setAgreementDefinition('');
     setAgreementExecution('');
+    setGovernanceAgreement('');
     setDslIdExecution('');
     setValue(undefined);
     setConditions(mock);
@@ -122,6 +127,9 @@ const HomePage = () => {
     stepOne: (
       <AgreementRequest
         setValueAgreementRequest={setValueAgreementRequest}
+        setValueGovernanceRequest={setValueGovernanceRequest}
+        governanceAgreement={governanceAgreement}
+        setGovernanceAgreement={setGovernanceAgreement}
         setLoading={setLoading}
         setLender={setLender}
         setError={setError}
@@ -210,17 +218,17 @@ const HomePage = () => {
     );
   };
 
-  const recordContainer = (recordError, recordAddress, recprdMessage, isSubmit, createdName) => {
+  const recordContainer = (recordError, recordAddress, recordMessage, isSubmit, createdName) => {
     return (
       <div className={`recordContainer  ${recordError && !recordAddress ? 'error' : ''}`}>
         <div className="titleContainer">
           <div className="title">Record</div>
-          {isSubmit && iconValue(recordError && !!recprdMessage)}
+          {isSubmit && iconValue(recordError && !!recordMessage)}
         </div>
         <div className={`contentCOntainer ${recordError && 'error'}`}>
           <div className="content">
             <div className="title">
-              {recordError && recprdMessage
+              {recordError && recordMessage
                 ? 'Warning! Error encountered during contract execution'
                 : titleValueAgrement(!!recordAddress, createdName)}
             </div>
@@ -237,18 +245,18 @@ const HomePage = () => {
   };
 
   const recordCheck = () => {
-    // if open GovernanceCreator show governanceContainer
+    // if open governanceCreator show governanceContainer
     if (governanceCreator) {
       return recordContainer(
-        valueAgreementRequest.error,
-        valueAgreementRequest.lastAgrAddr,
-        valueAgreementRequest.message,
-        valueAgreementRequest.submit,
+        valueGovernanceRequest.error,
+        valueGovernanceRequest.governanceAddr,
+        valueGovernanceRequest.message,
+        valueGovernanceRequest.submit,
         'Governance'
       );
     }
+    // if open tokenCreator show tokenContainer
     if (tokenCreator) {
-      // if open tokenCreator show tokenContainer
       return recordContainer(
         tokenInfo.error,
         tokenInfo.address,
@@ -256,7 +264,8 @@ const HomePage = () => {
         tokenInfo.submit,
         'Token'
       );
-    } // else show agreementContainer
+    }
+    // if open agreementCreator show agreementContainer
     return recordContainer(
       valueAgreementRequest.error,
       valueAgreementRequest.lastAgrAddr,
