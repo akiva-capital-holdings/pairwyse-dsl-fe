@@ -8,11 +8,11 @@ import {
   titleValueUpdateRequest,
   initialExecutionValue,
   initialAgreementValue,
-  titleValueDefinition,
+  // titleValueDefinition,
   titleValueAgrement,
   titleValueExecute,
   initialTokenInfo,
-  initialGovernanceValue,
+  initialMultiTrancheValue,
 } from './initialValue';
 import { selectSession } from '../../redux/sessionReducer';
 import { ReactComponent as Copy } from '../../images/copy.svg';
@@ -33,7 +33,7 @@ const navSteps = {
 };
 
 const HomePage = () => {
-  const { agreementAddress } = useSelector(selectSession);
+  const { agreementAddress, contractType } = useSelector(selectSession);
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(navSteps.stepOne);
   // agrement request
@@ -41,11 +41,12 @@ const HomePage = () => {
   const [lender, setLender] = useState('');
   const [error, setError] = useState(undefined);
   const [tokenInfo, setTokenInfo] = useState(initialTokenInfo);
-  const [governanceAgreement, setGovernanceAgreement] = useState('');
-  const [valueGovernanceRequest, setValueGovernanceRequest] = useState(initialGovernanceValue);
+  const [multiTrancheAgreement, setMultiTrancheAgreement] = useState('');
+  const [valueMultiTrancheRequest, setValueMultiTrancheRequest] =
+    useState(initialMultiTrancheValue);
   const [valueAgreementRequest, setValueAgreementRequest] = useState(initialAgreementValue);
   const [agreementCreator, setAgreementCreator] = useState<boolean>(false);
-  const [governanceCreator, setGovernanceCreator] = useState<boolean>(false);
+  const [multiTrancheCreator, setMultiTrancheCreator] = useState<boolean>(false);
   const [tokenCreator, setTokenCreator] = useState<boolean>(false);
   // definition request
   const [definition, setDefinition] = useState('');
@@ -69,21 +70,37 @@ const HomePage = () => {
   const [executionValue, setExecutionValue] = useState(initialExecutionValue);
 
   useEffect(() => {
-    setValueAgreementRequest({
-      lastAgrAddr: agreementAddress,
-      error: false,
-      hash: '',
-      message: '',
-      submit: false,
-    });
+    if (contractType?.includes('Agreement')) {
+      setValueAgreementRequest({
+        lastAgrAddr: agreementAddress,
+        error: false,
+        hash: '',
+        message: '',
+        submit: false,
+      });
+    } else {
+      setValueMultiTrancheRequest({
+        multiTrancheAddr: agreementAddress,
+        error: false,
+        message: '',
+        submit: false,
+      });
+    }
   }, []);
 
   useEffect(() => {
-    setAgreementDefinition(valueAgreementRequest.lastAgrAddr);
-    setAgreement(valueAgreementRequest.lastAgrAddr);
-    setAgreementExecution(valueAgreementRequest.lastAgrAddr);
-    setGovernanceAgreement(valueAgreementRequest.lastAgrAddr);
-  }, [valueAgreementRequest]);
+    if (contractType?.includes('Agreement')) {
+      setAgreementDefinition(valueAgreementRequest.lastAgrAddr);
+      setAgreement(valueAgreementRequest.lastAgrAddr);
+      setAgreementExecution(valueAgreementRequest.lastAgrAddr);
+      setMultiTrancheAgreement(valueAgreementRequest.lastAgrAddr);
+    } else {
+      setAgreementDefinition(valueMultiTrancheRequest.multiTrancheAddr);
+      setAgreement(valueMultiTrancheRequest.multiTrancheAddr);
+      setAgreementExecution(valueMultiTrancheRequest.multiTrancheAddr);
+      setMultiTrancheAgreement(valueMultiTrancheRequest.multiTrancheAddr);
+    }
+  }, [valueAgreementRequest, valueMultiTrancheRequest]);
   useEffect(() => {
     console.log(tokenInfo);
   }, [tokenInfo]);
@@ -93,7 +110,7 @@ const HomePage = () => {
     setSignatories(mockSignatories);
     setAgreementDefinition('');
     setAgreementExecution('');
-    setGovernanceAgreement('');
+    setMultiTrancheAgreement('');
     setDslIdExecution('');
     setValue(undefined);
     setConditions(mock);
@@ -127,9 +144,9 @@ const HomePage = () => {
     stepOne: (
       <AgreementRequest
         setValueAgreementRequest={setValueAgreementRequest}
-        setValueGovernanceRequest={setValueGovernanceRequest}
-        governanceAgreement={governanceAgreement}
-        setGovernanceAgreement={setGovernanceAgreement}
+        setValueMultiTrancheRequest={setValueMultiTrancheRequest}
+        multiTrancheAgreement={multiTrancheAgreement}
+        setMultiTrancheAgreement={setMultiTrancheAgreement}
         setLoading={setLoading}
         setLender={setLender}
         setError={setError}
@@ -141,8 +158,8 @@ const HomePage = () => {
         setTokenInfo={setTokenInfo}
         agreementCreator={agreementCreator}
         setAgreementCreator={setAgreementCreator}
-        governanceCreator={governanceCreator}
-        setGovernanceCreator={setGovernanceCreator}
+        multiTrancheCreator={multiTrancheCreator}
+        setMultiTrancheCreator={setMultiTrancheCreator}
         tokenCreator={tokenCreator}
         setTokenCreator={setTokenCreator}
       />
@@ -245,14 +262,14 @@ const HomePage = () => {
   };
 
   const recordCheck = () => {
-    // if open governanceCreator show governanceContainer
-    if (governanceCreator) {
+    // if open MultiTrancheCreator show MultiTrancheContainer
+    if (multiTrancheCreator) {
       return recordContainer(
-        valueGovernanceRequest.error,
-        valueGovernanceRequest.governanceAddr,
-        valueGovernanceRequest.message,
-        valueGovernanceRequest.submit,
-        'Governance'
+        valueMultiTrancheRequest.error,
+        valueMultiTrancheRequest.multiTrancheAddr,
+        valueMultiTrancheRequest.message,
+        valueMultiTrancheRequest.submit,
+        'MultiTranche'
       );
     }
     // if open tokenCreator show tokenContainer
@@ -289,7 +306,7 @@ const HomePage = () => {
             iconValue(valueDefinitionRequest?.error && !!valueDefinitionRequest?.message)}
         </div>
         <div className={`contentCOntainer ${valueDefinitionRequest?.error ? 'error' : ''}`}>
-          <div className="content">
+          {/* <div className="content">
             <div className="title">
               {valueDefinitionRequest?.error && valueDefinitionRequest?.message
                 ? 'Warning! Error encountered during contract execution'
@@ -304,7 +321,7 @@ const HomePage = () => {
                 />
               </div>
             )}
-          </div>
+          </div> */}
           {valueDefinitionRequest?.value && (
             <div style={{ marginTop: '12px' }} className="content">
               <div className="title">

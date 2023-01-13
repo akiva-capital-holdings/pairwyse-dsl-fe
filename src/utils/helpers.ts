@@ -5,16 +5,17 @@ import { MetaMaskError } from '../types';
 import { abi as agreementABI, bytecode as agreementBytecode } from '../data/agreement.json';
 import { abi as contextFactoryABI } from '../data/contextFactory.json';
 import { abi as tokenABI, bytecode as tokenBytecode } from '../data/token.json';
-import { abi as governanceABI, bytecode as governanceBytecode } from '../data/governance.json';
-import { abi as contextABI, bytecode as contextBytecode } from '../data/context.json';
+import {
+  abi as multiTrancheABI,
+  bytecode as multiTrancheBytecode,
+} from '../data/multiTranche.json';
 import allNetworks from './networks.json';
 
 const contractNames = {
   Agreement: 'Agreement',
   ContextFactory: 'ContextFactory',
   Token: 'Token',
-  Governance: 'Governance',
-  Context: 'Context',
+  MultiTranche: 'MultiTranche',
 };
 type ContractName = keyof typeof contractNames;
 
@@ -56,10 +57,8 @@ export const getContractABI = (name: ContractName): AbiItem[] => {
       return contextFactoryABI as AbiItem[];
     case contractNames.Token:
       return tokenABI as AbiItem[];
-    case contractNames.Governance:
-      return governanceABI as AbiItem[];
-    case contractNames.Context:
-      return contextABI as AbiItem[];
+    case contractNames.MultiTranche:
+      return multiTrancheABI as AbiItem[];
     default:
       return [];
   }
@@ -71,10 +70,8 @@ export const getContractBytecode = (name: ContractName): string => {
       return agreementBytecode;
     case contractNames.Token:
       return tokenBytecode;
-    case contractNames.Governance:
-      return governanceBytecode;
-    case contractNames.Context:
-      return contextBytecode;
+    case contractNames.MultiTranche:
+      return multiTrancheBytecode;
     default:
       return '';
   }
