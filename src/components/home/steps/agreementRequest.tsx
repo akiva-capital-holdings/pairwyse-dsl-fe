@@ -56,6 +56,7 @@ const AgreementRequest = ({
               arguments: [
                 process.env.REACT_APP_PARSER,
                 account, // msg.sender would be the simulation of multisig wallet
+                process.env.REACT_APP_CONTEXT_DSL,
               ],
             })
             .send({ from: account })
@@ -137,20 +138,11 @@ const AgreementRequest = ({
       setLoading(true);
       try {
         if (!error) {
-          const Context = new utilsProvider.eth.Contract(getContractABI('Context'));
-          const contextsAddresses = [];
-          for (let i = 0; i <= 8; i++) {
-            await Context.deploy({ data: getContractBytecode('Context') })
-              .send({ from: account })
-              .then((newTokenInstance: Contract) => {
-                contextsAddresses.push(newTokenInstance.options.address);
-              });
-          }
           const governanceInstance = new utilsProvider.eth.Contract(getContractABI('Governance'));
           governanceInstance
             .deploy({
               data: getContractBytecode('Governance'),
-              arguments: [process.env.REACT_APP_PARSER, account, contextsAddresses],
+              arguments: [process.env.REACT_APP_PARSER, account, process.env.REACT_APP_CONTEXT_DSL],
             })
             .send({ from: account })
             .on('error', (err) => {

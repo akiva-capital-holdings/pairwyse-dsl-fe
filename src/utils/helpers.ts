@@ -3,18 +3,14 @@ import _ from 'lodash';
 import { AbiItem } from 'web3-utils';
 import { MetaMaskError } from '../types';
 import { abi as agreementABI, bytecode as agreementBytecode } from '../data/agreement.json';
-import { abi as contextFactoryABI } from '../data/contextFactory.json';
 import { abi as tokenABI, bytecode as tokenBytecode } from '../data/token.json';
 import { abi as governanceABI, bytecode as governanceBytecode } from '../data/governance.json';
-import { abi as contextABI, bytecode as contextBytecode } from '../data/context.json';
 import allNetworks from './networks.json';
 
 const contractNames = {
   Agreement: 'Agreement',
-  ContextFactory: 'ContextFactory',
   Token: 'Token',
   Governance: 'Governance',
-  Context: 'Context',
 };
 type ContractName = keyof typeof contractNames;
 
@@ -52,14 +48,10 @@ export const getContractABI = (name: ContractName): AbiItem[] => {
   switch (name) {
     case contractNames.Agreement:
       return agreementABI as AbiItem[];
-    case contractNames.ContextFactory:
-      return contextFactoryABI as AbiItem[];
     case contractNames.Token:
       return tokenABI as AbiItem[];
     case contractNames.Governance:
       return governanceABI as AbiItem[];
-    case contractNames.Context:
-      return contextABI as AbiItem[];
     default:
       return [];
   }
@@ -73,8 +65,6 @@ export const getContractBytecode = (name: ContractName): string => {
       return tokenBytecode;
     case contractNames.Governance:
       return governanceBytecode;
-    case contractNames.Context:
-      return contextBytecode;
     default:
       return '';
   }

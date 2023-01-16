@@ -51,57 +51,30 @@ const UpdateRequest = ({
   const addSteps = async (
     agreementContract: Contract,
     agreementAddr: string,
-    contextFactory: Contract,
+    DSLContext: Contract,
     steps: RecordObject[]
   ) => {
     setLoading(true);
     try {
       for await (const step of steps) {
-        await contextFactory.methods.deployContext(agreementAddr).send({ from: account });
-        let contextsLen = parseInt(
-          await contextFactory.methods.getDeployedContextsLen().call(),
-          10
-        );
-        const recordContextAddr = await contextFactory.methods
-          .deployedContexts(contextsLen - 1)
-          .call();
-        const conditionsContextAddrs = [];
-        for (let j = 0; j < step.conditions.length; j++) {
-          await contextFactory.methods.deployContext(agreementAddr).send({ from: account });
-          contextsLen = parseInt(await contextFactory.methods.getDeployedContextsLen().call(), 10);
-          const conditionContextAddr = await contextFactory.methods
-            .deployedContexts(contextsLen - 1)
-            .call();
-          conditionsContextAddrs.push(conditionContextAddr);
-          await agreementContract.methods
-            .parse(step.conditions[j], conditionContextAddr, process.env.REACT_APP_PREPROCESSOR)
-            .send({ from: account });
-          console.log(
-            `\n\taddress: \x1b[35m${conditionContextAddr}\x1b[0m\n\tcondition ${
-              j + 1
-            }:\n\t\x1b[33m${step.conditions[j]}\x1b[0m`
-          );
-        }
-
-        console.log({
-          rd: step.record,
-          recordContextAddr,
-          preprocessor: process.env.REACT_APP_PREPROCESSOR,
-        });
-        await agreementContract.methods
-          .parse(step.record, recordContextAddr, process.env.REACT_APP_PREPROCESSOR)
-          .send({ from: account });
         const agrUpdate = await agreementContract.methods
           .update(
             step.recordId,
             step.requiredRecords,
             step.signatories,
             step.record,
-            step.conditions,
-            recordContextAddr,
-            conditionsContextAddrs
+            step.conditions
           )
           .send({ from: account });
+        let parseFinished = await agreementContract.methods.parseFinished().call();
+        while (!parseFinished) {
+          await agreementContract.methods
+            .parse(process.env.REACT_APP_PREPROCESSOR)
+            .send({ from: account });
+          parseFinished = await agreementContract.methods.parseFinished().call();
+        }
+        console.log('parsed?:', parseFinished);
+        console.log(step.record);
         if (agrUpdate?.transactionHash) {
           hash = agrUpdate?.transactionHash;
         }
@@ -157,9 +130,9 @@ const UpdateRequest = ({
       const CONDITIONS = conditions.map((obj) => obj.value);
       const RECORD = record;
       const agreementContract = createInstance('Agreement', AGREEMENT_ADDR, utilsProvider);
-      const contextFactory = createInstance(
-        'ContextFactory',
-        process.env.REACT_APP_CONTEXT_FACTORY,
+      const DSLContext = createInstance(
+        'DSLContext',
+        process.env.REACT_APP_CONTEXT_DSL,
         utilsProvider
       );
 
@@ -168,7 +141,7 @@ const UpdateRequest = ({
         await transferFromApprove(agreementContract, value);
       });
       await transferFromApprove(agreementContract, record);
-      await addSteps(agreementContract, AGREEMENT_ADDR, contextFactory, [
+      await addSteps(agreementContract, AGREEMENT_ADDR, DSLContext, [
         {
           recordId: DSL_ID,
           requiredRecords: [...numbers],
