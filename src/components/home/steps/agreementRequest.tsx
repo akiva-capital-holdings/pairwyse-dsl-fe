@@ -56,7 +56,7 @@ const AgreementRequest = ({
               arguments: [
                 process.env.REACT_APP_PARSER,
                 account, // msg.sender would be the simulation of multisig wallet
-                process.env.REACT_APP_CONTEXT_FACTORY,
+                process.env.REACT_APP_DSL_CONTEXT,
               ],
             })
             .send({ from: account })
@@ -145,17 +145,32 @@ const AgreementRequest = ({
           multiTrancheInstance
             .deploy({
               data: getContractBytecode('MultiTranche'),
-              arguments: [
-                process.env.REACT_APP_PARSER,
-                account,
-                process.env.REACT_APP_CONTEXT_FACTORY,
-              ],
+              arguments: [process.env.REACT_APP_PARSER, account, process.env.REACT_APP_DSL_CONTEXT],
             })
             .send({ from: account })
             .on('error', (err) => {
               console.error({ err });
             })
-            .then((newMultiTrancheInstance: Contract) => {
+            .then(async (newMultiTrancheInstance: Contract) => {
+              // Parse MultiTranche records
+              console.log('Parse MultiTranche records');
+              setLoading(true);
+              try {
+                do {
+                  await newMultiTrancheInstance.methods
+                    .parse(process.env.REACT_APP_PREPROCESSOR)
+                    .send({ from: account });
+                  console.log({
+                    parseFinished: await newMultiTrancheInstance.methods.parseFinished().call(),
+                  });
+                } while ((await newMultiTrancheInstance.methods.parseFinished().call()) === false);
+
+                setLoading(false);
+              } catch (e) {
+                console.error({ e });
+                setLoading(false);
+              }
+
               setValueMultiTrancheRequest({
                 multiTrancheAddr: newMultiTrancheInstance.options.address,
                 error: true,

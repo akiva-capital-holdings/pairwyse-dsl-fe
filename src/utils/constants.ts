@@ -23,7 +23,7 @@ export const NETWORK_OPTIONS = {
     blockExplorerUrls: ['https://rinkeby.etherscan.io'],
   },
   local: {
-    chainId: `0x${Number(51337).toString(16)}`,
+    chainId: `0x${Number(31337).toString(16)}`,
     chainName: 'http://127.0.0.1:8545',
     nativeCurrency: {
       name: 'custom',
