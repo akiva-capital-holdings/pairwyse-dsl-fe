@@ -199,12 +199,22 @@ while the current allowance is ${transactionValue?.currentAllowance} ${transacti
   const GetRecordValues = async () => {
     try {
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      const { _requiredRecords, _signatories, _conditions, _transaction } =
+      const { _requiredRecords, _signatories, _conditions, _record } =
         await agreementContract.methods.getRecord(dslId).call();
+      console.log({
+        _requiredRecords,
+        _signatories,
+        _conditions,
+        _record,
+      });
       setConditions(_conditions);
       setRequiredRecirds(_requiredRecords);
-      setSignatories(_signatories);
-      setRecord(_transaction);
+      if (_signatories[0] === '0xFFfFfFffFFfffFFfFFfFFFFFffFFFffffFfFFFfF') {
+        setSignatories(['ANYONE']);
+      } else {
+        setSignatories(_signatories);
+      }
+      setRecord(_record);
     } catch (err) {
       console.error(err);
     }
@@ -309,6 +319,9 @@ while the current allowance is ${transactionValue?.currentAllowance} ${transacti
   useEffect(() => {
     GetActiveRecordIds();
   }, []);
+  useEffect(() => {
+    GetActiveRecordIds();
+  }, [agreementExecution]);
 
   useEffect(() => {
     if (dslId) {

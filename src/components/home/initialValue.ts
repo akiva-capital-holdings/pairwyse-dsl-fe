@@ -6,8 +6,8 @@ export const initialAgreementValue = {
   submit: false,
 };
 
-export const initialGovernanceValue = {
-  governanceAddr: '',
+export const initialMultiTrancheValue = {
+  multiTrancheAddr: '',
   error: false,
   message: '',
   submit: false,

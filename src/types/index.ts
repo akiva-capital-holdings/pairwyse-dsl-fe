@@ -39,15 +39,15 @@ export interface Agreement {
       submit: boolean;
     }>
   >;
-  setValueGovernanceRequest: React.Dispatch<
+  setValueMultiTrancheRequest: React.Dispatch<
     React.SetStateAction<{
-      governanceAddr: string;
+      multiTrancheAddr: string;
       error: boolean;
       message: string;
       submit: boolean;
     }>
   >;
-  governanceAgreement: string;
+  multiTrancheAgreement: string;
   setTokenInfo: React.Dispatch<
     React.SetStateAction<{
       name: string;
@@ -61,11 +61,11 @@ export interface Agreement {
   >;
   agreementCreator: boolean;
   setAgreementCreator: React.Dispatch<React.SetStateAction<boolean>>;
-  governanceCreator: boolean;
-  setGovernanceCreator: React.Dispatch<React.SetStateAction<boolean>>;
+  multiTrancheCreator: boolean;
+  setMultiTrancheCreator: React.Dispatch<React.SetStateAction<boolean>>;
   tokenCreator: boolean;
   setTokenCreator: React.Dispatch<React.SetStateAction<boolean>>;
-  setGovernanceAgreement: React.Dispatch<React.SetStateAction<string>>;
+  setMultiTrancheAgreement: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export interface TransactionValues {

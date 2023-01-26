@@ -8,7 +8,7 @@ import { getContractABI, getContractBytecode } from 'utils/helpers';
 import { Contract } from 'ethers';
 import getRule, { validationAgreementModel } from '../../../utils/validate';
 import { selectUtils } from '../../../redux/utilsReducer';
-import { changeAgreementAddress } from '../../../redux/sessionReducer';
+import { changeAgreementAddress, changeContractType } from '../../../redux/sessionReducer';
 import { Agreement } from '../../../types';
 import './index.css';
 
@@ -27,11 +27,11 @@ const AgreementRequest = ({
   setTokenInfo,
   agreementCreator,
   setAgreementCreator,
-  governanceCreator,
-  setGovernanceCreator,
+  multiTrancheCreator,
+  setMultiTrancheCreator,
   tokenCreator,
   setTokenCreator,
-  setValueGovernanceRequest,
+  setValueMultiTrancheRequest,
 }: Agreement) => {
   const { account } = useMetaMask();
   const { utilsProvider } = useSelector(selectUtils);
@@ -56,6 +56,7 @@ const AgreementRequest = ({
               arguments: [
                 process.env.REACT_APP_PARSER,
                 account, // msg.sender would be the simulation of multisig wallet
+                process.env.REACT_APP_DSL_CONTEXT,
               ],
             })
             .send({ from: account })
@@ -74,6 +75,7 @@ const AgreementRequest = ({
                 submit: true,
               });
               dispatch(changeAgreementAddress(newContractInstance.options.address));
+              dispatch(changeContractType('Agreement'));
               setLoading(false);
             });
         }
@@ -133,43 +135,57 @@ const AgreementRequest = ({
         setLoading(false);
       }
     }
-    if (governanceCreator) {
+    if (multiTrancheCreator) {
       setLoading(true);
       try {
         if (!error) {
-          const Context = new utilsProvider.eth.Contract(getContractABI('Context'));
-          const contextsAddresses = [];
-          for (let i = 0; i <= 8; i++) {
-            await Context.deploy({ data: getContractBytecode('Context') })
-              .send({ from: account })
-              .then((newTokenInstance: Contract) => {
-                contextsAddresses.push(newTokenInstance.options.address);
-              });
-          }
-          const governanceInstance = new utilsProvider.eth.Contract(getContractABI('Governance'));
-          governanceInstance
+          const multiTrancheInstance = new utilsProvider.eth.Contract(
+            getContractABI('MultiTranche')
+          );
+          multiTrancheInstance
             .deploy({
-              data: getContractBytecode('Governance'),
-              arguments: [process.env.REACT_APP_PARSER, account, contextsAddresses],
+              data: getContractBytecode('MultiTranche'),
+              arguments: [process.env.REACT_APP_PARSER, account, process.env.REACT_APP_DSL_CONTEXT],
             })
             .send({ from: account })
             .on('error', (err) => {
               console.error({ err });
             })
-            .then((newGovernanceInstance: Contract) => {
-              setValueGovernanceRequest({
-                governanceAddr: newGovernanceInstance.options.address,
+            .then(async (newMultiTrancheInstance: Contract) => {
+              // Parse MultiTranche records
+              console.log('Parse MultiTranche records');
+              setLoading(true);
+              try {
+                do {
+                  await newMultiTrancheInstance.methods
+                    .parse(process.env.REACT_APP_PREPROCESSOR)
+                    .send({ from: account });
+                  console.log({
+                    parseFinished: await newMultiTrancheInstance.methods.parseFinished().call(),
+                  });
+                } while ((await newMultiTrancheInstance.methods.parseFinished().call()) === false);
+
+                setLoading(false);
+              } catch (e) {
+                console.error({ e });
+                setLoading(false);
+              }
+
+              setValueMultiTrancheRequest({
+                multiTrancheAddr: newMultiTrancheInstance.options.address,
                 error: true,
                 message: '',
                 submit: true,
               });
+              dispatch(changeAgreementAddress(newMultiTrancheInstance.options.address));
+              dispatch(changeContractType('Multitranche'));
               setLoading(false);
             });
         }
       } catch (e) {
         console.error(e);
-        setValueGovernanceRequest({
-          governanceAddr: '',
+        setValueMultiTrancheRequest({
+          multiTrancheAddr: '',
           error: true,
           message: e?.message,
           submit: true,
@@ -242,7 +258,7 @@ const AgreementRequest = ({
     );
   };
 
-  const governantFeilds = () => {
+  const multiTrancheFeilds = () => {
     return <div></div>;
   };
 
@@ -324,7 +340,7 @@ const AgreementRequest = ({
           onClick={() => {
             setCreatorValue('Agreement');
             setAgreementCreator(true);
-            setGovernanceCreator(false);
+            setMultiTrancheCreator(false);
             setTokenCreator(false);
           }}
           type="button"
@@ -333,20 +349,20 @@ const AgreementRequest = ({
         </button>
         <button
           onClick={() => {
-            setCreatorValue('Governnace');
+            setCreatorValue('MultiTranche');
             setAgreementCreator(false);
-            setGovernanceCreator(true);
+            setMultiTrancheCreator(true);
             setTokenCreator(false);
           }}
           type="button"
         >
-          Governnace
+          Multi Tranche
         </button>
         <button
           onClick={() => {
             setCreatorValue('Token');
             setAgreementCreator(false);
-            setGovernanceCreator(false);
+            setMultiTrancheCreator(false);
             setTokenCreator(true);
           }}
           type="button"
@@ -381,8 +397,8 @@ const AgreementRequest = ({
     if (tokenCreator) {
       return tokenFields();
     }
-    if (governanceCreator) {
-      return governantFeilds();
+    if (multiTrancheCreator) {
+      return multiTrancheFeilds();
     }
     return <></>;
   };
