@@ -8,7 +8,6 @@ import {
   titleValueUpdateRequest,
   initialExecutionValue,
   initialAgreementValue,
-  // titleValueDefinition,
   titleValueAgrement,
   titleValueExecute,
   initialTokenInfo,
@@ -306,22 +305,6 @@ const HomePage = () => {
             iconValue(valueDefinitionRequest?.error && !!valueDefinitionRequest?.message)}
         </div>
         <div className={`contentCOntainer ${valueDefinitionRequest?.error ? 'error' : ''}`}>
-          {/* <div className="content">
-            <div className="title">
-              {valueDefinitionRequest?.error && valueDefinitionRequest?.message
-                ? 'Warning! Error encountered during contract execution'
-                : titleValueDefinition(!!valueDefinitionRequest?.value)}
-            </div>
-            {!!valueDefinitionRequest?.value && (
-              <div className="valueContainer">
-                <div className="value">{shortenedAddress(valueDefinitionRequest?.value, 9)}</div>
-                <Copy
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => onCopyClick(valueDefinitionRequest?.value)}
-                />
-              </div>
-            )}
-          </div> */}
           {valueDefinitionRequest?.value && (
             <div style={{ marginTop: '12px' }} className="content">
               <div className="title">
