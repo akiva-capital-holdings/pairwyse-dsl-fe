@@ -99,7 +99,7 @@ const HomePage = () => {
       setAgreementExecution(valueMultiTrancheRequest.multiTrancheAddr);
       setMultiTrancheAgreement(valueMultiTrancheRequest.multiTrancheAddr);
     }
-  }, [valueAgreementRequest, valueMultiTrancheRequest]);
+  }, [contractType, agreementAddress]);
   useEffect(() => {
     console.log(tokenInfo);
   }, [tokenInfo]);
