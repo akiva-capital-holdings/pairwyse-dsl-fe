@@ -99,7 +99,7 @@ const HomePage = () => {
       setAgreementExecution(valueMultiTrancheRequest.multiTrancheAddr);
       setMultiTrancheAgreement(valueMultiTrancheRequest.multiTrancheAddr);
     }
-  }, [contractType, agreementAddress]);
+  }, [valueMultiTrancheRequest, valueAgreementRequest]);
   useEffect(() => {
     console.log(tokenInfo);
   }, [tokenInfo]);
@@ -453,7 +453,7 @@ const HomePage = () => {
           <div>{steps[step]}</div>
         </div>
         <div>
-          <div className="statusContainer">
+          <div hidden className="statusContainer">
             <div className="title">Status</div>
             <div className="img" />
             <div className="secondaryTitle">Ready to deploy</div>

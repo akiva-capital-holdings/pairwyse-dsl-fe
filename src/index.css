@@ -1,7 +1,8 @@
 ::-webkit-scrollbar:horizontal {
   display: none;
 }
-:root {
+:root, #root{
+  height: 100%;
   --dark_col: #120023;
   --white_color: #FFFFFF;
   --grey_color: #ACA2B5;
@@ -27,6 +28,13 @@ body {
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.App{
+  display: flex;
+  flex-direction: column;
+  
+  height: 100%;
 }
 
 a {

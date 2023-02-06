@@ -1,6 +1,7 @@
 import React from 'react';
 import { useMetaMask } from 'metamask-react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import logo from '../../images/Logo.png';
 import './index.css';
 
 const Header = ({ onClick }) => {
@@ -26,7 +27,7 @@ const Header = ({ onClick }) => {
         }}
         className="logo"
       >
-        Logo
+        <img src={logo} style={{ height: 60 }} />
       </div>
       {account && (
         <button

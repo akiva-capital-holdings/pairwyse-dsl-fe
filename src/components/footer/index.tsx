@@ -1,4 +1,5 @@
 import React from 'react';
+import logo from '../../images/Logo.png';
 import './index.css';
 
 const Footer = () => {
@@ -6,7 +7,7 @@ const Footer = () => {
     <div className="footerContainer">
       <div className="logoContainer">
         <div style={{ cursor: 'pointer' }} className="logo">
-          Logo
+          <img src={logo} style={{ height: 60 }} />
         </div>
         <div className="text">© 2022 Akiva | All Rights Reserved</div>
       </div>

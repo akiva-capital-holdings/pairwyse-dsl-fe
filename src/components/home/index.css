@@ -2,8 +2,22 @@
   padding: 92px 120px 160px;
   text-align: left;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between
 }
+
+@media screen and (min-width: 1440px) {
+  .homePage {
+    margin: 0 auto;
+    width: 1440px;
+  }
+}
+
+@media screen and (max-width: 1439px) {
+  .homePage {
+    min-width: 1300px;
+  }
+}
+
 .homePage .title{
   display: inline-block;
   font-family: var(--font_family_bold);
