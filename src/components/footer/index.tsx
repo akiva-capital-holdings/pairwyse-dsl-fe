@@ -7,7 +7,7 @@ const Footer = () => {
     <div className="footerContainer">
       <div className="logoContainer">
         <div style={{ cursor: 'pointer' }} className="logo">
-          <img src={logo} style={{ height: 60 }} />
+          <img src={logo} id="logo" />
         </div>
         <div className="text">© 2022 Akiva | All Rights Reserved</div>
       </div>

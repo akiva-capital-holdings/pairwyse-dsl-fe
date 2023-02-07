@@ -27,7 +27,7 @@ const Header = ({ onClick }) => {
         }}
         className="logo"
       >
-        <img src={logo} style={{ height: 60 }} />
+        <img src={logo} id="logo" />
       </div>
       {account && (
         <button
