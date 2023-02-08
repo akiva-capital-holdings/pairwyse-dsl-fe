@@ -1,7 +1,8 @@
 ::-webkit-scrollbar:horizontal {
   display: none;
 }
-:root {
+:root, #root{
+  height: 100%;
   --dark_col: #120023;
   --white_color: #FFFFFF;
   --grey_color: #ACA2B5;
@@ -28,11 +29,17 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
+.App{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+#logo{
+  height: 60px;
+}
 a {
   text-decoration: none;
 }
-
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
@@ -45,11 +52,9 @@ button {
   cursor: pointer;
   display: block;
 }
-
 .copy{
   cursor: pointer;
 }
-
 .btn{
  min-width: 113px;
  height: 40px;

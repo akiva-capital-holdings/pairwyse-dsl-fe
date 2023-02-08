@@ -278,13 +278,19 @@ while the current allowance is ${transactionValue?.currentAllowance} ${transacti
             Required Records
           </div>
           <div className="numRecordCoontainer">
-            {requiredRecirds?.map((el, elId) => {
-              return (
-                <div key={elId} className="numRecord">
-                  <div className="textNum">{el}</div>
-                </div>
-              );
-            })}
+            {requiredRecirds.length === 0 ? (
+              <div className="numRecord">
+                <div className="textNum">None</div>
+              </div>
+            ) : (
+              requiredRecirds?.map((el, elId) => {
+                return (
+                  <div key={elId} className="numRecord">
+                    <div className="textNum">{el}</div>
+                  </div>
+                );
+              })
+            )}
           </div>
           {signatories?.map((el, elId) => {
             return (
@@ -302,14 +308,14 @@ while the current allowance is ${transactionValue?.currentAllowance} ${transacti
                 <div style={{ marginTop: '24px' }} className="text">
                   Condition {elId + 1}
                 </div>
-                <div className="lender">{el}</div>
+                <div className="lender text">{el}</div>
               </div>
             );
           })}
           <div style={{ marginTop: '24px' }} className="text">
-            Create a Record
+            Create a Transaction
           </div>
-          <div className="lender">{record}</div>
+          <div className="lender text">{record}</div>
         </div>
       );
     }
@@ -373,7 +379,7 @@ while the current allowance is ${transactionValue?.currentAllowance} ${transacti
           {dropDown()}
           {recordReview()}
           <div style={{ marginTop: '24px' }} className="text">
-            Record Value (in Wei)
+            Transaction Value (in Wei)
           </div>
           <Item
             name="record-value-in-wei"

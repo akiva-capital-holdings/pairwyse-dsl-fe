@@ -61,7 +61,7 @@ export default function getRule(label: string, name: string, v?: string, type?: 
         if (!v) return Promise.resolve();
         if (BigNumber.from(fixValue).gt(MAX_UINT256))
           return Promise.reject(new Error('Invalid number'));
-        if (parseInt(fixValue, 10) < 1) {
+        if (parseInt(fixValue, 10) < 0) {
           return Promise.reject(new Error('Invalid number'));
         }
         if (simbols.test(v)) return Promise.resolve();
