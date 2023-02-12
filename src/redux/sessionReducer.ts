@@ -20,11 +20,18 @@ export const sessionReducer = createSlice({
     changeContractType: (state: RootState, action: PayloadAction<string>) => {
       state.contractType = action.payload;
     },
+    changeTokenAddress: (state: RootState, action: PayloadAction<string>) => {
+      state.tokenAddress = action.payload;
+    },
   },
 });
 
-export const { changeNetworkAction, changeAgreementAddress, changeContractType } =
-  sessionReducer.actions;
+export const {
+  changeNetworkAction,
+  changeAgreementAddress,
+  changeContractType,
+  changeTokenAddress,
+} = sessionReducer.actions;
 
 export const selectSession = (state: RootState) => {
   return state.session;
