@@ -103,6 +103,7 @@ export interface TokenApproval {
   };
   setApprovalSuccess: React.Dispatch<React.SetStateAction<boolean>>;
   setapprovalSubmit: React.Dispatch<React.SetStateAction<boolean>>;
+  setApprovalHash: React.Dispatch<React.SetStateAction<string>>;
 }
 export interface TokenBalanceOf {
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;

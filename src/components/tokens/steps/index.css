@@ -103,7 +103,7 @@
   right: -50%;
 }
 .tokenApprovalRequest .inputMenuType {
-  width: 450px !important;
+  width: 450px ;
 }
 .tokenApprovalRequest .add,
 .tokenBalanceOfRequest .add {

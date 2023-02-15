@@ -10,7 +10,6 @@ import { ReactComponent as Success } from '../../images/successIcon.svg';
 
 import Header from '../header/index';
 import { TokenApprovalRequest, TokenCreationRequest, TokenBalanceOfRequest } from './steps';
-// import { mock, mockSignatories, mockDefinitions } from './mock';
 
 import './index.css';
 
@@ -27,6 +26,7 @@ const TokenPage = () => {
   const [error, setError] = useState(undefined);
   const [tokenInfo, setTokenInfo] = useState(initialTokenInfo);
   // token approval request
+  const [approvalHash, setApprovalHash] = useState('');
   const [approvalSuccess, setApprovalSuccess] = useState(true);
   const [approvalSubmit, setapprovalSubmit] = useState(false);
   // token balance of request
@@ -54,6 +54,7 @@ const TokenPage = () => {
     setbalanceOfSubmit(false);
     setAccountBalance('');
     setError('');
+    setApprovalHash('');
   };
 
   const onChangeStep = (v: number) => {
@@ -68,6 +69,7 @@ const TokenPage = () => {
         setStep(navSteps.stepThree);
         break;
       default:
+        console.error('no step is selected');
     }
   };
 
@@ -90,6 +92,7 @@ const TokenPage = () => {
         tokenInfo={tokenInfo}
         setApprovalSuccess={setApprovalSuccess}
         setapprovalSubmit={setapprovalSubmit}
+        setApprovalHash={setApprovalHash}
       />
     ),
     stepThree: (
@@ -129,7 +132,7 @@ const TokenPage = () => {
     );
   };
 
-  const contentCOnteiner = {
+  const contentConteiner = {
     stepOne: (
       <div className={`recordContainer  ${tokenInfo?.error && !tokenInfo?.address ? 'error' : ''}`}>
         <div className="titleContainer">
@@ -172,9 +175,15 @@ const TokenPage = () => {
           {approvalSuccess && (
             <div style={{ marginTop: '12px' }} className="content">
               <div className="title">
-                {tokenInfo?.error && tokenInfo?.message
-                  ? 'Warning! Error encountered during token approval'
-                  : 'Token Approval Request'}
+                {tokenInfo?.error && tokenInfo?.message ? (
+                  'Warning! Error encountered during token approval'
+                ) : (
+                  <div>
+                    Approval hash
+                    <br />
+                    {shortenedAddress(approvalHash, 9)}
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -262,7 +271,7 @@ const TokenPage = () => {
             <div className="img" />
             <div className="secondaryTitle">Ready to deploy</div>
           </div>
-          {contentCOnteiner[step]}
+          {contentConteiner[step]}
         </div>
       </div>
     </>

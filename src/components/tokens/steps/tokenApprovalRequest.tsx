@@ -1,15 +1,10 @@
 import React, { useState } from 'react';
-import {
-  Button,
-  Input,
-  Form,
-  Spin,
-  //  Dropdown, Menu, Space
-} from 'antd';
+import { Button, Input, Form, Spin } from 'antd';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useMetaMask } from 'metamask-react';
-import { createInstance } from 'utils/helpers';
+import { TransactionReceipt } from 'web3-core';
+import { createInstance, getWei } from 'utils/helpers';
 import { selectUtils } from '../../../redux/utilsReducer';
 import getRule from '../../../utils/validate';
 import { TokenApproval } from '../../../types';
@@ -23,9 +18,11 @@ const TokenApprovalRequest = ({
   tokenInfo,
   setApprovalSuccess,
   setapprovalSubmit,
+  setApprovalHash,
 }: TokenApproval) => {
   const { account } = useMetaMask();
   const [tokenAddress, setTokenAddress] = useState(tokenInfo.address);
+  const [errorTransactionValue, setErrorTransactionValue] = useState(false);
   const [spender, setSpender] = useState('');
   const [amount, setAmount] = useState('');
   const navigate = useNavigate();
@@ -37,12 +34,16 @@ const TokenApprovalRequest = ({
     try {
       if (!error) {
         const tokenContract = createInstance('Token', tokenAddress, utilsProvider);
+        // Check thet sender has anougth ERC20 tokens
         const accountBalance = await tokenContract.methods.balanceOf(account).call();
-
+        // Check current allowance
         const currentAllowance = await tokenContract.methods.allowance(account, spender).call();
         if (currentAllowance < amount && accountBalance >= amount) {
-          // Approve the Agreement to spend ERC20 tokens
-          await tokenContract.methods.approve(spender, amount).send({ from: account });
+          // Approve the account to spend ERC20 tokens
+          const tx: TransactionReceipt = await tokenContract.methods
+            .approve(spender, amount)
+            .send({ from: account });
+          setApprovalHash(tx?.transactionHash);
           setapprovalSubmit(true);
           setApprovalSuccess(true);
         }
@@ -105,7 +106,7 @@ const TokenApprovalRequest = ({
           </div>
           <Item
             name="approval-value-in-wei"
-            validateTrigger="onChange"
+            validateTrigger="onBlur"
             rules={
               amount?.length === 0
                 ? getRule('approval-value-in-wei', 'record-value', amount)
@@ -115,16 +116,25 @@ const TokenApprovalRequest = ({
             <Input
               className="lender"
               onChange={(e) => {
-                form.validateFields(['approval-value-in-wei']).then(() => {
-                  const valueFormatting = String(e?.target?.value.replace(/,/gi, '')).replace(
-                    /(.)(?=(\d{3})+$)/g,
-                    '$1,'
-                  );
-                  form.setFieldsValue({
-                    'approval-value-in-wei': valueFormatting,
+                if (e?.target?.value.length === 0 || e?.target?.value === '0') {
+                  return;
+                }
+                const normalValue = getWei(
+                  e?.target?.value.replace(/[\s.,%]/g, ''),
+                  setErrorTransactionValue
+                );
+                if (!errorTransactionValue) {
+                  form.validateFields(['approval-value-in-wei']).then(() => {
+                    const valueFormatting = String(e?.target?.value.replace(/,/gi, '')).replace(
+                      /(.)(?=(\d{3})+$)/g,
+                      '$1,'
+                    );
+                    form.setFieldsValue({
+                      'approval-value-in-wei': valueFormatting,
+                    });
                   });
-                });
-                setAmount(e?.target?.value.replace(/[\s.,%]/g, ''));
+                }
+                setAmount(normalValue);
               }}
             />
           </Item>

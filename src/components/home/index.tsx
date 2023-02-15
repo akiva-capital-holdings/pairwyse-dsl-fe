@@ -291,7 +291,7 @@ const HomePage = () => {
     );
   };
 
-  const contentCOnteiner = {
+  const contentConteiner = {
     stepOne: recordCheck(),
     stepTwo: (
       <div
@@ -458,7 +458,7 @@ const HomePage = () => {
             <div className="img" />
             <div className="secondaryTitle">Ready to deploy</div>
           </div>
-          {contentCOnteiner[step]}
+          {contentConteiner[step]}
         </div>
       </div>
     </>
