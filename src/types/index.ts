@@ -90,7 +90,6 @@ export interface Token {
 export interface TokenApproval {
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   error: string;
-  setError: React.Dispatch<string>;
   loading: boolean;
   tokenInfo: {
     name: string;
@@ -101,14 +100,18 @@ export interface TokenApproval {
     message: string;
     submit: boolean;
   };
-  setApprovalSuccess: React.Dispatch<React.SetStateAction<boolean>>;
-  setapprovalSubmit: React.Dispatch<React.SetStateAction<boolean>>;
-  setApprovalHash: React.Dispatch<React.SetStateAction<string>>;
+  setApprovalValue: React.Dispatch<
+    React.SetStateAction<{
+      submit: boolean;
+      hash: string;
+      error: boolean;
+      message: string;
+    }>
+  >;
 }
 export interface TokenBalanceOf {
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   error: string;
-  setError: React.Dispatch<string>;
   loading: boolean;
   tokenInfo: {
     name: string;
@@ -119,8 +122,14 @@ export interface TokenBalanceOf {
     message: string;
     submit: boolean;
   };
-  setAccountBalance: React.Dispatch<React.SetStateAction<string>>;
-  setbalanceOfSubmit: React.Dispatch<React.SetStateAction<boolean>>;
+  setbalanceOfValue: React.Dispatch<
+    React.SetStateAction<{
+      value: string;
+      submit: boolean;
+      error: boolean;
+      message: string;
+    }>
+  >;
 }
 
 export interface TransactionValues {

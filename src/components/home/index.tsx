@@ -241,7 +241,7 @@ const HomePage = () => {
           <div className="title">Record</div>
           {isSubmit && iconValue(recordError && !!recordMessage)}
         </div>
-        <div className={`contentCOntainer ${recordError && 'error'}`}>
+        <div className={`contentContainer ${recordError && 'error'}`}>
           <div className="content">
             <div className="title">
               {recordError && recordMessage
@@ -304,7 +304,7 @@ const HomePage = () => {
           {valueDefinitionRequest?.submit &&
             iconValue(valueDefinitionRequest?.error && !!valueDefinitionRequest?.message)}
         </div>
-        <div className={`contentCOntainer ${valueDefinitionRequest?.error ? 'error' : ''}`}>
+        <div className={`contentContainer ${valueDefinitionRequest?.error ? 'error' : ''}`}>
           {valueDefinitionRequest?.value && (
             <div style={{ marginTop: '12px' }} className="content">
               <div className="title">
@@ -334,7 +334,7 @@ const HomePage = () => {
           {valueUpdateRequest?.submit &&
             iconValue(valueUpdateRequest?.error && !!valueUpdateRequest?.message)}
         </div>
-        <div className={`contentCOntainer  ${valueUpdateRequest?.error ? 'error' : ''}`}>
+        <div className={`contentContainer  ${valueUpdateRequest?.error ? 'error' : ''}`}>
           <div className="content">
             <div className="title">
               {valueUpdateRequest?.error && valueUpdateRequest?.message
@@ -367,7 +367,7 @@ const HomePage = () => {
               iconValue(executionValue?.error && !!executionValue?.message)}
           </div>
         </div>
-        <div className={`contentCOntainer  ${executionValue?.error ? 'error' : ''}`}>
+        <div className={`contentContainer  ${executionValue?.error ? 'error' : ''}`}>
           <div className="content">
             <div className="title">
               {executionValue?.error && executionValue?.message

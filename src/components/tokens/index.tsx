@@ -2,7 +2,13 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { notification } from 'antd';
 import { shortenedAddress } from '../../utils/helpers';
-import { initialTokenInfo } from './initialValue';
+import {
+  initialTokenInfo,
+  titleValueApprove,
+  titleValueBalanceOf,
+  initialTokenApprove,
+  initialTokenBalanceOf,
+} from './initialValue';
 import { selectSession } from '../../redux/sessionReducer';
 import { ReactComponent as Copy } from '../../images/copy.svg';
 import { ReactComponent as CloseIcon } from '../../images/closeIcon.svg';
@@ -26,12 +32,9 @@ const TokenPage = () => {
   const [error, setError] = useState(undefined);
   const [tokenInfo, setTokenInfo] = useState(initialTokenInfo);
   // token approval request
-  const [approvalHash, setApprovalHash] = useState('');
-  const [approvalSuccess, setApprovalSuccess] = useState(true);
-  const [approvalSubmit, setapprovalSubmit] = useState(false);
+  const [approvalValue, setApprovalValue] = useState(initialTokenApprove);
   // token balance of request
-  const [accountBalance, setAccountBalance] = useState('');
-  const [balanceOfSubmit, setbalanceOfSubmit] = useState(false);
+  const [balanceOfValue, setbalanceOfValue] = useState(initialTokenBalanceOf);
 
   useEffect(() => {
     setTokenInfo({
@@ -45,16 +48,10 @@ const TokenPage = () => {
     });
   }, []);
 
-  useEffect(() => {
-    console.log(tokenInfo);
-  }, [tokenInfo]);
-
   const reset = () => {
-    setapprovalSubmit(false);
-    setbalanceOfSubmit(false);
-    setAccountBalance('');
     setError('');
-    setApprovalHash('');
+    setApprovalValue(initialTokenApprove);
+    setbalanceOfValue(initialTokenBalanceOf);
   };
 
   const onChangeStep = (v: number) => {
@@ -87,23 +84,18 @@ const TokenPage = () => {
       <TokenApprovalRequest
         setLoading={setLoading}
         error={error}
-        setError={setError}
         loading={loading}
         tokenInfo={tokenInfo}
-        setApprovalSuccess={setApprovalSuccess}
-        setapprovalSubmit={setapprovalSubmit}
-        setApprovalHash={setApprovalHash}
+        setApprovalValue={setApprovalValue}
       />
     ),
     stepThree: (
       <TokenBalanceOfRequest
         setLoading={setLoading}
         error={error}
-        setError={setError}
         loading={loading}
         tokenInfo={tokenInfo}
-        setAccountBalance={setAccountBalance}
-        setbalanceOfSubmit={setbalanceOfSubmit}
+        setbalanceOfValue={setbalanceOfValue}
       />
     ),
   };
@@ -139,7 +131,7 @@ const TokenPage = () => {
           <div className="title">Token</div>
           {tokenInfo?.submit && iconValue(tokenInfo?.error && !!tokenInfo?.message)}
         </div>
-        <div className={`contentCOntainer ${tokenInfo?.error ? 'error' : ''}`}>
+        <div className={`contentContainer ${tokenInfo?.error ? 'error' : ''}`}>
           {tokenInfo?.address && (
             <div style={{ marginTop: '12px' }} className="content">
               <div className="title">
@@ -166,49 +158,61 @@ const TokenPage = () => {
       </div>
     ),
     stepTwo: (
-      <div className={`recordContainer  ${error && approvalSuccess ? 'error' : ''}`}>
+      <div
+        className={`recordContainer  ${
+          approvalValue?.error && !approvalValue?.hash ? 'error' : ''
+        }`}
+      >
         <div className="titleContainer">
           <div className="title">Token</div>
-          {approvalSubmit && iconValue(error && approvalSuccess)}
+          {approvalValue?.submit && iconValue(approvalValue?.error && !!approvalValue?.message)}
         </div>
-        <div className={`contentCOntainer ${error ? 'error' : ''}`}>
-          {approvalSuccess && (
-            <div style={{ marginTop: '12px' }} className="content">
-              <div className="title">
-                {tokenInfo?.error && tokenInfo?.message ? (
-                  'Warning! Error encountered during token approval'
-                ) : (
-                  <div>
-                    Approval hash
-                    <br />
-                    {shortenedAddress(approvalHash, 9)}
-                  </div>
-                )}
-              </div>
+        <div className={`contentContainer  ${approvalValue?.error ? 'error' : ''}`}>
+          <div className="content">
+            <div className="title">
+              {approvalValue?.error && approvalValue?.message
+                ? 'Warning! Error encountered during contract execution'
+                : titleValueApprove(!!approvalValue?.hash)}
             </div>
-          )}
+            {!!approvalValue?.hash && (
+              <div className="valueContainer">
+                <div className="value">{shortenedAddress(approvalValue?.hash, 9)}</div>
+                <Copy
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => onCopyClick(approvalValue?.hash)}
+                />
+              </div>
+            )}
+          </div>
         </div>
       </div>
     ),
     stepThree: (
-      <div className={`recordContainer  ${error && !accountBalance ? 'error' : ''}`}>
+      <div
+        className={`recordContainer  ${
+          balanceOfValue?.error && !balanceOfValue?.value ? 'error' : ''
+        }`}
+      >
         <div className="titleContainer">
           <div className="title">Token</div>
-          {balanceOfSubmit && iconValue(error && !!accountBalance)}
+          {balanceOfValue?.submit && iconValue(balanceOfValue?.error && !!balanceOfValue?.message)}
         </div>
-        <div className={`contentCOntainer  ${error ? 'error' : ''}`}>
+        <div className={`contentContainer  ${balanceOfValue?.error ? 'error' : ''}`}>
           <div className="content">
             <div className="title">
-              {error && accountBalance ? (
-                'Warning! Error encountered during contract execution'
-              ) : (
-                <div>
-                  Balance Of Request
-                  <br />
-                  {accountBalance}
-                </div>
-              )}
+              {balanceOfValue?.error && balanceOfValue?.message
+                ? 'Warning! Error encountered during contract execution'
+                : titleValueBalanceOf(!!balanceOfValue?.value)}
             </div>
+            {!!balanceOfValue?.value && (
+              <div className="valueContainer">
+                <div className="value">{balanceOfValue?.value}</div>
+                <Copy
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => onCopyClick(balanceOfValue?.value)}
+                />
+              </div>
+            )}
           </div>
         </div>
       </div>

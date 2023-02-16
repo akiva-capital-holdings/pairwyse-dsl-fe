@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useMetaMask } from 'metamask-react';
 import { TransactionReceipt } from 'web3-core';
-import { createInstance, getWei } from 'utils/helpers';
+import { createInstance, getMultiplication } from 'utils/helpers';
 import { selectUtils } from '../../../redux/utilsReducer';
 import getRule from '../../../utils/validate';
 import { TokenApproval } from '../../../types';
@@ -16,9 +16,7 @@ const TokenApprovalRequest = ({
   error,
   loading,
   tokenInfo,
-  setApprovalSuccess,
-  setapprovalSubmit,
-  setApprovalHash,
+  setApprovalValue,
 }: TokenApproval) => {
   const { account } = useMetaMask();
   const [tokenAddress, setTokenAddress] = useState(tokenInfo.address);
@@ -43,16 +41,30 @@ const TokenApprovalRequest = ({
           const tx: TransactionReceipt = await tokenContract.methods
             .approve(spender, amount)
             .send({ from: account });
-          setApprovalHash(tx?.transactionHash);
-          setapprovalSubmit(true);
-          setApprovalSuccess(true);
+          setApprovalValue({
+            submit: true,
+            hash: tx?.transactionHash,
+            error: false,
+            message: '',
+          });
+        } else {
+          setApprovalValue({
+            submit: true,
+            hash: '',
+            error: true,
+            message: 'insufficient funds or the allowance has already been granted',
+          });
         }
       }
       setLoading(false);
     } catch (e) {
       console.error(e);
-      setapprovalSubmit(true);
-      setApprovalSuccess(false);
+      setApprovalValue({
+        submit: true,
+        hash: '',
+        error: true,
+        message: e?.message,
+      });
       setLoading(false);
     }
   };
@@ -119,7 +131,7 @@ const TokenApprovalRequest = ({
                 if (e?.target?.value.length === 0 || e?.target?.value === '0') {
                   return;
                 }
-                const normalValue = getWei(
+                const normalValue = getMultiplication(
                   e?.target?.value.replace(/[\s.,%]/g, ''),
                   setErrorTransactionValue
                 );

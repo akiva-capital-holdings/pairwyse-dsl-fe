@@ -13,11 +13,9 @@ const { Item } = Form;
 const TokenBalanceOfRequest = ({
   setLoading,
   error,
-  setError,
   loading,
   tokenInfo,
-  setAccountBalance,
-  setbalanceOfSubmit,
+  setbalanceOfValue,
 }: TokenBalanceOf) => {
   const { account } = useMetaMask();
   const [tokenAddress, setTokenAddress] = useState(tokenInfo.address);
@@ -31,16 +29,24 @@ const TokenBalanceOfRequest = ({
     try {
       if (!error) {
         const tokenContract = createInstance('Token', tokenAddress, utilsProvider);
-        const walletBalance = await tokenContract.methods.balanceOf(walletAddress).call();
-        setbalanceOfSubmit(true);
-        setAccountBalance(walletBalance);
+        const tx = await tokenContract.methods.balanceOf(walletAddress).call();
+        setbalanceOfValue({
+          value: tx,
+          submit: true,
+          error: false,
+          message: '',
+        });
+        console.log(tx);
       }
       setLoading(false);
     } catch (e) {
       console.error(e);
-      setbalanceOfSubmit(true);
-      setAccountBalance('');
-      setError('Сheck that the address is correct');
+      setbalanceOfValue({
+        value: '',
+        submit: true,
+        error: true,
+        message: e?.message,
+      });
       setLoading(false);
     }
   };

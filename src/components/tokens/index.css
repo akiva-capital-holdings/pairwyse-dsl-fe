@@ -28,7 +28,7 @@
   color: var(--dark_col);
   margin-bottom: 32px;
 }
-.stepsContentContainer{
+.stepscontentContainer{
   min-width: 680px;
 }
 .homePage .menu{
@@ -189,7 +189,7 @@
   color: #61E366;
 } 
 
-.contentCOntainer .content{
+.contentContainer .content{
   width: 294px;
   min-height: 82px;
   max-height: 100px;
@@ -197,7 +197,7 @@
   border-radius: 20px;
   padding: 18px 24px;
 }
-.contentCOntainer .content .title {
+.contentContainer .content .title {
   font-family: var(--font_family_bold);
   font-style: normal;
   font-weight: 800;
@@ -207,7 +207,7 @@
   margin-bottom: 6px;
 
 }
-.recordContainer .contentCOntainer .content .valueContainer {
+.recordContainer .contentContainer .content .valueContainer {
   justify-content: space-between;
   font-family: var(--font_family_medium);
   font-style: normal;
@@ -219,7 +219,7 @@
   overflow: hidden;
   display: flex;
 }
-.recordContainer.error .contentCOntainer .content .title {
+.recordContainer.error .contentContainer .content .title {
   font-family: var(--font_family_medium);
   font-style: normal;
   font-weight: 500;
@@ -227,7 +227,7 @@
   line-height: 20px;
   color: #E61F1F;
   }
-.contentCOntainer  .content .valueContainer .value{
+.contentContainer  .content .valueContainer .value{
   max-width: 220px;
   text-overflow: ellipsis;
   overflow: hidden;
