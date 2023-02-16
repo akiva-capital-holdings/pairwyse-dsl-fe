@@ -56,7 +56,6 @@ export const getMultiplication = (fn: string, setErrorRequiredRecords) => {
   array.forEach((el) => {
     result *= Number(getWei(el, setErrorRequiredRecords));
   });
-  console.log(result);
   return result.toString();
 };
 
