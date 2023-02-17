@@ -3,7 +3,7 @@ import { Form, Button, Input, Spin } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useMetaMask } from 'metamask-react';
-import { getContractABI, getContractBytecode } from 'utils/helpers';
+import { getContractABI, getContractBytecode, getMultiplication } from 'utils/helpers';
 import { Contract } from 'ethers';
 import getRule, { validationAgreementModel } from '../../../utils/validate';
 import { changeTokenAddress } from '../../../redux/sessionReducer';
@@ -19,6 +19,8 @@ const TokenCreationRequest = ({ setLoading, error, setError, loading, setTokenIn
   const [tokenName, setTokenName] = useState<string>();
   const [tokenSymbol, setTokenSymbol] = useState<string>();
   const [tokenSupply, setTokenSupply] = useState<string>();
+  const [tokenDecimal, setTokenDecimal] = useState<string>();
+  const [errorTransactionValue, setErrorTransactionValue] = useState(false);
   const [form] = Form.useForm();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -34,7 +36,7 @@ const TokenCreationRequest = ({ setLoading, error, setError, loading, setTokenIn
         tokenInstance
           .deploy({
             data: getContractBytecode('Token'),
-            arguments: [tokenName, tokenSymbol, tokenSypplyInWei],
+            arguments: [tokenName, tokenSymbol, tokenSypplyInWei, tokenDecimal],
           })
           .send({ from: account })
           .on('error', (err) => {
@@ -108,11 +110,30 @@ const TokenCreationRequest = ({ setLoading, error, setError, loading, setTokenIn
           />
         </Item>
         <div style={{ marginTop: '24px' }} className="text">
+          Decimal place
+        </div>
+        <Item
+          name="token-decimal"
+          validateTrigger="onChange"
+          rules={
+            tokenSupply?.length === 0
+              ? getRule('token-decimal', 'record-value', tokenDecimal)
+              : getRule('token-decimal', 'decimal-value', tokenDecimal)
+          }
+        >
+          <Input
+            className="lender"
+            onChange={(e) => {
+              setTokenDecimal(e?.target?.value);
+            }}
+          />
+        </Item>
+        <div style={{ marginTop: '24px' }} className="text">
           Token supply
         </div>
         <Item
           name="value-in-wei"
-          validateTrigger="onChange"
+          validateTrigger="onBlur"
           rules={
             tokenSupply?.length === 0
               ? getRule('value-in-wei', 'record-value', tokenSupply)
@@ -122,16 +143,25 @@ const TokenCreationRequest = ({ setLoading, error, setError, loading, setTokenIn
           <Input
             className="lender"
             onChange={(e) => {
-              form.validateFields(['value-in-wei']).then(() => {
-                const valueFormatting = String(e?.target?.value.replace(/,/gi, '')).replace(
-                  /(.)(?=(\d{3})+$)/g,
-                  '$1,'
-                );
-                form.setFieldsValue({
-                  'value-in-wei': valueFormatting,
+              if (e?.target?.value.length === 0 || e?.target?.value === '0') {
+                return;
+              }
+              const normalValue = getMultiplication(
+                e?.target?.value.replace(/[\s.,%]/g, ''),
+                setErrorTransactionValue
+              );
+              if (!errorTransactionValue) {
+                form.validateFields(['value-in-wei']).then(() => {
+                  const valueFormatting = String(e?.target?.value.replace(/,/gi, '')).replace(
+                    /(.)(?=(\d{3})+$)/g,
+                    '$1,'
+                  );
+                  form.setFieldsValue({
+                    'value-in-wei': valueFormatting,
+                  });
                 });
-              });
-              setTokenSupply(e?.target?.value.replace(/[\s.,%]/g, ''));
+              }
+              setTokenSupply(normalValue);
             }}
           />
         </Item>

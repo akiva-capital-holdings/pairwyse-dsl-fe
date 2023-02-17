@@ -3,7 +3,8 @@ import { Button, Input, Form, Spin } from 'antd';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useMetaMask } from 'metamask-react';
-import { createInstance } from 'utils/helpers';
+import { ethers } from 'ethers';
+import { createInstance, getTokenDetails } from 'utils/helpers';
 import { selectUtils } from '../../../redux/utilsReducer';
 import getRule from '../../../utils/validate';
 import { TokenBalanceOf } from '../../../types';
@@ -26,17 +27,19 @@ const TokenBalanceOfRequest = ({
 
   const tokenApproval = async () => {
     setLoading(true);
+    let tokenDecimals: string;
     try {
       if (!error) {
         const tokenContract = createInstance('Token', tokenAddress, utilsProvider);
+        ({ tokenDecimals } = await getTokenDetails(tokenContract));
         const tx = await tokenContract.methods.balanceOf(walletAddress).call();
+        const targetAllowanceNoDecimals = ethers.utils.formatUnits(tx, tokenDecimals);
         setbalanceOfValue({
-          value: tx,
+          value: targetAllowanceNoDecimals,
           submit: true,
           error: false,
           message: '',
         });
-        console.log(tx);
       }
       setLoading(false);
     } catch (e) {
