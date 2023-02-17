@@ -49,6 +49,16 @@ export const getWei = (amount: string, setErrorRequiredRecords) => {
   return normalAmount;
 };
 
+// multiplication values in string(including decimal number with e symbol (1e18))
+export const getMultiplication = (fn: string, setErrorRequiredRecords) => {
+  let result = 1;
+  const array = fn.split('*');
+  array.forEach((el) => {
+    result *= Number(getWei(el, setErrorRequiredRecords));
+  });
+  return result.toString();
+};
+
 export const getContractABI = (name: ContractName): AbiItem[] => {
   switch (name) {
     case contractNames.Agreement:

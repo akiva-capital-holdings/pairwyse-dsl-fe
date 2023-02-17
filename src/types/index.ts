@@ -2,6 +2,7 @@ export interface MetaMaskError {
   code: string | number;
   message: string;
 }
+export interface BalanceOf {}
 
 export interface MockType {
   date: string;
@@ -66,6 +67,69 @@ export interface Agreement {
   tokenCreator: boolean;
   setTokenCreator: React.Dispatch<React.SetStateAction<boolean>>;
   setMultiTrancheAgreement: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export interface Token {
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  setError: React.Dispatch<string>;
+  error: string;
+  loading: boolean;
+  setTokenInfo: React.Dispatch<
+    React.SetStateAction<{
+      name: string;
+      symbol: string;
+      supply: string;
+      address: string;
+      error: boolean;
+      message: string;
+      submit: boolean;
+    }>
+  >;
+}
+
+export interface TokenApproval {
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  error: string;
+  loading: boolean;
+  tokenInfo: {
+    name: string;
+    symbol: string;
+    supply: string;
+    address: string;
+    error: boolean;
+    message: string;
+    submit: boolean;
+  };
+  setApprovalValue: React.Dispatch<
+    React.SetStateAction<{
+      submit: boolean;
+      hash: string;
+      error: boolean;
+      message: string;
+    }>
+  >;
+}
+export interface TokenBalanceOf {
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  error: string;
+  loading: boolean;
+  tokenInfo: {
+    name: string;
+    symbol: string;
+    supply: string;
+    address: string;
+    error: boolean;
+    message: string;
+    submit: boolean;
+  };
+  setbalanceOfValue: React.Dispatch<
+    React.SetStateAction<{
+      value: string;
+      submit: boolean;
+      error: boolean;
+      message: string;
+    }>
+  >;
 }
 
 export interface TransactionValues {

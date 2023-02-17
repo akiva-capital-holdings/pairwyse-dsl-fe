@@ -393,16 +393,26 @@ while the current allowance is ${transactionValue?.currentAllowance} ${transacti
             <Input
               className="lender"
               onChange={(e) => {
-                form.validateFields(['record-value-in-wei']).then(() => {
-                  const valueFormatting = String(e?.target?.value.replace(/,/gi, '')).replace(
-                    /(.)(?=(\d{3})+$)/g,
-                    '$1,'
-                  );
-                  form.setFieldsValue({
-                    'record-value-in-wei': valueFormatting,
+                if (e?.target?.value.length === 0 || e?.target?.value === '0') {
+                  return;
+                }
+                const normalValue = getWei(
+                  e?.target?.value.replace(/[\s.,%]/g, ''),
+                  setTransferFromError
+                );
+                console.log(normalValue);
+                if (!transferFromError) {
+                  form.validateFields(['record-value-in-wei']).then(() => {
+                    const valueFormatting = String(e?.target?.value.replace(/,/gi, '')).replace(
+                      /(.)(?=(\d{3})+$)/g,
+                      '$1,'
+                    );
+                    form.setFieldsValue({
+                      'record-value-in-wei': valueFormatting,
+                    });
                   });
-                });
-                setRecordValue(e?.target?.value.replace(/[\s.,%]/g, ''));
+                }
+                setRecordValue(normalValue);
               }}
             />
           </Item>

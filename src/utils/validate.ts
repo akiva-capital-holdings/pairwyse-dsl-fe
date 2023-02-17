@@ -122,6 +122,17 @@ export default function getRule(label: string, name: string, v?: string, type?: 
     };
   };
 
+  const validateDecimalValue = () => {
+    return {
+      validator: () => {
+        if (Number(v) < 0 || Number(v) > 255) {
+          return Promise.reject(new Error('Invalid number'));
+        }
+        return Promise.resolve();
+      },
+    };
+  };
+
   switch (name) {
     case 'requestorLabel':
       return [validateMinMax(0, 20), validateSpace];
@@ -146,6 +157,10 @@ export default function getRule(label: string, name: string, v?: string, type?: 
       return [validateId];
     case 'record-value-in-wei':
       return [validateId];
+    case 'approval-value-in-wei':
+      return [validateId];
+    case 'decimal-value':
+      return [validateId, validateDecimalValue];
     case 'record-value':
       return [];
     default:

@@ -1,0 +1,223 @@
+.tokenCreationRequest,
+.tokenApprovalRequest,
+.tokenBalanceOfRequest,
+.executeRequest {
+  margin-top: 60px;
+}
+.tokenCreationRequest .title,
+.tokenApprovalRequest .title,
+.tokenBalanceOfRequest .title{
+  font-family: var(--font_family_bold);
+  font-style: normal;
+  font-weight: var(--font_weight_bolder);
+  font-size: var(--font_size_h2) !important;
+  line-height: 45px;
+  color: var(--dark_col);
+}
+.tokenCreationRequest .text,
+.tokenApprovalRequest .text,
+.tokenBalanceOfRequest .text{
+  font-family: var(--font_family);
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 15px;
+  color: var(--grey_color);
+  margin-bottom: 8px;
+}
+.tokenCreationRequest .lender,
+.tokenApprovalRequest .lender,
+.tokenBalanceOfRequest .lender{
+  background: var(--background_color);
+  border-radius: 8px;
+  max-width: 680px;
+  width: 100% !important;
+  padding: 12px 40px 12px 15px;
+  min-height: 48px;
+  font-family: var(--font_family);
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  color: var(--dark_col) !important;
+}
+.tokenCreationRequest .btns,
+.tokenBalanceOfRequest .btns {
+  margin-top: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.tokenApprovalRequest .specificationInput,
+.tokenBalanceOfRequest .specificationInput {
+  position: relative;
+}
+.tokenApprovalRequest .specificationInput {
+  max-width: 450px;
+}
+.tokenApprovalRequest .container {
+  background: #f7f5f9;
+  border-radius: 20px;
+  width: 680px;
+  height: 119px;
+  padding: 20px 28px 28px 28px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.tokenApprovalRequest .btnType {
+  background: #eae6ee;
+  border-radius: 8px;
+  width: 150px;
+  height: 48px;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  color: #120023;
+  text-align: left;
+  border: unset;
+  padding-left: 16px;
+}
+.tokenApprovalRequest .container > div > span {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 15px;
+  color: #aca2b5;
+  display: inline-block;
+  margin-bottom: 8px;
+}
+.tokenApprovalRequest .container:last-child {
+  margin-bottom: 0;
+}
+.tokenApprovalRequest .del,
+.tokenBalanceOfRequest .del {
+  position: absolute;
+  right: 16px;
+  background-color: inherit;
+  top: 12px;
+  border: none;
+}
+.tokenApprovalRequest .del {
+  right: -50%;
+}
+.tokenApprovalRequest .inputMenuType {
+  width: 450px ;
+}
+.tokenApprovalRequest .add,
+.tokenBalanceOfRequest .add {
+  font-family: var(--font_family_bold);
+  font-style: normal;
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 20px;
+  color: var(--dark_col);
+  border: none;
+  background-color: inherit;
+  margin-left: auto;
+  margin-top: 12px;
+}
+.tokenApprovalRequest .cancel,
+.tokenBalanceOfRequest .cancel {
+  font-family: var(--font_family_bold);
+  font-style: normal;
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 20px;
+  color: var(--grey_color);
+  border: none;
+}
+.tokenApprovalRequest .btnsContainer,
+.tokenBalanceOfRequest .btnsContainer{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 80px;
+}
+.value {
+  font-size: 16px;
+  font-family: var(--font_family);
+  font-weight: 500;
+}
+.tokenBalanceOfRequest .requiredRecords {
+  height: 48px;
+  position: relative;
+}
+.tokenBalanceOfRequest .btnRequiredRecords {
+  right: 0;
+  position: absolute;
+  top: -8%;
+}
+.tokenBalanceOfRequest .numRecordCoontainer{
+  display: flex;
+  max-width: 680px;
+  flex-wrap: wrap;
+}
+.tokenBalanceOfRequest .error {
+  padding-top: 14px;
+}
+.tokenBalanceOfRequest .numRecord{
+  display: flex;
+  height: 35px;
+  background: #120023;
+  border-radius: 30px;
+  padding: 10px 9px 7px 13px;
+  color: #fff;
+  margin-right: 8px;
+  margin-bottom: 8px;
+}
+.tokenBalanceOfRequest .numRecord .textNum{
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 15px;
+  color: #ffffff;
+  margin-right: 8px;
+}
+.tokenBalanceOfRequest .numRecord .btnNum {
+  border-radius: 50%;
+  border: unset;
+  width: 14px;
+  height: 14px;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #eae6ee;
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+.mainButton {
+  color: #aca2b5;
+}
+.transactionWarningBack {
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(0, 0, 0, 0.4);
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: scale(0);
+}
+
+.transactionWarningBack.active {
+  transform: scale(1)
+}
+.transactionWarningContainer{
+    width: 400px;
+    min-height: 200px;
+    background: #F7F5F9;
+    border-radius: 20px;
+    margin-top: 32px;
+    padding: 32px 28px 28px 28px;
+    color: #E61F1F;
+    font-family: var(--font_weight_bolder);
+    font-style: normal;
+    font-weight: 800;
+    font-size: 16px;
+    line-height: 20px;
+}
