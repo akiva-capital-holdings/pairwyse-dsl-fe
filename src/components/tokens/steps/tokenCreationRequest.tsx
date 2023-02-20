@@ -30,13 +30,13 @@ const TokenCreationRequest = ({ setLoading, error, setError, loading, setTokenIn
     try {
       if (!error) {
         const tokenInstance = new utilsProvider.eth.Contract(getContractABI('Token'));
-        const tokenSypplyInWei = (Number(tokenSupply) * Number(1e18)).toLocaleString('fullwide', {
+        const tokenSypplyWithDecimals = Number(tokenSupply).toLocaleString('fullwide', {
           useGrouping: false,
         });
         tokenInstance
           .deploy({
             data: getContractBytecode('Token'),
-            arguments: [tokenName, tokenSymbol, tokenSypplyInWei, tokenDecimal],
+            arguments: [tokenName, tokenSymbol, tokenSypplyWithDecimals, tokenDecimal],
           })
           .send({ from: account })
           .on('error', (err) => {
@@ -46,7 +46,7 @@ const TokenCreationRequest = ({ setLoading, error, setError, loading, setTokenIn
             setTokenInfo({
               name: tokenName,
               symbol: tokenSymbol,
-              supply: tokenSypplyInWei,
+              supply: tokenSypplyWithDecimals,
               address: newTokenInstance.options.address,
               error: false,
               message: '',

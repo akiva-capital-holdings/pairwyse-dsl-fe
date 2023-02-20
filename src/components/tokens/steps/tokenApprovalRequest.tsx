@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useMetaMask } from 'metamask-react';
 import { TransactionReceipt } from 'web3-core';
 import { createInstance, getMultiplication } from 'utils/helpers';
+import { BigNumber } from 'ethers';
 import { selectUtils } from '../../../redux/utilsReducer';
 import getRule from '../../../utils/validate';
 import { TokenApproval } from '../../../types';
@@ -33,11 +34,16 @@ const TokenApprovalRequest = ({
       if (!error) {
         const tokenContract = createInstance('Token', tokenAddress, utilsProvider);
         // Check thet sender has anougth ERC20 tokens
-        const accountBalance = await tokenContract.methods.balanceOf(account).call();
-        if (accountBalance >= amount) {
+        const amountWithDecimals = Number(amount).toLocaleString('fullwide', {
+          useGrouping: false,
+        });
+        const accountBalance = BigNumber.from(
+          await tokenContract.methods.balanceOf(account).call()
+        );
+        if (accountBalance.gte(amountWithDecimals)) {
           // Approve the account to spend ERC20 tokens
           const tx: TransactionReceipt = await tokenContract.methods
-            .approve(spender, amount)
+            .approve(spender, amountWithDecimals)
             .send({ from: account });
           setApprovalValue({
             submit: true,
@@ -112,7 +118,7 @@ const TokenApprovalRequest = ({
             />
           </Item>
           <div style={{ marginTop: '24px' }} className="text">
-            Transaction Value (in Wei)
+            Amount (with decimals)
           </div>
           <Item
             name="approval-value-in-wei"
