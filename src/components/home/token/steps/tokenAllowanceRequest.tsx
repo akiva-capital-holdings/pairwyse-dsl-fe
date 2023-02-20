@@ -5,9 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import { useMetaMask } from 'metamask-react';
 import { ethers } from 'ethers';
 import { createInstance, getTokenDetails } from 'utils/helpers';
-import { selectUtils } from '../../../redux/utilsReducer';
-import getRule from '../../../utils/validate';
-import { TokenAllowance } from '../../../types';
+import { selectUtils } from '../../../../redux/utilsReducer';
+import getRule from '../../../../utils/validate';
+import { TokenAllowance } from '../../../../types';
 
 const { Item } = Form;
 
@@ -82,6 +82,7 @@ const TokenAllowanceRequest = ({
           >
             <Input
               className="lender"
+              placeholder="ERC20 token address"
               defaultValue={tokenAddress}
               onChange={(e) => {
                 return setTokenAddress(e?.target?.value);
@@ -100,6 +101,7 @@ const TokenAllowanceRequest = ({
           >
             <Input
               className="lender"
+              placeholder="Owner address"
               defaultValue={ownerAddress}
               onChange={(e) => {
                 return setOwnerAddress(e?.target?.value);
@@ -118,6 +120,7 @@ const TokenAllowanceRequest = ({
           >
             <Input
               className="lender"
+              placeholder="Spender address"
               defaultValue={spenderAddress}
               onChange={(e) => {
                 return setSpenderAddress(e?.target?.value);

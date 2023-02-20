@@ -1,3 +1,5 @@
+import { contractNames } from '../utils/constants';
+
 export interface MetaMaskError {
   code: string | number;
   message: string;
@@ -270,3 +272,5 @@ export interface Update {
   loading: boolean;
   dslId: string;
 }
+
+export type ContractName = keyof typeof contractNames;

@@ -5,10 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import { useMetaMask } from 'metamask-react';
 import { TransactionReceipt } from 'web3-core';
 import { createInstance, getMultiplication } from 'utils/helpers';
-import { BigNumber } from 'ethers';
-import { selectUtils } from '../../../redux/utilsReducer';
-import getRule from '../../../utils/validate';
-import { TokenApproval } from '../../../types';
+import { selectUtils } from '../../../../redux/utilsReducer';
+import getRule from '../../../../utils/validate';
+import { TokenApproval } from '../../../../types';
 
 const { Item } = Form;
 
@@ -37,10 +36,8 @@ const TokenApprovalRequest = ({
         const amountWithDecimals = Number(amount).toLocaleString('fullwide', {
           useGrouping: false,
         });
-        const accountBalance = BigNumber.from(
-          await tokenContract.methods.balanceOf(account).call()
-        );
-        if (accountBalance.gte(amountWithDecimals)) {
+        const accountBalance = await tokenContract.methods.balanceOf(account).call();
+        if (Number(accountBalance) >= Number(amountWithDecimals)) {
           // Approve the account to spend ERC20 tokens
           const tx: TransactionReceipt = await tokenContract.methods
             .approve(spender, amountWithDecimals)
@@ -95,6 +92,7 @@ const TokenApprovalRequest = ({
           >
             <Input
               className="lender"
+              placeholder="ERC20 token address"
               defaultValue={tokenAddress}
               onChange={(e) => {
                 return setTokenAddress(e?.target?.value);
@@ -111,6 +109,7 @@ const TokenApprovalRequest = ({
           >
             <Input
               className="lender"
+              placeholder="Spender address"
               defaultValue={spender}
               onChange={(e) => {
                 return setSpender(e?.target?.value);
@@ -131,6 +130,7 @@ const TokenApprovalRequest = ({
           >
             <Input
               className="lender"
+              placeholder="Amount to approve with decimals"
               onChange={(e) => {
                 if (e?.target?.value.length === 0 || e?.target?.value === '0') {
                   return;

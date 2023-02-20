@@ -13,9 +13,9 @@ import { v4 as uuidv4 } from 'uuid';
 import { selectUtils } from 'redux/utilsReducer';
 import { createInstance, hex4Bytes } from 'utils/helpers';
 import { TransactionReceipt } from 'web3-core';
-import getRule from '../../../utils/validate';
-import { ReactComponent as Delete } from '../../../images/delete.svg';
-import { Definition } from '../../../types';
+import getRule from '../../../../utils/validate';
+import { ReactComponent as Delete } from '../../../../images/delete.svg';
+import { Definition } from '../../../../types';
 
 const { Item } = Form;
 

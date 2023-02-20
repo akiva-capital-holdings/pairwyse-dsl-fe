@@ -5,10 +5,10 @@ import { useNavigate } from 'react-router-dom';
 import { useMetaMask } from 'metamask-react';
 import { getContractABI, getContractBytecode, getMultiplication } from 'utils/helpers';
 import { Contract } from 'ethers';
-import getRule, { validationAgreementModel } from '../../../utils/validate';
-import { changeTokenAddress } from '../../../redux/sessionReducer';
-import { selectUtils } from '../../../redux/utilsReducer';
-import { Token } from '../../../types';
+import getRule, { validationAgreementModel } from '../../../../utils/validate';
+import { changeTokenAddress } from '../../../../redux/sessionReducer';
+import { selectUtils } from '../../../../redux/utilsReducer';
+import { Token } from '../../../../types';
 import './index.css';
 
 const { Item } = Form;
@@ -85,7 +85,7 @@ const TokenCreationRequest = ({ setLoading, error, setError, loading, setTokenIn
         >
           <Input
             className="lender"
-            placeholder="Enter name of Token"
+            placeholder="ERC20 token name"
             defaultValue={tokenName}
             onChange={(e) => {
               return setTokenName(e?.target?.value);
@@ -102,7 +102,7 @@ const TokenCreationRequest = ({ setLoading, error, setError, loading, setTokenIn
         >
           <Input
             className="lender"
-            placeholder="Enter symbol of Token"
+            placeholder="ERC20 token symbol"
             defaultValue={tokenSymbol}
             onChange={(e) => {
               return setTokenSymbol(e?.target?.value);
@@ -110,7 +110,7 @@ const TokenCreationRequest = ({ setLoading, error, setError, loading, setTokenIn
           />
         </Item>
         <div style={{ marginTop: '24px' }} className="text">
-          Decimal place
+          Decimal places
         </div>
         <Item
           name="token-decimal"
@@ -123,6 +123,7 @@ const TokenCreationRequest = ({ setLoading, error, setError, loading, setTokenIn
         >
           <Input
             className="lender"
+            placeholder="18"
             onChange={(e) => {
               setTokenDecimal(e?.target?.value);
             }}
@@ -142,6 +143,7 @@ const TokenCreationRequest = ({ setLoading, error, setError, loading, setTokenIn
         >
           <Input
             className="lender"
+            placeholder="1e6 * 1e18"
             onChange={(e) => {
               if (e?.target?.value.length === 0 || e?.target?.value === '0') {
                 return;

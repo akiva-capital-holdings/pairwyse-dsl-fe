@@ -1,7 +1,7 @@
 import { Contract, ethers } from 'ethers';
 import _ from 'lodash';
 import { AbiItem } from 'web3-utils';
-import { MetaMaskError } from '../types';
+import { ContractName, MetaMaskError } from '../types';
 import { abi as agreementABI, bytecode as agreementBytecode } from '../data/agreement.json';
 import { abi as contextFactoryABI } from '../data/contextFactory.json';
 import { abi as tokenABI, bytecode as tokenBytecode } from '../data/token.json';
@@ -10,14 +10,7 @@ import {
   bytecode as multiTrancheBytecode,
 } from '../data/multiTranche.json';
 import allNetworks from './networks.json';
-
-const contractNames = {
-  Agreement: 'Agreement',
-  ContextFactory: 'ContextFactory',
-  Token: 'Token',
-  MultiTranche: 'MultiTranche',
-};
-type ContractName = keyof typeof contractNames;
+import { contractNames } from './constants';
 
 // Convert string of record to array of string
 export const splitDSLString = (expr: string) =>

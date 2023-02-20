@@ -6,10 +6,10 @@ import { useNavigate } from 'react-router-dom';
 import { useMetaMask } from 'metamask-react';
 import { getContractABI, getContractBytecode } from 'utils/helpers';
 import { Contract } from 'ethers';
-import getRule, { validationAgreementModel } from '../../../utils/validate';
-import { selectUtils } from '../../../redux/utilsReducer';
-import { changeAgreementAddress, changeContractType } from '../../../redux/sessionReducer';
-import { Agreement } from '../../../types';
+import getRule, { validationAgreementModel } from '../../../../utils/validate';
+import { selectUtils } from '../../../../redux/utilsReducer';
+import { changeAgreementAddress, changeContractType } from '../../../../redux/sessionReducer';
+import { Agreement } from '../../../../types';
 import './index.css';
 
 const { Item } = Form;

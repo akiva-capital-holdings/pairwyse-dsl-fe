@@ -7,8 +7,8 @@ import { createInstance, hex4Bytes, splitDSLString, getWei, getTokenDetails } fr
 import { selectUtils } from 'redux/utilsReducer';
 import { useMetaMask } from 'metamask-react';
 import { ethers } from 'ethers';
-import { Execution, TransactionValues } from '../../../types';
-import getRule from '../../../utils/validate';
+import { Execution, TransactionValues } from '../../../../types';
+import getRule from '../../../../utils/validate';
 
 const { Item } = Form;
 

@@ -5,9 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import { useMetaMask } from 'metamask-react';
 import { ethers } from 'ethers';
 import { createInstance, getTokenDetails } from 'utils/helpers';
-import { selectUtils } from '../../../redux/utilsReducer';
-import getRule from '../../../utils/validate';
-import { TokenBalanceOf } from '../../../types';
+import { selectUtils } from '../../../../redux/utilsReducer';
+import getRule from '../../../../utils/validate';
+import { TokenBalanceOf } from '../../../../types';
 
 const { Item } = Form;
 
@@ -76,6 +76,7 @@ const TokenBalanceOfRequest = ({
           >
             <Input
               className="lender"
+              placeholder="ERC20 token address"
               defaultValue={tokenAddress}
               onChange={(e) => {
                 return setTokenAddress(e?.target?.value);
@@ -83,7 +84,7 @@ const TokenBalanceOfRequest = ({
             />
           </Item>
           <div style={{ marginTop: '24px' }} className="text">
-            Wallet Address
+            Owner Address
           </div>
           <Item
             name="spenderAddress"
@@ -92,6 +93,7 @@ const TokenBalanceOfRequest = ({
           >
             <Input
               className="lender"
+              placeholder="Owner address"
               defaultValue={walletAddress}
               onChange={(e) => {
                 return setWalletAddress(e?.target?.value);
