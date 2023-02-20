@@ -34,9 +34,7 @@ const TokenApprovalRequest = ({
         const tokenContract = createInstance('Token', tokenAddress, utilsProvider);
         // Check thet sender has anougth ERC20 tokens
         const accountBalance = await tokenContract.methods.balanceOf(account).call();
-        // Check current allowance
-        const currentAllowance = await tokenContract.methods.allowance(account, spender).call();
-        if (currentAllowance < amount && accountBalance >= amount) {
+        if (accountBalance >= amount) {
           // Approve the account to spend ERC20 tokens
           const tx: TransactionReceipt = await tokenContract.methods
             .approve(spender, amount)
@@ -52,7 +50,7 @@ const TokenApprovalRequest = ({
             submit: true,
             hash: '',
             error: true,
-            message: 'insufficient funds or the allowance has already been granted',
+            message: 'insufficient funds',
           });
         }
       }
