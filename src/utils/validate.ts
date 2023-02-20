@@ -29,8 +29,8 @@ export default function getRule(label: string, name: string, v?: string, type?: 
         if (parseInt(v, 10) < 1) {
           return Promise.reject(new Error('Invalid number'));
         }
-        if (BigNumber.from(v).gt(MAX_UINT256)) {
-          return Promise.reject(new Error('Invalid number'));
+        if (Number(v) > Number(MAX_UINT256)) {
+          return Promise.reject(new Error('Too big number'));
         }
         return Promise.resolve();
       },

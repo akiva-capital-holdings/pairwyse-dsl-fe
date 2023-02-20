@@ -30,7 +30,7 @@ const TokenBalanceOfRequest = ({
     let tokenDecimals: string;
     try {
       if (!error) {
-        const tokenContract = createInstance('Token', tokenAddress, utilsProvider);
+        const tokenContract = createInstance('ERC20PremintDecimals', tokenAddress, utilsProvider);
         ({ tokenDecimals } = await getTokenDetails(tokenContract));
         const tx = await tokenContract.methods.balanceOf(walletAddress).call();
         const targetAllowanceNoDecimals = ethers.utils.formatUnits(tx, tokenDecimals);

@@ -31,7 +31,7 @@ const TokenAllowanceRequest = ({
     let tokenDecimals: string;
     try {
       if (!error) {
-        const tokenContract = createInstance('Token', tokenAddress, utilsProvider);
+        const tokenContract = createInstance('ERC20PremintDecimals', tokenAddress, utilsProvider);
         ({ tokenDecimals } = await getTokenDetails(tokenContract));
 
         const allowance = await tokenContract.methods

@@ -95,13 +95,15 @@ const AgreementRequest = ({
       setLoading(true);
       try {
         if (!error) {
-          const tokenInstance = new utilsProvider.eth.Contract(getContractABI('Token'));
+          const tokenInstance = new utilsProvider.eth.Contract(
+            getContractABI('ERC20PremintDecimals')
+          );
           const tokenSypplyInWei = (Number(tokenSupply) * Number(1e18)).toLocaleString('fullwide', {
             useGrouping: false,
           });
           tokenInstance
             .deploy({
-              data: getContractBytecode('Token'),
+              data: getContractBytecode('ERC20PremintDecimals'),
               arguments: [tokenName, tokenSymbol, tokenSypplyInWei],
             })
             .send({ from: account })

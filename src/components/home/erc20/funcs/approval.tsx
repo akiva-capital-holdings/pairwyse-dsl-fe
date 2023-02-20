@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import * as math from 'mathjs';
 import { Button, Input, Form, Spin } from 'antd';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useMetaMask } from 'metamask-react';
 import { TransactionReceipt } from 'web3-core';
-import { createInstance, getMultiplication } from 'utils/helpers';
+import { createInstance } from 'utils/helpers';
 import { selectUtils } from '../../../../redux/utilsReducer';
 import getRule from '../../../../utils/validate';
 import { TokenApproval } from '../../../../types';
@@ -20,7 +21,7 @@ const TokenApprovalRequest = ({
 }: TokenApproval) => {
   const { account } = useMetaMask();
   const [tokenAddress, setTokenAddress] = useState(tokenInfo.address);
-  const [errorTransactionValue, setErrorTransactionValue] = useState(false);
+  const [, setErrorTransactionValue] = useState(false);
   const [spender, setSpender] = useState('');
   const [amount, setAmount] = useState('');
   const navigate = useNavigate();
@@ -31,7 +32,7 @@ const TokenApprovalRequest = ({
     setLoading(true);
     try {
       if (!error) {
-        const tokenContract = createInstance('Token', tokenAddress, utilsProvider);
+        const tokenContract = createInstance('ERC20PremintDecimals', tokenAddress, utilsProvider);
         // Check thet sender has anougth ERC20 tokens
         const amountWithDecimals = Number(amount).toLocaleString('fullwide', {
           useGrouping: false,
@@ -135,22 +136,15 @@ const TokenApprovalRequest = ({
                 if (e?.target?.value.length === 0 || e?.target?.value === '0') {
                   return;
                 }
-                const normalValue = getMultiplication(
-                  e?.target?.value.replace(/[\s.,%]/g, ''),
-                  setErrorTransactionValue
-                );
-                if (!errorTransactionValue) {
-                  form.validateFields(['approval-value-in-wei']).then(() => {
-                    const valueFormatting = String(e?.target?.value.replace(/,/gi, '')).replace(
-                      /(.)(?=(\d{3})+$)/g,
-                      '$1,'
-                    );
-                    form.setFieldsValue({
-                      'approval-value-in-wei': valueFormatting,
-                    });
-                  });
+
+                try {
+                  const normalValue = math.evaluate(e?.target?.value.replaceAll(',', ''));
+                  form.validateFields(['value-in-wei']);
+                  setAmount(normalValue);
+                } catch (err) {
+                  console.error(err);
+                  setErrorTransactionValue(true);
                 }
-                setAmount(normalValue);
               }}
             />
           </Item>

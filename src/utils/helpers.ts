@@ -4,7 +4,10 @@ import { AbiItem } from 'web3-utils';
 import { ContractName, MetaMaskError } from '../types';
 import { abi as agreementABI, bytecode as agreementBytecode } from '../data/agreement.json';
 import { abi as contextFactoryABI } from '../data/contextFactory.json';
-import { abi as tokenABI, bytecode as tokenBytecode } from '../data/token.json';
+import {
+  abi as erc20PremintDecimalsABI,
+  bytecode as erc20PremintDecimalsBytecode,
+} from '../data/erc20PremintDecimals.json';
 import {
   abi as multiTrancheABI,
   bytecode as multiTrancheBytecode,
@@ -42,25 +45,14 @@ export const getWei = (amount: string, setErrorRequiredRecords) => {
   return normalAmount;
 };
 
-// multiplication values in string(including decimal number with e symbol (1e18))
-export const getMultiplication = (fn: string, setErrorRequiredRecords) => {
-  let result = 1;
-  const array = fn.split('*');
-  array.forEach((el) => {
-    console.log({ el });
-    result *= Number(getWei(el, setErrorRequiredRecords));
-  });
-  return result.toString();
-};
-
 export const getContractABI = (name: ContractName): AbiItem[] => {
   switch (name) {
     case contractNames.Agreement:
       return agreementABI as AbiItem[];
     case contractNames.ContextFactory:
       return contextFactoryABI as AbiItem[];
-    case contractNames.Token:
-      return tokenABI as AbiItem[];
+    case contractNames.ERC20PremintDecimals:
+      return erc20PremintDecimalsABI as AbiItem[];
     case contractNames.MultiTranche:
       return multiTrancheABI as AbiItem[];
     default:
@@ -72,8 +64,8 @@ export const getContractBytecode = (name: ContractName): string => {
   switch (name) {
     case contractNames.Agreement:
       return agreementBytecode;
-    case contractNames.Token:
-      return tokenBytecode;
+    case contractNames.ERC20PremintDecimals:
+      return erc20PremintDecimalsBytecode;
     case contractNames.MultiTranche:
       return multiTrancheBytecode;
     default:

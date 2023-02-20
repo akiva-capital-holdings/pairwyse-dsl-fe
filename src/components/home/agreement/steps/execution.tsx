@@ -68,7 +68,7 @@ const ExecutionRequest = ({
       toAddress = await agreementContract.methods.getStorageAddress(hex4Bytes(toName)).call();
       tokenAddress = await agreementContract.methods.getStorageAddress(hex4Bytes(tokenName)).call();
 
-      const tokenContract = createInstance('Token', tokenAddress, utilsProvider);
+      const tokenContract = createInstance('ERC20PremintDecimals', tokenAddress, utilsProvider);
       ({ tokenSymbol, tokenDecimals } = await getTokenDetails(tokenContract));
       currentAllowance = await tokenContract.methods
         .allowance(fromAddress, agreementContract._address)

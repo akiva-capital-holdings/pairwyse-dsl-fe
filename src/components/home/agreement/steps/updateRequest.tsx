@@ -101,7 +101,7 @@ const UpdateRequest = ({
         const tokenAddress = await agreementContract.methods
           .getStorageAddress(hex4Bytes(token))
           .call();
-        const tokenContract = createInstance('Token', tokenAddress, utilsProvider);
+        const tokenContract = createInstance('ERC20PremintDecimals', tokenAddress, utilsProvider);
         const currentAllowance = await tokenContract.methods
           .allowance(fromAddress, agreementContract._address)
           .call();
