@@ -7,7 +7,9 @@ import {
   titleValueApprove,
   titleValueBalanceOf,
   initialTokenApprove,
+  initialTokenAllowance,
   initialTokenBalanceOf,
+  titleValueAllowance,
 } from './initialValue';
 import { selectSession } from '../../redux/sessionReducer';
 import { ReactComponent as Copy } from '../../images/copy.svg';
@@ -15,7 +17,12 @@ import { ReactComponent as CloseIcon } from '../../images/closeIcon.svg';
 import { ReactComponent as Success } from '../../images/successIcon.svg';
 
 import Header from '../header/index';
-import { TokenApprovalRequest, TokenCreationRequest, TokenBalanceOfRequest } from './steps';
+import {
+  TokenApprovalRequest,
+  TokenAllowanceRequest,
+  TokenCreationRequest,
+  TokenBalanceOfRequest,
+} from './steps';
 
 import './index.css';
 
@@ -23,6 +30,7 @@ const navSteps = {
   stepOne: 'stepOne',
   stepTwo: 'stepTwo',
   stepThree: 'stepThree',
+  stepFour: 'stepFour',
 };
 
 const TokenPage = () => {
@@ -33,6 +41,10 @@ const TokenPage = () => {
   const [tokenInfo, setTokenInfo] = useState(initialTokenInfo);
   // token approval request
   const [approvalValue, setApprovalValue] = useState(initialTokenApprove);
+
+  // token allowance sub-page
+  const [allowanceValue, setAllowanceValue] = useState(initialTokenAllowance);
+
   // token balance of request
   const [balanceOfValue, setbalanceOfValue] = useState(initialTokenBalanceOf);
 
@@ -52,6 +64,7 @@ const TokenPage = () => {
     setError('');
     setApprovalValue(initialTokenApprove);
     setbalanceOfValue(initialTokenBalanceOf);
+    setAllowanceValue(initialTokenAllowance);
   };
 
   const onChangeStep = (v: number) => {
@@ -64,6 +77,9 @@ const TokenPage = () => {
         break;
       case 3:
         setStep(navSteps.stepThree);
+        break;
+      case 4:
+        setStep(navSteps.stepFour);
         break;
       default:
         console.error('no step is selected');
@@ -90,6 +106,15 @@ const TokenPage = () => {
       />
     ),
     stepThree: (
+      <TokenAllowanceRequest
+        setLoading={setLoading}
+        error={error}
+        loading={loading}
+        tokenInfo={tokenInfo}
+        setAllowanceValue={setAllowanceValue}
+      />
+    ),
+    stepFour: (
       <TokenBalanceOfRequest
         setLoading={setLoading}
         error={error}
@@ -190,6 +215,36 @@ const TokenPage = () => {
     stepThree: (
       <div
         className={`recordContainer  ${
+          allowanceValue?.error && !allowanceValue?.value ? 'error' : ''
+        }`}
+      >
+        <div className="titleContainer">
+          <div className="title">Token</div>
+          {allowanceValue?.submit && iconValue(allowanceValue?.error && !!allowanceValue?.message)}
+        </div>
+        <div className={`contentContainer  ${allowanceValue?.error ? 'error' : ''}`}>
+          <div className="content">
+            <div className="title">
+              {allowanceValue?.error && allowanceValue?.message
+                ? 'Warning! Error encountered during contract execution'
+                : titleValueAllowance(!!allowanceValue?.value)}
+            </div>
+            {!!allowanceValue?.value && (
+              <div className="valueContainer">
+                <div className="value">{allowanceValue?.value}</div>
+                <Copy
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => onCopyClick(allowanceValue?.value)}
+                />
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    ),
+    stepFour: (
+      <div
+        className={`recordContainer  ${
           balanceOfValue?.error && !balanceOfValue?.value ? 'error' : ''
         }`}
       >
@@ -226,6 +281,7 @@ const TokenPage = () => {
         <div className="stepsContentContainer">
           <span className="title">Token</span>
           <div className="menu">
+            {/* Step 1 */}
             <button
               onClick={() => {
                 return onChangeStep(1);
@@ -240,6 +296,8 @@ const TokenPage = () => {
                 Creation
               </span>
             </button>
+
+            {/* Step 2 */}
             <button
               onClick={() => {
                 return onChangeStep(2);
@@ -253,6 +311,8 @@ const TokenPage = () => {
                 Approval
               </span>
             </button>
+
+            {/* Step 3 */}
             <button
               onClick={() => {
                 return onChangeStep(3);
@@ -262,6 +322,21 @@ const TokenPage = () => {
               <span
                 style={{ textAlign: 'right', marginLeft: 'auto', paddingBottom: '8px' }}
                 className={`${step === navSteps.stepThree && 'active'}`}
+              >
+                Allowance
+              </span>
+            </button>
+
+            {/* Step 4 */}
+            <button
+              onClick={() => {
+                return onChangeStep(4);
+              }}
+              className={'navButton'}
+            >
+              <span
+                style={{ textAlign: 'right', marginLeft: 'auto', paddingBottom: '8px' }}
+                className={`${step === navSteps.stepFour && 'active'}`}
               >
                 Balance Of
               </span>

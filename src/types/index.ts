@@ -109,6 +109,30 @@ export interface TokenApproval {
     }>
   >;
 }
+
+export interface TokenAllowance {
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  error: string;
+  loading: boolean;
+  tokenInfo: {
+    name: string;
+    symbol: string;
+    supply: string;
+    address: string;
+    error: boolean;
+    message: string;
+    submit: boolean;
+  };
+  setAllowanceValue: React.Dispatch<
+    React.SetStateAction<{
+      value: string;
+      submit: boolean;
+      error: boolean;
+      message: string;
+    }>
+  >;
+}
+
 export interface TokenBalanceOf {
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   error: string;
