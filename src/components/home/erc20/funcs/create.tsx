@@ -1,14 +1,15 @@
 import { useState } from 'react';
+import * as math from 'mathjs';
 import { Form, Button, Input, Spin } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useMetaMask } from 'metamask-react';
-import { getContractABI, getContractBytecode, getMultiplication } from 'utils/helpers';
+import { getContractABI, getContractBytecode } from 'utils/helpers';
 import { Contract } from 'ethers';
-import getRule, { validationAgreementModel } from '../../../utils/validate';
-import { changeTokenAddress } from '../../../redux/sessionReducer';
-import { selectUtils } from '../../../redux/utilsReducer';
-import { Token } from '../../../types';
+import getRule, { validationAgreementModel } from '../../../../utils/validate';
+import { changeTokenAddress } from '../../../../redux/sessionReducer';
+import { selectUtils } from '../../../../redux/utilsReducer';
+import { Token } from '../../../../types';
 import './index.css';
 
 const { Item } = Form;
@@ -19,8 +20,8 @@ const TokenCreationRequest = ({ setLoading, error, setError, loading, setTokenIn
   const [tokenName, setTokenName] = useState<string>();
   const [tokenSymbol, setTokenSymbol] = useState<string>();
   const [tokenSupply, setTokenSupply] = useState<string>();
-  const [tokenDecimal, setTokenDecimal] = useState<string>();
-  const [errorTransactionValue, setErrorTransactionValue] = useState(false);
+  const [tokenDecimals, setTokenDecimals] = useState<string>();
+  const [, setErrorTransactionValue] = useState(false);
   const [form] = Form.useForm();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -29,14 +30,16 @@ const TokenCreationRequest = ({ setLoading, error, setError, loading, setTokenIn
     setLoading(true);
     try {
       if (!error) {
-        const tokenInstance = new utilsProvider.eth.Contract(getContractABI('Token'));
+        const tokenInstance = new utilsProvider.eth.Contract(
+          getContractABI('ERC20PremintDecimals')
+        );
         const tokenSypplyWithDecimals = Number(tokenSupply).toLocaleString('fullwide', {
           useGrouping: false,
         });
         tokenInstance
           .deploy({
-            data: getContractBytecode('Token'),
-            arguments: [tokenName, tokenSymbol, tokenSypplyWithDecimals, tokenDecimal],
+            data: getContractBytecode('ERC20PremintDecimals'),
+            arguments: [tokenName, tokenSymbol, tokenSypplyWithDecimals, tokenDecimals],
           })
           .send({ from: account })
           .on('error', (err) => {
@@ -85,7 +88,7 @@ const TokenCreationRequest = ({ setLoading, error, setError, loading, setTokenIn
         >
           <Input
             className="lender"
-            placeholder="Enter name of Token"
+            placeholder="ERC20 token name"
             defaultValue={tokenName}
             onChange={(e) => {
               return setTokenName(e?.target?.value);
@@ -102,7 +105,7 @@ const TokenCreationRequest = ({ setLoading, error, setError, loading, setTokenIn
         >
           <Input
             className="lender"
-            placeholder="Enter symbol of Token"
+            placeholder="ERC20 token symbol"
             defaultValue={tokenSymbol}
             onChange={(e) => {
               return setTokenSymbol(e?.target?.value);
@@ -110,21 +113,22 @@ const TokenCreationRequest = ({ setLoading, error, setError, loading, setTokenIn
           />
         </Item>
         <div style={{ marginTop: '24px' }} className="text">
-          Decimal place
+          Decimal places
         </div>
         <Item
           name="token-decimal"
           validateTrigger="onChange"
           rules={
             tokenSupply?.length === 0
-              ? getRule('token-decimal', 'record-value', tokenDecimal)
-              : getRule('token-decimal', 'decimal-value', tokenDecimal)
+              ? getRule('token-decimal', 'record-value', tokenDecimals)
+              : getRule('token-decimal', 'decimal-value', tokenDecimals)
           }
         >
           <Input
             className="lender"
+            placeholder="18"
             onChange={(e) => {
-              setTokenDecimal(e?.target?.value);
+              setTokenDecimals(e?.target?.value);
             }}
           />
         </Item>
@@ -142,26 +146,20 @@ const TokenCreationRequest = ({ setLoading, error, setError, loading, setTokenIn
         >
           <Input
             className="lender"
+            placeholder="1e6 * 1e18"
             onChange={(e) => {
               if (e?.target?.value.length === 0 || e?.target?.value === '0') {
                 return;
               }
-              const normalValue = getMultiplication(
-                e?.target?.value.replace(/[\s.,%]/g, ''),
-                setErrorTransactionValue
-              );
-              if (!errorTransactionValue) {
-                form.validateFields(['value-in-wei']).then(() => {
-                  const valueFormatting = String(e?.target?.value.replace(/,/gi, '')).replace(
-                    /(.)(?=(\d{3})+$)/g,
-                    '$1,'
-                  );
-                  form.setFieldsValue({
-                    'value-in-wei': valueFormatting,
-                  });
-                });
+
+              try {
+                const normalValue = math.evaluate(e?.target?.value.replaceAll(',', ''));
+                form.validateFields(['value-in-wei']);
+                setTokenSupply(normalValue);
+              } catch (err) {
+                console.error(err);
+                setErrorTransactionValue(true);
               }
-              setTokenSupply(normalValue);
             }}
           />
         </Item>

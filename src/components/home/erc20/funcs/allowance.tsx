@@ -1,26 +1,27 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Button, Input, Form, Spin } from 'antd';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useMetaMask } from 'metamask-react';
 import { ethers } from 'ethers';
 import { createInstance, getTokenDetails } from 'utils/helpers';
-import { selectUtils } from '../../../redux/utilsReducer';
-import getRule from '../../../utils/validate';
-import { TokenBalanceOf } from '../../../types';
+import { selectUtils } from '../../../../redux/utilsReducer';
+import getRule from '../../../../utils/validate';
+import { TokenAllowance } from '../../../../types';
 
 const { Item } = Form;
 
-const TokenBalanceOfRequest = ({
+const TokenAllowanceRequest = ({
   setLoading,
   error,
   loading,
   tokenInfo,
-  setbalanceOfValue,
-}: TokenBalanceOf) => {
+  setAllowanceValue,
+}: TokenAllowance) => {
   const { account } = useMetaMask();
   const [tokenAddress, setTokenAddress] = useState(tokenInfo.address);
-  const [walletAddress, setWalletAddress] = useState('');
+  const [ownerAddress, setOwnerAddress] = useState('');
+  const [spenderAddress, setSpenderAddress] = useState('');
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const { utilsProvider } = useSelector(selectUtils);
@@ -30,11 +31,14 @@ const TokenBalanceOfRequest = ({
     let tokenDecimals: string;
     try {
       if (!error) {
-        const tokenContract = createInstance('Token', tokenAddress, utilsProvider);
+        const tokenContract = createInstance('ERC20PremintDecimals', tokenAddress, utilsProvider);
         ({ tokenDecimals } = await getTokenDetails(tokenContract));
-        const tx = await tokenContract.methods.balanceOf(walletAddress).call();
-        const targetAllowanceNoDecimals = ethers.utils.formatUnits(tx, tokenDecimals);
-        setbalanceOfValue({
+
+        const allowance = await tokenContract.methods
+          .allowance(ownerAddress, spenderAddress)
+          .call();
+        const targetAllowanceNoDecimals = ethers.utils.formatUnits(allowance, tokenDecimals);
+        setAllowanceValue({
           value: targetAllowanceNoDecimals,
           submit: true,
           error: false,
@@ -44,7 +48,7 @@ const TokenBalanceOfRequest = ({
       setLoading(false);
     } catch (e) {
       console.error(e);
-      setbalanceOfValue({
+      setAllowanceValue({
         value: '',
         submit: true,
         error: true,
@@ -55,8 +59,8 @@ const TokenBalanceOfRequest = ({
   };
 
   return (
-    <div className="tokenBalanceOfRequest">
-      <div className="title">Balance Of Request</div>
+    <div className="token tokenAllowanceRequest">
+      <div className="title">Allowance Request</div>
       <Spin spinning={loading}>
         <Form
           name="tokenCreationRequestForm"
@@ -66,6 +70,8 @@ const TokenBalanceOfRequest = ({
         >
           <div className="text">Requestor</div>
           <div className="value">{account}</div>
+
+          {/* Token */}
           <div style={{ marginTop: '24px' }} className="text">
             Token Address
           </div>
@@ -76,31 +82,55 @@ const TokenBalanceOfRequest = ({
           >
             <Input
               className="lender"
+              placeholder="ERC20 token address"
               defaultValue={tokenAddress}
               onChange={(e) => {
                 return setTokenAddress(e?.target?.value);
               }}
             />
           </Item>
+
+          {/* Owner */}
           <div style={{ marginTop: '24px' }} className="text">
-            Wallet Address
+            Owner Address
+          </div>
+          <Item
+            name="ownerAddress"
+            validateTrigger="onBlur"
+            rules={getRule('agreement', 'agreement', ownerAddress)}
+          >
+            <Input
+              className="lender"
+              placeholder="Owner address"
+              defaultValue={ownerAddress}
+              onChange={(e) => {
+                return setOwnerAddress(e?.target?.value);
+              }}
+            />
+          </Item>
+
+          {/* Spender */}
+          <div style={{ marginTop: '24px' }} className="text">
+            Spender Address
           </div>
           <Item
             name="spenderAddress"
             validateTrigger="onBlur"
-            rules={getRule('agreement', 'agreement', walletAddress)}
+            rules={getRule('agreement', 'agreement', spenderAddress)}
           >
             <Input
               className="lender"
-              defaultValue={walletAddress}
+              placeholder="Spender address"
+              defaultValue={spenderAddress}
               onChange={(e) => {
-                return setWalletAddress(e?.target?.value);
+                return setSpenderAddress(e?.target?.value);
               }}
             />
           </Item>
+
           <div className="btnsContainer">
             <Button disabled={loading} style={{ height: '48px' }} htmlType="submit" className="btn">
-              Get Balance
+              Get Allowance
             </Button>
             <Button
               onClick={() => {
@@ -118,4 +148,4 @@ const TokenBalanceOfRequest = ({
   );
 };
 
-export default TokenBalanceOfRequest;
+export default TokenAllowanceRequest;

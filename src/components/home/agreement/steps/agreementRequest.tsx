@@ -6,10 +6,10 @@ import { useNavigate } from 'react-router-dom';
 import { useMetaMask } from 'metamask-react';
 import { getContractABI, getContractBytecode } from 'utils/helpers';
 import { Contract } from 'ethers';
-import getRule, { validationAgreementModel } from '../../../utils/validate';
-import { selectUtils } from '../../../redux/utilsReducer';
-import { changeAgreementAddress, changeContractType } from '../../../redux/sessionReducer';
-import { Agreement } from '../../../types';
+import getRule, { validationAgreementModel } from '../../../../utils/validate';
+import { selectUtils } from '../../../../redux/utilsReducer';
+import { changeAgreementAddress, changeContractType } from '../../../../redux/sessionReducer';
+import { Agreement } from '../../../../types';
 import './index.css';
 
 const { Item } = Form;
@@ -95,13 +95,15 @@ const AgreementRequest = ({
       setLoading(true);
       try {
         if (!error) {
-          const tokenInstance = new utilsProvider.eth.Contract(getContractABI('Token'));
+          const tokenInstance = new utilsProvider.eth.Contract(
+            getContractABI('ERC20PremintDecimals')
+          );
           const tokenSypplyInWei = (Number(tokenSupply) * Number(1e18)).toLocaleString('fullwide', {
             useGrouping: false,
           });
           tokenInstance
             .deploy({
-              data: getContractBytecode('Token'),
+              data: getContractBytecode('ERC20PremintDecimals'),
               arguments: [tokenName, tokenSymbol, tokenSypplyInWei],
             })
             .send({ from: account })

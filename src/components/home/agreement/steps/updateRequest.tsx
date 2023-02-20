@@ -7,10 +7,10 @@ import { createInstance, hex4Bytes, splitDSLString, getWei } from 'utils/helpers
 import { selectUtils } from 'redux/utilsReducer';
 import { Contract } from 'ethers';
 import { v4 as uuidv4 } from 'uuid';
-import { ReactComponent as Delete } from '../../../images/delete.svg';
-import { ReactComponent as Cloose } from '../../../images/close.svg';
-import getRule from '../../../utils/validate';
-import { Update } from '../../../types';
+import { ReactComponent as Delete } from '../../../../images/delete.svg';
+import { ReactComponent as Cloose } from '../../../../images/close.svg';
+import getRule from '../../../../utils/validate';
+import { Update } from '../../../../types';
 
 const { Item } = Form;
 
@@ -101,7 +101,7 @@ const UpdateRequest = ({
         const tokenAddress = await agreementContract.methods
           .getStorageAddress(hex4Bytes(token))
           .call();
-        const tokenContract = createInstance('Token', tokenAddress, utilsProvider);
+        const tokenContract = createInstance('ERC20PremintDecimals', tokenAddress, utilsProvider);
         const currentAllowance = await tokenContract.methods
           .allowance(fromAddress, agreementContract._address)
           .call();

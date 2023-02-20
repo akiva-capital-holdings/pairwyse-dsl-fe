@@ -7,8 +7,8 @@ import { createInstance, hex4Bytes, splitDSLString, getWei, getTokenDetails } fr
 import { selectUtils } from 'redux/utilsReducer';
 import { useMetaMask } from 'metamask-react';
 import { ethers } from 'ethers';
-import { Execution, TransactionValues } from '../../../types';
-import getRule from '../../../utils/validate';
+import { Execution, TransactionValues } from '../../../../types';
+import getRule from '../../../../utils/validate';
 
 const { Item } = Form;
 
@@ -68,7 +68,7 @@ const ExecutionRequest = ({
       toAddress = await agreementContract.methods.getStorageAddress(hex4Bytes(toName)).call();
       tokenAddress = await agreementContract.methods.getStorageAddress(hex4Bytes(tokenName)).call();
 
-      const tokenContract = createInstance('Token', tokenAddress, utilsProvider);
+      const tokenContract = createInstance('ERC20PremintDecimals', tokenAddress, utilsProvider);
       ({ tokenSymbol, tokenDecimals } = await getTokenDetails(tokenContract));
       currentAllowance = await tokenContract.methods
         .allowance(fromAddress, agreementContract._address)

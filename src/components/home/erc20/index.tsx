@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { notification } from 'antd';
-import { shortenedAddress } from '../../utils/helpers';
+import { shortenedAddress } from '../../../utils/helpers';
 import {
   initialTokenInfo,
   titleValueApprove,
@@ -11,18 +11,18 @@ import {
   initialTokenBalanceOf,
   titleValueAllowance,
 } from './initialValue';
-import { selectSession } from '../../redux/sessionReducer';
-import { ReactComponent as Copy } from '../../images/copy.svg';
-import { ReactComponent as CloseIcon } from '../../images/closeIcon.svg';
-import { ReactComponent as Success } from '../../images/successIcon.svg';
+import { selectSession } from '../../../redux/sessionReducer';
+import { ReactComponent as Copy } from '../../../images/copy.svg';
+import { ReactComponent as CloseIcon } from '../../../images/closeIcon.svg';
+import { ReactComponent as Success } from '../../../images/successIcon.svg';
 
-import Header from '../header/index';
+import Header from '../../header/index';
 import {
   TokenApprovalRequest,
   TokenAllowanceRequest,
   TokenCreationRequest,
   TokenBalanceOfRequest,
-} from './steps';
+} from './funcs';
 
 import './index.css';
 

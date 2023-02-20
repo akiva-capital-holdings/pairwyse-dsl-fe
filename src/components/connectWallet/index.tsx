@@ -1,7 +1,7 @@
 import React from 'react';
 import Header from 'components/header';
 import { useMetaMask } from 'metamask-react';
-import '../home/index.css';
+import '../home/agreement/index.css';
 import './index.css';
 
 const ConnectWallet = () => {

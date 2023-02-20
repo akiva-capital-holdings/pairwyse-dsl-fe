@@ -55,4 +55,11 @@ export const NETWORK_OPTIONS = {
   },
 };
 
-export default { NETWORK_OPTIONS };
+export const contractNames = {
+  Agreement: 'Agreement',
+  ContextFactory: 'ContextFactory',
+  ERC20PremintDecimals: 'ERC20PremintDecimals',
+  MultiTranche: 'MultiTranche',
+};
+
+export default { NETWORK_OPTIONS, contractNames };

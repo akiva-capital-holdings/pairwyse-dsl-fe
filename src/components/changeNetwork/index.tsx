@@ -4,7 +4,7 @@ import { MetaMaskError } from '../../types';
 import { NETWORK_OPTIONS } from '../../utils/constants';
 import { getNetworksList } from '../../utils/helpers';
 
-import '../home/index.css';
+import '../home/agreement/index.css';
 import './index.css';
 
 const ChangeNetwork = () => {
