@@ -3,7 +3,7 @@ import { lazy } from 'react';
 
 const Record = lazy(() => import('../components/record'));
 const Home = lazy(() => import('../components/home/agreement'));
-const Token = lazy(() => import('../components/home/token'));
+const Token = lazy(() => import('../components/home/erc20'));
 
 const privateRoutes = [
   {

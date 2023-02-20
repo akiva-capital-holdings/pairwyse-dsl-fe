@@ -22,7 +22,7 @@ import {
   TokenAllowanceRequest,
   TokenCreationRequest,
   TokenBalanceOfRequest,
-} from './steps';
+} from './funcs';
 
 import './index.css';
 

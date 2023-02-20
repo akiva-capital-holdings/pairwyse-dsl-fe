@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { evaluate } from 'mathjs';
 import { Form, Button, Input, Spin } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -145,25 +146,33 @@ const TokenCreationRequest = ({ setLoading, error, setError, loading, setTokenIn
             className="lender"
             placeholder="1e6 * 1e18"
             onChange={(e) => {
+              console.log(e?.target?.value);
               if (e?.target?.value.length === 0 || e?.target?.value === '0') {
                 return;
               }
-              const normalValue = getMultiplication(
-                e?.target?.value.replace(/[\s.,%]/g, ''),
-                setErrorTransactionValue
-              );
-              if (!errorTransactionValue) {
-                form.validateFields(['value-in-wei']).then(() => {
-                  const valueFormatting = String(e?.target?.value.replace(/,/gi, '')).replace(
-                    /(.)(?=(\d{3})+$)/g,
-                    '$1,'
-                  );
-                  form.setFieldsValue({
-                    'value-in-wei': valueFormatting,
+              try {
+                const normalValue = getMultiplication(
+                  e?.target?.value.replace(/[\s.,%]/g, ''),
+                  setErrorTransactionValue
+                );
+
+                if (!errorTransactionValue) {
+                  form.validateFields(['value-in-wei']).then(() => {
+                    const valueFormatting = String(e?.target?.value.replace(/,/gi, '')).replace(
+                      /(.)(?=(\d{3})+$)/g,
+                      '$1,'
+                    );
+                    console.log({ valueFormatting });
+                    form.setFieldsValue({
+                      'value-in-wei': valueFormatting,
+                    });
                   });
-                });
+                }
+                setTokenSupply(normalValue);
+              } catch (err) {
+                console.error(err);
+                setErrorTransactionValue(true);
               }
-              setTokenSupply(normalValue);
             }}
           />
         </Item>
