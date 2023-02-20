@@ -1,12 +1,14 @@
+.token,
 .tokenCreationRequest,
 .tokenApprovalRequest,
 .tokenBalanceOfRequest,
 .executeRequest {
   margin-top: 60px;
 }
+.token .title,
 .tokenCreationRequest .title,
 .tokenApprovalRequest .title,
-.tokenBalanceOfRequest .title{
+.tokenBalanceOfRequest .title {
   font-family: var(--font_family_bold);
   font-style: normal;
   font-weight: var(--font_weight_bolder);
@@ -14,9 +16,10 @@
   line-height: 45px;
   color: var(--dark_col);
 }
+.token .text,
 .tokenCreationRequest .text,
 .tokenApprovalRequest .text,
-.tokenBalanceOfRequest .text{
+.tokenBalanceOfRequest .text {
   font-family: var(--font_family);
   font-style: normal;
   font-weight: 500;
@@ -25,9 +28,10 @@
   color: var(--grey_color);
   margin-bottom: 8px;
 }
+.token .lender,
 .tokenCreationRequest .lender,
 .tokenApprovalRequest .lender,
-.tokenBalanceOfRequest .lender{
+.tokenBalanceOfRequest .lender {
   background: var(--background_color);
   border-radius: 8px;
   max-width: 680px;
@@ -41,6 +45,7 @@
   line-height: 20px;
   color: var(--dark_col) !important;
 }
+.token .btns,
 .tokenCreationRequest .btns,
 .tokenBalanceOfRequest .btns {
   margin-top: 80px;
@@ -48,6 +53,7 @@
   align-items: center;
   justify-content: space-between;
 }
+.token .specificationInput,
 .tokenApprovalRequest .specificationInput,
 .tokenBalanceOfRequest .specificationInput {
   position: relative;
@@ -91,6 +97,7 @@
 .tokenApprovalRequest .container:last-child {
   margin-bottom: 0;
 }
+.token .del,
 .tokenApprovalRequest .del,
 .tokenBalanceOfRequest .del {
   position: absolute;
@@ -103,8 +110,9 @@
   right: -50%;
 }
 .tokenApprovalRequest .inputMenuType {
-  width: 450px ;
+  width: 450px;
 }
+.token .add,
 .tokenApprovalRequest .add,
 .tokenBalanceOfRequest .add {
   font-family: var(--font_family_bold);
@@ -118,6 +126,7 @@
   margin-left: auto;
   margin-top: 12px;
 }
+.token .cancel,
 .tokenApprovalRequest .cancel,
 .tokenBalanceOfRequest .cancel {
   font-family: var(--font_family_bold);
@@ -128,8 +137,9 @@
   color: var(--grey_color);
   border: none;
 }
+.token .btnsContainer,
 .tokenApprovalRequest .btnsContainer,
-.tokenBalanceOfRequest .btnsContainer{
+.tokenBalanceOfRequest .btnsContainer {
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -140,24 +150,29 @@
   font-family: var(--font_family);
   font-weight: 500;
 }
+.token .requiredRecords,
 .tokenBalanceOfRequest .requiredRecords {
   height: 48px;
   position: relative;
 }
+.token .btnRequiredRecords,
 .tokenBalanceOfRequest .btnRequiredRecords {
   right: 0;
   position: absolute;
   top: -8%;
 }
-.tokenBalanceOfRequest .numRecordCoontainer{
+.token .numRecordCoontainer,
+.tokenBalanceOfRequest .numRecordCoontainer {
   display: flex;
   max-width: 680px;
   flex-wrap: wrap;
 }
+.token .error,
 .tokenBalanceOfRequest .error {
   padding-top: 14px;
 }
-.tokenBalanceOfRequest .numRecord{
+.token .numRecord,
+.tokenBalanceOfRequest .numRecord {
   display: flex;
   height: 35px;
   background: #120023;
@@ -167,13 +182,15 @@
   margin-right: 8px;
   margin-bottom: 8px;
 }
-.tokenBalanceOfRequest .numRecord .textNum{
+.token .numRecord .textNum,
+.tokenBalanceOfRequest .numRecord .textNum {
   font-weight: 700;
   font-size: 12px;
   line-height: 15px;
   color: #ffffff;
   margin-right: 8px;
 }
+.token .numRecord .btnNum,
 .tokenBalanceOfRequest .numRecord .btnNum {
   border-radius: 50%;
   border: unset;
@@ -205,19 +222,19 @@
 }
 
 .transactionWarningBack.active {
-  transform: scale(1)
+  transform: scale(1);
 }
-.transactionWarningContainer{
-    width: 400px;
-    min-height: 200px;
-    background: #F7F5F9;
-    border-radius: 20px;
-    margin-top: 32px;
-    padding: 32px 28px 28px 28px;
-    color: #E61F1F;
-    font-family: var(--font_weight_bolder);
-    font-style: normal;
-    font-weight: 800;
-    font-size: 16px;
-    line-height: 20px;
+.transactionWarningContainer {
+  width: 400px;
+  min-height: 200px;
+  background: #f7f5f9;
+  border-radius: 20px;
+  margin-top: 32px;
+  padding: 32px 28px 28px 28px;
+  color: #e61f1f;
+  font-family: var(--font_weight_bolder);
+  font-style: normal;
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 20px;
 }
