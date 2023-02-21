@@ -1,11 +1,11 @@
-.footerContainer{
+.footerContainer {
   display: flex;
   margin-top: auto;
   padding: 40px 60px;
   background-color: var(--background_color);
   justify-content: space-between;
 }
-.logoContainer{
+.logoContainer {
   text-align: left;
 }
 .footerContainer .logoContainer .text {
@@ -15,7 +15,7 @@
   font-size: 14px;
   line-height: 18px;
   text-align: center;
-  color: #ACA2B5;
+  color: #aca2b5;
 }
 .logoContainer .logo {
   font-family: var(--font_family_bold);
@@ -23,15 +23,17 @@
   font-weight: var(--font_weight_bolder);
   font-size: 40px;
   line-height: 50px;
+  transform: scale(1.3);
   color: var(--dark_col);
-  margin-bottom: 60px;
+  filter: invert(5%) sepia(27%) saturate(100%) hue-rotate(262deg) brightness(0%) contrast(116%);
+  margin: 0 0 50px 50px;
 }
-.contactContainer{
+.contactContainer {
   display: flex;
   justify-content: space-between;
 }
 .contactContainer .learnMore,
-.contactContainer .contactUs  {
+.contactContainer .contactUs {
   margin-right: 100px;
 }
 .contactContainer .title {
@@ -43,8 +45,8 @@
   line-height: 23px;
   margin-bottom: 20px;
 }
-.contactContainer .learnMore, 
-.contactContainer .contactUs, 
+.contactContainer .learnMore,
+.contactContainer .contactUs,
 .contactContainer .social {
   text-align: left;
 }
@@ -60,28 +62,28 @@
   min-width: 150px;
   justify-content: space-between;
 }
-.contactContainer .social .icon{
+.contactContainer .social .icon {
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
   cursor: pointer;
 }
-.contactContainer .social .instagram{
- width: 18px;
- height: 18px;
- background-image: url(../../images/instagram.svg);
+.contactContainer .social .instagram {
+  width: 18px;
+  height: 18px;
+  background-image: url(../../images/instagram.svg);
 }
-.contactContainer .social .facebook{
+.contactContainer .social .facebook {
   width: 9px;
   height: 18px;
   background-image: url(../../images/facebook.svg);
 }
-.contactContainer .social .twitter{
+.contactContainer .social .twitter {
   width: 20px;
   height: 16px;
   background-image: url(../../images/twitter.svg);
 }
-.contactContainer .social .youtube{
+.contactContainer .social .youtube {
   width: 22px;
   height: 15px;
   background-image: url(../../images/youtube.svg);
