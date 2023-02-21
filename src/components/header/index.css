@@ -13,4 +13,5 @@
   font-size: 40px;
   line-height: 50px;
   color: var(--dark_col);
+  filter: invert(5%) sepia(27%) saturate(100%) hue-rotate(262deg) brightness(0%) contrast(116%)
 }
