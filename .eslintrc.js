@@ -26,15 +26,15 @@ module.exports = {
     mocha: true,
     node: true
   },
-   "plugins": ['react', '@typescript-eslint'],
-   "extends": ["airbnb-base", "airbnb-typescript/base", "prettier"],
-   "parser": "@typescript-eslint/parser",
-   "parserOptions": {
-   "ecmaVersion": 12,
-   "project": "./tsconfig.json",
-   "sourceType": "module"
-  }, 
-  rules : {
+  "plugins": ['react', '@typescript-eslint'],
+  "extends": ["airbnb-base", "airbnb-typescript/base", "prettier"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 12,
+    "project": "./tsconfig.json",
+    "sourceType": "module"
+  },
+  rules: {
     "quotes": ["error", "single"],
     "no-restricted-syntax": ["off"],
     "no-await-in-loop": ["off"],
@@ -45,5 +45,6 @@ module.exports = {
     "import/no-named-as-default": 0,
     "no-console": "off",
     "no-underscore-dangle": 0,
+    "import/prefer-default-export": 0,
   }
 }

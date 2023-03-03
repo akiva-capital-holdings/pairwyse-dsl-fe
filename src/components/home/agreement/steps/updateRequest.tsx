@@ -7,6 +7,7 @@ import { createInstance, hex4Bytes, splitDSLString, getWei } from 'utils/helpers
 import { selectUtils } from 'redux/utilsReducer';
 import { Contract } from 'ethers';
 import { v4 as uuidv4 } from 'uuid';
+import { parseRecords } from 'utils/agreementHelpers';
 import { ReactComponent as Delete } from '../../../../images/delete.svg';
 import { ReactComponent as Cloose } from '../../../../images/close.svg';
 import getRule from '../../../../utils/validate';
@@ -51,15 +52,7 @@ const UpdateRequest = ({
   const addSteps = async (agreementContract: Contract, steps: RecordObject[]) => {
     setLoading(true);
     try {
-      do {
-        await agreementContract.methods
-          .parse(process.env.REACT_APP_PREPROCESSOR)
-          .send({ from: account });
-        console.log({
-          parseFinished: await agreementContract.methods.parseFinished().call(),
-        });
-      } while ((await agreementContract.methods.parseFinished().call()) === false);
-
+      // Add a record
       for await (const step of steps) {
         const agrUpdate = await agreementContract.methods
           .update(
@@ -74,6 +67,11 @@ const UpdateRequest = ({
           hash = agrUpdate?.transactionHash;
         }
       }
+
+      // Parse all records in the Agreement
+      await parseRecords(agreementContract, account);
+
+      // Update UI
       setUpdateRequest({ hash, submit: true, error: false, message: '' });
       setLoading(false);
     } catch (e) {

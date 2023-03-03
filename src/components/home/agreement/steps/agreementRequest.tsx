@@ -157,6 +157,7 @@ const AgreementRequest = ({
               // Parse MultiTranche records
               console.log('Parse MultiTranche records');
               setLoading(true);
+              // TODO: replace this block with parseAgreement() function call from `utils/agreementHelpers.ts`
               try {
                 do {
                   await newMultiTrancheInstance.methods
