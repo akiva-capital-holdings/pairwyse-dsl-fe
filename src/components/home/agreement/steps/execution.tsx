@@ -337,7 +337,7 @@ while the current allowance is ${transactionValue?.currentAllowance} ${transacti
 
   return (
     <div className="executeRequest">
-      <div className="title">Execution</div>
+      <div className="title">Execute Agreement Record</div>
       <Spin spinning={loading}>
         <Form
           name="agreementRequestForm"

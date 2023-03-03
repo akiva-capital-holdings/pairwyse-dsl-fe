@@ -12,7 +12,7 @@ import {
   abi as multiTrancheABI,
   bytecode as multiTrancheBytecode,
 } from '../data/multiTranche.json';
-import allNetworks from './networks.json';
+import allNetworks from '../data/networks.json';
 import { contractNames } from './constants';
 
 // Convert string of record to array of string

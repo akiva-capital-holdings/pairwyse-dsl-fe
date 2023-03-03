@@ -420,7 +420,7 @@ const HomePage = () => {
                 style={{ textAlign: 'center', margin: '0 auto', paddingBottom: '8px' }}
                 className={`${step === navSteps.stepTwo && 'active'}`}
               >
-                Definition
+                Variable
               </span>
             </button>
             <button
@@ -433,7 +433,7 @@ const HomePage = () => {
                 style={{ textAlign: 'center', margin: '0 auto', paddingBottom: '8px' }}
                 className={`${step === navSteps.stepThree && 'active'}`}
               >
-                Update
+                Record
               </span>
             </button>
             <button

@@ -11,10 +11,13 @@ import { parseRecords } from 'utils/agreementHelpers';
 import { ReactComponent as Delete } from '../../../../images/delete.svg';
 import { ReactComponent as Cloose } from '../../../../images/close.svg';
 import getRule from '../../../../utils/validate';
-import { Update } from '../../../../types';
+import { RecordObject, Update } from '../../../../types';
 
 const { Item } = Form;
 
+/**
+ * Create a new record for Agreement
+ */
 const UpdateRequest = ({
   setUpdateRequest,
   setSignatories,
@@ -40,14 +43,6 @@ const UpdateRequest = ({
 
   const navigate = useNavigate();
   let hash = '';
-
-  type RecordObject = {
-    recordId: number;
-    requiredRecords: (string | number)[];
-    signatories: string[];
-    conditions: string[];
-    record: string;
-  };
 
   const addSteps = async (agreementContract: Contract, steps: RecordObject[]) => {
     setLoading(true);
@@ -160,9 +155,10 @@ const UpdateRequest = ({
       setValueRequiredRecords(numbers[numbers.length - 1].toString());
     }
   };
+
   return (
     <div className="updateRequest">
-      <div className="title">Update Request </div>
+      <div className="title">Create Record</div>
       <Spin spinning={loading}>
         <Form
           name="agreementRequestForm"
@@ -383,7 +379,7 @@ const UpdateRequest = ({
           </div>
           <div className="specificationInput">
             <div style={{ marginTop: '24px' }} className="text">
-              Record
+              Transaction
             </div>
             <Item
               name="record"
@@ -407,7 +403,7 @@ const UpdateRequest = ({
               htmlType="submit"
               className="btn"
             >
-              Request Approval
+              Create
             </Button>
             <Button
               onClick={() => {

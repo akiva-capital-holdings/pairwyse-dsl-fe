@@ -46,7 +46,7 @@
 }
 .executeRequest .lender.text {
   white-space: pre-wrap;
-  word-wrap: break-word;;
+  word-wrap: break-word;
 }
 .agreementRequest .btns,
 .updateRequest .btns {
@@ -216,19 +216,19 @@
 }
 
 .transactionWarningBack.active {
-  transform: scale(1)
+  transform: scale(1);
 }
-.transactionWarningContainer{
-    width: 400px;
-    min-height: 200px;
-    background: #F7F5F9;
-    border-radius: 20px;
-    margin-top: 32px;
-    padding: 32px 28px 28px 28px;
-    color: #E61F1F;
-    font-family: var(--font_weight_bolder);
-    font-style: normal;
-    font-weight: 800;
-    font-size: 16px;
-    line-height: 20px;
+.transactionWarningContainer {
+  width: 400px;
+  min-height: 200px;
+  background: #f7f5f9;
+  border-radius: 20px;
+  margin-top: 32px;
+  padding: 32px 28px 28px 28px;
+  color: #e61f1f;
+  font-family: var(--font_weight_bolder);
+  font-style: normal;
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 20px;
 }

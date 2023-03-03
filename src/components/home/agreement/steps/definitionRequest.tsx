@@ -1,11 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Button,
-  Input,
-  Form,
-  Spin,
-  //  Dropdown, Menu, Space
-} from 'antd';
+import { Button, Input, Form, Spin } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useMetaMask } from 'metamask-react';
@@ -81,9 +75,7 @@ const DefinitionRequest = ({
   };
 
   const updateTypeSpetification = (id, type) => {
-    const update = specifications?.map((c) => {
-      return c?.id === id ? { ...c, type } : { ...c };
-    });
+    const update = specifications?.map((c) => (c?.id === id ? { ...c, type } : { ...c }));
     setspecification(update);
     setActiveMenu(undefined);
     setVisible(!visible);
@@ -108,7 +100,7 @@ const DefinitionRequest = ({
   };
   return (
     <div className="definitionRequest">
-      <div className="title">Definition Request</div>
+      <div className="title">Define New Variable</div>
       <Spin spinning={loading}>
         <Form name="agreementRequestForm" autoComplete="off" onFinish={defineVariable}>
           <div className="text">Requestor</div>
@@ -130,7 +122,7 @@ const DefinitionRequest = ({
             />
           </Item>
           <div style={{ marginTop: '24px' }} className="text">
-            Definition
+            Variable name
           </div>
           <Item
             name="borrower"
@@ -139,7 +131,7 @@ const DefinitionRequest = ({
           >
             <Input
               maxLength={20}
-              placeholder="Borrower"
+              placeholder="BORROWER"
               className="lender"
               defaultValue={definition}
               onChange={(e) => {
@@ -219,6 +211,7 @@ const DefinitionRequest = ({
 
             {specifications?.length < 5 && (
               <Button
+                disabled
                 htmlType="button"
                 className="add"
                 onClick={() => {
@@ -241,7 +234,7 @@ const DefinitionRequest = ({
           </div>
           <div className="btnsContainer">
             <Button disabled={loading} style={{ height: '48px' }} htmlType="submit" className="btn">
-              Request Approval
+              Define
             </Button>
             <Button
               onClick={() => {

@@ -45,7 +45,7 @@ export const initialTokenInfo = {
   submit: false,
 };
 
-export const titleValueAgrement = (v, createdName) => {
+export const titleValueAgrement = (v, createdName: string) => {
   return v ? `Created ${createdName} Address` : 'No transactions yet';
 };
 

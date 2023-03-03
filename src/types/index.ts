@@ -274,3 +274,11 @@ export interface Update {
 }
 
 export type ContractName = keyof typeof contractNames;
+
+export type RecordObject = {
+  recordId: number;
+  requiredRecords: (string | number)[];
+  signatories: string[];
+  conditions: string[];
+  record: string;
+};
