@@ -13,7 +13,7 @@ export const initialMultiTrancheValue = {
   submit: false,
 };
 
-export const initialDefinitionRequestValue = {
+export const initialVariableDefinitionValue = {
   value: '',
   submit: false,
   hash: '',
@@ -21,7 +21,7 @@ export const initialDefinitionRequestValue = {
   message: '',
 };
 
-export const initialUpdateRequestValue = {
+export const initialRecordCreationValue = {
   hash: '',
   submit: false,
   error: false,
@@ -53,7 +53,7 @@ export const titleValueDefinition = (v) => {
   return v ? 'Definition Record ID' : 'No transactions yet';
 };
 
-export const titleValueUpdateRequest = (v) => {
+export const titleValueRecordCreation = (v) => {
   return v ? 'Update Request Record ID' : 'No transactions yet';
 };
 
@@ -62,9 +62,9 @@ export const titleValueExecute = (v) => {
 };
 
 export default {
-  initialDefinitionRequestValue,
-  initialUpdateRequestValue,
-  titleValueUpdateRequest,
+  initialVariableDefinitionValue,
+  initialRecordCreationValue,
+  titleValueRecordCreation,
   initialAgreementValue,
   initialExecutionValue,
   titleValueDefinition,

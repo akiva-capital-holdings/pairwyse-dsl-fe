@@ -13,10 +13,10 @@ import { Definition } from '../../../../types';
 
 const { Item } = Form;
 
-const DefinitionRequest = ({
+const VariableDefinition = ({
   setAgreementDefinition: setAgreement,
   agreementDefinition: agreement,
-  setValueDefinitionRequest,
+  setValueVariableDefinition,
   setspecification,
   specifications,
   setDefinition,
@@ -53,7 +53,7 @@ const DefinitionRequest = ({
           .send({ from: account });
       }
 
-      setValueDefinitionRequest({
+      setValueVariableDefinition({
         value: 'definition',
         submit: true,
         hash: tx?.transactionHash,
@@ -63,7 +63,7 @@ const DefinitionRequest = ({
       setLoading(false);
     } catch (e) {
       console.error(e);
-      setValueDefinitionRequest({
+      setValueVariableDefinition({
         value: '',
         submit: true,
         hash: '',
@@ -252,4 +252,4 @@ const DefinitionRequest = ({
   );
 };
 
-export default DefinitionRequest;
+export default VariableDefinition;

@@ -12,7 +12,7 @@ import getRule from '../../../../utils/validate';
 
 const { Item } = Form;
 
-const ExecutionRequest = ({
+const AgreementExecution = ({
   setExecutionValue,
   setAgreement,
   setRecordValue,
@@ -436,4 +436,4 @@ while the current allowance is ${transactionValue?.currentAllowance} ${transacti
   );
 };
 
-export default ExecutionRequest;
+export default AgreementExecution;

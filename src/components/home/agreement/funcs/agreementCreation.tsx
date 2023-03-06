@@ -18,7 +18,7 @@ const { Item } = Form;
 /**
  * Creates a new Agreement conract. Either a General Agreement or MultiTranche Agreement
  */
-const AgreementRequest = ({
+const AgreementCreation = ({
   setLoading,
   setLender,
   setError,
@@ -27,7 +27,7 @@ const AgreementRequest = ({
   lender,
   error,
   value,
-  setValueAgreementRequest,
+  setValueAgreementCreation,
   agreementCreator,
   setAgreementCreator,
   multiTrancheCreator,
@@ -64,7 +64,7 @@ const AgreementRequest = ({
             recordHash = _recordHash;
           })
           .then((newContractInstance: Contract) => {
-            setValueAgreementRequest({
+            setValueAgreementCreation({
               lastAgrAddr: newContractInstance.options.address,
               error: false,
               hash: recordHash,
@@ -78,7 +78,7 @@ const AgreementRequest = ({
       }
     } catch (e) {
       console.error(e);
-      setValueAgreementRequest({
+      setValueAgreementCreation({
         lastAgrAddr: '',
         error: true,
         hash: '',
@@ -308,4 +308,4 @@ const AgreementRequest = ({
   );
 };
 
-export default AgreementRequest;
+export default AgreementCreation;

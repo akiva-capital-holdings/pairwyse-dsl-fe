@@ -18,8 +18,8 @@ const { Item } = Form;
 /**
  * Create a new record for Agreement
  */
-const UpdateRequest = ({
-  setUpdateRequest,
+const RecordCreation = ({
+  setRecordCreation,
   setSignatories,
   setRecord,
   setConditions,
@@ -67,11 +67,11 @@ const UpdateRequest = ({
       await parseRecords(agreementContract, account);
 
       // Update UI
-      setUpdateRequest({ hash, submit: true, error: false, message: '' });
+      setRecordCreation({ hash, submit: true, error: false, message: '' });
       setLoading(false);
     } catch (e) {
       console.error({ e });
-      setUpdateRequest({ hash: '', submit: true, error: true, message: JSON.parse(e?.message) });
+      setRecordCreation({ hash: '', submit: true, error: true, message: JSON.parse(e?.message) });
       setLoading(false);
     }
   };
@@ -135,7 +135,7 @@ const UpdateRequest = ({
       ]);
     } catch (e) {
       console.error(e);
-      setUpdateRequest({ hash: '', submit: true, error: true, message: e?.message });
+      setRecordCreation({ hash: '', submit: true, error: true, message: e?.message });
       setLoading(false);
     }
   };
@@ -421,4 +421,4 @@ const UpdateRequest = ({
   );
 };
 
-export default UpdateRequest;
+export default RecordCreation;

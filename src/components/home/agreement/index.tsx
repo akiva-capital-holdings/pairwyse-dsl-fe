@@ -3,9 +3,9 @@ import { useSelector } from 'react-redux';
 import { notification } from 'antd';
 import { shortenedAddress } from '../../../utils/helpers';
 import {
-  initialDefinitionRequestValue,
-  initialUpdateRequestValue,
-  titleValueUpdateRequest,
+  initialVariableDefinitionValue,
+  initialRecordCreationValue,
+  titleValueRecordCreation,
   initialExecutionValue,
   initialAgreementValue,
   titleValueAgrement,
@@ -19,7 +19,7 @@ import { ReactComponent as CloseIcon } from '../../../images/closeIcon.svg';
 import { ReactComponent as Success } from '../../../images/successIcon.svg';
 
 import Header from '../../header/index';
-import { UpdateRequest, DefinitionRequest, AgreementRequest, ExecutionRequest } from './steps';
+import { RecordCreation, VariableDefinition, AgreementCreation, AgreementExecution } from './funcs';
 import { mock, mockSignatories, mockDefinitions } from './mock';
 
 import './index.css';
@@ -43,7 +43,7 @@ const HomePage = () => {
   const [multiTrancheAgreement, setMultiTrancheAgreement] = useState('');
   const [valueMultiTrancheRequest, setValueMultiTrancheRequest] =
     useState(initialMultiTrancheValue);
-  const [valueAgreementRequest, setValueAgreementRequest] = useState(initialAgreementValue);
+  const [valueAgreementCreation, setValueAgreementCreation] = useState(initialAgreementValue);
   const [agreementCreator, setAgreementCreator] = useState<boolean>(false);
   const [multiTrancheCreator, setMultiTrancheCreator] = useState<boolean>(false);
   const [tokenCreator, setTokenCreator] = useState<boolean>(false);
@@ -51,8 +51,8 @@ const HomePage = () => {
   const [definition, setDefinition] = useState('');
   const [specifications, setspecification] = useState(mockDefinitions);
   const [agreementDefinition, setAgreementDefinition] = useState('');
-  const [valueDefinitionRequest, setValueDefinitionRequest] = useState(
-    initialDefinitionRequestValue
+  const [valueVariableDefinition, setValueVariableDefinition] = useState(
+    initialVariableDefinitionValue
   );
   // update request
   const [conditions, setConditions] = useState(mock);
@@ -60,7 +60,7 @@ const HomePage = () => {
   const [agreement, setAgreement] = useState('');
   const [dslId, setDslID] = useState('');
   const [record, setRecord] = useState('');
-  const [valueUpdateRequest, setUpdateRequest] = useState(initialUpdateRequestValue);
+  const [valueRecordCreation, setRecordCreation] = useState(initialRecordCreationValue);
   const [numbers, setNumbers] = useState([]);
   // Execution
   const [agreementExecution, setAgreementExecution] = useState('');
@@ -70,7 +70,7 @@ const HomePage = () => {
 
   useEffect(() => {
     if (contractType?.includes('Agreement')) {
-      setValueAgreementRequest({
+      setValueAgreementCreation({
         lastAgrAddr: agreementAddress,
         error: false,
         hash: '',
@@ -89,17 +89,17 @@ const HomePage = () => {
 
   useEffect(() => {
     if (contractType?.includes('Agreement')) {
-      setAgreementDefinition(valueAgreementRequest.lastAgrAddr);
-      setAgreement(valueAgreementRequest.lastAgrAddr);
-      setAgreementExecution(valueAgreementRequest.lastAgrAddr);
-      setMultiTrancheAgreement(valueAgreementRequest.lastAgrAddr);
+      setAgreementDefinition(valueAgreementCreation.lastAgrAddr);
+      setAgreement(valueAgreementCreation.lastAgrAddr);
+      setAgreementExecution(valueAgreementCreation.lastAgrAddr);
+      setMultiTrancheAgreement(valueAgreementCreation.lastAgrAddr);
     } else {
       setAgreementDefinition(valueMultiTrancheRequest.multiTrancheAddr);
       setAgreement(valueMultiTrancheRequest.multiTrancheAddr);
       setAgreementExecution(valueMultiTrancheRequest.multiTrancheAddr);
       setMultiTrancheAgreement(valueMultiTrancheRequest.multiTrancheAddr);
     }
-  }, [valueMultiTrancheRequest, valueAgreementRequest]);
+  }, [valueMultiTrancheRequest, valueAgreementCreation]);
   useEffect(() => {
     console.log(tokenInfo);
   }, [tokenInfo]);
@@ -141,8 +141,8 @@ const HomePage = () => {
 
   const steps = {
     stepOne: (
-      <AgreementRequest
-        setValueAgreementRequest={setValueAgreementRequest}
+      <AgreementCreation
+        setValueAgreementCreation={setValueAgreementCreation}
         setValueMultiTrancheRequest={setValueMultiTrancheRequest}
         multiTrancheAgreement={multiTrancheAgreement}
         setMultiTrancheAgreement={setMultiTrancheAgreement}
@@ -164,8 +164,8 @@ const HomePage = () => {
       />
     ),
     stepTwo: (
-      <DefinitionRequest
-        setValueDefinitionRequest={setValueDefinitionRequest}
+      <VariableDefinition
+        setValueVariableDefinition={setValueVariableDefinition}
         setAgreementDefinition={setAgreementDefinition}
         agreementDefinition={agreementDefinition}
         setspecification={setspecification}
@@ -177,8 +177,8 @@ const HomePage = () => {
       />
     ),
     stepThree: (
-      <UpdateRequest
-        setUpdateRequest={setUpdateRequest}
+      <RecordCreation
+        setRecordCreation={setRecordCreation}
         setSignatories={setSignatories}
         setRecord={setRecord}
         setConditions={setConditions}
@@ -196,7 +196,7 @@ const HomePage = () => {
       />
     ),
     stepFour: (
-      <ExecutionRequest
+      <AgreementExecution
         setDslID={setDslIdExecution}
         dslId={dslIdExecution}
         setExecutionValue={setExecutionValue}
@@ -283,10 +283,10 @@ const HomePage = () => {
     }
     // if open agreementCreator show agreementContainer
     return recordContainer(
-      valueAgreementRequest.error,
-      valueAgreementRequest.lastAgrAddr,
-      valueAgreementRequest.message,
-      valueAgreementRequest.submit,
+      valueAgreementCreation.error,
+      valueAgreementCreation.lastAgrAddr,
+      valueAgreementCreation.message,
+      valueAgreementCreation.submit,
       'Agreement'
     );
   };
@@ -296,26 +296,26 @@ const HomePage = () => {
     stepTwo: (
       <div
         className={`recordContainer  ${
-          valueDefinitionRequest?.error && !valueDefinitionRequest?.value ? 'error' : ''
+          valueVariableDefinition?.error && !valueVariableDefinition?.value ? 'error' : ''
         }`}
       >
         <div className="titleContainer">
           <div className="title">Record</div>
-          {valueDefinitionRequest?.submit &&
-            iconValue(valueDefinitionRequest?.error && !!valueDefinitionRequest?.message)}
+          {valueVariableDefinition?.submit &&
+            iconValue(valueVariableDefinition?.error && !!valueVariableDefinition?.message)}
         </div>
-        <div className={`contentContainer ${valueDefinitionRequest?.error ? 'error' : ''}`}>
-          {valueDefinitionRequest?.value && (
+        <div className={`contentContainer ${valueVariableDefinition?.error ? 'error' : ''}`}>
+          {valueVariableDefinition?.value && (
             <div style={{ marginTop: '12px' }} className="content">
               <div className="title">
                 Definition Request <br />
                 Record ID
               </div>
               <div className="valueContainer">
-                <div className="value">{shortenedAddress(valueDefinitionRequest?.hash, 9)}</div>
+                <div className="value">{shortenedAddress(valueVariableDefinition?.hash, 9)}</div>
                 <Copy
                   style={{ cursor: 'pointer' }}
-                  onClick={() => onCopyClick(valueDefinitionRequest?.hash)}
+                  onClick={() => onCopyClick(valueVariableDefinition?.hash)}
                 />
               </div>
             </div>
@@ -326,27 +326,27 @@ const HomePage = () => {
     stepThree: (
       <div
         className={`recordContainer  ${
-          valueUpdateRequest?.error && !valueUpdateRequest?.hash ? 'error' : ''
+          valueRecordCreation?.error && !valueRecordCreation?.hash ? 'error' : ''
         }`}
       >
         <div className="titleContainer">
           <div className="title">Record</div>
-          {valueUpdateRequest?.submit &&
-            iconValue(valueUpdateRequest?.error && !!valueUpdateRequest?.message)}
+          {valueRecordCreation?.submit &&
+            iconValue(valueRecordCreation?.error && !!valueRecordCreation?.message)}
         </div>
-        <div className={`contentContainer  ${valueUpdateRequest?.error ? 'error' : ''}`}>
+        <div className={`contentContainer  ${valueRecordCreation?.error ? 'error' : ''}`}>
           <div className="content">
             <div className="title">
-              {valueUpdateRequest?.error && valueUpdateRequest?.message
+              {valueRecordCreation?.error && valueRecordCreation?.message
                 ? 'Warning! Error encountered during contract execution'
-                : titleValueUpdateRequest(!!valueUpdateRequest?.hash)}
+                : titleValueRecordCreation(!!valueRecordCreation?.hash)}
             </div>
-            {!!valueUpdateRequest?.hash && (
+            {!!valueRecordCreation?.hash && (
               <div className="valueContainer">
-                <div className="value">{shortenedAddress(valueUpdateRequest?.hash, 9)}</div>
+                <div className="value">{shortenedAddress(valueRecordCreation?.hash, 9)}</div>
                 <Copy
                   style={{ cursor: 'pointer' }}
-                  onClick={() => onCopyClick(valueUpdateRequest?.hash)}
+                  onClick={() => onCopyClick(valueRecordCreation?.hash)}
                 />
               </div>
             )}

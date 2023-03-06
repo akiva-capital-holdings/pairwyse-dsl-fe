@@ -33,7 +33,7 @@ export interface Agreement {
   lender: string;
   error: string;
   value: string;
-  setValueAgreementRequest: React.Dispatch<
+  setValueAgreementCreation: React.Dispatch<
     React.SetStateAction<{
       lastAgrAddr: string;
       error: boolean;
@@ -174,7 +174,7 @@ export interface TransactionValues {
 export interface Definition {
   setAgreementDefinition: React.Dispatch<React.SetStateAction<string>>;
   agreementDefinition: string;
-  setValueDefinitionRequest: React.Dispatch<
+  setValueVariableDefinition: React.Dispatch<
     React.SetStateAction<{
       value: string;
       submit: boolean;
@@ -225,7 +225,7 @@ export interface Execution {
 }
 
 export interface Update {
-  setUpdateRequest: React.Dispatch<
+  setRecordCreation: React.Dispatch<
     React.SetStateAction<{
       hash: string;
       submit: boolean;
