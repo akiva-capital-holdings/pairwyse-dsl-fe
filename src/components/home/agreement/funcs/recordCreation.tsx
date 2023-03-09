@@ -291,8 +291,25 @@ const RecordCreation = ({
                     }}
                     className="lender"
                     defaultValue={el?.value}
+                    value={el?.value}
                   />
+                  {el?.id === 1 && (
+                    <button
+                      onClick={() => {
+                        return setSignatories(
+                          signatories?.map((c) => {
+                            return c?.id === 1 ? { ...c, value: account } : { ...c };
+                          })
+                        );
+                      }}
+                      className="ant-btn ant-btn-default add btnAddMe"
+                      type="button"
+                    >
+                      Add Me
+                    </button>
+                  )}
                 </Item>
+
                 <Button
                   htmlType="button"
                   onClick={() => {
