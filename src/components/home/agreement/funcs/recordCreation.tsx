@@ -217,7 +217,7 @@ const RecordCreation = ({
             name="requiredRecords"
             validateTrigger="onChange"
             className="requiredRecords"
-            rules={getRule('requiredRecords', 'record-value', valueRequiredRecords?.toString())}
+            rules={getRule('requiredRecords', 'requiredRecords', valueRequiredRecords?.toString())}
             style={{ marginBottom: '8px' }}
           >
             <Input
