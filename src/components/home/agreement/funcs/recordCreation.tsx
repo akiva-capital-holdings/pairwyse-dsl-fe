@@ -11,12 +11,15 @@ import { parseRecords } from 'utils/agreementHelpers';
 import { ReactComponent as Delete } from '../../../../images/delete.svg';
 import { ReactComponent as Cloose } from '../../../../images/close.svg';
 import getRule from '../../../../utils/validate';
-import { Update } from '../../../../types';
+import { RecordObject, Update } from '../../../../types';
 
 const { Item } = Form;
 
-const UpdateRequest = ({
-  setUpdateRequest,
+/**
+ * Create a new record for Agreement
+ */
+const RecordCreation = ({
+  setRecordCreation,
   setSignatories,
   setRecord,
   setConditions,
@@ -41,14 +44,6 @@ const UpdateRequest = ({
   const navigate = useNavigate();
   let hash = '';
 
-  type RecordObject = {
-    recordId: number;
-    requiredRecords: (string | number)[];
-    signatories: string[];
-    conditions: string[];
-    record: string;
-  };
-
   const addSteps = async (agreementContract: Contract, steps: RecordObject[]) => {
     setLoading(true);
     try {
@@ -72,11 +67,11 @@ const UpdateRequest = ({
       await parseRecords(agreementContract, account);
 
       // Update UI
-      setUpdateRequest({ hash, submit: true, error: false, message: '' });
+      setRecordCreation({ hash, submit: true, error: false, message: '' });
       setLoading(false);
     } catch (e) {
       console.error({ e });
-      setUpdateRequest({ hash: '', submit: true, error: true, message: JSON.parse(e?.message) });
+      setRecordCreation({ hash: '', submit: true, error: true, message: JSON.parse(e?.message) });
       setLoading(false);
     }
   };
@@ -140,7 +135,7 @@ const UpdateRequest = ({
       ]);
     } catch (e) {
       console.error(e);
-      setUpdateRequest({ hash: '', submit: true, error: true, message: e?.message });
+      setRecordCreation({ hash: '', submit: true, error: true, message: e?.message });
       setLoading(false);
     }
   };
@@ -160,9 +155,10 @@ const UpdateRequest = ({
       setValueRequiredRecords(numbers[numbers.length - 1].toString());
     }
   };
+
   return (
     <div className="updateRequest">
-      <div className="title">Update Request </div>
+      <div className="title">Create Record</div>
       <Spin spinning={loading}>
         <Form
           name="agreementRequestForm"
@@ -400,7 +396,7 @@ const UpdateRequest = ({
           </div>
           <div className="specificationInput">
             <div style={{ marginTop: '24px' }} className="text">
-              Record
+              Transaction
             </div>
             <Item
               name="record"
@@ -424,7 +420,7 @@ const UpdateRequest = ({
               htmlType="submit"
               className="btn"
             >
-              Request Approval
+              Create
             </Button>
             <Button
               onClick={() => {
@@ -442,4 +438,4 @@ const UpdateRequest = ({
   );
 };
 
-export default UpdateRequest;
+export default RecordCreation;

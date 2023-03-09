@@ -1,7 +1,5 @@
 import { BigNumber, ethers } from 'ethers';
-
-const MAX_UINT256 =
-  '115792089237316195423570985008687907853269984665640564039457584007913129639935';
+import { ruAlphabet, symbols } from './constants';
 
 export const validationAgreementModel = (value, setError) => {
   if (value?.length > 0) {
@@ -29,7 +27,7 @@ export default function getRule(label: string, name: string, v?: string, type?: 
         if (parseInt(v, 10) < 1) {
           return Promise.reject(new Error('Invalid number'));
         }
-        if (Number(v) > Number(MAX_UINT256)) {
+        if (Number(v) > Number(ethers.constants.MaxUint256)) {
           return Promise.reject(new Error('Too big number'));
         }
         return Promise.resolve();
@@ -51,20 +49,17 @@ export default function getRule(label: string, name: string, v?: string, type?: 
     };
   };
 
-  const simbols = /^[A-Za-z0-9_.]+$/;
-  const ruAlfabet = /^[а-яА-ЯёЁ]+$/;
-
   const validateField = () => {
     const fixValue = v?.replace(/,/gi, '');
     return {
       validator: () => {
         if (!v) return Promise.resolve();
-        if (BigNumber.from(fixValue).gt(MAX_UINT256))
+        if (BigNumber.from(fixValue).gt(ethers.constants.MaxUint256))
           return Promise.reject(new Error('Invalid number'));
         if (parseInt(fixValue, 10) < 0) {
           return Promise.reject(new Error('Invalid number'));
         }
-        if (simbols.test(v)) return Promise.resolve();
+        if (symbols.test(v)) return Promise.resolve();
         return Promise.reject(new Error('This field is required'));
       },
     };
@@ -74,7 +69,7 @@ export default function getRule(label: string, name: string, v?: string, type?: 
     return {
       validator: () => {
         if (!v) return Promise.resolve();
-        if (!ruAlfabet.test(v)) return Promise.resolve();
+        if (!ruAlphabet.test(v)) return Promise.resolve();
         return Promise.reject(new Error('Invalid format'));
       },
     };
@@ -94,7 +89,7 @@ export default function getRule(label: string, name: string, v?: string, type?: 
     return {
       validator: () => {
         if (!v) return Promise.resolve();
-        if (v !== '0x0000000000000000000000000000000000000000') return Promise.resolve();
+        if (v !== ethers.constants.AddressZero) return Promise.resolve();
         return Promise.reject(new Error('Invalid address'));
       },
     };
