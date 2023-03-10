@@ -63,3 +63,7 @@ export const contractNames = {
 };
 
 export default { NETWORK_OPTIONS, contractNames };
+
+export const symbols = /^[A-Za-z0-9_.]+$/;
+
+export const ruAlphabet = /^[а-яА-ЯёЁ]+$/;
