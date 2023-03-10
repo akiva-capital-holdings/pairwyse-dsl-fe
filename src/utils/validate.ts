@@ -15,7 +15,10 @@ export default function getRule(label: string, name: string, v?: string, type?: 
     message: 'This field is required',
   };
 
-  const validateId = () => {
+  /**
+   * Validates input of type "Record ID" that is required
+   */
+  const validateRequiredRecordID = () => {
     return {
       validator: () => {
         if (!Number.isInteger(+v)) {
@@ -35,8 +38,10 @@ export default function getRule(label: string, name: string, v?: string, type?: 
     };
   };
 
-  // validated optional ID
-  const validateNoRequiredId = () => {
+  /**
+   * Validates input of type "Record ID" that is optional (may be undefined)
+   */
+  const validateOptionalRecordID = () => {
     return {
       validator: () => {
         if (!Number.isInteger(+v)) {
@@ -165,15 +170,15 @@ export default function getRule(label: string, name: string, v?: string, type?: 
     case 'record':
       return [validateSpace];
     case 'dsl-id':
-      return [validateId];
+      return [validateRequiredRecordID];
     case 'requiredRecords':
-      return [validateNoRequiredId];
+      return [validateOptionalRecordID];
     case 'record-value-in-wei':
-      return [validateId];
+      return [validateRequiredRecordID];
     case 'approval-value-in-wei':
-      return [validateId];
+      return [validateRequiredRecordID];
     case 'decimal-value':
-      return [validateId, validateDecimalValue];
+      return [validateRequiredRecordID, validateDecimalValue];
     case 'record-value':
       return [];
     default:
