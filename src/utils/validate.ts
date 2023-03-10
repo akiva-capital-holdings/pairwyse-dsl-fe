@@ -15,7 +15,10 @@ export default function getRule(label: string, name: string, v?: string, type?: 
     message: 'This field is required',
   };
 
-  const validateId = () => {
+  /**
+   * Validates input of type "Record ID" that is required
+   */
+  const validateRequiredRecordID = () => {
     return {
       validator: () => {
         if (!Number.isInteger(+v)) {
@@ -23,6 +26,26 @@ export default function getRule(label: string, name: string, v?: string, type?: 
         }
         if (v === null || v === undefined || v === '') {
           return Promise.reject(new Error('This field is required'));
+        }
+        if (parseInt(v, 10) < 1) {
+          return Promise.reject(new Error('Invalid number'));
+        }
+        if (Number(v) > Number(ethers.constants.MaxUint256)) {
+          return Promise.reject(new Error('Too big number'));
+        }
+        return Promise.resolve();
+      },
+    };
+  };
+
+  /**
+   * Validates input of type "Record ID" that is optional (may be undefined)
+   */
+  const validateOptionalRecordID = () => {
+    return {
+      validator: () => {
+        if (!Number.isInteger(+v)) {
+          return Promise.reject(new Error('Invalid number'));
         }
         if (parseInt(v, 10) < 1) {
           return Promise.reject(new Error('Invalid number'));
@@ -147,15 +170,15 @@ export default function getRule(label: string, name: string, v?: string, type?: 
     case 'record':
       return [validateSpace];
     case 'dsl-id':
-      return [validateId];
+      return [validateRequiredRecordID];
     case 'requiredRecords':
-      return [validateId];
+      return [validateOptionalRecordID];
     case 'record-value-in-wei':
-      return [validateId];
+      return [validateRequiredRecordID];
     case 'approval-value-in-wei':
-      return [validateId];
+      return [validateRequiredRecordID];
     case 'decimal-value':
-      return [validateId, validateDecimalValue];
+      return [validateRequiredRecordID, validateDecimalValue];
     case 'record-value':
       return [];
     default:

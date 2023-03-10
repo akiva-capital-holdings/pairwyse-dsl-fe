@@ -217,7 +217,7 @@ const RecordCreation = ({
             name="requiredRecords"
             validateTrigger="onChange"
             className="requiredRecords"
-            rules={getRule('requiredRecords', 'record-value', valueRequiredRecords?.toString())}
+            rules={getRule('requiredRecords', 'requiredRecords', valueRequiredRecords?.toString())}
             style={{ marginBottom: '8px' }}
           >
             <Input
@@ -283,6 +283,9 @@ const RecordCreation = ({
                 >
                   <Input
                     onChange={(e) => {
+                      if (e?.target?.value !== '') {
+                        form.validateFields([`signatories${el.id}`]);
+                      }
                       return setSignatories(
                         signatories?.map((c) => {
                           return c?.id === el?.id ? { ...c, value: e?.target?.value } : { ...c };
@@ -296,6 +299,7 @@ const RecordCreation = ({
                   {el?.id === 1 && (
                     <button
                       onClick={() => {
+                        form.validateFields([`signatories${el.id}`]);
                         return setSignatories(
                           signatories?.map((c) => {
                             return c?.id === 1 ? { ...c, value: account } : { ...c };
