@@ -35,6 +35,23 @@ export default function getRule(label: string, name: string, v?: string, type?: 
     };
   };
 
+  const validateNoRequiredId = () => {
+    return {
+      validator: () => {
+        if (!Number.isInteger(+v)) {
+          return Promise.reject(new Error('Invalid number'));
+        }
+        if (parseInt(v, 10) < 1) {
+          return Promise.reject(new Error('Invalid number'));
+        }
+        if (Number(v) > Number(ethers.constants.MaxUint256)) {
+          return Promise.reject(new Error('Too big number'));
+        }
+        return Promise.resolve();
+      },
+    };
+  };
+
   const validateMinMax = (min: number, max: number) => {
     return {
       validator: () => {
@@ -149,7 +166,7 @@ export default function getRule(label: string, name: string, v?: string, type?: 
     case 'dsl-id':
       return [validateId];
     case 'requiredRecords':
-      return [validateId];
+      return [validateNoRequiredId];
     case 'record-value-in-wei':
       return [validateId];
     case 'approval-value-in-wei':
